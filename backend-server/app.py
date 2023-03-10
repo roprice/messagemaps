@@ -5,11 +5,17 @@ import openai
 #from flask import Flask
 
 #app = Flask(__name__)
-openai.api_key = "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"
+
+# Open the text file containing the API key and read its contents
+with open('../ai_models/openai/key.txt', 'r') as f:
+    api_key = f.read().strip()
+
+# Set the OpenAI API key using the openai.api_key variable
+openai.api_key = api_key
 
 gpt35turbo = openai.ChatCompletion.create(
   model="gpt-3.5-turbo-0301",
-  messages=[{"role": "user", "content": "Think through this step-by-step and give me a passionate answer in the form of a bulleted list that reflect a logical progression in though. Can Whisper AI evaluate the emotional subtance of an audio file before it is transcribed?"}]
+  messages=[{"role": "user", "content": "what is the inner life of a labrador like?"}]
 )
 
 gptResponse = gpt35turbo["choices"][0]["message"]["content"]
@@ -25,9 +31,4 @@ paralleldots.set_api_key("fUE4KZzTXex4ASebbJKJd4NHbbNWs2gkvNUcXeEUOEc")
 text=gptResponse
 lang_code="en"
 response=paralleldots.sentiment(text,lang_code)
-print(response)
-
-# for multiple sentence as array
-text=["Come on,lets play together","Team performed well overall.",gptResponse]
-response=paralleldots.batch_sentiment(text)
 print(response)
