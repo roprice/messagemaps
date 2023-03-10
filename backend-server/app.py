@@ -8,10 +8,10 @@ import openai
 
 # Open the text file containing the API key and read its contents
 with open('../ai_models/openai/key.txt', 'r') as f:
-    api_key = f.read().strip()
+    openai_api_key = f.read().strip()
 
 # Set the OpenAI API key using the openai.api_key variable
-openai.api_key = api_key
+openai.api_key = openai_api_key
 
 gpt35turbo = openai.ChatCompletion.create(
   model="gpt-3.5-turbo-0301",
@@ -24,11 +24,14 @@ print( gptResponse + "\n\n")
 
 
 
+with open('../ai_models/komprehend/key.txt', 'r') as f:
+    komprehend_api_key = f.read().strip()
+
 import paralleldots
-paralleldots.set_api_key("fUE4KZzTXex4ASebbJKJd4NHbbNWs2gkvNUcXeEUOEc")
+paralleldots.set_api_key(komprehend_api_key)
 
 # for single sentence
 text=gptResponse
 lang_code="en"
-response=paralleldots.sentiment(text,lang_code)
-print(response)
+komprehend_response=paralleldots.sentiment(text,lang_code)
+print(komprehend_response)
