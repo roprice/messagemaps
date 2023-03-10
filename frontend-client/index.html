@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>Message Maps</title>
+  <link rel="icon" href="app/favicon.ico" type="image/x-icon">
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Material Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <!-- Google Variable Fonts-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="app/styles.css" rel="stylesheet">
+</head>
+
+<body x-data x-bind:class="[  Alpine.store('authenticationStatus').current, Alpine.store('currentPage').current, Alpine.store('currentScreen').current, Alpine.store('lightDarkMode').current,  Alpine.store('sidebarStatus').current]">
+
+<!-- custom js -->
+<script>
+
+document.addEventListener('alpine:init', () => {
+
+  Alpine.store('authenticationStatus', {
+    current: 'loggedOut',
+    items: ['loggedIn','loggedOut']
+  });
+
+// site-level states
+Alpine.store('currentPage', {
+    current: 'home',
+    items: ['home','contact', 'privacy', 'terms', 'signup', 'login']
+  });
+
+
+ // app-level states
+  Alpine.store('currentScreen', {
+    current: 'dashboard',
+    items: ['account','dashboard','maps','interviews','strategies','assets','newMap']
+  });
+
+  Alpine.store('lightDarkMode', {
+    current: 'light',
+    items: ['light','dark']
+  });
+
+  Alpine.store('sidebarStatus', {
+    current: 'expanded',
+    items: ['collapsed','expanded']
+  });
+
+});
+</script>
+
+<div class="container-fluid m-0 p-0 vw-100 vh-100" id="Logged_In_States" x-show="Alpine.store('authenticationStatus').current === 'loggedIn'" x-transition>
+
+  <header class="p-3 border-bottom bg-white shadow-sm">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <div class="d-flex align-items-center">
+        <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
+          x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
+          <img class="mb-0 me-2" src="app/logo/logo-dark-40x40.png" alt="" width="36" height="36">
+          <div class="brand-name fw-bold fs-4">MessageMaps<span class="text-secondary"></span></div>
+        </a>
+      </div>
+      <div id="accountSettings" class="dropdown text-end account-settings ms-auto me-0">
+        <div class="d-flex align-items-center">
+          <span class="welcome me-2 small">Welcome, Sa'ar!</span>
+          <svg class="bi pe-none me-2 notifications-bell" width="20" height="20"><use xlink:href="#bell"/></svg>
+          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+        </div>
+        <ul class="dropdown-menu text-small">
+          <li><a href="#">New message map...</a></li>
+          <li><a href="#">Settings</a></li>
+          <li><a href="#">Billing</a></li>
+          <li><a href="#">Downloads</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a href="#">Sign out</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <div id="Body" class="container-fluid px-0">
+    <div class="row body-inner">
+
+      <div id="CollapsedSidebar" class="py-0 pl-2 pe-0 col-md-1 border-end"
+      x-show.transition="Alpine.store('sidebarStatus').current === 'collapsed'">
+
+        <div class="position-relative m-0 mb-2">
+          <a href="#" class="text-secondary expandSidebar text-small navlink linkdark p-1 position-absolute top-0 end-0 border-small d-flex align-items-center" x-on:click.prevent="Alpine.store('sidebarStatus').current = 'expanded'">
+            <span class="me-0 p-0">expand</span>
+            <span class="material-symbols-outlined p-0 small">left_panel_open</span>
+          </a>
+        </div>
+
+        <div class="sidenav-wrapper py-5 px-4">
+          <div class="fs-5" style="text-align:center"><b>B</b></div>
+          <ul class="nav sidebar-nav flex-column mb-auto pt-2 pb-2">
+            <li class="my-3  text-center dashboard">
+              <a class="navlink linkdark p-2 px-2 my-2" href="#"
+              x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
+              <span class="material-symbols-outlined medium">dashboard</span></a>
+            </li>
+            <li class="my-3  text-center maps" >
+              <a class="navlink linkdark p-2  2 my-2" href="#"
+              x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+                <span class="material-symbols-outlined medium">map</span></a>
+            </li>
+            <li class="my-3  text-center strategy child">
+              <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">
+                <span class="material-symbols-outlined medium">explore</span></a>
+            </li>
+            <li class="my-3  text-center interviews child">
+              <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
+                <span class="material-symbols-outlined medium">auto_detect_voice</span></a>
+            </li>
+            <li class="my-3  text-center assets child">
+              <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'">
+                <span class="material-symbols-outlined medium">dashboard_customize</span></a>
+            </a>
+            </li>
+            <li class="my-3  text-center newMap">
+              <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'">
+                <span class="material-symbols-outlined medium">add</span>&nbsp;</a>
+            </li>
+          <ul>
+        </div>
+      </div><!-- end of #CollapsedSidebar -->
+
+      <div id="ExpandedSidebar" class="py-0 pl-2 pe-0  col-md-3 border-end"
+      x-show.transition="Alpine.store('sidebarStatus').current === 'expanded'">
+
+        <div class="position-relative m-0 mb-2">
+            <a href="#" class="text-secondary collapseSidebar text-small navlink linkdark p-1 position-absolute top-0 end-0 border-small d-flex align-items-center"
+            x-on:click.prevent="Alpine.store('sidebarStatus').current = 'collapsed'">
+              <span class="me-0 p-0">collapse</span>
+              <span class="material-symbols-outlined p-0 small">left_panel_close</span>
+            </a>
+        </div>
+
+        <div class="sidenav-wrapper p-3 pt-5 ps-4">
+
+          <span class="fs-5 d-inline-block text-wrap"><b>Brightr</b> Salesmaps</span>
+
+          <ul class="nav sidebar-nav nav-pills flex-column mb-auto pt-2 pb-2">
+
+            <li class="my-3 dashboard">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
+                <span class="material-symbols-outlined medium me-2">dashboard</span>Dashboard</a>
+            </li>
+            <li class="my-3 maps" >
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+                <span class="material-symbols-outlined medium me-2">map</span>
+                Brightr 2023 Salesmap
+              </a>
+            </li>
+            <li class="my-3 strategy child">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">
+                <span class="material-symbols-outlined medium me-2">explore</span>Brand Strategy</a>
+            </li>
+            <li class="my-3 interviews child">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
+                <span class="material-symbols-outlined medium me-2">auto_detect_voice</span>Your Interviews</a>
+            </li>
+            <li class="my-3 assets child">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'">
+                <span class="material-symbols-outlined medium me-2">dashboard_customize</span>Sales & Marketing Assets</a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="my-3 newMap">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'">
+                <span class="material-symbols-outlined medium me-2">add_circle</span>Get a new map</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-dropdown mt-auto border-top p-3 col-md-3 bg-white">
+          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu text-small">
+            <li><a href="#">New message map...</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Billing</a></li>
+            <li><a href="#">Downloads</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a href="#">Sign out</a></li>
+          </ul>
+        </div>
+      </div><!-- /#ExpandedSidebar -->
+
+      <div id="Main"
+      :class="{
+        'col-md-9': Alpine.store('sidebarStatus').current === 'expanded',
+        'col-md-11': Alpine.store('sidebarStatus').current === 'collapsed'
+      }">
+
+        <!-- welcome screen -->
+
+          <div x-show="Alpine.store('currentScreen').current === 'dashboard'">
+            <!-- Dashboard screen markup -->
+
+            <div class="p-5 bg-light rounded-3  mt-5 mx-5 shadow">
+              <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">Welcome to Salesmaps!!</h1>
+
+                <p class="col-md-12 fs-4"><b>Rowan</b>, I'm so glad you're here. If you need anything, don't hesitate to reach out on
+                  Slack or through our support system.<br>
+                  - Rowan, Message Maps founder</p>
+
+                  <p class="col-md-12 fs-4">The first step is to grab a little company info, then we're going to dive
+                    right into a discovery interview, so we can make your map. Are you ready?
+                  </p>
+                <button class="btn btn-primary btn-lg" type="button">Let's Get Started</button>
+              </div>
+            </div>
+
+            <div class="p-3 bg-light rounded-3  mt-5 mx-5 col-md-12 shadow">
+              <div class="container-fluid py-5">
+                <h1 class="display-6 fw-normal">Dashboard</h1>
+
+                <p class="col-md-12">
+
+                  <p class="fs-5">This is your dashboard where you can find your map and its key components, and all of the sales and marketing assets that go with it.</p>
+
+                <button class="btn btn-primary btn-lg" type="button">Explore your map</button>
+              </div>
+            </div>
+
+            <div class="p-3 bg-light rounded-3  mt-5 mx-5 col-md-12 shadow">
+              <div class="container-fluid py-5">
+                <h1 class="display-6 fw-normal">Dashboard</h1>
+
+                <p class="col-md-12">
+
+                  <p class="fs-5">This is your dashboard where you can find your map and its key components, and all of the sales and marketing assets that go with it.</p>
+
+                <button class="btn btn-primary btn-lg" type="button">Explore your map</button>
+              </div>
+            </div>
+
+            <div class="p-3 bg-light rounded-3  mt-5 mx-5 col-md-12 shadow">
+              <div class="container-fluid py-5">
+                <h1 class="display-6 fw-normal">Dashboard</h1>
+
+                <p class="col-md-12">
+
+                  <p class="fs-5">This is your dashboard where you can find your map and its key components, and all of the sales and marketing assets that go with it.</p>
+
+                <button class="btn btn-primary btn-lg" type="button">Explore your map</button>
+              </div>
+            </div>
+
+            <div class="p-3 bg-light rounded-3  mt-5 mx-5 col-md-12 shadow">
+              <div class="container-fluid py-5">
+                <h1 class="display-6 fw-normal">Dashboard</h1>
+
+                <p class="col-md-12">
+
+                  <p class="fs-5">This is your dashboard where you can find your map and its key components, and all of the sales and marketing assets that go with it.</p>
+
+                <button class="btn btn-primary btn-lg" type="button">Explore your map</button>
+              </div>
+            </div>
+
+
+            <div class="p-3 bg-light rounded-3  mt-5 mx-5 col-md-12 shadow">
+              <div class="container-fluid py-5">
+                <h1 class="display-6 fw-normal">Dashboard</h1>
+
+                <p class="col-md-12">
+
+                  <p class="fs-5">This is your dashboard where you can find your map and its key components, and all of the sales and marketing assets that go with it.</p>
+
+                <button class="btn btn-primary btn-lg" type="button">Explore your map</button>
+              </div>
+            </div>
+
+          <div x-show="Alpine.store('currentScreen').current === 'maps'">
+            <!-- Message Map screen markup -->
+            <h4>{BrandName} Message Map</h4>
+          </div>
+
+          <div x-show="Alpine.store('currentScreen').current === 'interviews'">
+            <!-- Interview screen markup -->
+            <h4>Your Interviews</h4>
+          </div>
+
+          <div x-show="Alpine.store('currentScreen').current === 'strategies'">
+            <!-- Message Map screen markup -->
+            <h4>Strategy Map</h4>
+          </div>
+
+          <div x-show="Alpine.store('currentScreen').current === 'assets'">
+            <!-- Interview screen markup -->
+            <h4>Brand Assets for Sales and Marketing</h4>
+          </div>
+
+          <div x-show="Alpine.store('currentScreen').current === 'accounts'">
+            <!-- Dashboard screen markup -->
+            <h4>Your Account</h4>
+          </div>
+        </div>
+      </div><!-- /#Main -->
+
+
+    </div><!-- /.body-inner -->
+  </div><!-- /#Body -->
+
+</div><!-- /  --><!-- /.Logged_In_States -->
+
+
+
+
+
+
+<!-- Logged Out States -->
+
+
+<!-- Signin -->
+<div id="Logged_Out_States"  x-show="Alpine.store('authenticationStatus').current === 'loggedOut'" x-transition>
+
+  <!-- home -->
+  <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'home'" x-transition>
+    <div class="row h-100 align-items-center home-inner">
+
+      <h1>If your website doesn't map to your messaging, it's a waste of time</h1>
+
+      Get your website Message Map <input type="text" placeholder="Enter URL" class="form-control" id="floatingInput">
+
+    </div>
+  </div>
+  <!-- /home -->
+
+  <!-- contact -->
+  <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'contact'" x-transition>
+    <div class="row no-gutters h-100 align-items-center contact-inner">
+      <main class="form-signin  m-auto ">
+        <form>
+          <div class="text-center mb-3">
+            <img class="mb-0" src="app/logo/logo-dark-60x60.png" alt="" width="60" height="60">
+          </div>
+          <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+          <div class="form-floating">
+            <input type="email" class="form-control" id="floatingInput" placeholder="">"
+            <label for="floatingInput">Email address</label>
+          </div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="floatingInput" placeholder="">
+            <label for="floatingInput">Name</label>
+          </div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="floatingInput" placeholder="">
+            <label for="floatingInput">Company</label>
+          </div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="floatingInput" placeholder="">
+            <label for="floatingInput">Phone</label>
+          </div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="floatingInput" placeholder="">
+            <label for="floatingInput">Message</label>
+          </div>
+          <div class="input">
+            <button class="btn btn-lg btn-primary" type="submit">Submit</button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </div><!-- /contact -->
+
+  <!-- privacy -->
+  <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'privacy'" x-transition>
+    <div class="row no-gutters h-100 align-items-center home-inner">
+      Privacy Policy
+    </div>
+  </div>
+  <!-- /privacy -->
+
+  <!-- terms -->
+  <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'terms'" x-transition>
+    <div class="row no-gutters h-100 align-items-center home-inner">
+      Terms and Conditions
+    </div>
+  </div>
+  <!-- /terms -->
+
+
+    <!-- sign up -->
+    <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'signup'" x-transition>
+      <div class="row no-gutters h-100 align-items-center home-inner">
+        Terms and Conditions
+      </div>
+    </div>
+    <!-- /sign up -->
+
+  <!-- login -->
+  <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'login'" x-transition>
+    <div class="row no-gutters h-100 align-items-center login-inner">
+
+      <div class="col col-md-5  my-5">
+
+        <main class="form-signin  m-auto ">
+          <form>
+            <div class="text-center mb-3">
+              <img class="mb-0" src="app/logo/logo-dark-60x60.png" alt="" width="60" height="60">
+            </div>
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+            <div class="form-floating">
+              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+              <label for="floatingInput">Email address</label>
+            </div>
+            <div class="form-floating">
+              <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+              <label for="floatingPassword">Password</label>
+            </div>
+
+            <div class="checkbox mb-3 text-secondary text-small d-flex align-items-center justify-content-between">
+              <label>
+                <input type="checkbox" value="remember-me" class="pb-2 mr-2" style="position:relative;top:2px"> Remember me
+              </label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary shadow shadow-lg" type="submit" x-on:click.prevent="isLoggedIn = true">Sign in</button>
+          </form>
+        </main>
+
+      </div>
+
+      <div class="col-md-7  m-0 p-0 vh-100  d-flex align-items-end justify-content-end"  style="background-image: url('app/aspire.jpg');background-size: cover;background-position: center center">
+        <div class="credits  text-right p-3 text-small me-2">
+          Photo by <a href="https://unsplash.com/@grakozy?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Greg Rakozy</a>
+        </div>
+      </div>
+  </div>
+  </div><!-- /CurrentPage.login -->
+
+</div><!--  /#Logged_Out_States -->
+
+<!--  #Logged_Out_States -->
+
+</body>
+</html>
