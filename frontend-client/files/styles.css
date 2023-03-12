@@ -12,6 +12,9 @@ https://api.flutter.dev/flutter/animation/Curves/easeInOutCubicEmphasized-consta
 
 */
 
+
+a {color:#377EA4;}
+
 a.disabled {
   pointer-events: none;
   cursor: default;
