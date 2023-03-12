@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <!-- Custom CSS -->
-  <link href="app/styles.css" rel="stylesheet">
+  <link href="files/styles.css" rel="stylesheet">
 </head>
 
 <body x-data x-bind:class="[  Alpine.store('authenticationStatus').current, Alpine.store('currentPage').current, Alpine.store('currentScreen').current, Alpine.store('lightDarkMode').current,  Alpine.store('sidebarStatus').current]">
@@ -30,7 +30,7 @@
 document.addEventListener('alpine:init', () => {
 
   Alpine.store('authenticationStatus', {
-    current: 'loggedOut',
+    current: 'loggedIn',
     items: ['loggedIn','loggedOut']
   });
 
@@ -67,7 +67,7 @@ Alpine.store('currentPage', {
       <div class="d-flex align-items-center">
         <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
           x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
-          <img class="mb-0 me-2" src="app/logo/logo-dark-40x40.png" alt="" width="36" height="36">
+          <img class="mb-0 me-2" src="files/logo/logo-dark-40x40.png" alt="" width="36" height="36">
           <div class="brand-name fw-bold fs-4">MessageMaps<span class="text-secondary"></span></div>
         </a>
       </div>
@@ -117,13 +117,13 @@ Alpine.store('currentPage', {
               x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
                 <span class="material-symbols-outlined medium">map</span></a>
             </li>
-            <li class="my-3  text-center strategy child">
-              <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">
-                <span class="material-symbols-outlined medium">explore</span></a>
-            </li>
             <li class="my-3  text-center interviews child">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
                 <span class="material-symbols-outlined medium">auto_detect_voice</span></a>
+            </li>
+            <li class="my-3  text-center strategy child">
+              <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">
+                <span class="material-symbols-outlined medium">explore</span></a>
             </li>
             <li class="my-3  text-center assets child">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'">
@@ -162,19 +162,19 @@ Alpine.store('currentPage', {
             <li class="my-3 maps" >
               <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
                 <span class="material-symbols-outlined medium me-2">map</span>
-                Brightr 2023 Salesmap
+                Sa'ar's first map
               </a>
+            </li>
+            <li class="my-3 interviews child">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
+                <span class="material-symbols-outlined medium me-2">auto_detect_voice</span>Your Interview</a>
             </li>
             <li class="my-3 strategy child">
               <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">
                 <span class="material-symbols-outlined medium me-2">explore</span>Brand Strategy</a>
             </li>
-            <li class="my-3 interviews child">
-              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
-                <span class="material-symbols-outlined medium me-2">auto_detect_voice</span>Your Interviews</a>
-            </li>
             <li class="my-3 assets child">
-              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'">
+              <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'" >
                 <span class="material-symbols-outlined medium me-2">dashboard_customize</span>Sales & Marketing Assets</a>
             </li>
             <div class="dropdown-divider"></div>
@@ -213,9 +213,9 @@ Alpine.store('currentPage', {
 
             <div class="p-5 bg-light rounded-3  mt-5 mx-5 shadow">
               <div class="container-fluid py-5">
-                <h1 class="display-5 fw-bold">Welcome to Salesmaps!!</h1>
+                <h1 class="display-5 fw-bold">Welcome to Message Maps!!</h1>
 
-                <p class="col-md-12 fs-4"><b>Rowan</b>, I'm so glad you're here. If you need anything, don't hesitate to reach out on
+                <p class="col-md-12 fs-4"><b>Sa'ar</b>, I'm so glad you're here. If you need anything, don't hesitate to reach out on
                   Slack or through our support system.<br>
                   - Rowan, Message Maps founder</p>
 
