@@ -12,6 +12,12 @@ https://api.flutter.dev/flutter/animation/Curves/easeInOutCubicEmphasized-consta
 
 */
 
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+  color: #ccc;
+}
+
 .sidebar-dropdown {
   position: fixed;
   bottom: 0;
