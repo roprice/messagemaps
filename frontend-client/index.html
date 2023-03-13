@@ -25,7 +25,13 @@
   <link href="files/styles.css" rel="stylesheet">
 </head>
 
-<body x-data x-bind:class="[  Alpine.store('authenticationStatus').current, Alpine.store('currentPage').current, Alpine.store('currentScreen').current, Alpine.store('lightDarkMode').current,  Alpine.store('sidebarStatus').current], Alpine.store('sidebarStatus').current]">
+<body x-data x-bind:class="[
+  Alpine.store('authenticationStatus').current,
+  Alpine.store('currentPage').current,
+  Alpine.store('currentScreen').current,
+  Alpine.store('lightDarkMode').current,
+  Alpine.store('sidebarStatus').current],
+  Alpine.store('sidebarStatus').current]">
 
 <!-- custom js -->
 <script>
@@ -335,27 +341,8 @@ Alpine.store('currentPage', {
 
             <div   class="card shadow my-5 p-3 col-md-9">
               <div class="card-body">
-                <h5 class="card-title">Interview</h5>
+                <h5 class="card-title">Sa'ar's First Interview</h5>
                 <p class="card-text">
-                  Bootstrap Form Builder
-
-4.1.3
- Add a field
- Edit field
- Form settings
-Title
-Who has a similar audience as you but isn't a direct competitor?
-Unique id and name
-partners
-Help text (instructions)
-Rows
-5
- Display label?
- Required field?
- Editor
- Code
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-
 <form>
   <div class="form-group">
     <label for="brand_name">What's the name of the brand I'm interviewing you about?</label>
@@ -608,10 +595,10 @@ Rows
     <textarea id="partners" name="partners" cols="40" rows="5" class="form-control"></textarea>
   </div>
   <div class="form-group">
-    <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+    <button name="submit" type="submit" class="btn btn-primary">Submit Your Interview</button>
   </div>
 </form>
-Built with: Bootstrap, Vue.js, Prism.jsCreated by Chris Youderian in 2018-2020 - chris@bootstrapformbuilder.com
+
                 </p>
 
               </div>
