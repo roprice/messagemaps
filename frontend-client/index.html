@@ -434,35 +434,6 @@ Alpine.store('currentPage', {
 
 </div><!--  /#Logged_Out_States -->
 
-<!--  #Logged_Out_States -->
-<script>
-  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
-  })
-</script>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyCr6MgKPfcpCYCXUPphSuPD3BAyXTf1AK0",
-    authDomain: "messagemaps.firebaseapp.com",
-    projectId: "messagemaps",
-    storageBucket: "messagemaps.appspot.com",
-    messagingSenderId: "973988509508",
-    appId: "1:973988509508:web:52628df8e68bb8fb958911",
-    measurementId: "G-E0HNP7NESD"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
 </body>
 </html>
