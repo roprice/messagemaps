@@ -12,6 +12,9 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
   <!-- Google Material Icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <!-- Google Variable Fonts-->
@@ -22,7 +25,7 @@
   <link href="files/styles.css" rel="stylesheet">
 </head>
 
-<body x-data x-bind:class="[  Alpine.store('authenticationStatus').current, Alpine.store('currentPage').current, Alpine.store('currentScreen').current, Alpine.store('lightDarkMode').current,  Alpine.store('sidebarStatus').current]">
+<body x-data x-bind:class="[  Alpine.store('authenticationStatus').current, Alpine.store('currentPage').current, Alpine.store('currentScreen').current, Alpine.store('lightDarkMode').current,  Alpine.store('sidebarStatus').current], Alpine.store('sidebarStatus').current]">
 
 <!-- custom js -->
 <script>
@@ -45,6 +48,13 @@ Alpine.store('currentPage', {
   Alpine.store('currentScreen', {
     current: 'dashboard',
     items: ['account','dashboard','maps','interviews','strategies','assets','newMap']
+  });
+
+
+   // app-level states
+   Alpine.store('onboarding', {
+    current: 'welcome',
+    items: ['welcome','hiddenwelcome']
   });
 
   Alpine.store('lightDarkMode', {
@@ -72,7 +82,9 @@ Alpine.store('currentPage', {
     <div class="row body-inner">
 
       <div id="CollapsedSidebar" class="py-0 pl-2 pe-0 col-md-1 border-end"
-      x-show.transition="Alpine.store('sidebarStatus').current === 'collapsed'">
+      x-show="Alpine.store('sidebarStatus').current === 'collapsed'"
+      x-transition:enter.duration.500ms
+>
 
         <div class="position-relative m-0">
           <a href="#" class="text-secondary expandSidebar text-small navlink linkdark p-0 position-absolute top-0 end-0 border-small d-flex align-items-center" x-on:click.prevent="Alpine.store('sidebarStatus').current = 'expanded'">
@@ -123,7 +135,8 @@ Alpine.store('currentPage', {
       </div><!-- end of #CollapsedSidebar -->
 
       <div id="ExpandedSidebar" class="py-0 pl-2 pe-0  col-md-3 border-end"
-      x-show.transition="Alpine.store('sidebarStatus').current === 'expanded'" >
+      x-show="Alpine.store('sidebarStatus').current === 'expanded'"
+      x-transition:enter.duration.400ms>
 
         <div class="position-relative m-0">
             <a href="#" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
@@ -135,39 +148,39 @@ Alpine.store('currentPage', {
         <div class="sidenav-wrapper py-5 px-2">
 
           <div class="logo my-3 middle text-center">
-            <a href="#" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
+            <a href="#" class="mx-auto my-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
               <img class="mb-auto" src="files/logo/logo-dark-40x40.png" alt="" width="36" height="36">
             </a>
-            <div class="brand-name fw-bold fs-6">MessageMaps<span class="text-secondary">.io</span></div>
+            <div class="brand-name fw-bold">MESSAGE <span class="text-secondary">MAPS</span></div>
           </div>
 
           <ul class="nav sidebar-nav nav-pills flex-column mb-auto pt-2 pb-2">
 
             <li class="my-3 dashboard">
-              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'; window.history.pushState(null, null, '/dashboard')">
                 <span class="material-symbols-outlined medium me-2">dashboard</span>Dashboard</a>
             </li>
             <li class="my-3 maps" >
-              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'; window.history.pushState(null, null, '/maps')">
                 <span class="material-symbols-outlined medium me-2">map</span>
                 Sa'ar's first map
               </a>
             </li>
             <li class="my-3 interviews child">
-              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">
                 <span class="material-symbols-outlined medium me-2">auto_detect_voice</span>Your Interview</a>
             </li>
             <li class="my-3 strategy child">
-              <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">
+              <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; window.history.pushState(null, null, '/strategy')">
                 <span class="material-symbols-outlined medium me-2">explore</span>Brand Strategy</a>
             </li>
             <li class="my-3 assets child">
-              <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'" >
+              <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'; window.history.pushState(null, null, '/assets')" >
                 <span class="material-symbols-outlined medium me-2">dashboard_customize</span>Sales & Marketing Assets</a>
             </li>
             <div class="dropdown-divider"></div>
             <li class="my-3 newMap">
-              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'; window.history.pushState(null, null, '/new-map')">
                 <span class="material-symbols-outlined medium me-2">add_circle</span>Get a new map</a>
             </li>
           </ul>
@@ -194,39 +207,57 @@ Alpine.store('currentPage', {
         'col-md-11': Alpine.store('sidebarStatus').current === 'collapsed'
       }">
 
-<header class="p-3 border-bottom bg-white shadow-sm">
-  <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <header class="p-3 border-bottom bg-white shadow-sm">
+          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
-    <div id="accountSettings" class="dropdown text-end account-settings ms-auto me-0">
-      <div class="d-flex align-items-center">
-        <span class="welcome me-2 small">Welcome, Sa'ar!</span>
-        <svg class="bi pe-none me-2 notifications-bell" width="20" height="20"><use xlink:href="#bell"/></svg>
-        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-        </a>
-      </div>
-      <ul class="dropdown-menu text-small">
-        <li><a href="#">New message map...</a></li>
-        <li><a href="#">Settings</a></li>
-        <li><a href="#">Billing</a></li>
-        <li><a href="#">Downloads</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a href="#">Sign out</a></li>
-      </ul>
-    </div>
-  </div>
-</header>
+            <div id="accountSettings" class="dropdown text-end account-settings ms-auto me-0">
+              <div class="d-flex align-items-center">
+                <span class="welcome me-2 small">Welcome, Sa'ar!</span>
+                <svg class="bi pe-none me-2 notifications-bell" width="20" height="20"><use xlink:href="#bell"/></svg>
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                </a>
+              </div>
+              <ul class="dropdown-menu text-small">
+                <li><a href="#">New message map...</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Billing</a></li>
+                <li><a href="#">Downloads</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a href="#">Sign out</a></li>
+              </ul>
+            </div>
+          </div>
+        </header>
 
 
+        <div class="view-wrapper vh-100 my-5 mx-5">
 
-          <div x-show="Alpine.store('currentScreen').current === 'dashboard'" class=" vh-100">
+          <div class="dashboard-view" style="max-width: 1000px;" x-show="Alpine.store('currentScreen').current === 'dashboard'"
+          x-transition.delay.50ms
+          x-transition:enter.duration.600ms>
             <!-- Dashboard screen markup -->
 
-            <div class="p-5 bg-light rounded-3  mt-4 mx-5 shadow">
-              <div class="container-fluid py-5">
+            <h4>Dashboard</h4>
+
+            <div  x-show="Alpine.store('onboarding').current === 'welcome'" class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-3  ">
+
+              <div class="welcome-message-control position-relative m-0">
+                <a href="#" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
+                data-bs-toggle="tooltip"
+                data-bs-title="To remove this welcome message forever, click the X" data-bs-placement="top"
+                data-bs-trigger="hover"
+                x-on:click.prevent="Alpine.store('onboarding').current = 'hiddenwelcome'"
+
+                >welcome message
+                  <span class="material-symbols-outlined p-0 small ">close</span>
+                </a>
+              </div>
+
+              <div class="welcome-message container-fluid py-5">
                 <h1 class="display-6 fw-bold">Welcome Sa'ar!!</h1>
 
-                <p class="col-md-12 fs-5 mt-5"><b>First, I'm so glad you're here.</b> If you ever need anything or just want to chat, reach me
+                <p class="col-md-12 fs-5 mt-5"><b>First, I'm  glad you're here.</b> If you ever need anything or just want to chat, reach me
                   <a href="#">Slack</a> or by email at <a href="#">rowan@messagemaps.io</a>.</p>
 
                   <p class="col-md-12 fs-5"><b>Second, a brief overview</b>: each message map you creat e consist of three parts: <ol><li ><span class="fs-5">A discovery interview (or multiple interviews)</span></span><li><span class="fs-5">A brand strategy brief <li><span class="fs-5">Brand messaging assets</span></ol></p>
@@ -236,34 +267,66 @@ Alpine.store('currentPage', {
 
                   </p>
                 <button class="btn btn-primary btn-lg mt-3" type="button">Interview me</button>
-              </div>
-            </div>
+              </div><!-- /.welcome-message -->
 
-          <div x-show="Alpine.store('currentScreen').current === 'maps'">
-            <!-- Message Map screen markup -->
-            <h4>{BrandName} Message Map</h4>
-          </div>
+            </div><!-- /#welcome -->
+
+            <div x-show="Alpine.store('onboarding').current === 'hiddenwelcome'">
+
+              <div   class="card shadow my-5 p-3 col-md-4" >
+                <div class="card-body">
+                  <h5 class="card-title">Time to get started</h5>
+                  <p class="card-text">Your dashboard will show up here, but there's nothing to see. Get started by completing an interview</p>
+                  <a href="#" class="btn btn-primary">Let's Go</a>
+                </div>
+              </div>
+
+              <div   class="card shadow my-5 p-3 col-md-4" >
+                <div class="card-body">
+                  <h5 class="card-title">Help and Support</h5>
+                  <p class="card-text">
+                    <p>We're <a href=#>here on Slack at all<a > times.</p>
+                    <p>You can also use our email-based support system.</p>
+                    <p>See <a>our FAQs</a> and <a>product roadmap</a></p>
+                  </p>
+
+                </div>
+              </div>
+
+            </div><!-- /#hiddenwelcome -->
+          </div><!-- /.dashboard-view -->
 
           <div x-show="Alpine.store('currentScreen').current === 'interviews'">
             <!-- Interview screen markup -->
             <h4>Your Interviews</h4>
           </div>
 
-          <div x-show="Alpine.store('currentScreen').current === 'strategies'">
-            <!-- Message Map screen markup -->
-            <h4>Strategy Map</h4>
+            <div x-show="Alpine.store('currentScreen').current === 'maps'">
+              <!-- Message Map screen markup -->
+              <h4>{BrandName} Message Map</h4>
+
+            </div>
+
+            <div x-show="Alpine.store('currentScreen').current === 'strategies'">
+              <!-- Message Map screen markup -->
+              <h4>Strategy Map</h4>
+            </div>
+
+            <div x-show="Alpine.store('currentScreen').current === 'assets'">
+              <!-- Interview screen markup -->
+              <h4>Brand Assets for Sales and Marketing</h4>
+            </div>
+
+            <div x-show="Alpine.store('currentScreen').current === 'accounts'">
+              <!-- Dashboard screen markup -->
+              <h4>Your Account</h4>
+            </div>
           </div>
 
-          <div x-show="Alpine.store('currentScreen').current === 'assets'">
-            <!-- Interview screen markup -->
-            <h4>Brand Assets for Sales and Marketing</h4>
-          </div>
 
-          <div x-show="Alpine.store('currentScreen').current === 'accounts'">
-            <!-- Dashboard screen markup -->
-            <h4>Your Account</h4>
-          </div>
-        </div>
+        </div><!-- /.screen-wrapper -->
+
+
       </div><!-- /#Main -->
 
 
@@ -372,6 +435,12 @@ Alpine.store('currentPage', {
 </div><!--  /#Logged_Out_States -->
 
 <!--  #Logged_Out_States -->
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+</script>
 
 </body>
 </html>
