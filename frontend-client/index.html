@@ -168,7 +168,7 @@ Alpine.store('currentPage', {
             </li>
             <li class="my-3 interviews child">
               <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">
-                <span class="material-symbols-outlined medium me-2">auto_detect_voice</span>Your Interview</a>
+                <span class="material-symbols-outlined medium me-2">auto_detect_voice</span> Interview</a>
             </li>
             <li class="my-3 strategy child">
               <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; window.history.pushState(null, null, '/strategy')">
@@ -210,6 +210,8 @@ Alpine.store('currentPage', {
         <header class="p-3 border-bottom bg-white shadow-sm">
           <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
+            <div class="text-small text-secondary ms-4 ps-2" x-text="Alpine.store('currentScreen').current"></div>
+
             <div id="accountSettings" class="dropdown text-end account-settings ms-auto me-0">
               <div class="d-flex align-items-center">
                 <span class="welcome me-2 small">Welcome, Sa'ar!</span>
@@ -238,7 +240,7 @@ Alpine.store('currentPage', {
           x-transition:enter.duration.600ms>
             <!-- Dashboard screen markup -->
 
-            <h4>Dashboard</h4>
+
 
             <div  x-show="Alpine.store('onboarding').current === 'welcome'" class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-3  ">
 
@@ -255,33 +257,36 @@ Alpine.store('currentPage', {
               </div>
 
               <div class="welcome-message container-fluid py-5">
-                <h1 class="display-6 fw-bold">Welcome Sa'ar!!</h1>
+                <h3 class="display fw-bold mb-4">Welcome Sa'ar!!</h3>
 
-                <p class="col-md-12 fs-5 mt-5"><b>First, I'm  glad you're here.</b> If you ever need anything or just want to chat, reach me
+                <p class="col-md-12"><b>First, I'm  glad you're here.</b> If you ever need anything or just want to chat, reach me
                   <a href="#">Slack</a> or by email at <a href="#">rowan@messagemaps.io</a>.</p>
 
-                  <p class="col-md-12 fs-5"><b>Second, a brief overview</b>: each message map you creat e consist of three parts: <ol><li ><span class="fs-5">A discovery interview (or multiple interviews)</span></span><li><span class="fs-5">A brand strategy brief <li><span class="fs-5">Brand messaging assets</span></ol></p>
+                  <p class="col-md-12"><b>Second, a brief overview</b>: each message map you creat e consist of three parts: <ol><li ><span >A discovery interview (or multiple interviews)</span></span><li><span >A brand strategy brief <li><span >Brand messaging assets</span></ol></p>
 
-                  <p  class="col-md-12 fs-5">
-                    The first step is your <a href=#>discovery interview</a> - ready to dive in?
+                  <p  class="col-md-12">
+                    The first step is your <a href=# x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">discovery interview</a> - ready to dive in?
 
                   </p>
-                <button class="btn btn-primary btn-lg mt-3" type="button">Interview me</button>
+                <button class="btn btn-primary btn-lg mt-3" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">Interview me</button>
               </div><!-- /.welcome-message -->
 
             </div><!-- /#welcome -->
 
-            <div x-show="Alpine.store('onboarding').current === 'hiddenwelcome'">
+            <div x-show="Alpine.store('onboarding').current === 'hiddenwelcome'"
+            x-transition:enter.delay.200ms
+            x-transition:enter.duration.500ms>
 
-              <div   class="card shadow my-5 p-3 col-md-4" >
+              <div   class="card shadow my-5 p-3 col-md-4">
                 <div class="card-body">
                   <h5 class="card-title">Time to get started</h5>
-                  <p class="card-text">Your dashboard will show up here, but there's nothing to see. Get started by completing an interview</p>
-                  <a href="#" class="btn btn-primary">Let's Go</a>
+                  <p class="card-text">Dashboard items will show up here, but there's not much to see. Get started on improving your messaging by completing an interview</p>
+                  <a href="#" class="btn btn-primary" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">Let's Go</a>
                 </div>
               </div>
 
-              <div   class="card shadow my-5 p-3 col-md-4" >
+              <div   class="card shadow my-5 p-3 col-md-4"
+             >
                 <div class="card-body">
                   <h5 class="card-title">Help and Support</h5>
                   <p class="card-text">
@@ -296,9 +301,37 @@ Alpine.store('currentPage', {
             </div><!-- /#hiddenwelcome -->
           </div><!-- /.dashboard-view -->
 
-          <div x-show="Alpine.store('currentScreen').current === 'interviews'">
+          <div class="interviews-view" style="max-width: 1000px;" x-show="Alpine.store('currentScreen').current === 'interviews'"
+          x-transition.delay.50ms
+          x-transition:enter.duration.600ms>
             <!-- Interview screen markup -->
-            <h4>Your Interviews</h4>
+
+            <div  x-show="Alpine.store('onboarding').current === 'welcome'" class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-3  ">
+
+
+              <div class="welcome-message-control position-relative m-0">
+                <a href="#" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
+                data-bs-toggle="tooltip"
+                data-bs-title="To remove this welcome message forever, click the X" data-bs-placement="top"
+                data-bs-trigger="hover"
+                x-on:click.prevent="Alpine.store('onboarding').current = 'hiddenwelcome'"
+
+                >welcome message
+                  <span class="material-symbols-outlined p-0 small ">close</span>
+                </a>
+              </div>
+
+              <div class="intervew-welcome-message container-fluid py-5">
+
+                <h3 class="display fw-bold mb-4">Your first interview</h3>
+
+                <p class="col-md-12"><b>You're about to do your first interview.</b> As a reminder of how  this works, message maps rely in part on interviews. Interviews probe your brand, your competitors, your customers, your value propositions, and more. Your answers will help create a brand strategy brief and ultimately messaging assets.</p>
+                <p>Later you'll be able to add additional interviews, upload audio transcripts, and add market research.</p>
+                But first, we need to hear from you, in your own words. The more you write (you can also record your answers), the better the results. So, let's get started.</p>
+
+              </div><!-- /interviw-welcome-message -->
+
+            </div><!-- /#interview-welcome -->
           </div>
 
             <div x-show="Alpine.store('currentScreen').current === 'maps'">
