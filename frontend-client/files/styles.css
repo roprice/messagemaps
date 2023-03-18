@@ -41,21 +41,21 @@
 }
 
 .login-inner button {
-display: inline-flex;
-position: relative;
-flex-grow: 1;
-align-items: center;
-justify-content: center;
-padding: 0 30px;
-border: none;
-border-radius: 44px;
-line-height: 44px;
-text-decoration: initial;
-cursor: pointer;
-vertical-align: middle;
-background-color: #ff5757;
-color: white;
-font-size: 14px;
+  display: inline-flex;
+  position: relative;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30px;
+  border: none;
+  border-radius: 44px;
+  line-height: 44px;
+  text-decoration: initial;
+  cursor: pointer;
+  vertical-align: middle;
+  background-color: #ff5757;
+  color: white;
+  font-size: 14px;
 }
 
 
@@ -262,6 +262,13 @@ body {font-family: Inter;}
     margin:0;
   }
 
+
+  #CollapsedSidebar  .sidebar-nav li {
+    min-width:54px;
+    max-width: 54px;
+    max-height: 54px;
+}
+
   li.child {
       margin-left: 1.5rem;
   }
@@ -295,6 +302,13 @@ body {font-family: Inter;}
   }
 
 #CollapsedSidebar .sidenav a {max-height: 40px;}
+
+
+#CollapsedSidebar ul.nav {
+  align-items: center;
+}
+
+
 
 a.navlink {
   text-decoration: none;

@@ -119,9 +119,9 @@ Alpine.store('currentPage', {
 
       // Redirect the user to a protected page
       window.location.href = '/frontend-client';
-    } catch (error) {
-      handleError(error);
-    }
+      } catch (error) {
+        handleError(error);
+      }
   }
 
   function logout() {
@@ -160,40 +160,46 @@ Alpine.store('currentPage', {
 
           <div class="logo my-3 middle text-center">
             <a href="#" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
-              <img class="mb-auto" src="files/logo.png" alt="" width="36" height="36">
+              <img class="mb-auto" src="files/logo.png" alt="" width="52" height="52">
               <div class="brand-name fw-bold fs-6">&nbsp;</div>
             </a>
           </div>
 
-          <ul class="nav sidebar-nav flex-column mb-auto pt-2 py-5">
-            <li class="my-3  text-center dashboard">
-              <a class="navlink linkdark p-2 px-2 my-2" href="#"
-              x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
-              <span class="material-symbols-outlined medium">dashboard</span></a>
+          <ul class="nav sidebar-nav flex-column mb-auto pt-2 py-5 d-flex justify-content-center">
+            <li class="my-3 text-center dashboard">
+              <a class="navlink linkdark p-2 px-2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
+                <span class="material-symbols-outlined medium">dashboard</span>
+              </a>
             </li>
-            <li class="my-3  text-center maps" >
-              <a class="navlink linkdark p-2  2 my-2" href="#"
-              x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
-                <span class="material-symbols-outlined medium">map</span></a>
+            <li class="my-3 text-center maps">
+              <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+                <span class="material-symbols-outlined medium">map</span>
+              </a>
             </li>
-            <li class="my-3  text-center interviews child">
+            <li class="my-3 text-center interviews child">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
-                <span class="material-symbols-outlined medium">auto_detect_voice</span></a>
+                <span class="material-symbols-outlined medium">auto_detect_voice</span>
+              </a>
             </li>
-            <li class="my-3  text-center strategy child">
+            <li class="my-3 text-center strategy child">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">
-                <span class="material-symbols-outlined medium">explore</span></a>
+                <span class="material-symbols-outlined medium">explore</span>
+              </a>
             </li>
-            <li class="my-3  text-center assets child">
+            <li class="my-3 text-center assets child">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'">
-                <span class="material-symbols-outlined medium">dashboard_customize</span></a>
-            </a>
+                <span class="material-symbols-outlined medium">dashboard_customize</span>
+              </a>
             </li>
-            <li class="my-3  text-center newMap">
+            <li class="my-3 text-center newMap">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'">
-                <span class="material-symbols-outlined medium">add</span>&nbsp;</a>
+                <span class="material-symbols-outlined medium">add</span>&nbsp;
+              </a>
             </li>
-          <ul>
+          </ul>
+
+
+
         </div>
       </div><!-- end of #CollapsedSidebar -->
 
@@ -212,7 +218,7 @@ Alpine.store('currentPage', {
 
           <div class="logo my-3 middle text-center">
             <a href="#" class="mx-auto my-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
-              <img class="mb-auto" src="files/logo.png" alt="" width="40" height="40">
+              <img class="mb-auto" src="files/logo.png" alt="" width="52" height="52">
             </a>
             <div class="brand-name fw-bold">MESSAGE <span class="text-secondary">MAPS</span></div>
           </div>
@@ -265,12 +271,14 @@ Alpine.store('currentPage', {
               <div class="dropdown">
 
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  <div class="avatar" x-text="">SC</div>
+                  <div class="avatar">SC</div>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  <li><a class="dropdown-item" href="#">New Map</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">My Account</a></li>
+                  <li><a class="dropdown-item" href="#">Settings</a></li>
+                  <li><a class="dropdown-item" href="#">Help</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="#" @click="logout">Logout</a></li>
                 </ul>
@@ -305,9 +313,11 @@ Alpine.store('currentPage', {
                     <div class="avatar">SC</div>
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    <li><a class="dropdown-item" href="#">New Map</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">My Account</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Help</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#" @click="logout">Logout</a></li>
                   </ul>
@@ -337,7 +347,7 @@ Alpine.store('currentPage', {
                 data-bs-trigger="hover"
                 x-on:click.prevent="Alpine.store('onboarding').current = 'hiddenwelcome'"
 
-                >welcome message
+                >close
                   <span class="material-symbols-outlined p-0 small ">close</span>
                 </a>
               </div>
@@ -401,7 +411,7 @@ Alpine.store('currentPage', {
                 data-bs-trigger="hover"
                 x-on:click.prevent="Alpine.store('onboarding').current = 'hiddenwelcome'"
 
-                >welcome message
+                >close
                   <span class="material-symbols-outlined p-0 small ">close</span>
                 </a>
               </div>
@@ -423,6 +433,27 @@ Alpine.store('currentPage', {
               <div class="card-body">
                 <h5 class="card-title">Sa'ar's First Interview</h5>
                 <p class="card-text">
+
+
+                  <ul class="nav nav-pills mb-3">
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="#">Active</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                  </ul>
+
+
+
+
+
 <form>
   <div class="form-group">
     <label for="brand_name">What's the name of the brand I'm interviewing you about?</label>
