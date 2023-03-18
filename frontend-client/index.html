@@ -89,51 +89,89 @@ Alpine.store('currentPage', {
 </script>
 
 <script>
-  function handleError(error) {
-    console.error(error);
-    // Set the error message to display to the user
-    Alpine.set('error', 'An error occurred. Please try again.');
-  }
 
-  async function login(email, password) {
-    try {
-      const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:8waiSY4E:v1/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
 
-      const responseBody = await response.json();
-
-      console.log('authToken:', responseBody.authToken); // Log the response body
-
-      const token = responseBody.authToken; // once extras are added (e.g. user data), use the destructuring assignment syntax
-
-      // Save the token to local storage for future use
-      localStorage.setItem('authToken', token);
-
-      // Update the authentication status to loggedIn
-      Alpine.store('authenticationStatus').current = 'loggedIn';
-
-      // Redirect the user to a protected page
-      window.location.href = '/frontend-client';
-      } catch (error) {
-        handleError(error);
+async function fetchUserDetailsAndLog() {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:8waiSY4E:v1/auth/me', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
       }
+    });
+
+    const user = await response.json();
+
+    // Log the user data to the console
+    console.log(user);
+
+    // Display the user data on the page
+    // displayUserData(user);
+    const userWelcomeSpan = document.querySelector('.user-welcome');
+userWelcomeSpan.textContent += ` ${user.firstname}!`;
+
+    return user;
+
+  } catch (error) {
+    handleError(error);
   }
+}
 
-  function logout() {
-    // Remove the authToken from local storage
-    localStorage.removeItem('authToken');
 
-    // Update the authentication status to loggedOut
-    Alpine.store('authenticationStatus').current = 'loggedOut';
+function handleError(error) {
+  console.error(error);
+  // Set the error message to display to the user
+  Alpine.set('error', 'An error occurred. Please try again.');
+}
 
-    // Redirect the user to the login page
-    window.location.href = '/frontend-client';
-  }
+async function login(email, password) {
+  try {
+    const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:8waiSY4E:v1/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    const responseBody = await response.json();
+
+    console.log('authToken:', responseBody.authToken); // Log the response body
+
+    const token = responseBody.authToken; // once extras are added (e.g. user data), use the destructuring assignment syntax
+
+    // Save the token to local storage for future use
+    localStorage.setItem('authToken', token);
+
+    // Update the authentication status to loggedIn
+    Alpine.store('authenticationStatus').current = 'loggedIn';
+
+    // Call fetchUserDetailsAndLog() to fetch user details and log them to the console
+    await fetchUserDetailsAndLog();
+
+
+
+    } catch (error) {
+      handleError(error);
+    }
+
+
+
+}
+
+
+
+function logout() {
+  // Remove the authToken from local storage
+  localStorage.removeItem('authToken');
+
+  // Update the authentication status to loggedOut
+  Alpine.store('authenticationStatus').current = 'loggedOut';
+
+
+}
 
 
 </script>
@@ -305,7 +343,7 @@ Alpine.store('currentPage', {
 
             <div id="userMenu" class=" text-end ms-auto me-0">
               <div class="d-flex align-items-center">
-                <span class="user-welcome mt-1 me-2 pb-1 small">Welcome, Sa'ar!</span>
+                <span class="user-welcome mt-1 me-2 pb-1 small title-case">Welcome</span>
                 <a class="user-settings mt-2 me-1 navlink linkdark " href="#"><span class="material-symbols-outlined medium me-2">tune</span></a>
                 <div class="dropdown">
 
@@ -772,7 +810,7 @@ Alpine.store('currentPage', {
       <main class="form-signin  m-auto ">
         <form>
           <div class="text-center mb-3">
-            <img class="mb-0"files/logo.png alt="" width="60" height="60">
+            <img class="mb-0" src="files/logo.png" alt="" width="60" height="60">
           </div>
           <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
@@ -824,11 +862,11 @@ Alpine.store('currentPage', {
               <form @submit.prevent="login(email, password)">
                 <div>
                   <label for="email">Email:</label>
-                  <input class="input" type="email" id="email" placeholder="Enter email.." x-model="email">
+                  <input class="input" type="email" id="email" placeholder="Enter email.." x-model="email"  autocomplete="username">
                 </div>
                 <div>
                   <label for="password">Password:</label>
-                  <input type="password"  placeholder="Enter password.." id="password" x-model="password">
+                  <input type="password"  placeholder="Enter password.." id="password" x-model="password"  autocomplete="password">
                 </div>
                 <div class="mt-1">
                   <button type="submit">Login</button>

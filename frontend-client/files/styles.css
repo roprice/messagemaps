@@ -257,6 +257,9 @@ body {font-family: Inter;}
   .dropdown-toggle {
     outline: 0;
   }
+  .title-case {
+    text-transform: capitalize;
+  }
 
   #CollapsedSidebar .child {
     margin:0;
