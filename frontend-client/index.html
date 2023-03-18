@@ -160,7 +160,7 @@ Alpine.store('currentPage', {
 
           <div class="logo my-3 middle text-center">
             <a href="#" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
-              <img class="mb-auto" src="files/logo/logo-dark-40x40.png" alt="" width="36" height="36">
+              <img class="mb-auto" src="files/logo.png" alt="" width="36" height="36">
               <div class="brand-name fw-bold fs-6">&nbsp;</div>
             </a>
           </div>
@@ -212,7 +212,7 @@ Alpine.store('currentPage', {
 
           <div class="logo my-3 middle text-center">
             <a href="#" class="mx-auto my-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
-              <img class="mb-auto" src="files/logo/logo-dark-40x40.png" alt="" width="36" height="36">
+              <img class="mb-auto" src="files/logo.png" alt="" width="40" height="40">
             </a>
             <div class="brand-name fw-bold">MESSAGE <span class="text-secondary">MAPS</span></div>
           </div>
@@ -719,7 +719,7 @@ Alpine.store('currentPage', {
       <main class="form-signin  m-auto ">
         <form>
           <div class="text-center mb-3">
-            <img class="mb-0" src="files/logo/logo-dark-60x60.png" alt="" width="60" height="60">
+            <img class="mb-0"files/logo.png alt="" width="60" height="60">
           </div>
           <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
@@ -762,22 +762,22 @@ Alpine.store('currentPage', {
 
         <main class="form-signin m-auto">
 
-          <div class="text-center mb-3">
-            <img class="mb-0" src="files/logo/logo-dark-60x60.png" alt="" width="60" height="60">
+          <div class="text-center mb-4">
+            <img class="mb-0" src="frontend-client/fi" alt="" width="60" height="60">
           </div>
-          <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+          <h1 class="h4 mb-0 fw-normal">Please sign in</h1>
 
           <div x-data="{ email: '', password: '', error: ''}">
               <form @submit.prevent="login(email, password)">
                 <div>
                   <label for="email">Email:</label>
-                  <input class="input" type="email" id="email" x-model="email">
+                  <input class="input" type="email" id="email" placeholder="Enter email.." x-model="email">
                 </div>
                 <div>
                   <label for="password">Password:</label>
-                  <input type="password" id="password" x-model="password">
+                  <input type="password"  placeholder="Enter password.." id="password" x-model="password">
                 </div>
-                <div>
+                <div class="mt-1">
                   <button type="submit">Login</button>
                 </div>
                 <div x-text="error"></div>

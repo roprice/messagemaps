@@ -1,16 +1,77 @@
-/*
-cubic-bezier() easing functions
-
-decelerate:
-
-div {
-  transition: width 200ms;
-  transition-timing-function: cubic-bezier(0.1, 0.7, 1.0, 0.1);
+.login-inner label {
+  display:none;
 }
-https://api.flutter.dev/flutter/animation/Curves/easeInOutCubicEmphasized-constant.html
+
+.login-inner button {
+display: inline-flex;
+position: relative;
+flex-grow: 1;
+align-items: center;
+justify-content: center;
+padding: 0 20px;
+border: none;
+border-radius: 44px;
+background: var(--mio-theme-color-surface-1);
+color: var(--mio-theme-color-on-surface-variant);
+line-height: 44px;
+text-decoration: initial;
+cursor: pointer;
+vertical-align: middle;
+background-color: #ff5757;
+color: white;
+font-size: 14px;
+}
 
 
-*/
+.btn-primary {
+  border-color: rgba(255, 87, 87, 1);
+  display: inline-flex;
+  position: relative;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border: none;
+  border-radius: 44px;
+  background: var(--mio-theme-color-surface-1);
+  line-height: 44px;
+  -theme-color-on-surface-variant): ;
+  line-height: 40px;
+  text-decoration: initial;
+  cursor: pointer;
+  vertical-align: middle;
+  background-color: #ff5757;
+  color: white;
+  font-size: 14px;
+}
+
+.btn-primary:hover {
+  background-color: hsla(0, 100%, 60%, 1); /* 10% darker */
+  border-color:  hsla(0, 100%, 60%, 1); /* 10% darker */
+}
+
+.btn-primary:active, .btn-primary:focus {
+  background-color: hsla(0, 100%, 60%, 1); /* 10% darker */
+  border-color:  hsla(0, 100%, 60%, 1); /* 10% darker */
+}
+
+
+.login-inner input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 40px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+
+.placeholder {
+  color: #ccc;
+}
+
+
 
 .form-group {margin-bottom:2rem;}
 
@@ -74,33 +135,9 @@ body {font-family: Inter;}
   z-index: 2;
 }
 
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
 
 
-.btn-primary {
-  background-color: rgba(255, 87, 87, 1);
-  border-color:  rgba(255, 87, 87, 1);
-}
 
-.btn-primary:hover {
-  background-color: hsla(0, 100%, 60%, 1); /* 10% darker */
-  border-color:  hsla(0, 100%, 60%, 1); /* 10% darker */
-}
-
-.btn-primary:active, .btn-primary:focus {
-  background-color: hsla(0, 100%, 60%, 1); /* 10% darker */
-  border-color:  hsla(0, 100%, 60%, 1); /* 10% darker */
-}
 
 
 .dropdown-toggle { outline: 0; }
@@ -199,7 +236,7 @@ body {font-family: Inter;}
 }
   .sidebar-nav li {
 
-      border-radius: 6px;
+      border-radius: 40px;
   }
   .sidebar-nav li:hover,
   .sidebar-nav li:hover {
@@ -225,10 +262,33 @@ body {font-family: Inter;}
 
 #CollapsedSidebar .sidenav a {max-height: 40px;}
 
-.navlink {
+a.navlink {
   text-decoration: none;
-  display: block;}
-.linkdark, .linkdark:hover {
+  display: block;
+  font-size: 15px!important;
+}
+
+
+a.linkdark, a.linkdark:hover {
     color:#222;
 }
 
+input, .form-control {
+  border-radius: 16px!important;
+}
+
+
+.input-group-text {
+
+  border-radius: 16px 0 0 16px ;
+}
+
+input#brand_name {
+  border-radius: 0 16px 16px 0 !important;
+}
+
+
+.text-muted {
+  padding: 0 16px;
+  display: inline-block;
+}
