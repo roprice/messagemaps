@@ -91,6 +91,15 @@ Alpine.store('currentPage', {
 <script>
 
 
+
+window.addEventListener('load', async () => {
+  const authToken = localStorage.getItem('authToken');
+  if (authToken) {
+    // If an authToken is present in localStorage, call fetchUserDetailsAndLog()
+    await fetchUserDetailsAndLog();
+  }
+});
+
 async function fetchUserDetailsAndLog() {
   try {
     const authToken = localStorage.getItem('authToken');
@@ -109,8 +118,21 @@ async function fetchUserDetailsAndLog() {
 
     // Display the user data on the page
     // displayUserData(user);
-    const userWelcomeSpan = document.querySelector('.user-welcome');
-userWelcomeSpan.textContent += ` ${user.firstname}!`;
+    const userWelcome = document.querySelector('.user-welcome');
+    userWelcome.textContent = `Welcome back ${user.firstname}!`;
+
+
+
+    const firstName = "Rowan";
+    const lastName = "Price";
+    const initials = firstName.charAt(0) + lastName.charAt(0);
+
+    const avatarSidebar = document.querySelector('.avatar-sidebar');
+    avatarSidebar.textContent = initials;
+    const avatarHeader = document.querySelector('.avatar-header');
+    avatarHeader.textContent = initials;
+
+
 
     return user;
 
@@ -309,7 +331,7 @@ function logout() {
               <div class="dropdown">
 
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  <div class="avatar">SC</div>
+                  <div class="avatar avatar-sidebar">hi</div>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                   <li><a class="dropdown-item" href="#">New Map</a></li>
@@ -348,7 +370,7 @@ function logout() {
                 <div class="dropdown">
 
                   <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <div class="avatar">SC</div>
+                    <div class="avatar avatar-header">hi</div>
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item" href="#">New Map</a></li>
@@ -757,9 +779,42 @@ function logout() {
 
             <div x-show="Alpine.store('currentScreen').current === 'maps'">
               <!-- Message Map screen markup -->
-              <h4>{BrandName} Message Map</h4>
+              <h4>Overview of Sa'ar First Map</h4>
+              <b>"Extracted quote"</b>
+              <p>You're building a map for the [acme] brand belonging to [company name]. This is your [first] message map.</p>
+              <p>Other people who can see your map are [team member 1] and [team member 2]</p>
+              <p>Status: your interview isn't complete yet. You need to <a href=#>complete the interview<a > before you can build your map.</p>
 
-            </div>
+                <div class="row container-fluid">
+                  <div class="card shadow m-3 ms-0 col-md-4 p-3  col">
+                    <div class="card-body">
+                      <h5 class="card-title">Interview</h5>
+                      <p class="card-text">Your [first] interview is only 45% complete</p>
+                      <a href="#" class="btn my-3 btn-primary" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">Finish It</a>
+                      <p class="card-text">You can also use an interview from a team member - instead of or in addition to your own</p>
+                      <p><a href="#">Add recorded Zoom interviews</a></p>
+                    </div>
+                  </div>
+
+                  <div class="card shadow m-3 p-3 col-md-3 col">
+                    <div class="card-body">
+                      <h5 class="card-title">Brand Strategy</h5>
+                      <p class="card-text">Complete your interview to unveil your brand strategy</p>
+                      <p><a href="#" class="btn btn-seconday" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">Finish It</a></p>
+                    </div>
+                  </div>
+
+                  <div class="card shadow m-3 me-0  p-3 col-md-3 col">
+                    <div class="card-body">
+                      <h5 class="card-title">Brand Assets</h5>
+                      <p class="card-text">no marketing assets :(</p>
+                      <p class="card-text">no sales assets:(</p>
+                      <p><a href="#" class="" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">Finish your interview</a> and brand strategy to get started making assets</p>
+                    </div>
+                  </div>
+                </div>
+
+
 
             <div x-show="Alpine.store('currentScreen').current === 'strategies'">
               <!-- Message Map screen markup -->

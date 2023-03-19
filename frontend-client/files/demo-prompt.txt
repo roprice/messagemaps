@@ -1,1 +1,0 @@
-write a headline for a B2B SaaS company that wants its customers to stop managing 100s of excel files. return just one example. your tone is serious.
