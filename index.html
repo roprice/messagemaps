@@ -76,7 +76,7 @@ document.addEventListener('alpine:init', () => {
       items: ['light','dark']
     });
 
-    Alpine.store('errorMessage', ''); // initialize the errorMessage global state
+    Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
 
     Alpine.store('sidebarStatus', {
       current: localStorage.getItem('sidebarStatus') || 'expanded',
@@ -89,6 +89,10 @@ document.addEventListener('alpine:init', () => {
 
 });
 
+function handleError(error) {
+  console.error(error);
+  // Handle the error as needed (e.g. display an error message to the user)
+}
 
 window.addEventListener('load', async () => {
   const authToken = localStorage.getItem('authToken');
@@ -114,17 +118,24 @@ async function fetchUserDetailsAndLog() {
     // Log the user data to the console
     console.log(user);
 
-    // Display the user data on the page
-    // displayUserData(user);
+
+    // Capture user information as variables
+    const accountTier = user.account_tier;
+    const companyId = user.company_id;
+    const createdAt = user.created_at;
+    const email = user.email;
+    const firstName = user.firstname;
+    const id = user.id;
+    const lastName = user.lastname;
+    const role = user.role;
+
+
+    // Display the user's first name in the welcome message
     const userWelcome = document.querySelector('.user-welcome');
     userWelcome.textContent = `Welcome back ${user.firstname}!`;
 
-
-
-    const firstName = "Rowan";
-    const lastName = "Price";
+    // Display the user's initials in the sidebar and header
     const initials = firstName.charAt(0) + lastName.charAt(0);
-
     const avatarSidebar = document.querySelector('.avatar-sidebar');
     avatarSidebar.textContent = initials;
     const avatarHeader = document.querySelector('.avatar-header');
@@ -140,10 +151,10 @@ async function fetchUserDetailsAndLog() {
 }
 
 
-
-
 async function login(email, password) {
+  console.log('login function executed');
   try {
+    console.log('try block executed');
     const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:8waiSY4E:v1/auth/login', {
       method: 'POST',
       headers: {
@@ -153,42 +164,43 @@ async function login(email, password) {
     });
 
     if (response.status === 200 || response.status === 201) {
+
+      Alpine.store('errorMessage', '');
+
       const responseBody = await response.json();
 
       console.log('authToken:', responseBody.authToken); // Log the response body
 
-      const token = responseBody.authToken; // once extras are added (e.g. user data), use the destructuring assignment syntax
+      const token = responseBody.authToken;
 
-      // Save the token to local storage for future use
       localStorage.setItem('authToken', token);
 
-      // Update the authentication status to loggedIn
       Alpine.store('authenticationStatus').current = 'loggedIn';
 
-      // Call fetchUserDetailsAndLog() to fetch user details and log them to the console
       await fetchUserDetailsAndLog();
 
-       // update the error message state to an empty string
-       Alpine.store('errorMessage', '');
+
+
+    } else if (response.status === 403) {
+  // incorrect password case
+  const errorResponse = await response.json();
+  console.log('403 errorMessage:', errorResponse.message); // Log the errorResponse
+  Alpine.store('errorMessage', {message: "Sorry - " + errorResponse.message});
+}
+
+    else {
+
+  // other error case
+  const errorResponse = await response.json();
+  handleError(errorResponse.message);
 
     }
-    else if (response.status === 403) {
-      // incorrect password case
-      // update the error message state with the appropriate message
-      Alpine.store('errorMessage', 'Incorrect email or password');
-    }
-    else {
-      // other error case
-      handleError(errorResponse.error);
-    }
   } catch (error) {
+    console.log('catch block executed');
     handleError(error);
   }
 }
 
-function handleError(error) {
-  console.error(error);
-}
 
 
 
@@ -198,12 +210,81 @@ function logout() {
 
   // Update the authentication status to loggedOut
   Alpine.store('authenticationStatus').current = 'loggedOut';
-
-
 }
 
 
 </script>
+
+
+
+<!-- Logged Out States -->
+
+
+<!-- Signin -->
+<div id="Logged_Out_States"  x-show="Alpine.store('authenticationStatus').current === 'loggedOut'" x-transition>
+
+  <!-- login -->
+  <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'login'" x-transition>
+    <div class="row no-gutters h-100 align-items-center login-inner">
+
+      <div class="col col-md-5  my-5">
+
+        <main class="form-signin m-auto">
+
+          <div class="text-center mb-4">
+            <img class="mb-0" src="files/logo.png" alt="" width="60" height="60">
+          </div>
+          <h1 class="h4 mb-0 fw-normal">Please sign in</h1>
+
+          <div x-data="{ email: '', password: ''}">
+              <form @submit.prevent="login(email, password)">
+                <div>
+                  <label for="email">Email:</label>
+                  <input class="input" type="email" id="email" placeholder="Enter email.." x-model="email"  autocomplete="username">
+                </div>
+                <div>
+                  <label for="password">Password:</label>
+                  <input type="password"  placeholder="Enter password.." id="password" x-model="password"  autocomplete="password">
+                </div>
+
+
+                <div class="mt-1">
+                  <button type="submit">Login</button>
+                </div>
+
+                <div class="alert alert-danger rounded-2 mt-2 p-2" style="text-align:center" x-show="Alpine.store('errorMessage').message" x-text="Alpine.store('errorMessage').message" x-transition:enter.duration.200ms></div>
+
+
+
+              </form>
+            </div>
+
+
+
+          </main>
+
+      </div>
+
+      <div class="col-md-7  m-0 p-0 vh-100  d-flex align-items-end justify-content-end"  style="background-image: url('files/aspire.jpg');background-size: cover;background-position: center center">
+        <div class="credits  text-right p-3 text-small me-2">
+          Photo by <a href="https://unsplash.com/@grakozy?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Greg Rakozy</a>
+        </div>
+      </div>
+  </div>
+  </div><!-- /CurrentPage.login -->
+
+
+    <!-- sign up -->
+    <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'signup'" x-transition>
+      <div class="row no-gutters h-100 align-items-center home-inner">
+        Terms and Conditions
+      </div>
+    </div>
+    <!-- /sign up -->
+
+</div><!--  /#Logged_Out_States -->
+
+
 
 <div class="container-fluid m-0 p-0 vw-100 vh-100" id="Logged_In_States" x-show="Alpine.store('authenticationStatus').current === 'loggedIn'" x-transition>
 
@@ -852,107 +933,7 @@ function logout() {
 </div><!-- /  --><!-- /.Logged_In_States -->
 
 
-<!-- Logged Out States -->
 
-
-<!-- Signin -->
-<div id="Logged_Out_States"  x-show="Alpine.store('authenticationStatus').current === 'loggedOut'" x-transition>
-
-  <!-- home -->
-  <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'home'" x-transition>
-    <div class="row h-100 align-items-center home-inner">
-
-    </div>
-  </div>
-  <!-- /home -->
-
-  <!-- contact -->
-  <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'contact'" x-transition>
-    <div class="row no-gutters h-100 align-items-center contact-inner">
-      <main class="form-signin  m-auto ">
-        <form>
-          <div class="text-center mb-3">
-            <img class="mb-0" src="files/logo.png" alt="" width="60" height="60">
-          </div>
-          <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-
-
-        </form>
-      </main>
-    </div>
-  </div><!-- /contact -->
-
-  <!-- privacy -->
-  <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'privacy'" x-transition>
-    <div class="row no-gutters h-100 align-items-center home-inner">
-      Privacy Policy
-    </div>
-  </div>
-  <!-- /privacy -->
-
-  <!-- terms -->
-  <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'terms'" x-transition>
-    <div class="row no-gutters h-100 align-items-center home-inner">
-      Terms and Conditions
-    </div>
-  </div>
-  <!-- /terms -->
-
-
-    <!-- sign up -->
-    <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'signup'" x-transition>
-      <div class="row no-gutters h-100 align-items-center home-inner">
-        Terms and Conditions
-      </div>
-    </div>
-    <!-- /sign up -->
-
-  <!-- login -->
-  <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'login'" x-transition>
-    <div class="row no-gutters h-100 align-items-center login-inner">
-
-      <div class="col col-md-5  my-5">
-
-        <main class="form-signin m-auto">
-
-          <div class="text-center mb-4">
-            <img class="mb-0" src="files/logo.png" alt="" width="60" height="60">
-          </div>
-          <h1 class="h4 mb-0 fw-normal">Please sign in</h1>
-
-          <div x-data="{ email: '', password: '', errorMessage: ''}">
-              <form @submit.prevent="login(email, password)">
-                <div>
-                  <label for="email">Email:</label>
-                  <input class="input" type="email" id="email" placeholder="Enter email.." x-model="email"  autocomplete="username">
-                </div>
-                <div>
-                  <label for="password">Password:</label>
-                  <input type="password"  placeholder="Enter password.." id="password" x-model="password"  autocomplete="password">
-                </div>
-                <div class="mt-1">
-                  <button type="submit">Login</button>
-                </div>
-                <div  x-text="errorMessage"></div>
-                <div  x-text="email"></div>
-              </form>
-            </div>
-
-
-
-          </main>
-
-      </div>
-
-      <div class="col-md-7  m-0 p-0 vh-100  d-flex align-items-end justify-content-end"  style="background-image: url('files/aspire.jpg');background-size: cover;background-position: center center">
-        <div class="credits  text-right p-3 text-small me-2">
-          Photo by <a href="https://unsplash.com/@grakozy?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Greg Rakozy</a>
-        </div>
-      </div>
-  </div>
-  </div><!-- /CurrentPage.login -->
-
-</div><!--  /#Logged_Out_States -->
 
 
 </body>
