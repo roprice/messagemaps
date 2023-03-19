@@ -1,1 +1,1 @@
-# messagemaps helps technology firms communicate better with customers, partners, and their own teams
+# messagemaps helps tech firms quickly find their message
