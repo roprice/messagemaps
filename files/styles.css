@@ -2,8 +2,6 @@
   --bs-border-radius-lg: 2rem;
 }
 
-
-
 .avatar {
   display: inline-flex;
   justify-content: center;
@@ -15,6 +13,7 @@
   color: #222;
   font-size: 13px;
   letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .avatar::after {
@@ -335,7 +334,6 @@ input, .form-control {
 input#brand_name {
   border-radius: 0 16px 16px 0 !important;
 }
-
 
 .text-muted {
   padding: 0 16px;
