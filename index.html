@@ -523,7 +523,7 @@ function logout() {
               </div>
 
               <div class="welcome-message container-fluid py-5">
-                <h3 class="display fw-bold mb-4">Welcome Sa'ar!!</h3>
+                <h3 class="display fw-bold mb-4">Welcome <span>[user firstname]<span></h3>
 
                 <p class="col-md-12"><b>First, I'm  glad you're here.</b> If you ever need anything or just want to chat, reach me
                   <a href="#">Slack</a> or by email at <a href="#">rowan@messagemaps.io</a>.</p>
@@ -894,6 +894,27 @@ function logout() {
               <p>You're building a map for the [acme] brand belonging to [company name]. This is your [first] message map.</p>
               <p>Other people who can see your map are [team member 1] and [team member 2]</p>
               <p>Status: your interview isn't complete yet. You need to <a href=#>complete the interview<a > before you can build your map.</p>
+
+
+                <script>
+                  async function fetchMessageMap(messagemap_id) {
+                    // Replace `YOUR_API_BASE_URL` with the base URL of your Xano API
+                    const response = await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:8waiSY4E/messagemap/4`);
+
+                    if (response.ok) {
+                      const data = await response.json();
+                      console.log(data);
+                    } else {
+                      console.error('Error fetching messagemap:', response.statusText);
+                    }
+                  }
+
+                  // Call the function with the desired messagemap_id
+                  fetchMessageMap(4);
+                </script>
+
+
+
 
                 <div class="row container-fluid">
                   <div class="card shadow m-3 ms-0 col-md-4 p-3  col">
