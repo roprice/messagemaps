@@ -122,8 +122,8 @@ async function fetchUserDetailsAndLog() {
 
 
     // Capture user information as variables
+    // const teamName = user.teamName;
     const accountTier = user.account_tier;
-    const companyId = user.company_id;
     const createdAt = user.created_at;
     const email = user.email;
     const firstName = user.firstname;
@@ -472,7 +472,7 @@ function logout() {
       }">
 
         <header class="p-3 border-bottom bg-white shadow-sm">
-          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start me-2">
 
             <div class="text-small text-secondary ms-4 ps-2" x-text="Alpine.store('currentScreen').current"></div>
 
