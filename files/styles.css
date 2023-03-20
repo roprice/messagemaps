@@ -357,3 +357,8 @@ input#brand_name {
   padding: 0 16px;
   display: inline-block;
 }
+
+
+.disabled {
+  color: #ccc;
+}
