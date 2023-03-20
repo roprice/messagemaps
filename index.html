@@ -50,27 +50,21 @@ document.addEventListener('alpine:init', () => {
     current: localStorage.getItem('authToken') ? 'loggedIn' : 'loggedOut',
     items: ['loggedIn','loggedOut']
   });
-
   // site-level states
   Alpine.store('currentPage', {
       current: 'login',
       items: ['signup', 'login']
     });
-
-
     // app-level states
     Alpine.store('currentScreen', {
       current: 'dashboard',
       items: ['account','dashboard','maps','interviews','strategies','assets','newMap']
     });
-
-
     // app-level states
     Alpine.store('onboarding', {
       current: 'welcome',
       items: ['welcome','hiddenwelcome']
     });
-
     Alpine.store('lightDarkMode', {
       current: 'light',
       items: ['light','dark']
@@ -79,8 +73,6 @@ document.addEventListener('alpine:init', () => {
     Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
 
     Alpine.store('showSuccessMessage', false); // initialize the errorMessage global state
-
-
 
     Alpine.store('sidebarStatus', {
       current: localStorage.getItem('sidebarStatus') || 'expanded',
@@ -98,10 +90,16 @@ function handleError(error) {
   // Handle the error as needed (e.g. display an error message to the user)
 }
 
+
 window.addEventListener('load', async () => {
+
+      // If an authToken is already present in localStorage, get the user's details and save as variables
+
+         // If an authToken is already present in localStorage, get the user's details and save as variables
+
+
   const authToken = localStorage.getItem('authToken');
   if (authToken) {
-    // If an authToken is present in localStorage, call fetchUserDetailsAndLog()
     await fetchUserDetailsAndLog();
   }
 });
@@ -171,12 +169,6 @@ async function login(email, password) {
 
       Alpine.store('errorMessage', '');
 
-      // Display success message
-      Alpine.store('showSuccessMessage', true);
-      setTimeout(() => {
-        Alpine.store('showSuccessMessage', false);
-      }, 3000);
-
       const responseBody = await response.json();
 
       console.log('authToken:', responseBody.authToken); // Log the response body
@@ -185,23 +177,18 @@ async function login(email, password) {
 
       localStorage.setItem('authToken', token);
 
-      await fetchUserDetailsAndLog();
-
-
       Alpine.store('authenticationStatus').current = 'loggedIn';
 
+      await fetchUserDetailsAndLog();
 
 
 
     } else if (response.status === 403) {
-      // incorrect password case
-      const errorResponse = await response.json();
-      console.log('403 errorMessage:', errorResponse.message); // Log the errorResponse
-      Alpine.store('errorMessage', {message: "Sorry - " + errorResponse.message});
-      Alpine.store('errorMessage', {message: 'Sorry, wrong email or password'});
-
-
-    }
+  // incorrect password case
+  const errorResponse = await response.json();
+  console.log('403 errorMessage:', errorResponse.message); // Log the errorResponse
+  Alpine.store('errorMessage', {message: "Sorry - " + errorResponse.message});
+}
 
     else {
 
@@ -228,6 +215,8 @@ function logout() {
 }
 
 
+
+
 </script>
 
 
@@ -236,7 +225,7 @@ function logout() {
 
 
 <!-- Signin -->
-<div id="Logged_Out_States" x-cloak  x-show="Alpine.store('authenticationStatus').current === 'loggedOut'" x-transition:enter.duration.5000ms>
+<div id="Logged_Out_States" x-cloak  x-show="Alpine.store('authenticationStatus').current === 'loggedOut'" x-transition:enter.duration.500ms>
 
   <!-- login -->
   <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'login'" x-transition>
@@ -246,15 +235,16 @@ function logout() {
 
         <main class="form-signin m-auto">
 
-          <div class="text-center mb-4">
-            <img class="mb-0" src="files/logo.png" alt="" width="60" height="60">
+          <div class="logo my-3 middle text-center">
+            <a href="#" class="mx-auto my-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
+              <img class="mb-auto" src="files/logo.png" alt="" width="52" height="52">
+            </a>
+            <div class="brand-name fw-bold h3">MESSAGE <span class="">MAPS</span></div>
           </div>
-          <h1 class="h4 mb-0 fw-normal">Please sign in</h1>
 
 
 
-
-
+          <h2 class="h5 mb-0 fw-normal">Sign in</h2>
           <div x-data="{ email: '', password: ''}">
               <form @submit.prevent="login(email, password)">
                 <div>
@@ -297,8 +287,6 @@ function logout() {
               </form>
             </div>
 
-
-
           </main>
 
       </div>
@@ -325,7 +313,7 @@ function logout() {
 
 
 <!-- #Logged_In_States -->
-<div class="container-fluid m-0 p-0 vw-100 vh-100" id="Logged_In_States"  x-cloak x-show="Alpine.store('authenticationStatus').current === 'loggedIn'" x-transition>
+<div class="container-fluid m-0 p-0 vw-100 vh-100" id="Logged_In_States"  x-cloak x-show="Alpine.store('authenticationStatus').current === 'loggedIn'"  x-transition:enter.duration.1000ms>
 
 
 
@@ -334,7 +322,7 @@ function logout() {
 
       <div id="CollapsedSidebar" class="py-0 pl-2 pe-0 col-md-1 border-end"
       x-show="Alpine.store('sidebarStatus').current === 'collapsed'"
-      x-transition:enter.duration.500ms>
+      x-transition:enter.duration.100ms>
 
         <div class="position-relative m-0">
           <a href="#" class="text-secondary expandSidebar text-small navlink linkdark p-0 position-absolute top-0 end-0 border-small d-flex align-items-center" x-on:click.prevent="Alpine.store('sidebarStatus').current = 'expanded'">
@@ -342,43 +330,42 @@ function logout() {
           </a>
         </div>
 
-        <div class="sidenav-wrapper  py-5 px-2">
+        <div class="sidenav-wrapper  py-0 px-2">
 
 
           <div class="logo my-3 middle text-center">
             <a href="#" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
               <img class="mb-auto" src="files/logo.png" alt="" width="52" height="52">
-              <div class="brand-name fw-bold fs-6">&nbsp;</div>
             </a>
           </div>
 
           <ul class="nav sidebar-nav flex-column mb-auto pt-2 py-5 d-flex justify-content-center">
-            <li class="my-3 text-center dashboard">
+            <li class="my-2 text-center dashboard">
               <a class="navlink linkdark p-2 px-2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
                 <span class="material-symbols-outlined medium">dashboard</span>
               </a>
             </li>
-            <li class="my-3 text-center maps">
+            <li class="my-2 text-center maps">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
                 <span class="material-symbols-outlined medium">map</span>
               </a>
             </li>
-            <li class="my-3 text-center interviews child">
+            <li class="my-2 text-center interviews child">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
                 <span class="material-symbols-outlined medium">auto_detect_voice</span>
               </a>
             </li>
-            <li class="my-3 text-center strategy child">
+            <li class="my-2 text-center strategy child">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">
                 <span class="material-symbols-outlined medium">explore</span>
               </a>
             </li>
-            <li class="my-3 text-center assets child">
+            <li class="my-2 text-center assets child">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'">
                 <span class="material-symbols-outlined medium">dashboard_customize</span>
               </a>
             </li>
-            <li class="my-3 text-center newMap">
+            <li class="my-2 text-center newMap">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'">
                 <span class="material-symbols-outlined medium">add</span>&nbsp;
               </a>
@@ -392,7 +379,7 @@ function logout() {
 
       <div id="ExpandedSidebar" class="py-0 pl-2 pe-0  col-md-3 border-end"
       x-show="Alpine.store('sidebarStatus').current === 'expanded'"
-      x-transition:enter.duration.400ms>
+      x-transition:enter.duration.150ms>
 
         <div class="position-relative m-0">
             <a href="#" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
@@ -401,41 +388,40 @@ function logout() {
             </a>
         </div>
 
-        <div class="sidenav-wrapper py-5 px-2">
+        <div class="sidenav-wrapper py-0 px-2">
 
           <div class="logo my-3 middle text-center">
             <a href="#" class="mx-auto my-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
               <img class="mb-auto" src="files/logo.png" alt="" width="52" height="52">
             </a>
-            <div class="brand-name fw-bold">MESSAGE <span class="text-secondary">MAPS</span></div>
           </div>
 
           <ul class="nav sidebar-nav nav-pills flex-column mb-auto pt-2 pb-2">
 
-            <li class="my-3 dashboard">
+            <li class="my-2 dashboard">
               <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'; window.history.pushState(null, null, '/dashboard')">
                 <span class="material-symbols-outlined medium me-2">dashboard</span>Dashboard</a>
             </li>
-            <li class="my-3 maps" >
+            <li class="my-2 maps" >
               <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'; window.history.pushState(null, null, '/maps')">
                 <span class="material-symbols-outlined medium me-2">map</span>
                 Sa'ar's first map
               </a>
             </li>
-            <li class="my-3 interviews child">
+            <li class="my-2 interviews child">
               <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; ">
                 <span class="material-symbols-outlined medium me-2">auto_detect_voice</span> Interview</a>
             </li>
-            <li class="my-3 strategy child">
+            <li class="my-2 strategy child">
               <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; window.history.pushState(null, null, '/strategy')">
                 <span class="material-symbols-outlined medium me-2">explore</span>Brand Strategy</a>
             </li>
-            <li class="my-3 assets child">
+            <li class="my-2 assets child">
               <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'; window.history.pushState(null, null, '/assets')" >
                 <span class="material-symbols-outlined medium me-2">dashboard_customize</span>Sales & Marketing Assets</a>
             </li>
             <div class="dropdown-divider"></div>
-            <li class="my-3 newMap">
+            <li class="my-2 newMap">
               <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'; window.history.pushState(null, null, '/new-map')">
                 <span class="material-symbols-outlined medium me-2">add_circle</span>Get a new map</a>
             </li>
@@ -492,7 +478,7 @@ function logout() {
 
             <div id="userMenu" class=" text-end ms-auto me-0">
               <div class="d-flex align-items-center">
-                <span class="user-welcome mt-1 me-2 pb-1 small title-case  highlight-welcome">Welcome</span>
+                <span class="user-welcome mt-1 me-2 pb-1 small title-case  highlight-welcome"></span>
                 <a class="user-settings mt-2 me-1 navlink linkdark " href="#"><span class="material-symbols-outlined medium me-2">tune</span></a>
                 <div class="dropdown">
 
@@ -516,19 +502,13 @@ function logout() {
         </header>
 
 
-<!-- JavaScript code to add the class to the welcome message -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const welcomeMessage = document.querySelector('.welcome-message');
-    welcomeMessage.classList.add('highlight-welcome');
-  });
-</script>
+
 
         <div class="view-wrapper vh-100 my-5 mx-5">
 
           <div class="dashboard-view" style="max-width: 1000px;" x-show="Alpine.store('currentScreen').current === 'dashboard'"
           x-transition.delay.50ms
-          x-transition:enter.duration.600ms>
+          x-transition:enter.duration.00ms>
             <!-- Dashboard screen markup -->
 
 
@@ -626,7 +606,7 @@ function logout() {
 
             <div   class="card shadow my-5 p-3 col-md-9">
               <div class="card-body">
-                <h5 class="card-title">Sa'ar's First Interview</h5>
+                <h5 class="card-title">Interview name: Sa'ar's First Interview</h5>
                 <p class="card-text">
 
 
