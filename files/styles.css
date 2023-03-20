@@ -1,3 +1,21 @@
+[x-cloak] { display: none !important; }
+
+
+.highlight-welcome {
+  animation: highlight 2s;
+}
+
+@keyframes highlight {
+  from {
+    background-color: yellow;
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+
+
 :root {
   --bs-border-radius-lg: 2rem;
 }
