@@ -93,11 +93,6 @@ function handleError(error) {
 
 window.addEventListener('load', async () => {
 
-      // If an authToken is already present in localStorage, get the user's details and save as variables
-
-         // If an authToken is already present in localStorage, get the user's details and save as variables
-
-
   const authToken = localStorage.getItem('authToken');
   if (authToken) {
     await fetchUserDetailsAndLog();
@@ -418,7 +413,7 @@ function logout() {
             </li>
             <li class="my-2 assets child">
               <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'; window.history.pushState(null, null, '/assets')" >
-                <span class="material-symbols-outlined medium me-2">dashboard_customize</span>Sales & Marketing Assets</a>
+                <span class="material-symbols-outlined medium me-2">dashboard_customize</span>Brand Assets</a>
             </li>
             <div class="dropdown-divider"></div>
             <li class="my-2 newMap">
