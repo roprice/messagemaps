@@ -566,7 +566,7 @@ function logout() {
             </div><!-- /#hiddenwelcome -->
           </div><!-- /.dashboard-view -->
 
-          <div class="interviews-view" style="max-width: 1000px;" x-show="Alpine.store('currentScreen').current === 'interviews'"
+          <div class="interviews-view" style="" x-show="Alpine.store('currentScreen').current === 'interviews'"
           x-transition.delay.50ms
           x-transition:enter.duration.600ms>
             <!-- Interview screen markup -->
@@ -599,7 +599,7 @@ function logout() {
             </div><!-- /#interview-welcome -->
 
 
-            <div   class="card shadow my-5 p-3 col-md-9">
+            <div   class="card shadow my-5 p-3 col-md-12">
               <div class="card-body">
                 <h5 class="card-title">Interview name: Sa'ar's First Interview</h5>
                 <p class="card-text">
@@ -607,16 +607,16 @@ function logout() {
 
                   <ul class="nav nav-pills mb-3">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#">Active</a>
+                      <a class="nav-link active" aria-current="page" href="#">Customer</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">Link</a>
+                      <a class="nav-link" href="#">Competition</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">Link</a>
+                      <a class="nav-link" href="#">Your Solution</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Your Brand</a>
                     </li>
                   </ul>
 
