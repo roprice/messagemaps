@@ -32,7 +32,7 @@
 
 </head>
 
-<body x-data x-bind:class="[
+<body id="light" x-data x-bind:class="[
   Alpine.store('authenticationStatus').current,
   Alpine.store('currentPage').current,
   Alpine.store('currentScreen').current,
@@ -210,21 +210,6 @@ function logout() {
 }
 
 
-// Check for user's preferred color scheme
-if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  // Set dark mode
-  document.body.classList.add('dark');
-} else {
-  // Set light mode
-  document.body.classList.remove('dark');
-}
-
-// Toggle theme on button click
-document.getElementById('theme-toggle').addEventListener('click', function() {
-  document.body.classList.toggle('dark');
-});
-
-
 </script>
 
 
@@ -321,18 +306,18 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
 
 
 <!-- #Logged_In_States -->
-<div class="container-fluid m-0 p-0 vw-100 vh-100" id="Logged_In_States"  x-cloak x-show="Alpine.store('authenticationStatus').current === 'loggedIn'"  x-transition:enter.duration.1000ms>
+<div class="" id="Logged_In_States"  x-cloak x-show="Alpine.store('authenticationStatus').current === 'loggedIn'"  x-transition:enter.duration.1000ms>
 
 
 
   <div id="Body" class="container-fluid px-0">
     <div class="row body-inner">
 
-      <div id="CollapsedSidebar" class="py-0 pl-2 pe-0 col-md-1 border-end"
+      <div id="CollapsedSidebar" class="py-0 pl-2 pe-0  border-end"
       x-show="Alpine.store('sidebarStatus').current === 'collapsed'"
       x-transition:enter.duration.100ms>
 
-        <div class="position-relative m-0">
+        <div class="position-relative m-0 sidebar-toggle-icon">
           <a href="#" class="text-secondary expandSidebar text-small navlink linkdark p-0 position-absolute top-0 end-0 border-small d-flex align-items-center" x-on:click.prevent="Alpine.store('sidebarStatus').current = 'expanded'">
             <span class="material-symbols-outlined p-0 small">left_panel_open</span>
           </a>
@@ -385,11 +370,11 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
         </div>
       </div><!-- end of #CollapsedSidebar -->
 
-      <div id="ExpandedSidebar" class="py-0 pl-2 pe-0  col-md-3 border-end"
+      <div id="ExpandedSidebar" class="py-0 pl-2 pe-0 border-end"
       x-show="Alpine.store('sidebarStatus').current === 'expanded'"
       x-transition:enter.duration.150ms>
 
-        <div class="position-relative m-0">
+        <div class="position-relative m-0 sidebar-toggle-icon">
             <a href="#" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
             x-on:click.prevent="Alpine.store('sidebarStatus').current = 'collapsed'">
               <span class="material-symbols-outlined p-0 small ">left_panel_close</span>
@@ -407,7 +392,7 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
           <ul class="nav sidebar-nav nav-pills flex-column mb-auto pt-2 pb-2">
 
             <li class="my-2 dashboard">
-              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'; window.history.pushState(null, null, '/dashboard')">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'; window.history.pushState(null, null, '/')">
                 <span class="material-symbols-outlined medium me-2">dashboard</span>Dashboard</a>
             </li>
             <li class="my-2 maps" >
@@ -437,11 +422,7 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
         </div>
 
 
-
-
-
-
-        <div class="sidebar-dropdown mt-auto border-top p-3 col-md-3 bg-white">
+        <div class="sidebar-dropdown mt-auto border-top border-light p-3 col-md-3 bg-white">
 
 
 
@@ -468,22 +449,17 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
             </div>
 
           </div><!-- /#userMenu -->
-
-
-
         </div>
-
-
 
       </div><!-- /#ExpandedSidebar -->
 
       <div class="p-0 bg-light" id="Main"
       :class="{
-        'col-md-9': Alpine.store('sidebarStatus').current === 'expanded',
-        'col-md-11': Alpine.store('sidebarStatus').current === 'collapsed'
+        'main-expanded': Alpine.store('sidebarStatus').current === 'expanded',
+        'main-collapsed': Alpine.store('sidebarStatus').current === 'collapsed'
       }">
 
-        <header class="p-3 border-bottom bg-white shadow-sm">
+        <header class="p-3 border-bottom bg-white shadow-sm sticky-element">
           <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start me-2">
 
             <div class="text-small text-secondary ms-4 ps-2" x-text="Alpine.store('currentScreen').current"></div>
@@ -515,17 +491,15 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
 
 
 
+        <!-- main section with views of various states-->
+        <div class="view-wrapper  my-5 mx-5">
 
-        <div class="view-wrapper vh-100 my-5 mx-5">
-
-          <div class="dashboard-view" style="max-width: 1000px;" x-show="Alpine.store('currentScreen').current === 'dashboard'"
+          <div class="dashboard-view" x-show="Alpine.store('currentScreen').current === 'dashboard'"
           x-transition.delay.50ms
           x-transition:enter.duration.00ms>
             <!-- Dashboard screen markup -->
 
-
-
-            <div  x-show="Alpine.store('onboarding').current === 'welcome'" class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-3  ">
+            <div  x-show="Alpine.store('onboarding').current === 'welcome'" class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-2  ">
 
               <div class="welcome-message-control position-relative m-0">
                 <a href="#" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
@@ -588,7 +562,7 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
           x-transition:enter.duration.600ms>
             <!-- Interview screen markup -->
 
-            <div  x-show="Alpine.store('onboarding').current === 'welcome'" class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-3  ">
+            <div  x-show="Alpine.store('onboarding').current === 'welcome'" class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-2  ">
 
 
               <div class="welcome-message-control position-relative m-0">
@@ -618,30 +592,39 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
 
             <div   class="card shadow my-5 p-3 col-md-12">
               <div class="card-body">
-                <h5 class="card-title">Interview name: Sa'ar's First Interview</h5>
+                <h5 class="card-title mb-4">Interview name: Sa'ar's First Interview</h5>
                 <p class="card-text">
 
 
                   <div x-data="{ activeTab: 'YourCustomer' }">
-                    <ul class="nav nav-pills mb-3" id="TheInterview">
+                    <ul class="nav nav-pills mb-3 sticky-sub-element" id="TheInterview">
                         <li class="nav-item">
-                            <a class="nav-link" :class="{ 'active': activeTab === 'YourCustomer'}" href="#" @click.prevent="activeTab = 'YourCustomer'">The Customer and Its Problems</a>
+                            <a class="nav-link text-small" :class="{ 'active': activeTab === 'YourCustomer'}" href="#" @click.prevent="activeTab = 'YourCustomer'">Customer/Market</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" :class="{ 'active': activeTab === 'YourCompetition'}" href="#" @click.prevent="activeTab = 'YourCompetition'">Your Market and Competition</a>
+                          <a class="nav-link text-small" :class="{ 'active': activeTab === 'YourBuyer'}" href="#" @click.prevent="activeTab = 'YourBuyer'">Buyer/Problem</a>
+                      </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-small" :class="{ 'active': activeTab === 'YourCompetition'}" href="#" @click.prevent="activeTab = 'YourCompetition'">Competition/Positioning</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" :class="{ 'active': activeTab === 'YourSolution'}" href="#" @click.prevent="activeTab = 'YourSolution'">Your Solution and Value</a>
+                            <a class="nav-link text-small" :class="{ 'active': activeTab === 'YourSolution'}" href="#" @click.prevent="activeTab = 'YourSolution'">Solution/UVP</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="#" :class="{ 'active': activeTab === 'YourBrand'}" href="#" @click.prevent="activeTab = 'YourBrand'">Your Brand and Story</a>
+                            <a class="nav-link  text-small" href="#" :class="{ 'active': activeTab === 'YourBrand'}" href="#" @click.prevent="activeTab = 'YourBrand'">Brand/Story</a>
                         </li>
                     </ul>
                     <form style="padding:50px">
-                        <div x-show="activeTab === 'YourCustomer'" id="YourCustomer">Your Customer Content</div>
-                        <div x-show="activeTab === 'YourCompetition'" id="YourCompetition">Your Competition Content</div>
-                        <div x-show="activeTab === 'YourSolution'" id="YourSolution">Your Solution Content</div>
-                        <div id="YourBrand"></div>
+                        <div x-show="activeTab === 'YourCustomer'" id="YourCustomer">Your Customer Questions</div>
+
+                        <div x-show="activeTab === 'YourBuyer'" id="YourBuyer">Your Buyer Questions</div>
+
+
+                        <div x-show="activeTab === 'YourCompetition'" id="YourCompetition">Your Competition Questions</div>
+
+                        <div x-show="activeTab === 'YourSolution'" id="YourSolution">Your Solution Question</div>
+
+                        <div x-show="activeTab === 'YourBrand'" id="YourBrand">Your Brand Question</div>
                     </form>
                 </div>
 
@@ -652,9 +635,7 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
   <div class="form-group">
     <label for="brand_name">What's the name of the brand I'm interviewing you about?</label>
     <div class="input-group">
-      <div class="input-group-prepend">
-        <div class="input-group-text">brand nickname</div>
-      </div>
+
       <input id="brand_name" name="brand_name" type="text" aria-describedby="brand_nameHelpBlock" class="form-control">
     </div>
     <span id="brand_nameHelpBlock" class="form-text text-muted">How do you want to refer to it in your marketing? Consider how your team and customers refer to the brand</span>
