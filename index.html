@@ -210,6 +210,19 @@ function logout() {
 }
 
 
+// Check for user's preferred color scheme
+if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  // Set dark mode
+  document.body.classList.add('dark');
+} else {
+  // Set light mode
+  document.body.classList.remove('dark');
+}
+
+// Toggle theme on button click
+document.getElementById('theme-toggle').addEventListener('click', function() {
+  document.body.classList.toggle('dark');
+});
 
 
 </script>
@@ -451,8 +464,12 @@ function logout() {
                   <li><a class="dropdown-item" href="#" @click="logout">Logout</a></li>
                 </ul>
               </div>
+
             </div>
+
           </div><!-- /#userMenu -->
+
+
 
         </div>
 
@@ -605,21 +622,28 @@ function logout() {
                 <p class="card-text">
 
 
-                  <ul class="nav nav-pills mb-3">
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#">Customer</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Competition</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Your Solution</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Your Brand</a>
-                    </li>
-                  </ul>
-
+                  <div x-data="{ activeTab: 'YourCustomer' }">
+                    <ul class="nav nav-pills mb-3" id="TheInterview">
+                        <li class="nav-item">
+                            <a class="nav-link" :class="{ 'active': activeTab === 'YourCustomer'}" href="#" @click.prevent="activeTab = 'YourCustomer'">The Customer and Its Problems</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" :class="{ 'active': activeTab === 'YourCompetition'}" href="#" @click.prevent="activeTab = 'YourCompetition'">Your Market and Competition</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" :class="{ 'active': activeTab === 'YourSolution'}" href="#" @click.prevent="activeTab = 'YourSolution'">Your Solution and Value</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="#" :class="{ 'active': activeTab === 'YourBrand'}" href="#" @click.prevent="activeTab = 'YourBrand'">Your Brand and Story</a>
+                        </li>
+                    </ul>
+                    <form style="padding:50px">
+                        <div x-show="activeTab === 'YourCustomer'" id="YourCustomer">Your Customer Content</div>
+                        <div x-show="activeTab === 'YourCompetition'" id="YourCompetition">Your Competition Content</div>
+                        <div x-show="activeTab === 'YourSolution'" id="YourSolution">Your Solution Content</div>
+                        <div id="YourBrand"></div>
+                    </form>
+                </div>
 
 
 
@@ -897,20 +921,20 @@ function logout() {
 
 
                 <script>
-                  async function fetchMessageMap(messagemap_id) {
+                  //async function fetchMessageMap(messagemap_id) {
                     // Replace `YOUR_API_BASE_URL` with the base URL of your Xano API
-                    const response = await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:8waiSY4E/messagemap/4`);
+                    //const response = await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:8waiSY4E/messagemap/4`);
 
-                    if (response.ok) {
-                      const data = await response.json();
-                      console.log(data);
-                    } else {
-                      console.error('Error fetching messagemap:', response.statusText);
-                    }
-                  }
+                    //if (response.ok) {
+                      //const data = await response.json();
+                      //console.log(data);
+                    ///} else {
+                      //console.error('Error fetching messagemap:', response.statusText);
+                    //}
+                  //}
 
                   // Call the function with the desired messagemap_id
-                  fetchMessageMap(4);
+                  //fetchMessageMap(4);
                 </script>
 
 
