@@ -14,8 +14,38 @@
 }
 
 
+
+
+.btn.disabled, .btn:disabled, fieldset:disabled .btn {
+  color: #222;
+  pointer-events: none;
+  background-color: #ff575763!important;
+  border-color: #ff575763!important;
+  opacity: var(--bs-btn-disabled-opacity);
+}
+
+.card.col-md-12 {
+    max-width: 980px;
+}
+
+
 .card {
   border-radius: .9rem!important;
+}
+
+
+.card-header {
+  padding: 2rem 1rem 0 2rem;
+  margin: 1rem;
+  color: var(--bs-card-cap-color);
+  background-color: hsl(210, 14%, 97%);
+  border-bottom: none;
+  border-radius: 0.9rem!important;
+}
+.card-body {margin:auto}
+
+  .card.col-md-12 {
+    max-width: 980px;
 }
 
 .card.elevated {
@@ -24,15 +54,16 @@
 .card.filled {
   box-shadow: none;
   border:none;
-  background-color: #d9d9d9;
+  background-color:  hsl(210, 14%, 97%);
 }
 .card.outlined {
-
-  border: 1px solid #d9d9d9;
+  border: 1px solid  hsl(210, 14%, 97%);
   background-color: #fff;
 }
 
-
+.card-body.the-interview-card {
+  color:inherit;
+}
 
 
 .highlight-welcome {
@@ -48,6 +79,11 @@
 }
 
 
+form#InterviewForm {
+  max-width: 700px;
+  margin: auto;
+}
+
 
 a {color:#377EA4;}
 
@@ -57,18 +93,32 @@ a.disabled {
   color: #ccc;
 }
 
+button.btn.btn-primary {
+  font-size: 12px;
+  padding: 1px 31px 0px 32px!important;
+}
+
+
+
+a.navlink {
+  text-decoration: none;
+  display: block;
+  font-size: 15px!important;
+}
 
 #light #TheInterview.nav-pills {
-  background: #e9ecef;
+  background-color:  hsl(210, 14%, 97%);
   border-radius: 1.5rem;
   width: fit-content;
 }
 
 #light .nav-pills .nav-link {
-  padding: 12px 29px 11px 30px;
-  background-color:  hsl(210, 14%, 93%);
+  padding: 14px 31px 13px 32px;
+  background-color: hsl(210, 14%, 97%);
   color: #000;
   border-radius: 1.5rem;
+  position: relative;
+  font-size: 12px;
 }
 
 #light .nav-pills .nav-link.active,
@@ -79,6 +129,67 @@ a.disabled {
 #light .nav-pills .nav-link:hover {
   background-color:  hsl(210, 14%, 88%);
 }
+
+span.material-symbols-outlined {
+font-size: 20px;
+}
+
+span.material-symbols-outlined.tiny {
+  font-size: 16px;
+  top: 9px;
+  visibility: hidden;
+  position: absolute;
+  right: 15px;
+  color: #444;
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48;
+  transition: all 0.2s ease-in-out;
+}
+
+a.active .material-symbols-outlined,
+a:hover .material-symbols-outlined,
+.material-symbols-outlined:hover {
+  font-variation-settings: 'FILL' 1!important;
+}
+
+
+a.disabled.navlink.linkdark {
+  color: #999;
+}
+
+.material-symbols-outlined.medium {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 100,
+  'GRAD' 200,
+  'opsz' 20
+}
+
+.material-symbols-outlined.small {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 200,
+  'GRAD' 0,
+  'opsz' 16
+}
+
+
+.material-symbols-outlined.large {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 300,
+  'GRAD' 0,
+  'opsz' 48
+}
+
+
 
 .btn-outline-primary {
   --bs-btn-color: #FF5757;
@@ -349,30 +460,6 @@ a.disabled {
 
 
 
-.material-symbols-outlined.medium {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 100,
-  'GRAD' 200,
-  'opsz' 24
-}
-
-.material-symbols-outlined.small {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 200,
-  'GRAD' 0,
-  'opsz' 24
-}
-
-
-.material-symbols-outlined.large {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 300,
-  'GRAD' 0,
-  'opsz' 48
-}
 
 body {font-family: Inter;}
 
@@ -504,9 +591,6 @@ body {font-family: Inter;}
     max-width: 960px;
 }
 
-  .card.col-md-12 {
-    max-width: 960px;
-}
 
 html, body {
   height: 100%;
@@ -565,13 +649,6 @@ html, body {
   align-items: center;
 }
 
-
-
-a.navlink {
-  text-decoration: none;
-  display: block;
-  font-size: 15px!important;
-}
 
 
 a.linkdark, a.linkdark:hover {
