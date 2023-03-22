@@ -392,13 +392,13 @@ function logout() {
           <ul class="nav sidebar-nav nav-pills flex-column mb-auto pt-2 pb-2">
 
             <li class="my-2 dashboard">
-              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'; window.history.pushState(null, null, '/')">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'; ">
                 <span class="material-symbols-outlined medium me-2">dashboard</span>Dashboard</a>
             </li>
             <li class="my-2 maps" >
-              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'; window.history.pushState(null, null, '/maps')">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'; ">
                 <span class="material-symbols-outlined medium me-2">map</span>
-                Sa'ar's first map
+                Message Map
               </a>
             </li>
             <li class="my-2 interviews child">
@@ -406,16 +406,16 @@ function logout() {
                 <span class="material-symbols-outlined medium me-2">auto_detect_voice</span> Interview</a>
             </li>
             <li class="my-2 strategy child">
-              <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; window.history.pushState(null, null, '/strategy')">
+              <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">
                 <span class="material-symbols-outlined medium me-2">explore</span>Brand Strategy</a>
             </li>
             <li class="my-2 assets child">
-              <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'; window.history.pushState(null, null, '/assets')" >
+              <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'; " >
                 <span class="material-symbols-outlined medium me-2">dashboard_customize</span>Brand Assets</a>
             </li>
             <div class="dropdown-divider"></div>
             <li class="my-2 newMap">
-              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'; window.history.pushState(null, null, '/new-map')">
+              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'; ">
                 <span class="material-symbols-outlined medium me-2">add_circle</span>Get a new map</a>
             </li>
           </ul>
@@ -462,7 +462,9 @@ function logout() {
         <header class="p-3 border-bottom bg-white shadow-sm sticky-element">
           <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start me-2">
 
-            <div class="text-small text-secondary ms-4 ps-2" x-text="Alpine.store('currentScreen').current"></div>
+            <div class="custom-breadcrumb text-small text-secondary ms-4 ps-2">
+              <span class="" x-text="Alpine.store('currentScreen').current"></span>
+            </div>
 
             <div id="userMenu" class=" text-end ms-auto me-0">
               <div class="d-flex align-items-center">
@@ -522,10 +524,10 @@ function logout() {
                   <p class="col-md-12"><b>Second, a brief overview</b>: each message map you creat e consist of three parts: <ol><li ><span >A discovery interview (or multiple interviews)</span></span><li><span >A brand strategy brief <li><span >Brand messaging assets</span></ol></p>
 
                   <p  class="col-md-12">
-                    The first step is your <a href=# x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">discovery interview</a> - ready to dive in?
+                    The first step is your <a href=# x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews';">discovery interview</a> - ready to dive in?
 
                   </p>
-                <button class="btn btn-primary btn-lg mt-3" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">Interview me</button>
+                <button class="btn btn-primary btn-lg mt-3" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Interview me</button>
               </div><!-- /.welcome-message -->
 
             </div><!-- /#welcome -->
@@ -596,16 +598,16 @@ function logout() {
               <div class="row card-header">
 
                 <div class=" col-md-8">
-                    <h5 class="card-title col-md-8">Sa'ar's First Interview</h5>
-                    <div class="text-small text- created">Created: <span>2021-08-01 12:17</span></div>
+                    <h5 class="card-title col-md-8" id="interview-name">Rowan's First Interview</h5>
+                    <div class="text-small text-secondary created">Created: <span>2021-08-01 12:17</span></div>
                     <div class="text-small text-secondary last-saved">Last saved: <span>2021-08-01 12:54</span></div>
-                    <p class="text-small text-secondary mt-1">This form <strong>auto-saves</strong> as you type</p>
+                    <div class="text-small text-secondary last-saved mt-3">This is the <strong>first interview</strong> for your message map</div>
                 </div>
 
 
                 <div class=" col-md-4 align-items-end">
                   <button name="submit" type="submit" class="btn btn-primary mb-1 disabled">Complete and Review</button>
-                  <p class="text-small text-secondary px-2"> Once you have completed the interview, review your answers and generate a brand strategy.</p>
+                  <p class="text-small text-secondary px-2">Complete the interview, review your answers, generate a brand strategy. Note: this form <strong>auto-saves</strong> as you type</p>
                 </div>
 
 
@@ -614,10 +616,12 @@ function logout() {
               <div class="card-body the-interview-card">
 
 
-                <p class="card-text">
+                <p class="card-text"  id="InterviewTabs">
+
+                  <div x-data="{ activeTab: 'YourBrand', tabs: ['YourBrand', 'YourCustomer', 'YourBuyer', 'YourCompetition', 'YourSolution', 'YourPricing'], changeTab: function (direction) { let currentIndex = this.tabs.indexOf(this.activeTab); let newIndex = currentIndex + direction; if (newIndex >= 0 && newIndex < this.tabs.length) { this.activeTab = this.tabs[newIndex]; this.scrollToInterviewTabs(); } }, scrollToInterviewTabs: function () { document.getElementById('InterviewTabs').scrollIntoView({ behavior: 'smooth' }); } }">
 
 
-                  <div x-data="{ activeTab: 'YourBrand' }">
+
                     <ul class="nav nav-pills my-5 sticky-sub-element" id="TheInterview">
 
                       <li class="nav-item brand">
@@ -655,26 +659,40 @@ function logout() {
                           </div>
 
                           <div class="form-group">
-                            <label for="brand_name_reaction">Do you like the name? Why did you choose it?</label>
+                            <label for="brand_name_reaction">What sets your brand apart from your competitors? What unique value do you provide to your customers?</label>
                             <input id="brand_name_reaction" name="brand_name_reaction" type="text" class="form-control">
                           </div>
 
                           <div class="form-group">
-                            <label for="actual_positioning">What do people say about you?</label>
+                            <label for="actual_positioning">What do people say about your business?</label>
                             <textarea id="actual_positioning" name="actual_positioning" cols="40" rows="3" aria-describedby="actual_positioningHelpBlock" class="form-control"></textarea>
-                            <span id="actual_positioningHelpBlock" class="form-text text-muted">Imagine two ideal customers meet at a conference. Your brand comes up when one asks the other for recommendations in your field. What is said and known about your brand - how is it perceived?</span>
+                            <span id="actual_positioningHelpBlock" class="form-text text-muted">Imagine two ideal customers meet at a conference. Your name comes up when one asks the other for recommendations in your field. What is said and known about your business - how is it perceived?</span>
                           </div>
 
                           <div class="form-group">
                             <label for="desired_positioning">What do you *want* them to say?</label>
-                            <textarea id="desired_positioning" name="desired_positioning" cols="40" rows="5" class="form-control" aria-describedby="desired_positioningHelpBlock"></textarea>
+                            <textarea id="desired_positioning" name="desired_positioning" cols="40" rows="3" class="form-control" aria-describedby="desired_positioningHelpBlock"></textarea>
                             <span id="desired_positioningHelpBlock" class="form-text text-muted">Imagine the same scenario and you control it - what exactly do you want them to say?</span>
                           </div>
 
+
                           <div class="form-group">
-                            <label for="textarea">Why does your brand exist? </label>
-                            <textarea id="textarea" name="textarea" cols="40" rows="5" class="form-control" aria-describedby="textareaHelpBlock"></textarea>
-                            <span id="textareaHelpBlock" class="form-text text-muted">What's the result of its existence, what would happen if it didn't exist?</span>
+                            <label for="misconceptions">Is there any common misconception about your product, service, or industry that you frequently encounter?</label>
+                            <textarea id="misconceptions" name="misconceptions" cols="40" rows="3" class="form-control" aria-describedby="misconceptionsHelpBlock"></textarea>
+                            <span id="misconceptionsHelpBlock" class="form-text text-muted">In your own words, how would you clarify or correct this misconception(s)?</span>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="vision">How do you think things should be done in your industry?</label>
+                            <textarea id="vision" name="vision" cols="40" rows="3" class="form-control" aria-describedby="visionHelpBlock"></textarea>
+                            <span id="visionHelpBlock" class="form-text text-muted">What's your vision - how would you change the market or industry if you could?</span>
+                          </div>
+
+
+                          <div class="form-group">
+                            <label for="why_exist">Why does your brand exist? </label>
+                            <textarea id="why_exist" name="why_exist" cols="40" rows="3" class="form-control" aria-describedby="why_existHelpBlock"></textarea>
+                            <span id="why_existHelpBlock" class="form-text text-muted">What's its impact, what would happen if it didn't exist?</span>
                           </div>
 
                         </div><!-- /#YourBrand -->
@@ -683,117 +701,225 @@ function logout() {
 
 
 
+
+                          <div class="form-group">
+                            <label for="brand_category">Market category (eg. CRM consulting, Sales Software, AI for HR)</label>
+                            <textarea id="brand_category" name="solution_category" cols="40" rows="3" aria-describedby="brand_categoryHelpBlock" class="form-control"></textarea>
+                            <span id="brand_categoryHelpBlock" class="form-text text-muted">Talk about the market, industry, or field that you'd put your brand in? Does it belong in more than one? Does it need a new category?</span>
+                          </div>
+
+
+
+
                           <div class="form-group">
                             <label for="ICP">The problem your solution addresses – what kind of organization does that help the most?</label>
-                            <textarea id="ICP" name="ICP" cols="40" rows="5" aria-describedby="ICPHelpBlock" class="form-control"></textarea>
-                            <span id="ICPHelpBlock" class="form-text text-muted">Think about your ideal customers in terms of who benefits the most from what your brand offers.  Why do they get more value from what you offer than other customers?</span>
+                            <textarea id="ICP" name="ICP" cols="40" rows="3" aria-describedby="ICPHelpBlock" class="form-control"></textarea>
+                            <span id="ICPHelpBlock" class="form-text text-muted">Think about your ideal customers in terms of who benefits the most from what your brand offers.  Why do they get more value from what you offer than other customers get from it?</span>
                           </div>
 
 
 
                           <div class="form-group">
-                            <label for="fauxICP">Who does that not help so much?</label>
-                            <textarea id="fauxICP" name="fauxICP" cols="40" rows="5" aria-describedby="fauxICPHelpBlock" class="form-control"></textarea>
-                            <span id="fauxICPHelpBlock" class="form-text text-muted">Who is similar to your ideal customer but wouldn't actually benefit from it? Who might regret buying it?</span>
+                            <label for="faux_ICP">Who does that not help so much?</label>
+                            <textarea id="faux_ICP" name="faux_ICP" cols="40" rows="3" aria-describedby="faux_ICPHelpBlock" class="form-control"></textarea>
+                            <span id="faux_ICPHelpBlock" class="form-text text-muted">Who is similar to your ideal customer but wouldn't actually benefit from it? Who might regret buying it?</span>
                           </div>
 
 
                           <div class="form-group">
                             <label for="before_hearing_message">Before they hear about you</label>
-                            <textarea id="before_hearing_message" name="before_hearing_message" cols="40" rows="5" aria-describedby="before_hearing_messageHelpBlock" class="form-control"></textarea>
+                            <textarea id="before_hearing_message" name="before_hearing_message" cols="40" rows="3" aria-describedby="before_hearing_messageHelpBlock" class="form-control"></textarea>
                             <span id="before_hearing_messageHelpBlock" class="form-text text-muted">Imagine the ideal customer just before they hear your message - what are they concerned about?</span>
                           </div>
 
 
                           <div class="form-group">
                             <label for="after_hearing_message">After they hear about you</label>
-                            <textarea id="after_hearing_message" name="after_hearing_message" cols="40" rows="5" class="form-control" aria-describedby="after_hearing_messageHelpBlock"></textarea>
+                            <textarea id="after_hearing_message" name="after_hearing_message" cols="40" rows="3" class="form-control" aria-describedby="after_hearing_messageHelpBlock"></textarea>
                             <span id="after_hearing_messageHelpBlock" class="form-text text-muted">Ideally, what do they think after they hear your message?</span>
                           </div>
 
 
                           <div class="form-group">
-                            <label for="action_after_hearing_about_you">Action taken</label>
-                            <textarea id="action_after_hearing_about_you" name="action_after_hearing_about_you" cols="40" rows="5" aria-describedby="action_after_hearing_about_youHelpBlock" class="form-control"></textarea>
-                            <span id="action_after_hearing_about_youHelpBlock" class="form-text text-muted">Ideally, what action do they take after they hear your message?</span>
+                            <label for="customer_secrets">What do you know about your customer that hardly anybody else knows?</label>
+                            <textarea id="customer_secrets" name="customer_secrets" cols="40" rows="4" class="form-control"></textarea>
                           </div>
+
+
+                          <div class="form-group">
+                            <label for="sharedVision">What do you and your customers both agree on?</label>
+                            <textarea id="sharedVision" name="sharedVision" cols="40" rows="3" aria-describedby="sharedVisionHelpBlock" class="form-control"></textarea>
+                            <span id="sharedVisionHelpBlock" class="form-text text-muted">Where do your perspectives line-up in terms of how things should be done in your industry?</span>
+                          </div>
+
 
 
                         </div><!-- /#YourCustomer -->
 
                         <div x-show="activeTab === 'YourBuyer'" id="YourBuyer"><!-- Your Buyer -->
 
+
+
                           <div class="form-group">
-                            <label for="customer_secrets">What do you know about your customer that hardly anybody else knows</label>
-                            <textarea id="customer_secrets" name="customer_secrets" cols="40" rows="4" class="form-control"></textarea>
+                            <label for="buyer">Who usually approves the decision to buy your solution?</label>
+                            <input id="buyer" name="buyer" type="text" class="form-control">
+                          </div>
+
+                          <div class="form-group">
+                            <label for="buyerGroup">Is that the person who ends up using the solution, or is that typically somone else?</label>
+                            <textarea id="buyerGroup" name="buyerGroup" cols="40" rows="4" class="form-control"></textarea>
+                            <span id="buyerGroupHelpBlock" class="form-text text-muted">List out the different roles of people who use your solution, or who is impacted by it.</span>
                           </div>
 
 
                           <div class="form-group">
-                            <label for="customers_market_secrets">What is something you know about your customer's industry, field, or market?</label>
-                            <textarea id="customers_market_secrets" name="customers_market_secrets" cols="40" rows="4" class="form-control"></textarea>
+                            <label for="buyer_pain">What are these people incredibly sick or frustrated by?</label>
+                            <textarea id="buyer_pain" name="buyer_pain" cols="40" rows="3" class="form-control" aria-describedby="buyer_painHelpBlock"></textarea>
+                            <span id="buyer_painHelpBlock" class="form-text text-muted">When they say something like, "I'm so sick of _____", what comes next? How does this differ from role to role?</span>
                           </div>
-
 
                           <div class="form-group">
-                            <label for="customer_pain">What are your customers really afraid of, sick of, or frustrated by?</label>
-                            <textarea id="customer_pain" name="customer_pain" cols="40" rows="5" class="form-control" aria-describedby="customer_painHelpBlock"></textarea>
-                            <span id="customer_painHelpBlock" class="form-text text-muted">When they say something like, "I'm so sick of _____", what comes next?</span>
+                            <label for="buyer_problems">What are the top 2 problems you can help solve for your buyers?</label>
+                            <textarea id="buyer_problems" name="buyer_problems" cols="40" rows="3" class="form-control"  aria-describedby="buyer_problemsHelpBlock"></textarea>
+                            <span id="buyer_problemsHelpBlock" class="form-text text-muted">Problems that cost the most money or time?</span>
                           </div>
-
 
                           <div class="form-group">
-                            <label for="customer_objections">What sometimes makes customers reluctant to engage you? What are they worried about?</label>
-                            <textarea id="customer_objections" name="customer_objections" cols="40" rows="5" class="form-control"></textarea>
+                            <label for="adjacentProblems">What problems can your solution not quite solve?</label>
+                            <textarea id="adjacentProblems" name="adjacentProblems" cols="40" rows="3" class="form-control"  aria-describedby="adjacentProblemsHelpBlock"></textarea>
+                            <span id="adjacentProblemsHelpBlock" class="form-text text-muted">Any buyer problems you know about but your solution can't quite solve (or can't solve yet?)</span>
                           </div>
-
 
                           <div class="form-group">
-                            <label for="customer_acquisition_channels">How do your customers find out about you? How do they not find out about you?</label>
-                            <textarea id="customer_acquisition_channels" name="customer_acquisition_channels" cols="40" rows="5" class="form-control" aria-describedby="customer_acquisition_channelsHelpBlock"></textarea>
-                            <span id="customer_acquisition_channelsHelpBlock" class="form-text text-muted">Also - how do you wish they found out about you</span>
+                            <label for="buyer_opportunites">Are there opportunities your solution can unlock for your buyers?</label>
+                            <textarea id="buyer_opportunites" name="buyer_opportunites" cols="40" rows="3" class="form-control"  aria-describedby="buyer_opportunitesHelpBlock"></textarea>
+                            <span id="buyer_opportunitesHelpBlock" class="form-text text-muted">Any opportunities related to new revenue, work-life satisfation, new customers, etc?</span>
                           </div>
+
+
+
 
 
                         </div><!-- /#YourBuyer -->
 
                         <div x-show="activeTab === 'YourCompetition'" id="YourCompetition"><!-- /#YourCompetition -->
 
+
+
+
                           <div class="form-group">
-                            <label for="competition">Can you list or talk about your main competition?</label>
-                            <textarea id="competition" name="competition" cols="40" rows="5" class="form-control"></textarea>
+                            <label for="direct_competition">Who is your direct competitor?</label>
+                            <textarea id="direct_competition" name="direct_competition" cols="40" rows="3" class="form-control" aria-describedby="direct_competitionHelpBlock"></textarea>
+                            <span id="direct_competitionHelpBlock" class="form-text text-muted">Is there a company that you know for a fact your potential customers also consider? How many total direct competitors do you have</span>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="big_competition">Do products and services from large Fortune 1000 companies (eg. Excel from Microsoft) compete with your solution?</label>
+                            <textarea id="big_competition" name="big_competition" cols="40" rows="3" class="form-control" aria-describedby="big_competitionHelpBlock"></textarea>
+                            <span id="alternativesHelpBlock" class="form-text text-muted">If so, why is your solution better.</span>
                           </div>
 
 
                           <div class="form-group">
-                            <label for="unique_difference">If you actually feel like you have no competition, why is that?</label>
-                            <textarea id="unique_difference" name="unique_difference" cols="40" rows="5" class="form-control"></textarea>
+                            <label for="small_competition">Do you also face competition from small and medium-sized companies?</label>
+                            <textarea id="small_competition" name="small_competition" cols="40" rows="3" class="form-control" aria-describedby="small_competitionHelpBlock"></textarea>
+                            <span id="small_competitionHelpBlock" class="form-text text-muted">Can you name a few of them.</span>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="small_competition">Please list the websites of at least three  competitors</label>
+                            <textarea id="small_competition" name="small_competition" cols="40" rows="3" class="form-control" aria-describedby="small_competitionHelpBlock"></textarea>
+                            <span id="small_competitionHelpBlock" class="form-text text-muted">Just a domain name will do (eg microsoft.com, google.com. List as many as you would like Message Maps to analyze.</span>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="indirect_competition">What's your indirect competition?</label>
+                            <textarea id="indirect_competition" name="indirect_competition" cols="40" rows="3" class="form-control" aria-describedby="indirect_competitionHelpBlock"></textarea>
+                            <span id="indirect_competitionHelpBlock" class="form-text text-muted">If you have a product-based solution, what kind of services do you compete with? If you have a services-based solution, what SaaS or other software products compete with you?</span>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="unique_difference">Is there a sense in which you have no true competition - why is that?</label>
+                            <textarea id="unique_difference" name="unique_difference" cols="40" rows="3" class="form-control"></textarea>
                           </div>
 
 
+
+
+
                           <div class="form-group">
-                            <label for="competitor_perception">Any observations or comments about your brand/solution, your customers, your competitors, or your industry?</label>
-                            <textarea id="competitor_perception" name="competitor_perception" cols="40" rows="5" class="form-control"></textarea>
+
+                            <label for="comparisonPoints" class="checkboxes-label mb-2">Compared to your competitors or alternatives, is your solution....? (check any that apply)</label>
+
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                              <input name="comparisonPoints" id="comparisonPoints_0" type="checkbox" aria-describedby="comparisonPointsHelpBlock" class="custom-control-input" value="consultations">
+                              <label for="comparisonPoints_0" class="custom-control-label">More expensive overall but higher quality</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                              <input name="comparisonPoints" id="comparisonPoints_1" type="checkbox" aria-describedby="comparisonPointsHelpBlock" class="custom-control-input" value="demos">
+                              <label for="comparisonPoints_1" class="custom-control-label">More expensive upfront, lower longer-term costs</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                              <input name="comparisonPoints" id="comparisonPoints_2" type="checkbox" aria-describedby="comparisonPointsHelpBlock" class="custom-control-input" value="self-service">
+                              <label for="comparisonPoints_2" class="custom-control-label">Much less expensive</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                              <input name="comparisonPoints" id="comparisonPoints_3" type="checkbox" aria-describedby="comparisonPointsHelpBlock" class="custom-control-input" value="other">
+                              <label for="comparisonPoints_3" class="custom-control-label">Distinctly simpler to purchase</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                              <input name="comparisonPoints" id="comparisonPoints_4" type="checkbox" aria-describedby="comparisonPointsHelpBlock" class="custom-control-input" value="other">
+                              <label for="comparisonPoints_4" class="custom-control-label">Dinstinctly easier to adopt or use</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                              <input name="comparisonPoints" id="comparisonPoints_5" type="checkbox" aria-describedby="comparisonPointsHelpBlock" class="custom-control-input" value="other">
+                              <label for="comparisonPoints_5" class="custom-control-label">More likely to transform long term, less likely to optimize short term</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                              <input name="comparisonPoints" id="comparisonPoints_6" type="checkbox" aria-describedby="comparisonPointsHelpBlock" class="custom-control-input" value="other">
+                              <label for="comparisonPoints_6" class="custom-control-label">More likely to optimize short term, less likely to transform long-term</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                              <input name="comparisonPoints" id="comparisonPoints_7" type="checkbox" aria-describedby="comparisonPointsHelpBlock" class="custom-control-input" value="other">
+                              <label for="comparisonPoints_7" class="custom-control-label">More innovative but riskier for the client</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                              <input name="comparisonPoints" id="comparisonPoints_8" type="checkbox" aria-describedby="comparisonPointsHelpBlock" class="custom-control-input" value="other">
+                              <label for="comparisonPoints_8" class="custom-control-label">Dependable low-risk but not as interesting</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                              <input name="comparisonPoints" id="comparisonPoints_9" type="checkbox" aria-describedby="comparisonPointsHelpBlock" class="custom-control-input" value="other">
+                              <label for="comparisonPoints_9" class="custom-control-label">Other (describe in your own words below)</label>
+                            </div>
+                            <span id="comparisonPointsHelpBlock" class="form-text text-muted">Check all that apply</span>
+                          </div>
+
+
+
+                          <div class="form-group">
+                            <label for="primaryDifferentiation">If you selected "Other" (or just have something else to add), please explain below </label>
+                            <textarea id="primaryDifferentiation" name="primaryDifferentiation" cols="40" rows="3" class="form-control" aria-describedby="primaryDifferentiationHelpBlock"></textarea>
+                            <span id="primaryDifferentiationHelpBlock" class="form-text text-muted">In what other ways do you compare to your competition?</span>
                           </div>
 
 
                           <div class="form-group">
                             <label for="alternatives">What are the *alternatives* (as opposed to competitors) to your solution?</label>
-                            <textarea id="alternatives" name="alternatives" cols="40" rows="5" class="form-control" aria-describedby="alternativesHelpBlock"></textarea>
+                            <textarea id="alternatives" name="alternatives" cols="40" rows="3" class="form-control" aria-describedby="alternativesHelpBlock"></textarea>
                             <span id="alternativesHelpBlock" class="form-text text-muted">What do people do in the absence of your solution? Examples: hire freelancers, use Excel, build in-house workarounds, suffer the consequences.</span>
                           </div>
 
 
                           <div class="form-group">
                             <label for="customer_problems">Are any of these alternatives costly or foolish? If so, why?</label>
-                            <textarea id="customer_problems" name="customer_problems" cols="40" rows="5" class="form-control" aria-describedby="customer_problemsHelpBlock"></textarea>
+                            <textarea id="customer_problems" name="customer_problems" cols="40" rows="3" class="form-control" aria-describedby="customer_problemsHelpBlock"></textarea>
                             <span id="customer_problemsHelpBlock" class="form-text text-muted">How might these alternatives cause problems for your customers?</span>
                           </div>
 
 
                           <div class="form-group">
-                            <label for="partners">Who has a similar audience as you but isn't a direct competitor?</label>
-                            <textarea id="partners" name="partners" cols="40" rows="5" class="form-control"></textarea>
+                            <label for="partners">Who has a similar audience as you but isn't really competitor?</label>
+                            <textarea id="partners" name="partners" cols="40" rows="3" class="form-control"></textarea>
                           </div>
 
                         </div><!-- /#YourCompetition -->
@@ -804,37 +930,49 @@ function logout() {
 
                           <div class="form-group">
                             <label for="solution_impact">How does your brand's solution change how things are done in your industry?</label>
-                            <textarea id="solution_impact" name="solution_impact" cols="40" rows="5" class="form-control"></textarea>
+                            <textarea id="solution_impact" name="solution_impact" cols="40" rows="3" class="form-control"></textarea>
                           </div>
 
 
                           <div class="form-group">
-                            <label for="solution_technologies">Your technology</label>
-                            <textarea id="solution_technologies" name="solution_technologies" cols="40" rows="5" aria-describedby="solution_technologiesHelpBlock" class="form-control"></textarea>
+                            <label for="solution_context">What are recent or longer-term market or technology trends that have made your solution relevant?</label>
+                            <textarea id="solution_context" name="context" cols="40" rows="3" class="form-control"></textarea>
+                          </div>
+
+
+
+                          <div class="form-group">
+                            <label for="solution_technologies">Key technologies or platforms</label>
+                            <textarea id="solution_technologies" name="solution_technologies" cols="40" rows="3" aria-describedby="solution_technologiesHelpBlock" class="form-control"></textarea>
                             <span id="solution_technologiesHelpBlock" class="form-text text-muted">What technology (or technologies) does your solution leverage, depend on, or base itself on? Why?</span>
                           </div>
 
 
                           <div class="form-group">
-                            <label for="solution_features">Top three features</label>
-                            <textarea id="solution_features" name="solution_features" cols="40" rows="5" aria-describedby="solution_featuresHelpBlock" class="form-control"></textarea>
+                            <label for="solution_features">Top three solution features</label>
+                            <textarea id="solution_features" name="solution_features" cols="40" rows="3" aria-describedby="solution_featuresHelpBlock" class="form-control"></textarea>
                             <span id="solution_featuresHelpBlock" class="form-text text-muted">What are the three most important features, benefits, or value propositions of your product? Can you write a sentence or two about each one?</span>
                           </div>
 
 
                           <div class="form-group">
-                            <label for="solution_ip">Intellectual property</label>
-                            <textarea id="solution_ip" name="solution_ip" cols="40" rows="5" class="form-control" aria-describedby="solution_ipHelpBlock"></textarea>
-                            <span id="solution_ipHelpBlock" class="form-text text-muted">What unique intellectual property, logic, processes, or abilities are associated with your solution?</span>
+                            <label for="UVP">Which feature stands out, or is connected to your unique value proposition?</label>
+                            <textarea id="UVP" name="UVP" cols="40" rows="3" aria-describedby="UVPHelpBlock" class="form-control"></textarea>
+                            <span id="UVPHelpBlock" class="form-text text-muted">Please explain, especially if this one sets you apart from the competition</span>
                           </div>
 
 
                           <div class="form-group">
-                            <label for="solution_category">Solution Category</label>
-                            <textarea id="solution_category" name="solution_category" cols="40" rows="5" aria-describedby="solution_categoryHelpBlock" class="form-control"></textarea>
-                            <span id="solution_categoryHelpBlock" class="form-text text-muted">Talk about the industry, category, or field that you'd put your brand in? Does it belong in more than one? Does it need a new category?</span>
+                            <label for="solution_ip">Intellectual property?</label>
+                            <textarea id="solution_ip" name="solution_ip" cols="40" rows="3" class="form-control" aria-describedby="solution_ipHelpBlock"></textarea>
+                            <span id="solution_ipHelpBlock" class="form-text text-muted">Do you have unique intellectual property, logic, processes, or abilities are associated with your solution? For example, data, benchmarks, software, or proprietary processes?</span>
                           </div>
 
+                          <div class="form-group">
+                            <label for="case_studies">Putting it all together: the one-sentence case study. Demonstrate the value of your solution.</label>
+                            <textarea id="case_studies" name="case_studies" cols="40" rows="3" aria-describedby="case_studiesHelpBlock" class="form-control"></textarea>
+                            <span id="case_studiesHelpBlock" class="form-text text-muted">Think about your prior answers in this section and write a one-sentence case study that describes a problem, your solution, and results.</span>
+                          </div>
 
                           <div class="form-group">
                             <label>Which does your solution help with *more* – increasing income or cutting costs?</label>
@@ -861,7 +999,7 @@ function logout() {
 
                           <div class="form-group">
                             <label for="solution_detail">More on your solution's impact</label>
-                            <textarea id="solution_detail" name="solution_detail" cols="40" rows="5" aria-describedby="solution_detailHelpBlock" class="form-control"></textarea>
+                            <textarea id="solution_detail" name="solution_detail" cols="40" rows="3" aria-describedby="solution_detailHelpBlock" class="form-control"></textarea>
                             <span id="solution_detailHelpBlock" class="form-text text-muted">Based on your choice above, describe your impact in your own words</span>
                           </div>
 
@@ -872,6 +1010,21 @@ function logout() {
 
                          <div x-show="activeTab === 'YourPricing'" id="YourPricing"><!-- YourPricing -->
 
+
+                          <div class="form-group">
+                            <label for="purchase_decision">Can you describe a common decision-making process for your customers? How long does it take?</label>
+                            <textarea id="purchase_decision" name="purchase_decision" cols="40" rows="3" aria-describedby="purchase_decisionHelpBlock" class="form-control"></textarea>
+                            <span id="purchase_decisionHelpBlock" class="form-text text-muted">Talk about your pricing and how they respond to it or react to it.</span>
+                          </div>
+
+
+
+
+                          <div class="form-group">
+                            <label for="buyer_objections">What are the common objections or concerns that customers have during the sales process, and how do you address them?</label>
+                            <textarea id="buyer_objections" name="buyer_objections" cols="40" rows="3" aria-describedby="buyer_objectionsHelpBlock" class="form-control"></textarea>
+                            <span id="buyer_objectionsHelpBlock" class="form-text text-muted">Talk about any doubts or hesitations that come up as well</span>
+                          </div>
 
 
                           <div class="form-group">
@@ -891,7 +1044,7 @@ function logout() {
                               </div>
                               <div class="custom-control custom-radio custom-control-inline">
                                 <input name="pricing_presentation" id="pricing_presentation_3" type="radio" class="custom-control-input" value="private_custom">
-                                <label for="pricing_presentation_3" class="custom-control-label">We don't publish it anywhere, we always work up custom, variable pricing for each prospect</label>
+                                <label for="pricing_presentation_3" class="custom-control-label">We don't publish it anywhere, we  work up custom, variable pricing for each prospect</label>
                               </div>
                               <div class="custom-control custom-radio custom-control-inline">
                                 <input name="pricing_presentation" id="pricing_presentation_4" type="radio" class="custom-control-input" value="other">
@@ -925,17 +1078,10 @@ function logout() {
 
 
                           <div class="form-group">
-                            <label for="pricing_internal_view">What do you think about your pricing, on a scale of 1 to 10?</label>
-                            <input id="pricing_internal_view" name="pricing_internal_view" type="text" class="form-control">
+                            <label for="customer_acquisition_channels">How do your customers find out about you? How do they not find out about you?</label>
+                            <textarea id="customer_acquisition_channels" name="customer_acquisition_channels" cols="40" rows="3" class="form-control" aria-describedby="customer_acquisition_channelsHelpBlock"></textarea>
+                            <span id="customer_acquisition_channelsHelpBlock" class="form-text text-muted">Also - how do you wish they found out about you?</span>
                           </div>
-
-
-                          <div class="form-group">
-                            <label for="pricing_perception">Pricing Perception</label>
-                            <textarea id="pricing_perception" name="pricing_perception" cols="40" rows="5" aria-describedby="pricing_perceptionHelpBlock" class="form-control"></textarea>
-                            <span id="pricing_perceptionHelpBlock" class="form-text text-muted">What does your pricing say about your brand? What do you want it to say?</span>
-                          </div>
-
 
                           <div class="form-group">
                             <label>How do you primarily sell your product</label>
@@ -953,8 +1099,8 @@ function logout() {
                                 <label for="selling_channel_2" class="custom-control-label">Through self-service ecommerce; they can buy my solution online</label>
                               </div>
                               <div class="custom-control custom-checkbox custom-control-inline">
-                                <input name="selling_channel" id="selling_channel_3" type="checkbox" aria-describedby="selling_channelHelpBlock" class="custom-control-input" value="">
-                                <label for="selling_channel_3" class="custom-control-label"></label>
+                                <input name="selling_channel" id="selling_channel_3" type="checkbox" aria-describedby="selling_channelHelpBlock" class="custom-control-input" value="other">
+                                <label for="selling_channel_3" class="custom-control-label">Other</label>
                               </div>
                               <span id="selling_channelHelpBlock" class="form-text text-muted">Check all that apply</span>
                             </div>
@@ -967,9 +1113,23 @@ function logout() {
                           </div>
 
                         </div><!-- /#YourPricing -->
-                      </form>
-                  </div>
 
+
+
+                        <!-- Previous/Next buttons -->
+                        <div class="row  my-5">
+                          <div class=" col-md-6 text-start ">
+                            <button @click.prevent="changeTab(-1)" class="btn btn-primary" :disabled="activeTab === tabs[0]">Previous</button>
+                            <button @click.prevent="changeTab(1)" class="btn btn-primary" :disabled="activeTab === tabs[tabs.length - 1]">Next</button>
+                          </div>
+                          <div class="col-md-6 text-end ">
+                            <button name="submit" type="submit" class="btn btn-primary mb-1 disabled">Complete and Review</button>
+                          </div>
+                        </div>
+
+
+                    </div>
+                  </form>
 
 
                 </p><!-- card-text -->
@@ -981,7 +1141,7 @@ function logout() {
 
             <div x-show="Alpine.store('currentScreen').current === 'maps'">
               <!-- Message Map screen markup -->
-              <h4>Overview of Sa'ar First Map</h4>
+              <h4>Your Message Map: "Rowan's First Map"</h4>
               <b>"Extracted quote"</b>
               <p>You're building a map for the [acme] brand belonging to [company name]. This is your [first] message map.</p>
               <p>Other people who can see your map are [team member 1] and [team member 2]</p>
@@ -1013,7 +1173,7 @@ function logout() {
                     <div class="card-body">
                       <h5 class="card-title">Interview</h5>
                       <p class="card-text">Your [first] interview is only 45% complete</p>
-                      <a href="#" class="btn my-3 btn-primary" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">Finish It</a>
+                      <a href="#" class="btn my-3 btn-primary" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews';">Finish It</a>
                       <p class="card-text">You can also use an interview from a team member - instead of or in addition to your own</p>
                       <p><a href="#">Add recorded Zoom interviews</a></p>
                     </div>

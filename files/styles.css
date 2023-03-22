@@ -35,7 +35,7 @@
 
 
 .card-header {
-  padding: 2rem 1rem 0 2rem;
+  padding: 2rem 0rem .5rem 1rem;
   margin: 1rem;
   color: var(--bs-card-cap-color);
   background-color: hsl(210, 14%, 97%);
@@ -588,7 +588,7 @@ body {font-family: Inter;}
     margin:0;
   }
   .onboard-welcome {
-    max-width: 960px;
+    max-width: 980px;
 }
 
 
