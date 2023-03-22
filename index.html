@@ -140,11 +140,14 @@ async function fetchUserDetailsAndLog() {
     // Update the Alpine store with the user data
     Alpine.store('userData').firstName = user.firstname;
     Alpine.store('userData').lastName = user.lastname;
+    Alpine.store('userData').initials = user.firstname.charAt(0) + user.lastname.charAt(0);
     Alpine.store('userData').email = user.email;
     Alpine.store('userData').accountTier = user.account_tier;
     Alpine.store('userData').createdAt = user.created_at;
     Alpine.store('userData').id = user.id;
     Alpine.store('userData').role = user.role;
+
+    console.log("initials",  Alpine.store('userData').initials);
 
 
     // Capture user information as variables
@@ -166,12 +169,12 @@ async function fetchUserDetailsAndLog() {
     const userWelcome = document.querySelector('.user-welcome');
     userWelcome.textContent = `Welcome back ${user.firstname}!`;
 
-    // Display the user's initials in the sidebar and header
+    /* Display the user's initials in the sidebar and header
     const initials = firstName.charAt(0) + lastName.charAt(0);
     const avatarSidebar = document.querySelector('.avatar-sidebar');
     avatarSidebar.textContent = initials;
     const avatarHeader = document.querySelector('.avatar-header');
-    avatarHeader.textContent = initials;
+    avatarHeader.textContent = initials;*/
 
 
 
