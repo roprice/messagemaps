@@ -46,10 +46,30 @@
 
 document.addEventListener('alpine:init', () => {
 
+
+
+
+
+
   Alpine.store('authenticationStatus', {
     current: localStorage.getItem('authToken') ? 'loggedIn' : 'loggedOut',
     items: ['loggedIn','loggedOut']
   });
+
+
+  Alpine.store('userData', {
+  firstName: '',
+  lastName: '',
+  email: '',
+  accountTier: '',
+  createdAt: '',
+  id: '',
+  role: '',
+});
+
+
+
+
   // site-level states
   Alpine.store('currentPage', {
       current: 'login',
@@ -113,7 +133,18 @@ async function fetchUserDetailsAndLog() {
     const user = await response.json();
 
     // Log the user data to the console
-    console.log(user);
+    console.log("User object",user);
+
+
+
+    // Update the Alpine store with the user data
+    Alpine.store('userData').firstName = user.firstname;
+    Alpine.store('userData').lastName = user.lastname;
+    Alpine.store('userData').email = user.email;
+    Alpine.store('userData').accountTier = user.account_tier;
+    Alpine.store('userData').createdAt = user.created_at;
+    Alpine.store('userData').id = user.id;
+    Alpine.store('userData').role = user.role;
 
 
     // Capture user information as variables
@@ -125,6 +156,10 @@ async function fetchUserDetailsAndLog() {
     const id = user.id;
     const lastName = user.lastname;
     const role = user.role;
+
+
+
+
 
 
     // Display the user's first name in the welcome message
@@ -433,7 +468,10 @@ function logout() {
               <div class="dropdown">
 
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  <div class="avatar avatar-sidebar">hi</div>
+
+
+                    <img src="https://avatars.githubusercontent.com/u/19863?v=4" alt="" width="40" height="40" class="rounded-circle">
+                  <!--<div class="avatar avatar-sidebar">hi</div>-->
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                   <li><a class="dropdown-item" href="#">New Map</a></li>
@@ -473,7 +511,8 @@ function logout() {
                 <div class="dropdown">
 
                   <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <div class="avatar avatar-header">hi</div>
+                    <img src="https://avatars.githubusercontent.com/u/19863?v=4" alt="" width="40" height="40" class="rounded-circle">
+                  <!--<div class="avatar avatar-sidebar">hi</div>-->
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item" href="#">New Map</a></li>
@@ -516,7 +555,7 @@ function logout() {
               </div>
 
               <div class="welcome-message container-fluid py-5">
-                <h3 class="display fw-bold mb-4">Welcome <span>[user firstname]<span></h3>
+                <h3 class="display fw-bold mb-4">Welcome <span class="user-firstname" x-text="$store.userData.firstName"></span></h3>
 
                 <p class="col-md-12"><b>First, I'm  glad you're here.</b> If you ever need anything or just want to chat, reach me
                   <a href="#">Slack</a> or by email at <a href="#">rowan@messagemaps.io</a>.</p>
@@ -598,7 +637,7 @@ function logout() {
               <div class="row card-header">
 
                 <div class=" col-md-8">
-                    <h5 class="card-title col-md-8" id="interview-name">Rowan's First Interview</h5>
+                    <h5 class="card-title col-md-8" id="interview-name"><span class="user-firstname" x-text="$store.userData.firstName"></span>'s First Interview</h5>
                     <div class="text-small text-secondary created">Created: <span>2021-08-01 12:17</span></div>
                     <div class="text-small text-secondary last-saved">Last saved: <span>2021-08-01 12:54</span></div>
                     <div class="text-small text-secondary last-saved mt-3">This is the <strong>first interview</strong> for your message map</div>
@@ -1141,7 +1180,7 @@ function logout() {
 
             <div x-show="Alpine.store('currentScreen').current === 'maps'">
               <!-- Message Map screen markup -->
-              <h4>Your Message Map: "Rowan's First Map"</h4>
+              <h4>Your Message Map: "<span class="user-firstname" x-text="$store.userData.firstName"></span>'s First Map"</h4>
               <b>"Extracted quote"</b>
               <p>You're building a map for the [acme] brand belonging to [company name]. This is your [first] message map.</p>
               <p>Other people who can see your map are [team member 1] and [team member 2]</p>
