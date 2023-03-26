@@ -46,61 +46,52 @@
 
 document.addEventListener('alpine:init', () => {
 
+    Alpine.store('authenticationStatus', {
+      current: localStorage.getItem('authToken') ? 'loggedIn' : 'loggedOut',
+      items: ['loggedIn','loggedOut']
+    });
 
 
 
-
-
-  Alpine.store('authenticationStatus', {
-    current: localStorage.getItem('authToken') ? 'loggedIn' : 'loggedOut',
-    items: ['loggedIn','loggedOut']
-  });
-
-
-  Alpine.store('userData', {
-  firstName: '',
-  lastName: '',
-  email: '',
-  accountTier: '',
-  createdAt: '',
-  id: '',
-  role: '',
-});
-
-
+    Alpine.store('userData', {
+      firstName: '',
+      email: '',
+      id: '',
+      messageMapIds: []
+    });
 
 
   // site-level states
   Alpine.store('currentPage', {
-      current: 'login',
-      items: ['signup', 'login']
-    });
-    // app-level states
-    Alpine.store('currentScreen', {
-      current: 'dashboard',
-      items: ['account','dashboard','maps','interviews','strategies','assets','newMap']
-    });
-    // app-level states
-    Alpine.store('onboarding', {
-      current: 'welcome',
-      items: ['welcome','hiddenwelcome']
-    });
-    Alpine.store('lightDarkMode', {
-      current: 'light',
-      items: ['light','dark']
-    });
+    current: 'login',
+    items: ['signup', 'login']
+  });
+  // app-level states
+  Alpine.store('currentScreen', {
+    current: 'dashboard',
+    items: ['account','dashboard','maps','interviews','strategies','assets','newMap']
+  });
+  // app-level states
+  Alpine.store('onboarding', {
+    current: 'welcome',
+    items: ['welcome','hiddenwelcome']
+  });
+  Alpine.store('lightDarkMode', {
+    current: 'light',
+    items: ['light','dark']
+  });
 
-    Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
+  Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
 
-    Alpine.store('showSuccessMessage', false); // initialize the errorMessage global state
+  Alpine.store('showSuccessMessage', false); // initialize the errorMessage global state
 
-    Alpine.store('sidebarStatus', {
-      current: localStorage.getItem('sidebarStatus') || 'expanded',
-      items: ['collapsed', 'expanded'],
-      toggle() {
-        this.current = this.current === 'collapsed' ? 'expanded' : 'collapsed';
-        localStorage.setItem('sidebarStatus', this.current);
-      }
+  Alpine.store('sidebarStatus', {
+    current: localStorage.getItem('sidebarStatus') || 'expanded',
+    items: ['collapsed', 'expanded'],
+    toggle() {
+      this.current = this.current === 'collapsed' ? 'expanded' : 'collapsed';
+      localStorage.setItem('sidebarStatus', this.current);
+    }
   });
 
 });
@@ -132,50 +123,20 @@ async function fetchUserDetailsAndLog() {
 
     const user = await response.json();
 
-    // Log the user data to the console
-    console.log("User object",user);
-
-
+          // Log the user data to the console
+          console.log("User object",user);
 
     // Update the Alpine store with the user data
     Alpine.store('userData').firstName = user.firstname;
-    Alpine.store('userData').lastName = user.lastname;
-    Alpine.store('userData').initials = user.firstname.charAt(0) + user.lastname.charAt(0);
     Alpine.store('userData').email = user.email;
-    Alpine.store('userData').accountTier = user.account_tier;
-    Alpine.store('userData').createdAt = user.created_at;
     Alpine.store('userData').id = user.id;
-    Alpine.store('userData').role = user.role;
-
-    console.log("initials",  Alpine.store('userData').initials);
-
-
-    // Capture user information as variables
-    // const teamName = user.teamName;
-    const accountTier = user.account_tier;
-    const createdAt = user.created_at;
-    const email = user.email;
-    const firstName = user.firstname;
-    const id = user.id;
-    const lastName = user.lastname;
-    const role = user.role;
+    //for (var i = 0; i < user.messagemaps.length; i++) {
+      //Alpine.store('userData').messageMapIds.push(user.messagemaps[i].messagemap_id);
+    //}
 
 
-
-
-
-
-    // Display the user's first name in the welcome message
-    const userWelcome = document.querySelector('.user-welcome');
-    userWelcome.textContent = `Welcome back ${user.firstname}!`;
-
-    /* Display the user's initials in the sidebar and header
-    const initials = firstName.charAt(0) + lastName.charAt(0);
-    const avatarSidebar = document.querySelector('.avatar-sidebar');
-    avatarSidebar.textContent = initials;
-    const avatarHeader = document.querySelector('.avatar-header');
-    avatarHeader.textContent = initials;*/
-
+        // Log the user data to the console
+        console.log("User object in reactive Alpine store:",Alpine.store('userData'));
 
 
     return user;
@@ -268,7 +229,7 @@ function logout() {
 
           <div class="logo my-3 middle text-center">
             <a href="#" class="mx-auto my-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
-              <img class="mb-auto" src="files/logo.png" alt="" width="52" height="52">
+              <img class="mb-2" src="files/logo.png" alt="" width="80" height="80">
             </a>
             <div class="brand-name fw-bold h3">MESSAGE <span class="">MAPS</span></div>
           </div>
@@ -355,18 +316,21 @@ function logout() {
       x-show="Alpine.store('sidebarStatus').current === 'collapsed'"
       x-transition:enter.duration.100ms>
 
-        <div class="position-relative m-0 sidebar-toggle-icon">
-          <a href="#" class="text-secondary expandSidebar text-small navlink linkdark p-0 position-absolute top-0 end-0 border-small d-flex align-items-center" x-on:click.prevent="Alpine.store('sidebarStatus').current = 'expanded'">
-            <span class="material-symbols-outlined p-0 small">left_panel_open</span>
-          </a>
-        </div>
-
-        <div class="sidenav-wrapper  py-0 px-2">
 
 
-          <div class="logo my-3 middle text-center">
+        <div class="sidenav-wrapper  py-0 px-2 sticky-element">
+
+
+          <div class="position-relative m-0 sidebar-toggle-icon">
+            <a href="#" class="text-secondary expandSidebar text-small navlink linkdark p-0 position-absolute top-0 end-0 border-small d-flex align-items-center" x-on:click.prevent="Alpine.store('sidebarStatus').current = 'expanded'">
+              <span class="material-symbols-outlined p-0 small">left_panel_open</span>
+            </a>
+          </div>
+
+
+          <div class="logo mb-3 pt-2 middle text-center">
             <a href="#" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
-              <img class="mb-auto" src="files/logo.png" alt="" width="52" height="52">
+              <img class="mb-auto" src="files/logo.png" alt="" width="41" height="41">
             </a>
           </div>
 
@@ -412,18 +376,21 @@ function logout() {
       x-show="Alpine.store('sidebarStatus').current === 'expanded'"
       x-transition:enter.duration.150ms>
 
-        <div class="position-relative m-0 sidebar-toggle-icon">
+
+
+        <div class="sidenav-wrapper py-0 px-2 sticky-element">
+
+
+          <div class="position-relative m-0 sidebar-toggle-icon">
             <a href="#" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
             x-on:click.prevent="Alpine.store('sidebarStatus').current = 'collapsed'">
               <span class="material-symbols-outlined p-0 small ">left_panel_close</span>
             </a>
         </div>
 
-        <div class="sidenav-wrapper py-0 px-2">
-
-          <div class="logo my-3 middle text-center">
+          <div class="logo mb-3 pt-2 middle text-center">
             <a href="#" class="mx-auto my-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
-              <img class="mb-auto" src="files/logo.png" alt="" width="52" height="52">
+              <img class="mb-auto" src="files/logo.png" alt="" width="41" height="41">
             </a>
           </div>
 
@@ -509,7 +476,7 @@ function logout() {
 
             <div id="userMenu" class=" text-end ms-auto me-0">
               <div class="d-flex align-items-center">
-                <span class="user-welcome mt-1 me-2 pb-1 small title-case  highlight-welcome"></span>
+                <span class="user-welcome mt-1 me-2 pb-1 small title-case  highlight-welcome">Welcome <span class="user-firstname" x-text="$store.userData.firstName"></span></span>
                 <a class="user-settings mt-2 me-1 navlink linkdark " href="#"><span class="material-symbols-outlined medium me-2">tune</span></a>
                 <div class="dropdown">
 
