@@ -639,6 +639,16 @@ html, body {
       background-color:  #e9e9e9!important;
   }
 
+  body.maps li.maps .material-symbols-outlined.medium,
+  body.dashboard li.dashboard .material-symbols-outlined.medium,
+  body.interviews li.interviews .material-symbols-outlined.medium,
+  body.strategies li.strategy .material-symbols-outlined.medium,
+  body.assets li.assets .material-symbols-outlined.medium,
+  body.newMap li.newMap .material-symbols-outlined.medium,
+  body.account li.account .material-symbols-outlined.medium {
+    font-variation-settings: 'FILL' 100, 'wght' 100, 'GRAD' 200, 'opsz' 20;
+}
+
   .sidebar-nav li.active {
     border-color: #ddd!important;
   }
