@@ -7,7 +7,8 @@ document.addEventListener('alpine:init', () => {
     Alpine.store('authenticationStatus', {
       current: localStorage.getItem('supabase.auth.token') ? 'loggedIn' : 'loggedOut',
       items: ['loggedIn','loggedOut'],
-      updateAuthenticationStatus: function () {
+      updateAuthStatus: function () {
+        console.log('updateAuthStatus called');
         this.current = localStorage.getItem('supabase.auth.token') ? 'loggedIn' : 'loggedOut';
       },
 

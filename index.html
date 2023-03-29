@@ -88,7 +88,7 @@
             </div>
           </main>
 
-          <div style="visibility: hidden;">
+          <div style="visibility: hidden;position: absolute;left:-999em">
             <div class='section'>
               <form id='sign-up'>
                   <h3>Sign Up</h3>
@@ -111,7 +111,7 @@
           </div>
           <div class='section'>
               <h3>Logout</h3>
-              <button id='real-logout-button'>Logout</button>
+              <button class='logout-button'>Logout</button>
           </div>
           </div>
       </div>
@@ -262,8 +262,6 @@
 
         <div class="sidebar-dropdown mt-auto border-top border-light p-3 col-md-3 bg-white">
 
-
-
           <div id="userMenu" class=" text-end ms-auto me-0">
             <div class="d-flex align-items-center">
 
@@ -283,7 +281,7 @@
                   <li><a class="dropdown-item" href="#">Settings</a></li>
                   <li><a class="dropdown-item" href="#">Help</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" id="logout-button" href="#">Logout</a></li>
+                  <li><a class="dropdown-item logout-button" href="#">Logout Bro</a></li>
                 </ul>
               </div>
 
@@ -294,7 +292,7 @@
 
       </div><!-- /#ExpandedSidebar -->
 
-      <div class="p-0 bg-light" id="Main"
+      <div id="Main" class="p-0 bg-light"
       :class="{
         'main-expanded': Alpine.store('sidebarStatus').current === 'expanded',
         'main-collapsed': Alpine.store('sidebarStatus').current === 'collapsed'
@@ -324,7 +322,7 @@
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">Help</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item"  id="logout-button" href="#">Logout</a></li>
+                    <li><a class="dropdown-item logout-button" href="#">Logout</a></li>
                   </ul>
                 </div>
               </div>
