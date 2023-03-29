@@ -26,13 +26,12 @@
   <!-- Custom CSS -->
   <link href="files/styles.css" rel="stylesheet">
 
-
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+
    <!-- Supabase.js -->
-   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1"></script>
-   <script src="files/supabase-auth.js"></script>
+   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 
 </head>
@@ -52,7 +51,7 @@
 
 
 
-  // Alpine.js state management
+
 
 document.addEventListener('alpine:init', () => {
 
@@ -61,12 +60,15 @@ document.addEventListener('alpine:init', () => {
       items: ['loggedIn','loggedOut']
     });
 
+
+
     Alpine.store('userData', {
       firstName: '',
       email: '',
       id: '',
       messageMapIds: []
     });
+
 
   // site-level states
   Alpine.store('currentPage', {
@@ -108,13 +110,122 @@ function handleError(error) {
   // Handle the error as needed (e.g. display an error message to the user)
 }
 
+
+window.addEventListener('load', async () => {
+
+  const authToken = localStorage.getItem('authToken');
+  if (authToken) {
+    await fetchUserDetailsAndLog();
+  }
+});
+
+async function fetchUserDetailsAndLog() {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    const response = await fetch('https://xmiq-lerj-gn96.n7.xano.io/api:fG_d5cKD/auth/me', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      }
+    });
+
+    const user = await response.json();
+
+          // Log the user data to the console
+          console.log("User object",user);
+
+    // Update the Alpine store with the user data
+    Alpine.store('userData').firstName = user.firstname;
+    Alpine.store('userData').email = user.email;
+    Alpine.store('userData').id = user.id;
+    //for (var i = 0; i < user.messagemaps.length; i++) {
+      //Alpine.store('userData').messageMapIds.push(user.messagemaps[i].messagemap_id);
+    //}
+
+
+        // Log the user data to the console
+        console.log("User object in reactive Alpine store:",Alpine.store('userData'));
+
+
+    return user;
+
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+
+async function signInWithEmail() {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: 'example@email.com',
+    password: 'example-password',
+  })
+}
+const supabase = createClient('https://your-supabase-url.com', 'your-supabase-api-key');
+
+
+async function login(email, password) {
+  console.log('login function executed');
+  try {
+    console.log('try block executed');
+    const response = await fetch('https://xmiq-lerj-gn96.n7.xano.io/api:fG_d5cKD/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    if (response.status === 200 || response.status === 201) {
+
+      Alpine.store('errorMessage', '');
+
+      const responseBody = await response.json();
+
+      console.log('authToken:', responseBody.authToken); // Log the response body
+
+      const token = responseBody.authToken;
+
+      localStorage.setItem('authToken', token);
+
+      Alpine.store('authenticationStatus').current = 'loggedIn';
+
+      await fetchUserDetailsAndLog();
+
+
+
+    } else if (response.status === 403) {
+  // incorrect password case
+  const errorResponse = await response.json();
+  console.log('403 errorMessage:', errorResponse.message); // Log the errorResponse
+  Alpine.store('errorMessage', {message: "Sorry - " + errorResponse.message});
+}
+
+    else {
+
+  // other error case
+  const errorResponse = await response.json();
+  handleError(errorResponse.message);
+
+    }
+  } catch (error) {
+    console.log('catch block executed');
+    handleError(error);
+  }
+}
+
+
+
+
 function logout() {
   // Remove the authToken from local storage
-  // localStorage.removeItem('authToken');
+  localStorage.removeItem('authToken');
 
   // Update the authentication status to loggedOut
   Alpine.store('authenticationStatus').current = 'loggedOut';
 }
+
 
 </script>
 
@@ -143,20 +254,17 @@ function logout() {
 
 
 
-
-
-
-
           <h2 class="h5 mb-0 fw-normal">Sign in</h2>
           <div x-data="{ email: '', password: ''}">
-              <form id="log-in">
+              <form @submit.prevent="login(email, password)">
                 <div>
                   <label for="email">Email:</label>
-                  <input class="input" type="email" name="email" id="email" placeholder="Enter email.." x-model="email" autocomplete="username" @input="Alpine.store('errorMessage', { message: '' })">
+                  <input class="input" type="email" id="email" placeholder="Enter email.." x-model="email" autocomplete="username" @input="Alpine.store('errorMessage', { message: '' })">
+
                 </div>
                 <div>
                   <label for="password">Password:</label>
-                  <input type="password" name="password" placeholder="Enter password.." id="password" x-model="password" autocomplete="password" @input="Alpine.store('errorMessage', { message: '' })">
+                  <input type="password" placeholder="Enter password.." id="password" x-model="password" autocomplete="password" @input="Alpine.store('errorMessage', { message: '' })">
 
                 </div>
 
@@ -190,18 +298,6 @@ function logout() {
             </div>
 
           </main>
-
-
-
-
-            <form id='sign-up' style="visibility: hidden;">
-                <h3>Sign Up</h3>
-                <label>Email</label><input type='email' name='email' />
-                <label>Password</label><input type='password' name='password' />
-                <input type='submit'>
-            </form>
-
-
 
       </div>
 
@@ -372,7 +468,7 @@ function logout() {
                   <li><a class="dropdown-item" href="#">Settings</a></li>
                   <li><a class="dropdown-item" href="#">Help</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" id="logout-button" href="#" @click="logout">Logout</a></li>
+                  <li><a class="dropdown-item" href="#" @click="logout">Logout</a></li>
                 </ul>
               </div>
 
@@ -409,11 +505,11 @@ function logout() {
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item" href="#">New Map</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#" id="user-button">My Account</a></li>
+                    <li><a class="dropdown-item" href="#">My Account</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">Help</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item"  id="logout-button" href="#" @click="logout">Logout</a></li>
+                    <li><a class="dropdown-item" href="#" @click="logout">Logout</a></li>
                   </ul>
                 </div>
               </div>

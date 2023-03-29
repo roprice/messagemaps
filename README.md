@@ -1,1 +1,1 @@
-# messagemaps helps tech firms quickly find their message
+# messagemaps helps tech firms find their message and tell their story
