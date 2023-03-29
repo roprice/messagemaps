@@ -31,7 +31,7 @@
 
    <!-- Supabase.js -->
    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1"></script>
-   <script src="files/supabase-auth.js"></script>
+   <script src="files/supabase.js"></script>
 
 
 </head>
@@ -65,7 +65,7 @@
               </div>
               <div>
                 <label for="password">Password:</label>
-                <input type="password" name="password" placeholder="Enter password.." id="password" autocomplete="password">
+                <input type="password" name="password" placeholder="Enter password.." id="password" autocomplete="current-password">
               </div>
 
               <div class="text-secondary text-small m-2 mt-0">
@@ -92,8 +92,8 @@
             <div class='section'>
               <form id='sign-up'>
                   <h3>Sign Up</h3>
-                  <label>Email</label><input type='email' name='email' />
-                  <label>Password</label><input type='password' name='password' />
+                  <label>Email</label><input type='email' name='email' autocomplete="email"/>
+                  <label>Password</label><input type='password' name='password'  autocomplete="current-password" />
                   <input type='submit'>
               </form>
           </div>
@@ -111,7 +111,7 @@
           </div>
           <div class='section'>
               <h3>Logout</h3>
-              <button id='logout-button'>Logout</button>
+              <button id='real-logout-button'>Logout</button>
           </div>
           </div>
       </div>
@@ -283,7 +283,7 @@
                   <li><a class="dropdown-item" href="#">Settings</a></li>
                   <li><a class="dropdown-item" href="#">Help</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" id="logout-button" href="#" @click="logout">Logout</a></li>
+                  <li><a class="dropdown-item" id="logout-button" href="#">Logout</a></li>
                 </ul>
               </div>
 
@@ -324,7 +324,7 @@
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">Help</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item"  id="logout-button" href="#" @click="logout">Logout</a></li>
+                    <li><a class="dropdown-item"  id="logout-button" href="#">Logout</a></li>
                   </ul>
                 </div>
               </div>
