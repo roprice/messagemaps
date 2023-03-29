@@ -11,7 +11,6 @@
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 
@@ -37,92 +36,9 @@
 
 </head>
 
-<body id="light" x-data x-bind:class="[
-  Alpine.store('authenticationStatus').current,
-  Alpine.store('currentPage').current,
-  Alpine.store('currentScreen').current,
-  Alpine.store('lightDarkMode').current,
-  Alpine.store('sidebarStatus').current,
-  Alpine.store('onboarding').current]"
-  >
-
-<!-- custom js -->
-<script>
-
-
-
-
-  // Alpine.js state management
-
-document.addEventListener('alpine:init', () => {
-
-    Alpine.store('authenticationStatus', {
-      current: localStorage.getItem('authToken') ? 'loggedIn' : 'loggedOut',
-      items: ['loggedIn','loggedOut']
-    });
-
-    Alpine.store('userData', {
-      firstName: '',
-      email: '',
-      id: '',
-      messageMapIds: []
-    });
-
-  // site-level states
-  Alpine.store('currentPage', {
-    current: 'login',
-    items: ['signup', 'login']
-  });
-  // app-level states
-  Alpine.store('currentScreen', {
-    current: 'dashboard',
-    items: ['account','dashboard','maps','interviews','strategies','assets','newMap']
-  });
-  // app-level states
-  Alpine.store('onboarding', {
-    current: 'welcome',
-    items: ['welcome','hiddenwelcome']
-  });
-  Alpine.store('lightDarkMode', {
-    current: 'light',
-    items: ['light','dark']
-  });
-
-  Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
-
-  Alpine.store('showSuccessMessage', false); // initialize the errorMessage global state
-
-  Alpine.store('sidebarStatus', {
-    current: localStorage.getItem('sidebarStatus') || 'expanded',
-    items: ['collapsed', 'expanded'],
-    toggle() {
-      this.current = this.current === 'collapsed' ? 'expanded' : 'collapsed';
-      localStorage.setItem('sidebarStatus', this.current);
-    }
-  });
-
-});
-
-function handleError(error) {
-  console.error(error);
-  // Handle the error as needed (e.g. display an error message to the user)
-}
-
-function logout() {
-  // Remove the authToken from local storage
-  // localStorage.removeItem('authToken');
-
-  // Update the authentication status to loggedOut
-  Alpine.store('authenticationStatus').current = 'loggedOut';
-}
-
-</script>
-
-
+<body id="light" x-data x-bind:class="bodyClasses()">
 
 <!-- Logged Out States -->
-
-
 <!-- Signin -->
 <div id="Logged_Out_States" x-cloak  x-show="Alpine.store('authenticationStatus').current === 'loggedOut'" x-transition:enter.duration.500ms>
 
@@ -141,68 +57,63 @@ function logout() {
             <div class="brand-name fw-bold h3">MESSAGE <span class="">MAPS</span></div>
           </div>
 
-
-
-
-
-
-
           <h2 class="h5 mb-0 fw-normal">Sign in</h2>
-          <div x-data="{ email: '', password: ''}">
-              <form id="log-in">
-                <div>
-                  <label for="email">Email:</label>
-                  <input class="input" type="email" name="email" id="email" placeholder="Enter email.." x-model="email" autocomplete="username" @input="Alpine.store('errorMessage', { message: '' })">
-                </div>
-                <div>
-                  <label for="password">Password:</label>
-                  <input type="password" name="password" placeholder="Enter password.." id="password" x-model="password" autocomplete="password" @input="Alpine.store('errorMessage', { message: '' })">
+            <form id="log-in">
+              <div>
+                <label for="email">Email:</label>
+                <input class="input" type="email" name="email" id="email" placeholder="Enter email.." autocomplete="username">
+              </div>
+              <div>
+                <label for="password">Password:</label>
+                <input type="password" name="password" placeholder="Enter password.." id="password" autocomplete="password">
+              </div>
 
-                </div>
+              <div class="text-secondary text-small m-2 mt-0">
+                <a href="#" class="text-secondary">Forgot password?</a> | <a href="#" class="text-secondary">Magic login link</a>
+              </div>
 
-
-                <div class="text-secondary text-small m-2 mt-0">
-                  <a href="#" class="text-secondary">Forgot password?</a> | <a href="#"  class="text-secondary">Magic login link</a>
-                </div>
-
-                <div class="mt-2">
-                  <button type="submit">Login</button>
-                </div>
-
-                <div x-cloak style="position: relative;">
-                  <div class="alert alert-danger rounded-3 mt-2 p-2 align-items-center" style="text-align:center; position: absolute; top: 0; left: 0; right: 0;" x-show="Alpine.store('errorMessage').message">
-                    <div class="d-flex"><span class='material-symbols-outlined me-1'>error</span><span>Wrong username or password</span></div>
-                </div>
-
-
-                <div x-cloak x-show="Alpine.store('showSuccessMessage')" class="alert alert-success  rounded-3 mt-2 p-2 align-items-center" x-transition:enter.duration.50ms>
-
-
-                    <div class="d-flex"><span class='material-symbols-outlined me-1'>task_alt</span><span>Login successful!</span></div>
-                  </div>
-
-
-                </div>
-
-
-
-              </form>
-            </div>
-
-          </main>
-
-
-
-
-            <form id='sign-up' style="visibility: hidden;">
-                <h3>Sign Up</h3>
-                <label>Email</label><input type='email' name='email' />
-                <label>Password</label><input type='password' name='password' />
-                <input type='submit'>
+              <div class="mt-2">
+                <button type="submit">Login</button>
+              </div>
             </form>
 
+            <div x-cloak style="position: relative;">
+              <div class="alert alert-danger rounded-3 mt-2 p-2 align-items-center" style="text-align:center; position: absolute; top: 0; left: 0; right: 0;" x-show="Alpine.store('errorMessage').message">
+                <div class="d-flex"><span class='material-symbols-outlined me-1'>error</span><span>Wrong username or password</span></div>
+              </div>
 
+              <div x-cloak x-show="Alpine.store('showSuccessMessage')" class="alert alert-success  rounded-3 mt-2 p-2 align-items-center" x-transition:enter.duration.50ms>
+                <div class="d-flex"><span class='material-symbols-outlined me-1'>task_alt</span><span>Login successful!</span></div>
+              </div>
+            </div>
+          </main>
 
+          <div style="visibility: hidden;">
+            <div class='section'>
+              <form id='sign-up'>
+                  <h3>Sign Up</h3>
+                  <label>Email</label><input type='email' name='email' />
+                  <label>Password</label><input type='password' name='password' />
+                  <input type='submit'>
+              </form>
+          </div>
+          <div class='section'>
+              <form id='validate'>
+                  <h3>Access Token</h3>
+                  <input readonly=readonly type='text' id='access-token' /> <small>Default expiry is 60 minutes</small>
+                  <h3>Refresh Token</h3>
+                  <input readonly=readonly type='text' id='refresh-token' /> <small>Supabase-js will use this to automatically fetch a new accessToken for you every 60 mins whilst the client is running</small>
+              </form>
+          </div>
+          <div class='section'>
+              <h3>Fetch User Details</h3>
+              <button id='user-button'>Fetch</button>
+          </div>
+          <div class='section'>
+              <h3>Logout</h3>
+              <button id='logout-button'>Logout</button>
+          </div>
+          </div>
       </div>
 
       <div class="col-md-7  m-0 p-0 vh-100  d-flex align-items-end justify-content-end"  style="background-image: url('files/aspire.jpg');background-size: cover;background-position: center center">
@@ -1158,6 +1069,6 @@ function logout() {
 
 </div><!-- /  --><!-- /.Logged_In_States -->
 
-
+<script src="files/app.js"></script>
 </body>
 </html>

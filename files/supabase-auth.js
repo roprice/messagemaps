@@ -21,6 +21,12 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
 const signUpSubmitted = (event) => {
   event.preventDefault()
+
+
+  console.log("Form element:", event.target); // Log the form element
+
+
+
   const email = event.target[0].value
   const password = event.target[1].value
 
@@ -62,6 +68,8 @@ const logoutSubmitted = (event) => {
       document.querySelector('#access-token').value = ''
       document.querySelector('#refresh-token').value = ''
       alert('Logout successful')
+      Alpine.store('authenticationStatus').updateAuthenticationStatus(); // Add this line
+
     })
     .catch((err) => {
       alert(err.response.text)
@@ -75,5 +83,7 @@ function setToken(response) {
     document.querySelector('#access-token').value = response.session.access_token
     document.querySelector('#refresh-token').value = response.session.refresh_token
     alert('Logged in as ' + response.user.email)
+    Alpine.store('authenticationStatus').updateAuthenticationStatus(); // Add this line
+
   }
 }
