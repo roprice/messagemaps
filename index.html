@@ -48,45 +48,34 @@
 
       <div class="col col-md-5  my-5">
 
-        <main class="signin-signup forms m-auto"  style="padding: 0 100px"
-        x-data="{ formToShow: 'signup' }" x-init="formToShow = 'signup'">
+        <main class="form-signin m-auto">
 
-
-          <div class="logo my-3 mb-4 middle text-center">
+          <div class="logo my-3 middle text-center">
             <a href="#" class="mx-auto my-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
               <img class="mb-2" src="files/logo-80x80.png" alt="" width="80" height="80">
             </a>
             <div class="brand-name fw-bold h3">MESSAGE <span class="">MAPS</span></div>
           </div>
 
-          <!-- login-form -->
-          <div  style="min-height:500px;width:250px;text-align: center;margin: auto;" class="login-form section"
-          x-show="formToShow === 'signin'"
-          x-transition:enter.delay.100ms
-          x-transition:enter.duration.100ms>
+          <h2 class="h5 mb-0 fw-normal">Sign in</h2>
+            <form id="log-in">
+              <div>
+                <label for="email">Email:</label>
+                <input class="input" type="email" name="email" id="email" placeholder="Enter email.." autocomplete="username">
+              </div>
+              <div>
+                <label for="password">Password:</label>
+                <input type="password" name="password" placeholder="Enter password.." id="password" autocomplete="current-password">
+              </div>
 
+              <div class="text-secondary text-small m-2 mt-0">
+                <a href="#" class="text-secondary">Forgot password?</a> | <a href="#" class="text-secondary">Magic login link</a>
+              </div>
 
-          <form id="log-in" style="text-align: left;">
-            <h2 class="h5 mb-0 fw-normal">Sign in</h2>
-            <div>
-              <label for="email">Email:</label>
-              <input class="input" type="email" name="email" id="email" placeholder="Enter email.." autocomplete="username">
-            </div>
-            <div>
-              <label for="password">Password:</label>
-              <input type="password" name="password" placeholder="Enter password.." id="password" autocomplete="current-password">
-            </div>
-            <div class="text-secondary text-small m-2 mt-0">
-              <a href="#" class="text-secondary">Forgot password?</a> | <a href="#" class="text-secondary">Magic login link</a>
-            </div>
-            <div class="mt-2">
-              <button type="submit">Login</button>
-            </div>
-
-            <div class="text-secondary text-small m-2 mt-3">
-              <a href="#" class="text-secondary"
-              x-on:click.prevent="formToShow = 'signup'">Are you registered yet? Sign up</a>
-            </div>
+              <div class="mt-2">
+                <button type="submit">Login</button>
+              </div>
+            </form>
 
             <div x-cloak style="position: relative;">
               <div class="alert alert-danger rounded-3 mt-2 p-2 align-items-center" style="text-align:center; position: absolute; top: 0; left: 0; right: 0;" x-show="Alpine.store('errorMessage').message">
@@ -97,65 +86,41 @@
                 <div class="d-flex"><span class='material-symbols-outlined me-1'>task_alt</span><span>Login successful!</span></div>
               </div>
             </div>
+          </main>
 
-          </form>
-
-        </div><!-- /login-form -->
-
-        <!-- signup-form -->
-        <div  style="min-height:500px;width:250px;text-align: center;margin: auto;" class='signup section'
-        x-show="formToShow === 'signup'"
-        x-transition:enter.delay.100ms
-        x-transition:enter.duration.100ms>
-          <form id='sign-up' style="text-align: left;">
-              <h2 class="h5 mb-0 fw-normal">Invitation-only sign up</h2>
-              <label>Work email</label><input type='email' name='email' autocomplete="email" placeholder="Enter your work email.."/>
-              <label>Create a password</label><input type='password' name='password'  autocomplete="current-password" placeholder="Create a password.." />
-              <input type="text" name="invite_code" id="invite_code" placeholder="Enter invitation code.." >
-              <div class="text-secondary text-small m-2 mt-0">
-                <a href="#" class="text-secondary">Forgot your invite code?</a>
-              </div>
-              <div class="mt-2">
-                <button type="submit">Create your account</button>
-              </div>
-              <div class="text-secondary text-small m-2 mt-3">
-                <a href="#" class="text-secondary"
-                x-on:click.prevent="formToShow = 'signin'">Already registered? Sign in</a>
-              </div>
-          </form>
-
-        </div><!-- /signup -->
-
-
-
-      </main>
-
-
-      <div style="visibility: hidden;position: absolute;left:-999em">
-        <div class='section'>
-            <form id='validate'>
-                <h3>Access Token</h3>
-                <input readonly=readonly type='text' id='access-token' /> <small>Default expiry is 60 minutes</small>
-                <h3>Refresh Token</h3>
-                <input readonly=readonly type='text' id='refresh-token' /> <small>Supabase-js will use this to automatically fetch a new accessToken for you every 60 mins whilst the client is running</small>
-            </form>
-        </div>
-        <div class='section'>
-            <h3>Fetch User Details</h3>
-            <button id='user-button'>Fetch</button>
-        </div>
-        <div class='section'>
-            <h3>Logout</h3>
-            <button class='logout-button'>Logout</button>
-        </div>
-        </div>
+          <div style="visibility: hidden;position: absolute;left:-999em">
+            <div class='section'>
+              <form id='sign-up'>
+                  <h3>Sign Up</h3>
+                  <label>Email</label><input type='email' name='email' autocomplete="email"/>
+                  <label>Password</label><input type='password' name='password'  autocomplete="current-password" />
+                  <input type='submit'>
+              </form>
+          </div>
+          <div class='section'>
+              <form id='validate'>
+                  <h3>Access Token</h3>
+                  <input readonly=readonly type='text' id='access-token' /> <small>Default expiry is 60 minutes</small>
+                  <h3>Refresh Token</h3>
+                  <input readonly=readonly type='text' id='refresh-token' /> <small>Supabase-js will use this to automatically fetch a new accessToken for you every 60 mins whilst the client is running</small>
+              </form>
+          </div>
+          <div class='section'>
+              <h3>Fetch User Details</h3>
+              <button id='user-button'>Fetch</button>
+          </div>
+          <div class='section'>
+              <h3>Logout</h3>
+              <button class='logout-button'>Logout</button>
+          </div>
+          </div>
       </div>
 
-      <div class="col-md-7  m-0 p-0 vh-100  d-flex align-items-end justify-content-end"  style="background-image: url('files/map.png');background-size: cover;background-position: top left">
-        <!--<div class="credits  text-right p-3 text-small me-2">
+      <div class="col-md-7  m-0 p-0 vh-100  d-flex align-items-end justify-content-end"  style="background-image: url('files/aspire.jpg');background-size: cover;background-position: center center">
+        <div class="credits  text-right p-3 text-small me-2">
           Photo by <a href="https://unsplash.com/@grakozy?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Greg Rakozy</a>
         </div>
-      </div>-->
+      </div>
   </div>
   </div><!-- /CurrentPage.login -->
 
@@ -194,6 +159,7 @@
               <span class="material-symbols-outlined p-0 small">left_panel_open</span>
             </a>
           </div>
+
 
           <div class="logo mb-3 pt-2 middle text-center">
             <a href="#" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
