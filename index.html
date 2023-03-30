@@ -39,7 +39,6 @@
 <body id="light" x-data x-bind:class="bodyClasses()">
 
 <!-- Logged Out States -->
-<!-- Signin -->
 <div id="Logged_Out_States" x-cloak  x-show="Alpine.store('authenticationStatus').current === 'loggedOut'" x-transition:enter.duration.500ms>
 
   <!-- login -->
@@ -152,10 +151,10 @@
       </div>
 
       <div class="col-md-7  m-0 p-0 vh-100  d-flex align-items-end justify-content-end"  style="background-image: url('files/map.png');background-size: cover;background-position: top left">
-        <!--<div class="credits  text-right p-3 text-small me-2">
+        <div class="credits  text-right p-3 text-small me-2">
           Photo by <a href="https://unsplash.com/@grakozy?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Greg Rakozy</a>
         </div>
-      </div>-->
+      </div>
   </div>
   </div><!-- /CurrentPage.login -->
 
