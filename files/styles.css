@@ -611,6 +611,12 @@ html, body {
     max-height: 54px;
 }
 
+
+main.signin-signup.forms {
+  padding: 0 5rem;
+}
+
+
   li.child {
       margin-left: .6rem;
   }
