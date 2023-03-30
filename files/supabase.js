@@ -52,7 +52,7 @@ const logInSubmitted = (event) => {
   supabase.auth
     .signIn({ email, password })
     .then((response) => {
-      response.error ? alert(response.error.message) : setToken(response)
+      response.error ? alert('hi:',response.error.message) : setToken(response)
     })
     .catch((err) => {
       alert(err.response.text)
@@ -76,7 +76,6 @@ const logoutSubmitted = (event) => {
       console.log('signOut successful')
       document.querySelector('#access-token').value = ''
       document.querySelector('#refresh-token').value = ''
-      alert('Logout successful')
       Alpine.store('authenticationStatus').updateAuthStatus();
     })
     .catch((err) => {
