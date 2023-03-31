@@ -41,14 +41,16 @@
 <!-- Logged Out States -->
 <div id="Logged_Out_States" x-cloak  x-show="Alpine.store('authenticationStatus').current === 'loggedOut'" x-transition:enter.duration.500ms>
 
-  <!-- login -->
+  <!-- authentication and welcome -->
   <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'login'" x-transition>
     <div class="row no-gutters h-100 align-items-center login-inner">
 
       <div class="col col-md-5  my-5">
 
-        <main class="signin-signup forms m-auto"  style="padding: 0 100px"
+        <main class="signin-signup forms m-auto"  style="min-height:500px;width:250px;text-align: center;margin: auto;"
         x-data="{ formToShow: 'signup' }" x-init="formToShow = 'signup'">
+
+
 
 
           <div class="logo my-3 mb-4 middle text-center">
@@ -58,74 +60,97 @@
             <div class="brand-name fw-bold h3">MESSAGE <span class="">MAPS</span></div>
           </div>
 
-          <!-- login-form -->
-          <div  style="min-height:500px;width:250px;text-align: center;margin: auto;" class="login-form section"
-          x-show="formToShow === 'signin'"
-          x-transition:enter.delay.100ms
-          x-transition:enter.duration.100ms>
+          <ul class="nav nav-pills my-2 mb-3 " id="SigninSignUp">
+
+            <li class="nav-item signin-pill">
+              <a href="#" class="nav-link text-small" x-on:click.prevent="formToShow = 'signup'" :class="{ 'active': formToShow === 'signup' }">Sign up</a>
+            </li>
+            <li class="nav-item signup-pill">
+              <a href="#" class="nav-link text-small" x-on:click.prevent="formToShow = 'signin'" :class="{ 'active': formToShow === 'signin' }">Sign in</a>
+            </li>
+
+          </ul>
+
+          <!-- signup-form -->
+          <div class="signup-form section"
+            x-show="formToShow === 'signup'"
+            x-transition:enter.delay.100ms
+            x-transition:enter.duration.100ms>
+
+          <form  id="signup" action="#" method="POST"  style="text-align:left;">
 
 
-          <form id="log-in" style="text-align: left;">
-            <h2 class="h5 mb-0 fw-normal">Sign in</h2>
-            <div>
-              <label for="email">Email:</label>
-              <input class="input" type="email" name="email" id="email" placeholder="Enter email.." autocomplete="username">
+
+            <div class="mb-3">
+              <label for="signup-email" class="form-label">Email address</label>
+              <input placeholder="Enter email.." type="email" class="form-control text-small" id="signup-email" name="email" aria-describedby="emailHelp" required>
             </div>
-            <div>
-              <label for="password">Password:</label>
-              <input type="password" name="password" placeholder="Enter password.." id="password" autocomplete="current-password">
+            <div class="mb-3">
+              <label for="signup-password" class="form-label">Password</label>
+              <input placeholder="Enter password.." type="password" class="form-control text-small" id="signup-password" name="password" minlength="8" required>
             </div>
-            <div class="text-secondary text-small m-2 mt-0">
-              <a href="#" class="text-secondary">Forgot password?</a> | <a href="#" class="text-secondary">Magic login link</a>
+            <div class="mb-1">
+              <label for="invite-code" class="form-label">Invite code</label>
+              <input placeholder="Enter invite code.." type="text" class="form-control text-small" id="invite-code" name="invite-code" >
             </div>
             <div class="mt-2">
-              <button type="submit">Login</button>
+              <p  class="text-secondary text-small">Message Maps is in private beta and requires an invite - <a href="mailto:rowan@messagemaps.io&Subject=Invite!">forgot yours?</a></p>
+
+            </div>
+            <div class="mt-2">
+              <button type="submit" :disabled="Alpine.store('formStatus').submitButtonDisabled">Sign up</button>
             </div>
 
-            <div class="text-secondary text-small m-2 mt-3">
-              <a href="#" class="text-secondary"
-              x-on:click.prevent="formToShow = 'signup'">Are you registered yet? Sign up</a>
-            </div>
-
-            <div x-cloak style="position: relative;">
-              <div class="alert alert-danger rounded-3 mt-2 p-2 align-items-center" style="text-align:center; position: absolute; top: 0; left: 0; right: 0;" x-show="Alpine.store('errorMessage').message">
-                <div class="d-flex"><span class='material-symbols-outlined me-1'>error</span><span>Wrong username or password</span></div>
+            <div x-cloak>
+              <div class="alert alert-danger rounded-3 mt-2 p-2 align-items-center" style="text-align:center;" x-show="Alpine.store('formStatus').errorMessage">
+                <div class="d-flex"><span class='material-symbols-outlined me-1'>error</span><span x-text="Alpine.store('formStatus').errorMessage"></span></div>
               </div>
 
-              <div x-cloak x-show="Alpine.store('showSuccessMessage')" class="alert alert-success  rounded-3 mt-2 p-2 align-items-center" x-transition:enter.duration.50ms>
-                <div class="d-flex"><span class='material-symbols-outlined me-1'>task_alt</span><span>Login successful!</span></div>
+              <div x-cloak x-show="Alpine.store('formStatus').successMessage" class="alert alert-success  rounded-3 mt-2 p-2 align-items-center" x-transition:enter.duration.50ms>
+                <div class="d-flex"><span class='material-symbols-outlined me-1'>check_circle</span><span x-text="Alpine.store('formStatus').successMessage"></span></div>
               </div>
             </div>
-
           </form>
 
-        </div><!-- /login-form -->
+        </div><!-- /signup-form -->
 
-        <!-- signup-form -->
-        <div  style="min-height:500px;width:250px;text-align: center;margin: auto;" class='signup section'
-        x-show="formToShow === 'signup'"
+        <!-- signin-form -->
+        <div  class="signin-form section"
+        x-show="formToShow === 'signin'"
         x-transition:enter.delay.100ms
         x-transition:enter.duration.100ms>
-          <form id='sign-up' style="text-align: left;">
-              <h2 class="h5 mb-0 fw-normal">Invitation-only sign up</h2>
-              <label>Work email</label><input type='email' name='email' autocomplete="email" placeholder="Enter your work email.."/>
-              <label>Create a password</label><input type='password' name='password'  autocomplete="current-password" placeholder="Create a password.." />
-              <input type="text" name="invite_code" id="invite_code" placeholder="Enter invitation code.." >
-              <div class="text-secondary text-small m-2 mt-0">
-                <a href="#" class="text-secondary">Forgot your invite code?</a>
+
+          <form id="signin" action="#" method="POST" style="text-align:left;">
+
+
+            <div class="mb-3">
+              <label for="login-email" class="form-label">Email address</label>
+              <input type="email"  placeholder="Enter email.." class="form-control" id="login-email" name="email" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-1">
+              <label for="login-password" class="form-label">Password</label>
+              <input type="password"  placeholder="Enter password.." class="form-control" id="login-password" name="password" required>
+            </div>
+            <div class="mt-1">
+              <p  class="text-secondary text-small">Forgot password? <a href="#" class="text-decoration-none">Reset it here</a>
+              or get a <a href="#" class="text-decoration-none">magic link</a></p>
+
+            </div>
+            <div class="mt-2">
+              <button type="submit" :disabled="Alpine.store('formStatus').submitButtonDisabled">Login</button>
+            </div>
+
+            <div x-cloak>
+              <div class="alert alert-danger rounded-3 mt-2 p-2 align-items-center" style="text-align:center;" x-show="Alpine.store('formStatus').errorMessage">
+                <div class="d-flex"><span class='material-symbols-outlined me-1'>error</span><span x-text="Alpine.store('formStatus').errorMessage"></span></div>
               </div>
-              <div class="mt-2">
-                <button type="submit">Create your account</button>
+              <div x-cloak x-show="Alpine.store('formStatus').successMessage" class="alert alert-success  rounded-3 mt-2 p-2 align-items-center" x-transition:enter.duration.50ms>
+                <div class="d-flex"><span class='material-symbols-outlined me-1'>done</span><span x-text="Alpine.store('formStatus').successMessage"></span></div>
               </div>
-              <div class="text-secondary text-small m-2 mt-3">
-                <a href="#" class="text-secondary"
-                x-on:click.prevent="formToShow = 'signin'">Already registered? Sign in</a>
-              </div>
+            </div>
           </form>
 
-        </div><!-- /signup -->
-
-
+        </div><!-- /signin-form -->
 
       </main>
 

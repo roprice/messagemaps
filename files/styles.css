@@ -120,6 +120,14 @@ a.navlink {
   position: relative;
   font-size: 12px;
 }
+#light #SigninSignUp .nav-pills .nav-link {
+  padding: 11px 23px 10px 22px;
+}
+#light ul#SigninSignUp {
+  background: #e1e1e163;
+  border-radius: 1.5rem;
+  width: fit-content;
+}
 
 #light .nav-pills .nav-link.active,
 #light .nav-pills .show>a.nav-link {

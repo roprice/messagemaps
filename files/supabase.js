@@ -8,13 +8,14 @@ var SUPABASE_KEY =
 var supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 window.userToken = null
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Wait for the page to load and then attach the event handlers
 document.addEventListener('DOMContentLoaded', function (event) {
-  var signUpForm = document.querySelector('#sign-up')
+  var signUpForm = document.querySelector('#signup')
   signUpForm.onsubmit = signUpSubmitted.bind(signUpForm)
 
-  var logInForm = document.querySelector('#log-in')
+  var logInForm = document.querySelector('#signin')
   logInForm.onsubmit = logInSubmitted.bind(logInForm)
 
   var userDetailsButton = document.querySelector('#user-button')
@@ -27,37 +28,66 @@ document.addEventListener('DOMContentLoaded', function (event) {
 })
 
 
+
+
+
 // Sign the user up
-const signUpSubmitted = (event) => {
-  event.preventDefault()
-  console.log("Form element:", event.target); // Log the form element
-  const email = event.target[0].value
-  const password = event.target[1].value
-  supabase.auth
-    .signUp({ email, password })
-    .then((response) => {
-      response.error ? alert(response.error.message) : setToken(response)
-    })
-    .catch((err) => {
-      alert(err)
-    })
-}
+const signUpSubmitted = async (event) => {
+  event.preventDefault();
+  Alpine.store('formStatus').disableSubmitButton();
+  const email = event.target[0].value;
+  const password = event.target[1].value;
+  try {
+    const response = await supabase.auth.signUp({ email, password });
+    if (response.error) {
+      Alpine.store('formStatus').showErrorMessage(response.error.message);
+    } else {
+      setToken(response);
+      Alpine.store('formStatus').showSuccessMessage('Success!');
+      await delay(1000);
+      Alpine.store('formStatus').showSuccessMessage('Success! Accounted Created.');
+      await delay(800);
+      Alpine.store('formStatus').showSuccessMessage('Success! Accounted Created. Logging you in now..');
+      await delay(500);
+      Alpine.store('authenticationStatus').current = 'loggedIn';
+      console.log('signed up and signed in successfully');
+    }
+  } catch (err) {
+    Alpine.store('formStatus').showErrorMessage(err.message);
+  } finally {
+    Alpine.store('formStatus').enableSubmitButton();
+  }
+};
+
+
+
 
 
 // Log the user in
-const logInSubmitted = (event) => {
-  event.preventDefault()
-  const email = event.target[0].value
-  const password = event.target[1].value
-  supabase.auth
-    .signIn({ email, password })
-    .then((response) => {
-      response.error ? alert(response.error.message) : setToken(response)
-    })
-    .catch((err) => {
-      alert(err.response.text)
-    })
-}
+const logInSubmitted = async (event) => {
+  event.preventDefault();
+  Alpine.store('formStatus').disableSubmitButton();
+  const email = event.target[0].value;
+  const password = event.target[1].value;
+  try {
+    const response = await supabase.auth.signIn({ email, password });
+    if (response.error) {
+      Alpine.store('formStatus').showErrorMessage(response.error.message);
+    } else {
+      Alpine.store('formStatus').showSuccessMessage('Success!');
+      await delay(800);
+      Alpine.store('formStatus').showSuccessMessage('Success! Loading...');
+      await delay(500);
+      setToken(response);
+      Alpine.store('authenticationStatus').current = 'loggedIn';
+      console.log('signin successful');
+    }
+  } catch (err) {
+    Alpine.store('formStatus').showErrorMessage(err.message);
+  } finally {
+    Alpine.store('formStatus').enableSubmitButton();
+  }
+};
 
 
 // Get the user's details
@@ -73,10 +103,9 @@ const logoutSubmitted = (event) => {
   supabase.auth
     .signOut()
     .then((_response) => {
-      console.log('signOut successful')
+      console.log('logout successful')
       document.querySelector('#access-token').value = ''
       document.querySelector('#refresh-token').value = ''
-      alert('Logout successful')
       Alpine.store('authenticationStatus').updateAuthStatus();
     })
     .catch((err) => {
@@ -90,14 +119,14 @@ const logoutSubmitted = (event) => {
 function setToken(response) {
   if (response.user.confirmation_sent_at) {
     if (!response || !response.session || !response.session.access_token) {
-  // the two lines above could be compressed into one line like this: if (response.user.confirmation_sent_at && !response?.session?.access_token) {
-      alert('Confirmation Email Sent');
+      Alpine.store('authMessage', 'Confirmation Email Sent');
     } else {
       document.querySelector('#access-token').value = response.session.access_token;
       document.querySelector('#refresh-token').value = response.session.refresh_token;
-      alert('Logged in as ' + response.user.email);
+      Alpine.store('authMessage', 'Logged in as ' + response.user.email);
       Alpine.store('authenticationStatus').updateAuthStatus();
     }
   }
 }
+
 
