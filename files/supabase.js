@@ -86,15 +86,18 @@ const logoutSubmitted = (event) => {
 }
 
 
-
 // Set the token in the UI
 function setToken(response) {
-  if (response.user.confirmation_sent_at && !response?.session?.access_token) {
-    alert('Confirmation Email Sent')
-  } else {
-    document.querySelector('#access-token').value = response.session.access_token
-    document.querySelector('#refresh-token').value = response.session.refresh_token
-    alert('Logged in as ' + response.user.email)
-    Alpine.store('authenticationStatus').updateAuthStatus();
+  if (response.user.confirmation_sent_at) {
+    if (!response || !response.session || !response.session.access_token) {
+  // the two lines above could be compressed into one line like this: if (response.user.confirmation_sent_at && !response?.session?.access_token) {
+      alert('Confirmation Email Sent');
+    } else {
+      document.querySelector('#access-token').value = response.session.access_token;
+      document.querySelector('#refresh-token').value = response.session.refresh_token;
+      alert('Logged in as ' + response.user.email);
+      Alpine.store('authenticationStatus').updateAuthStatus();
+    }
   }
 }
+
