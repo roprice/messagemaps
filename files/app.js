@@ -1,18 +1,62 @@
 
 
   // Alpine.js state management
+  document.addEventListener('alpine:init', function() {
 
-document.addEventListener('alpine:init', () => {
+
 
     Alpine.store('authenticationStatus', {
-      current: localStorage.getItem('supabase.auth.token') ? 'loggedIn' : 'loggedOut',
-      items: ['loggedIn','loggedOut'],
+      current: 'loggedOut',
+      items: ['loggedIn', 'loggedOut'],
       updateAuthStatus: function () {
         console.log('updateAuthStatus called');
-        this.current = localStorage.getItem('supabase.auth.token') ? 'loggedIn' : 'loggedOut';
+        if (localStorage.getItem('supabase.auth.token')) {
+          this.current = 'loggedIn';
+        } else {
+          this.current = 'loggedOut';
+        }
       },
-
     });
+
+    if (localStorage.getItem('supabase.auth.token')) {
+      Alpine.store('authenticationStatus').current = 'loggedIn';
+    }
+
+    Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
+
+    Alpine.store('showSuccessMessage', false); // initialize the errorMessage global state
+
+
+    Alpine.store('formStatus', {
+      submitButtonDisabled: false,
+      successMessage: '',
+      errorMessage: '',
+      disableSubmitButton() {
+        this.submitButtonDisabled = true;
+      },
+      enableSubmitButton() {
+        this.submitButtonDisabled = false;
+      },
+      showSuccessMessage(message) {
+        this.successMessage = message;
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 2000);
+      },
+      showErrorMessage(message) {
+        this.errorMessage = message;
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 2000);
+      }
+    });
+
+
+
+
+
+
+
 
     Alpine.store('userData', {
       firstName: '',
@@ -41,9 +85,7 @@ document.addEventListener('alpine:init', () => {
     items: ['light','dark']
   });
 
-  Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
 
-  Alpine.store('showSuccessMessage', false); // initialize the errorMessage global state
 
   Alpine.store('sidebarStatus', {
     current: localStorage.getItem('sidebarStatus') || 'expanded',
