@@ -1,9 +1,5 @@
-
-
-  // Alpine.js state management
+// Alpine.js state management
   document.addEventListener('alpine:init', function() {
-
-
 
     Alpine.store('authenticationStatus', {
       current: 'loggedOut',
@@ -25,7 +21,6 @@
     Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
 
     Alpine.store('showSuccessMessage', false); // initialize the errorMessage global state
-
 
     Alpine.store('formStatus', {
       submitButtonDisabled: false,
@@ -50,13 +45,6 @@
         }, 2000);
       }
     });
-
-
-
-
-
-
-
 
     Alpine.store('userData', {
       firstName: '',
@@ -85,8 +73,6 @@
     items: ['light','dark']
   });
 
-
-
   Alpine.store('sidebarStatus', {
     current: localStorage.getItem('sidebarStatus') || 'expanded',
     items: ['collapsed', 'expanded'],
@@ -113,4 +99,3 @@ function bodyClasses() {
     Alpine.store('onboarding').current,
   ].join(' ');
 }
-
