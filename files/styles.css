@@ -98,7 +98,9 @@ button.btn.btn-primary {
   padding: 1px 31px 0px 32px!important;
 }
 
-
+#SigninSignUp li.nav-item {
+  min-width: 123px;
+}
 
 a.navlink {
   text-decoration: none;

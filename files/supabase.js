@@ -96,6 +96,8 @@ const fetchUserDetails = () => {
 }
 
 
+
+
 // Log the user out
 const logoutSubmitted = (event) => {
   console.log('logoutSubmitted called')
