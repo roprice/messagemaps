@@ -50,7 +50,7 @@
 
       <div class="col col-md-5  my-5">
 
-        <main class="signin-signup forms m-auto"  style="min-height:600px;width:250px;text-align: center;margin: auto;"
+        <main class="signin-signup forms m-auto"  style="min-height:500px;width:250px;text-align: center;margin: auto;"
         x-data="{ formToShow: 'signup' }" x-init="formToShow = 'signup'">
 
 
@@ -80,42 +80,42 @@
             x-transition:enter.delay.100ms
             x-transition:enter.duration.100ms>
 
-            <form  id="signup" action="#" method="POST"  style="text-align:left;">
+          <form  id="signup" action="#" method="POST"  style="text-align:left;">
 
-              <div class="mb-3">
-                <label for="firstName" class="form-label">First name</label>
-                <input autocomplete="given-name" placeholder="first name.." type="text" class="form-control text-small" id="firstName" name="firstName" minlength="0">
-              </div>
-              <div class="mb-3">
-                <label for="signup-email" class="form-label">Email address</label>
-                <input autocomplete="email" placeholder="email.." type="email" class="form-control text-small" id="signup-email" name="email" aria-describedby="emailHelp" required>
-              </div>
-              <div class="mb-3">
-                <label for="signup-password" class="form-label">Password</label>
-                <input  autocomplete="new-password" placeholder="password.." type="password" class="form-control text-small" id="signup-password" name="password" minlength="8" required>
-              </div>
-              <div class="mb-3">
-                <label for="invite-code" class="form-label">Invite code</label>
-                <input placeholder="invite code.." type="text" class="form-control text-small" id="invite-code" name="invite-code" >
-              </div>
-              <div class="mt-2">
-                <p  class="text-secondary text-small">Message Maps is in private beta and requires an invite - <a href="mailto:rowan@messagemaps.io&Subject=Invite!">forgot yours?</a></p>
-              </div>
-              <div class="mt-2">
-                <button type="submit" :disabled="Alpine.store('formStatus').submitButtonDisabled">Submit</button>
+
+
+            <div class="mb-3">
+              <label for="signup-email" class="form-label">Email address</label>
+              <input placeholder="Enter email.." type="email" class="form-control text-small" id="signup-email" name="email" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+              <label for="signup-password" class="form-label">Password</label>
+              <input placeholder="Enter password.." type="password" class="form-control text-small" id="signup-password" name="password" minlength="8" required>
+            </div>
+            <div class="mb-1">
+              <label for="invite-code" class="form-label">Invite code</label>
+              <input placeholder="Enter invite code.." type="text" class="form-control text-small" id="invite-code" name="invite-code" >
+            </div>
+            <div class="mt-2">
+              <p  class="text-secondary text-small">Message Maps is in private beta and requires an invite - <a href="mailto:rowan@messagemaps.io&Subject=Invite!">forgot yours?</a></p>
+
+            </div>
+            <div class="mt-2">
+              <button type="submit" :disabled="Alpine.store('formStatus').submitButtonDisabled">Submit</button>
+            </div>
+
+            <div x-cloak>
+              <div class="alert alert-danger rounded-3 mt-2 p-2 align-items-center" style="text-align:center;" x-show="Alpine.store('formStatus').errorMessage">
+                <div class="d-flex"><span class='material-symbols-outlined me-1'>error</span><span x-text="Alpine.store('formStatus').errorMessage"></span></div>
               </div>
 
-              <div x-cloak>
-                <div class="alert alert-danger rounded-3 mt-2 p-2 align-items-center" style="text-align:center;" x-show="Alpine.store('formStatus').errorMessage">
-                  <div class="d-flex"><span class='material-symbols-outlined me-1'>error</span><span x-text="Alpine.store('formStatus').errorMessage"></span></div>
-                </div>
-
-                <div x-cloak x-show="Alpine.store('formStatus').successMessage" class="alert alert-success  rounded-3 mt-2 p-2 align-items-center" x-transition:enter.duration.50ms>
-                  <div class="d-flex"><span class='material-symbols-outlined me-1'>check_circle</span><span x-text="Alpine.store('formStatus').successMessage"></span></div>
-                </div>
+              <div x-cloak x-show="Alpine.store('formStatus').successMessage" class="alert alert-success  rounded-3 mt-2 p-2 align-items-center" x-transition:enter.duration.50ms>
+                <div class="d-flex"><span class='material-symbols-outlined me-1'>check_circle</span><span x-text="Alpine.store('formStatus').successMessage"></span></div>
               </div>
-            </form>
-          </div><!-- /signup-form -->
+            </div>
+          </form>
+
+        </div><!-- /signup-form -->
 
         <!-- signin-form -->
         <div  class="signin-form section"
@@ -128,14 +128,16 @@
 
             <div class="mb-3">
               <label for="login-email" class="form-label">Email address</label>
-              <input autocomplete="username" type="email"  placeholder="Enter email.." class="form-control text-secondary text-small" id="login-email" name="email" aria-describedby="emailHelp" required>
+              <input type="email"  placeholder="Enter email.." class="form-control" id="login-email" name="email" aria-describedby="emailHelp" required>
             </div>
             <div class="mb-1">
               <label for="login-password" class="form-label">Password</label>
-              <input autocomplete="current-password" type="password"  placeholder="Enter password.." class="form-control text-secondary text-small" id="login-password" name="password" required>
+              <input type="password"  placeholder="Enter password.." class="form-control" id="login-password" name="password" required>
             </div>
             <div class="mt-1">
-              <p  class="text-secondary text-small">Forgot password? <a href="#" class="text-decoration-none">Reset it here</a> or get a <a href="#" class="text-decoration-none">magic link</a></p>
+              <p  class="text-secondary text-small">Forgot password? <a href="#" class="text-decoration-none">Reset it here</a>
+              or get a <a href="#" class="text-decoration-none">magic link</a></p>
+
             </div>
             <div class="mt-2">
               <button type="submit" :disabled="Alpine.store('formStatus').submitButtonDisabled">Login</button>
@@ -316,7 +318,7 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                   <li><a class="dropdown-item" href="#">New Map</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#"  x-on:click.prevent="Alpine.store('currentScreen').current = 'accounts'; ">My Account</a></li>
+                  <li><a class="dropdown-item" href="#">My Account</a></li>
                   <li><a class="dropdown-item" href="#">Settings</a></li>
                   <li><a class="dropdown-item" href="#">Help</a></li>
                   <li><hr class="dropdown-divider"></li>
@@ -525,15 +527,6 @@
 
                     </ul>
                     <form id="InterviewForm">
-
-
-                      <div x-data="interviewForm()" x-init="updateAuthStatus()">
-                        <!-- The form will be rendered here -->
-                      </div>
-
-
-
-
 
                         <div x-show="activeTab === 'YourBrand'" id="YourBrand">
 
@@ -1084,7 +1077,7 @@
                   </div>
                 </div>
 
-              </div>
+
 
             <div x-show="Alpine.store('currentScreen').current === 'strategies'">
               <!-- Message Map screen markup -->
@@ -1099,25 +1092,6 @@
             <div x-show="Alpine.store('currentScreen').current === 'accounts'">
               <!-- Dashboard screen markup -->
               <h4>Your Account</h4>
-
-
-
-              <form id="profileForm">
-                <label for="gegfirstName">First Name:</label>
-                <input type="text" id="getfirstName" name="firstName" required>
-
-                <label for="getlastName">Last Name:</label>
-                <input type="text" id="getlastName" name="lastName" optional>
-
-                <label for="getrole">Role:</label>
-                <input type="text" id="getrole" name="role" optional>
-
-                <button type="submit">Update Profile</button>
-              </form>
-
-
-
-
             </div>
           </div>
 

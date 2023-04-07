@@ -1,6 +1,3 @@
-
-
-
 // Handle the authentication with Supabase
 var SUPABASE_URL = 'https://wogivjshqopegucducyz.supabase.co'
 var SUPABASE_KEY =
@@ -28,19 +25,21 @@ document.addEventListener('DOMContentLoaded', function (event) {
 })
 
 
-
-
-
 // Sign the user up
 const signUpSubmitted = async (event) => {
   event.preventDefault();
   Alpine.store('formStatus').disableSubmitButton();
-  const email = event.target[0].value;
-  const password = event.target[1].value;
+  const firstName = event.target[0].value; // Get the first name from the form
+  const email = event.target[1].value; // Get the email address from the form
+  const password = event.target[2].value;
+
   try {
     const response = await supabase.auth.signUp({ email, password });
+
     if (response.error) {
       Alpine.store('formStatus').showErrorMessage(response.error.message);
+      console.error(response.error.message); // Log the error message
+
     } else {
       setToken(response);
       Alpine.store('formStatus').showSuccessMessage('Success!');
@@ -52,15 +51,37 @@ const signUpSubmitted = async (event) => {
       Alpine.store('authenticationStatus').current = 'loggedIn';
       console.log('signed up and signed in successfully');
     }
+
+    // Get the current user's ID
+    const userId = response.user.id;
+
+    // Create a new profile entry in the 'user_profiles' table
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .insert(
+        {
+          user_id: userId,
+          first_name: firstName, // Set the first name from the form
+          // Set default values for the other profile fields (e.g., empty strings)
+          last_name: '',
+          role: ''
+        }
+
+      );
+
+    if (error) {
+      console.error('Error creating profile:', error);
+    } else {
+      console.log('Profile created successfully:', data);
+    }
+
+
   } catch (err) {
     Alpine.store('formStatus').showErrorMessage(err.message);
   } finally {
     Alpine.store('formStatus').enableSubmitButton();
   }
 };
-
-
-
 
 
 // Log the user in
@@ -79,6 +100,7 @@ const logInSubmitted = async (event) => {
       Alpine.store('formStatus').showSuccessMessage('Success! Loading...');
       await delay(500);
       setToken(response);
+      getInterviewQuestions();
       Alpine.store('authenticationStatus').current = 'loggedIn';
       console.log('signin successful');
     }
@@ -97,7 +119,6 @@ const fetchUserDetails = () => {
 
 
 
-
 // Log the user out
 const logoutSubmitted = (event) => {
   console.log('logoutSubmitted called')
@@ -106,8 +127,6 @@ const logoutSubmitted = (event) => {
     .signOut()
     .then((_response) => {
       console.log('logout successful')
-      document.querySelector('#access-token').value = ''
-      document.querySelector('#refresh-token').value = ''
       Alpine.store('authenticationStatus').updateAuthStatus();
     })
     .catch((err) => {
@@ -117,18 +136,95 @@ const logoutSubmitted = (event) => {
 }
 
 
-// Set the token in the UI
 function setToken(response) {
   if (response.user.confirmation_sent_at) {
     if (!response || !response.session || !response.session.access_token) {
-      Alpine.store('authMessage', 'Confirmation Email Sent');
+      console.log('Confirmation Email Sent');
     } else {
-      document.querySelector('#access-token').value = response.session.access_token;
-      document.querySelector('#refresh-token').value = response.session.refresh_token;
-      Alpine.store('authMessage', 'Logged in as ' + response.user.email);
+      console.log('sT Access Token:', response.session.access_token);
+      console.log('Refresh Token:', response.session.refresh_token);
+      console.log('Logged in as', response.user.email);
+      // If you still need to call the updateAuthStatus method, you can keep this line.
+      // Otherwise, you can remove it.
       Alpine.store('authenticationStatus').updateAuthStatus();
     }
   }
 }
 
 
+function interviewForm() {
+  return {
+    questions: [],
+    answers: {},
+    categories: {
+      'YourBrand': 'category_brand',
+      'YourCustomer': 'category_customer',
+      'YourBuyer': 'category_buyer',
+      'YourCompetition': 'category_competitor_positioning',
+      'YourSolution': 'category_solution',
+      'YourPricing': 'category_pricing'
+    },
+    activeTab: 'YourBrand',
+    authToken: null,
+    async updateAuthStatus() {
+      this.authToken = await supabase.auth.session()?.access_token;
+      console.log('i Auth token:', this.authToken);
+      // Call the getInterviewQuestions method after the authToken is set
+      await this.getInterviewQuestions();
+    }
+
+    ,
+
+    async getInterviewQuestions() {
+      try {
+        // Get the current session and access token
+        const session = supabase.auth.session();
+        const accessToken = session?.access_token;
+
+        // Log the access token
+        console.log('Access token:', accessToken);
+
+        // Check if the user is authenticated (accessToken is not null)
+        if (accessToken) {
+          // Define the headers for the API request
+          const headers = {
+            'Authorization': `Bearer ${accessToken}`,
+            'apikey': 'YOUR_API_KEY'
+          };
+
+          // Log the headers object
+          console.log('Headers:', headers);
+
+          // Define the API endpoint to fetch your interview questions
+          const apiUrl = 'https://wogivjshqopegucducyz.supabase.co/rest/v1/interview_questions';
+
+          // Make the API request with the access token in the Authorization header
+          const response = await fetch(apiUrl, { headers });
+
+          // Check if the response is successful (status code 200-299)
+          if (response.ok) {
+            // Parse the response JSON and log the questions
+            const questions = await response.json();
+            console.log('Interview questions:', questions);
+          } else {
+            // Log the error message if the response is not successful
+            console.error('API response:', response.statusText);
+          }
+        } else {
+          // Handle the case when the user is not authenticated
+          console.log('User is not authenticated');
+        }
+      } catch (error) {
+        // Log any errors that occur during the API request
+        console.error('Error fetching interview questions:', error);
+      }
+    }
+
+    ,
+
+
+    submitForm() {
+      // Handle form submission here
+    }
+  };
+}
