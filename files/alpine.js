@@ -46,12 +46,11 @@
       }
     });
 
-    Alpine.store('userData', {
-      firstName: '',
-      email: '',
-      id: '',
-      messageMapIds: []
-    });
+  // Create a new Alpine store
+  Alpine.store('userData', {
+    firstName: '',
+  });
+
 
   // site-level states
   Alpine.store('currentPage', {
@@ -91,6 +90,7 @@ function handleError(error) {
 
 function bodyClasses() {
   return [
+    Alpine.store('userData').firstName,
     Alpine.store('authenticationStatus').current,
     Alpine.store('currentPage').current,
     Alpine.store('currentScreen').current,

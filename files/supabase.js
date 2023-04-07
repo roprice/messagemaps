@@ -15,9 +15,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
   var logInForm = document.querySelector('#signin')
   logInForm.onsubmit = logInSubmitted.bind(logInForm)
 
-  var userDetailsButton = document.querySelector('#user-button')
-  userDetailsButton.onclick = fetchUserDetails.bind(userDetailsButton)
-
   var logoutButtons = document.querySelectorAll('.logout-button')
   logoutButtons.forEach(function (logoutButton) {
     logoutButton.onclick = logoutSubmitted.bind(logoutButton)
@@ -66,13 +63,13 @@ const signUpSubmitted = async (event) => {
           last_name: '',
           role: ''
         }
-
       );
 
     if (error) {
       console.error('Error creating profile:', error);
     } else {
       console.log('Profile created successfully:', data);
+      await getUserData(userId);
     }
 
 
@@ -103,6 +100,7 @@ const logInSubmitted = async (event) => {
       getInterviewQuestions();
       Alpine.store('authenticationStatus').current = 'loggedIn';
       console.log('signin successful');
+      await getUserData(userId);
     }
   } catch (err) {
     Alpine.store('formStatus').showErrorMessage(err.message);
@@ -112,10 +110,32 @@ const logInSubmitted = async (event) => {
 };
 
 
-// Get the user's details
-const fetchUserDetails = () => {
-  alert(JSON.stringify(supabase.auth.user()))
+async function getUserData(userId) {
+  const { data, error } = await supabase
+    .from('user_profiles')
+    .select('first_name, last_name, role')
+    .eq('user_id', userId)
+    .single();
+
+  if (error) {
+    console.error('Error fetching user data:', error);
+  } else {
+    // Update the Alpine store with the fetched data
+    Alpine.store('userData').firstName = data.first_name;
+    Alpine.store('userData').lastName = data.last_name;
+    Alpine.store('userData').role = data.role;
+  }
 }
+
+// Call this function when the page loads
+(async function() {
+  const user = supabase.auth.user();
+  if (user) {
+    await getUserData(user.id);
+  }
+})();
+
+
 
 
 
