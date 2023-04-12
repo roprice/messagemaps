@@ -28,8 +28,8 @@
 
 }
 
-.card.col-md-12 {
-    max-width: 980px;
+.interview-form-card {
+  margin-right: 40px;
 }
 
 
@@ -83,9 +83,11 @@
 }
 
 
-form#InterviewForm {
-  max-width: 700px;
-  margin: auto;
+  form#InterviewForm {
+    width: calc(100% - 200px);
+
+    padding: 0;
+    margin: 0;
 }
 
 /* temp */
@@ -126,7 +128,8 @@ a.navlink {
 #light #TheInterview.nav-pills {
   background-color:  hsl(210, 14%, 97%);
   border-radius: 1.5rem;
-  width: fit-content;
+  width: 200px;
+  height: fit-content;
 }
 
 
@@ -147,6 +150,7 @@ a.navlink {
   border-radius: 1.5rem;
   position: relative;
   font-size: 12px;
+  width: 200px;
 }
 #light .nav-pills .nav-link.active,
 #light .nav-pills .show>a.nav-link {
@@ -477,13 +481,17 @@ a.disabled.navlink.linkdark {
 .placeholder {
   color: #ccc;
 }
-.form-group {margin-bottom:2rem;}
-
-
+.form-group {margin:4rem;}
+textarea {
+  width: 100%;
+  min-height: 90px;
+  border-radius: 6px;
+  padding: 8px 10px;
+}
 
 
 .sidebar-toggle-icon {
-  right: -3px;
+  right: -12px;
 }
 
 #ExpandedSidebar .sidebar-dropdown {
@@ -625,9 +633,7 @@ body {font-family: Inter;}
   #CollapsedSidebar .child {
     margin:0;
   }
-  .onboard-welcome {
-    max-width: 980px;
-}
+
 
 
 html, body {

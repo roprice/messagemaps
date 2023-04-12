@@ -8,15 +8,20 @@
         console.log('updateAuthStatus called');
         if (localStorage.getItem('supabase.auth.token')) {
           this.current = 'loggedIn';
+
         } else {
           this.current = 'loggedOut';
         }
       },
     });
 
+
     if (localStorage.getItem('supabase.auth.token')) {
       Alpine.store('authenticationStatus').current = 'loggedIn';
     }
+
+
+
 
     Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
 

@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 const signUpSubmitted = async (event) => {
   event.preventDefault();
   Alpine.store('formStatus').disableSubmitButton();
-  const firstName = event.target[0].value; // Get the first name from the form
+  const fullName = event.target[0].value; // Get the full name from the form
   const email = event.target[1].value; // Get the email address from the form
   const password = event.target[2].value;
 
@@ -57,10 +57,8 @@ const signUpSubmitted = async (event) => {
         .insert(
           {
             user_id: userId,
-            first_name: firstName, // Set the first name from the form
+            inferred_first_name: firstName, // Set the first name from the form
             // Set default values for the other profile fields (e.g., empty strings)
-            last_name: '',
-            role: ''
           }
         );
 
@@ -154,7 +152,7 @@ const logInSubmitted = async (event) => {
 async function getUserData(userId) {
   const { data, error } = await supabase
     .from('user_profiles')
-    .select('first_name, last_name, role')
+    .select('inferred_first_name, role')
     .eq('user_id', userId)
     .single();
 
@@ -162,8 +160,7 @@ async function getUserData(userId) {
     console.error('Error fetching user data:', error);
   } else {
     // Update the Alpine store with the fetched data
-    Alpine.store('userData').firstName = data.first_name;
-    Alpine.store('userData').lastName = data.last_name;
+    Alpine.store('userData').firstName = data.inferred_first_name;
     Alpine.store('userData').role = data.role;
   }
 }
@@ -191,64 +188,20 @@ function setToken(response) {
 //
 
 
-function interviewForm() {
-  return {
-    questions: [],
-    answers: {},
-    categories: {
-      'YourBrand': 'category_brand',
-      'YourCustomer': 'category_customer',
-      'YourBuyer': 'category_buyer',
-      'YourCompetition': 'category_competitor_positioning',
-      'YourSolution': 'category_solution',
-      'YourPricing': 'category_pricing'
-    },
-    activeTab: 'YourBrand',
-    authToken: null,
-    updateAuthStatus: async function () {
-      console.log('updateAuthStatus called');
-      if (localStorage.getItem('supabase.auth.token')) {
-        this.current = 'loggedIn';
-        console.log('User is logged in. Fetching interview questions.');
-
-        Alpine.store('interviewData').getInterviewQuestions(); // Add this line
-      } else {
-        this.current = 'loggedOut';
-      }
-    },
-
-
-    async getInterviewQuestions() {
-      try {
-        const { data, error } = await supabase
-          .from('interview_questions')
-          .select('*');
-        if (error) {
-          console.error('Error fetching interview questions:', error);
-        } else {
-          localStorage.setItem('interviewQuestions', JSON.stringify(data)); // Store the interview questions in the local storage
-
-        }
-      } catch (err) {
-        console.error('Error fetching interview questions:', err);
-      }
+async function getInterviewQuestions() {
+  try {
+    const { data, error } = await supabase
+      .from('interview_questions')
+      .select('*');
+    if (error) {
+      throw error; // Throw the error to be caught by the catch block
     }
-
-
-
-    ,
-
-
-    submitForm() {
-      // Handle form submission here
-    }
-  };
+    localStorage.setItem('interviewQuestions', JSON.stringify(data)); // Store the interview questions in the local storage
+    Alpine.store('questions', data); // Update the Alpine store with the interview questions
+  } catch (err) {
+    console.error('Error fetching interview questions:', err);
+  }
 }
-
-
-
-
-
 
 
 
@@ -269,20 +222,122 @@ const logoutSubmitted = (event) => {
 }
 
 
-
-
-
-
 // Call this function when the page loads
 (async function() {
   const user = supabase.auth.user();
   if (user) {
+    // if the user is already authenticated, load their data
     await getUserData(user.id);
 
-    // Create an instance of the interviewForm object
-    const interviewFormInstance = interviewForm();
-
-    // Call the getInterviewQuestions method on the interviewForm instance
-    await interviewFormInstance.getInterviewQuestions();
+    // Call the getInterviewQuestions function directly
+    await getInterviewQuestions();
   }
 })();
+
+
+// Alpine.js state management
+document.addEventListener('alpine:init', function() {
+
+    Alpine.store('authenticationStatus', {
+      current: 'loggedOut',
+      items: ['loggedIn', 'loggedOut'],
+      updateAuthStatus: function () {
+        console.log('updateAuthStatus called');
+        if (localStorage.getItem('supabase.auth.token')) {
+          this.current = 'loggedIn';
+
+        } else {
+          this.current = 'loggedOut';
+        }
+      },
+    });
+
+
+    if (localStorage.getItem('supabase.auth.token')) {
+      Alpine.store('authenticationStatus').current = 'loggedIn';
+    }
+
+
+
+
+    Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
+
+    Alpine.store('showSuccessMessage', false); // initialize the errorMessage global state
+
+    Alpine.store('formStatus', {
+      submitButtonDisabled: false,
+      successMessage: '',
+      errorMessage: '',
+      disableSubmitButton() {
+        this.submitButtonDisabled = true;
+      },
+      enableSubmitButton() {
+        this.submitButtonDisabled = false;
+      },
+      showSuccessMessage(message) {
+        this.successMessage = message;
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 2000);
+      },
+      showErrorMessage(message) {
+        this.errorMessage = message;
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 2000);
+      }
+    });
+
+  // Create a new Alpine store
+  Alpine.store('userData', {
+    firstName: '',
+  });
+
+
+  // site-level states
+  Alpine.store('currentPage', {
+    current: 'login',
+    items: ['signup', 'login']
+  });
+  // app-level states
+  Alpine.store('currentScreen', {
+    current: 'dashboard',
+    items: ['account','dashboard','maps','interviews','strategies','assets','newMap']
+  });
+  // app-level states
+  Alpine.store('onboarding', {
+    current: 'welcome',
+    items: ['welcome','hiddenwelcome']
+  });
+  Alpine.store('lightDarkMode', {
+    current: 'light',
+    items: ['light','dark']
+  });
+
+  Alpine.store('sidebarStatus', {
+    current: localStorage.getItem('sidebarStatus') || 'expanded',
+    items: ['collapsed', 'expanded'],
+    toggle() {
+      this.current = this.current === 'collapsed' ? 'expanded' : 'collapsed';
+      localStorage.setItem('sidebarStatus', this.current);
+    }
+  });
+
+});
+
+function handleError(error) {
+  console.error(error);
+  // Handle the error as needed (e.g. display an error message to the user)
+}
+
+function bodyClasses() {
+  return [
+    Alpine.store('userData').firstName,
+    Alpine.store('authenticationStatus').current,
+    Alpine.store('currentPage').current,
+    Alpine.store('currentScreen').current,
+    Alpine.store('lightDarkMode').current,
+    Alpine.store('sidebarStatus').current,
+    Alpine.store('onboarding').current,
+  ].join(' ');
+}
