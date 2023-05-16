@@ -1,3 +1,5 @@
+
+
 // Handle the authentication with Supabase
 var SUPABASE_URL = 'https://wogivjshqopegucducyz.supabase.co'
 var SUPABASE_KEY =
@@ -9,26 +11,12 @@ window.userToken = null
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Wait for the page to load and then attach the event handlers
-document.addEventListener('DOMContentLoaded', function (event) {
-  var signUpForm = document.querySelector('#signup')
-  signUpForm.onsubmit = signUpSubmitted.bind(signUpForm)
-
-  var logInForm = document.querySelector('#signin')
-  logInForm.onsubmit = logInSubmitted.bind(logInForm)
-
-  var logoutButtons = document.querySelectorAll('.logout-button')
-  logoutButtons.forEach(function (logoutButton) {
-    logoutButton.onclick = logoutSubmitted.bind(logoutButton)
-  })
-})
-
-
 // Sign the user up
 const signUpSubmitted = async (event) => {
   event.preventDefault();
   Alpine.store('formStatus').disableSubmitButton();
   const fullName = event.target[0].value; // Get the full name from the form
+  const [firstName, lastName] = fullName.split(' '); // Get the first and last name
   const email = event.target[1].value; // Get the email address from the form
   const password = event.target[2].value;
 
@@ -48,6 +36,10 @@ const signUpSubmitted = async (event) => {
       await delay(500);
       Alpine.store('authenticationStatus').current = 'loggedIn';
 
+
+
+
+
       // Get the current user's ID
       const userId = response.user.id;
 
@@ -57,20 +49,17 @@ const signUpSubmitted = async (event) => {
         .insert(
           {
             user_id: userId,
-            inferred_first_name: firstName, // Set the first name from the form
-            // Set default values for the other profile fields (e.g., empty strings)
+            first_name: firstName,
+            last_name: lastName,
+            full_name: fullName,
           }
         );
 
       if (error) {
         console.error('Error creating profile:', error);
       } else {
-        await getUserData(userId);
-        console.log('About to create messagemap and interview for user with ID: ', userId);
-        const messageMap = await createMessageMap(userId, firstName); // Get the created message map
-        const messageMapId = messageMap.id; // Get the message_map_id from the created message map
-        await createInterview(userId, firstName, messageMapId); // Pass the messageMapId to the createInterview function
-
+        window.localStorage.setItem('userProfile', JSON.stringify(data));
+        console.log('Profile stored successfully:', data);
       }
     }
   } catch (err) {
@@ -79,43 +68,6 @@ const signUpSubmitted = async (event) => {
     Alpine.store('formStatus').enableSubmitButton();
   }
 };
-
-// Modify the createMessageMap function
-async function createMessageMap(userId, firstName) {
-  const { data, error } = await supabase
-  .from('message_maps')
-  .insert({
-    user_id: userId,
-    map_name: `${firstName}'s map`, // Use the firstName passed as an argument
-    // Add any other default interview data here if needed
-  });
-
-  if (error) {
-    console.error('Error creating the message map:', error);
-    return null; // Return null if there's an error
-  } else {
-    console.log('message map created successfully:', data);
-    return data[0]; // Return the created message map
-  }
-}
-
-
-async function createInterview(userId, firstName) {
-  const { data, error } = await supabase
-  .from('interviews')
-  .insert({
-    user_id: userId,
-    interviewee_name: firstName, // Use the firstName passed as an argument
-    // Add any other default interview data here if needed
-  });
-
-  if (error) {
-    console.error('Error creating interview:', error);
-  } else {
-    console.log('Interview created successfully:', data);
-  }
-}
-
 
 
 
@@ -139,7 +91,17 @@ const logInSubmitted = async (event) => {
       getInterviewQuestions();
       Alpine.store('authenticationStatus').current = 'loggedIn';
       console.log('signin successful');
-      await getUserData(userId);
+      // Get user profile after successful login
+      const { data: userProfile, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', response.user.id)
+        .single();
+
+      if (userProfile) {
+        // Save the userProfile data in local storage or in a state
+        window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
+      }
     }
   } catch (err) {
     Alpine.store('formStatus').showErrorMessage(err.message);
@@ -149,10 +111,80 @@ const logInSubmitted = async (event) => {
 };
 
 
+
+
+
+/* Modify the createMessageMap function
+async function createMessageMap(userId, firstName) {
+  const { data, error } = await supabase
+  .from('message_maps')
+  .insert({
+    user_id: userId,
+    map_name: `${firstName}'s map`, // Use the firstName passed as an argument
+    // Add any other default interview data here if needed
+  });
+
+  if (error) {
+    console.error('Error creating the message map:', error);
+    return null; // Return null if there's an error
+  } else {
+    console.log('message map created successfully:', data);
+    return data[0]; // Return the created message map
+  }
+}*/
+
+
+
+
+async function createInterview(userId, name) {
+  const { data, error } = await supabase
+  .from('interviews')
+  .insert({
+    user_id: userId,
+    name: name,
+  });
+
+  if (error) {
+    console.error('Error creating interview:', error);
+  } else {
+    console.log('Interview created successfully:', data);
+  }
+}
+
+
+
+
+// Assuming this is the file/scope where 'createInterview' is defined:
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  // Ensure the DOM is fully loaded before setting up the event listener
+
+  const interviewButton = document.getElementById('InterviewMe');
+
+  // Add an event listener to the button
+  interviewButton.addEventListener('click', async () => {
+    // Pull the user profile from local storage
+    const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
+
+    // Extract the user's ID and full name from the profile
+    const userId = userProfile.user_id;
+    const name = userProfile.full_name;
+
+    // Create the interview
+    await createInterview(userId, name);
+  });
+});
+
+
+
+
+
+
+
 async function getUserData(userId) {
   const { data, error } = await supabase
     .from('user_profiles')
-    .select('inferred_first_name, role')
+    .select('first_name')
     .eq('user_id', userId)
     .single();
 
@@ -160,8 +192,8 @@ async function getUserData(userId) {
     console.error('Error fetching user data:', error);
   } else {
     // Update the Alpine store with the fetched data
-    Alpine.store('userData').firstName = data.inferred_first_name;
-    Alpine.store('userData').role = data.role;
+    Alpine.store('userData').firstName = data.first_name;
+
   }
 }
 
@@ -198,6 +230,8 @@ async function getInterviewQuestions() {
     }
     localStorage.setItem('interviewQuestions', JSON.stringify(data)); // Store the interview questions in the local storage
     Alpine.store('questions', data); // Update the Alpine store with the interview questions
+    console.log('Stored questions:', Alpine.store('questions')); // Debugging: Check the stored questions
+
   } catch (err) {
     console.error('Error fetching interview questions:', err);
   }
@@ -341,3 +375,103 @@ function bodyClasses() {
     Alpine.store('onboarding').current,
   ].join(' ');
 }
+
+
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+}
+
+
+
+async function saveAnswer(interviewId, questionId, answer, userId) {
+  if (!interviewId) {
+    throw new Error('Invalid interviewId');
+  }
+  try {
+    const { data, error } = await supabase
+      .from('interview_answers')
+      .insert({
+        interview_id: interviewId,
+        question_id: questionId,
+        answer: answer,
+        user_id: userId,
+      });
+
+    if (error) {
+      throw error;
+    } else {
+      console.log('Answer saved successfully:', data);
+    }
+  } catch (error) {
+    console.error('Error saving answer:', error);
+  }
+}
+
+const debouncedSave = debounce(async function (interviewId, questionId, answer, userId, textarea) {
+  try {
+    await saveAnswer(interviewId, questionId, answer, userId);
+
+    // Show the snackbar notification
+    const snackbar = document.getElementById("snackbar");
+    snackbar.className = "snackbar show";
+    setTimeout(() => {
+      snackbar.className = "snackbar";
+    }, 3000);
+
+    // Change the background color of the textarea
+    textarea.classList.add("autosaveIndicator");
+    setTimeout(() => {
+      textarea.classList.remove("autosaveIndicator");
+    }, 2000);
+  } catch (error) {
+    console.error('Error saving answer:', error);
+  }
+}, 2000);
+
+function handleTextareaInput(event, interviewId, userId) {
+  const textarea = event.target;
+  const questionId = event.target.dataset.questionId;
+  const inputValue = textarea.value;
+
+  if (inputValue.length >= 5) {
+    debouncedSave(interviewId, questionId, inputValue, userId, textarea);
+  }
+}
+
+
+
+
+
+// Wait for the page to load and then attach the event handlers
+document.addEventListener('DOMContentLoaded', function (event) {
+  var signUpForm = document.querySelector('#signup')
+  signUpForm.onsubmit = signUpSubmitted.bind(signUpForm)
+
+  var logInForm = document.querySelector('#signin')
+  logInForm.onsubmit = logInSubmitted.bind(logInForm)
+
+  var logoutButtons = document.querySelectorAll('.logout-button')
+  logoutButtons.forEach(function (logoutButton) {
+    logoutButton.onclick = logoutSubmitted.bind(logoutButton)
+  })
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+

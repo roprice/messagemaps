@@ -115,9 +115,8 @@ button.btn.btn-primary {
   padding: 4px 31px 3px 32px!important;
 }
 
-#SigninSignUp li.nav-item {
-  min-width: 123px;
-}
+
+
 
 a.navlink {
   text-decoration: none;
@@ -133,14 +132,6 @@ a.navlink {
 }
 
 
-#light #SigninSignUp .nav-pills .nav-link {
-  padding: 11px 23px 10px 22px;
-}
-#light ul#SigninSignUp {
-  background: #e1e1e163;
-  border-radius: 1.5rem;
-  width: fit-content;
-}
 
 
 #light .nav-pills .nav-link {
@@ -150,12 +141,20 @@ a.navlink {
   border-radius: 1.5rem;
   position: relative;
   font-size: 12px;
-  width: 200px;
+
 }
-#light .nav-pills .nav-link.active,
+
+#light .nav-pills .nav-item .nav-link.active,
+#light .nav-pills .nav-item.active .nav-link,
 #light .nav-pills .show>a.nav-link {
     background-color: #f7c326;
 }
+
+#light #TheInterview .nav-pills .nav-link {
+
+  width: 200px;
+}
+
 
 #light .nav-pills .nav-link:hover {
   background-color:  #f7c326;
@@ -165,6 +164,70 @@ a.navlink {
 #light .nav-pills .nav-link.active:hover {
   opacity: 1;
 }
+
+
+#SigninSignUp li.nav-item {
+  min-width: 123px;
+}
+
+#light #SigninSignUp .nav-pills .nav-link {
+  padding: 11px 23px 10px 22px;
+}
+
+#light ul#SigninSignUp {
+  background: #e1e1e163;
+  border-radius: 1.5rem;
+  width: fit-content;
+}
+
+
+div#PreviousNext {
+  padding: 11px 0 0 2.5rem;
+  font-size: 14px;
+}
+
+a.previous.text-secondary.text-small {
+  padding: 0 10px 0 0;
+}
+
+
+.nav-sub-items {
+  margin: 10px 0;
+  display: none;
+}
+
+.nav-item.active ul.nav-sub-items {
+  display: block;
+}
+
+.nav-sub-items li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-sub-items a.text-secondary {
+  font-size: 12px;
+  text-decoration: none;
+  margin: 8px 0;
+  display: inline-block;
+  padding: 5px
+}
+
+.nav-sub-item a.text-secondary.active,
+.nav-sub-item a.text-secondary:hover {
+  text-decoration: underline;
+  font-weight: 500;
+
+}
+
+
+
+
+
+
+
+
 
 span.material-symbols-outlined {
 font-size: 20px;
@@ -283,49 +346,11 @@ a.disabled.navlink.linkdark {
 
 :root {
   --bs-blue: #0d6efd;
-  --bs-indigo: #6610f2;
-  --bs-purple: #6f42c1;
   --bs-pink: #d63384;
   --bs-red: #ff5758;
   --bs-orange: #fd7e14;
   --bs-yellow: #f7c326;;
-  --bs-green: #198754;
-  --bs-teal: #20c997;
-  --bs-cyan: #0dcaf0;
-  --bs-black: #000;
-  --bs-white: #fff;
-  --bs-gray: #6c757d;
-  --bs-gray-dark: #343a40;
-  --bs-gray-100: #f8f9fa;
-  --bs-gray-200: #e9ecef;
-  --bs-gray-300: #dee2e6;
-  --bs-gray-400: #ced4da;
-  --bs-gray-500: #adb5bd;
-  --bs-gray-600: #6c757d;
-  --bs-gray-700: #495057;
-  --bs-gray-800: #343a40;
-  --bs-gray-900: #212529;
-  --bs-primary: #0d6efd;
-  --bs-secondary: #6c757d;
-  --bs-success: #198754;
-  --bs-info: #0dcaf0;
-  --bs-warning: #ffc107;
-  --bs-danger: #dc3545;
-  --bs-light: #f8f9fa;
-  --bs-dark: #212529;
-  --bs-primary-rgb: 13,110,253;
-  --bs-secondary-rgb: 108,117,125;
-  --bs-success-rgb: 25,135,84;
-  --bs-info-rgb: 13,202,240;
-  --bs-warning-rgb: 255,193,7;
-  --bs-danger-rgb: 220,53,69;
-  --bs-light-rgb: 248,249,250;
-  --bs-dark-rgb: 33,37,41;
-  --bs-white-rgb: 255,255,255;
-  --bs-black-rgb: 0,0,0;
-  --bs-body-color-rgb: 33,37,41;
-  --bs-body-bg-rgb: 255,255,255;
-  --bs-font-sans-serif: Inter, system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans","Liberation Sans",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  --bs-font-sans-serif: Inter;
   --bs-font-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-body-font-family: var(--bs-font-sans-serif);
@@ -481,7 +506,16 @@ a.disabled.navlink.linkdark {
 .placeholder {
   color: #ccc;
 }
-.form-group {margin:4rem;}
+
+.form-group {
+  margin: 0 0 10rem 0;
+}
+
+.category-fieldset {
+  margin-left: 2.5rem;
+}
+
+
 textarea {
   width: 100%;
   min-height: 90px;

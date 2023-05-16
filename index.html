@@ -28,6 +28,7 @@
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+
    <!-- Supabase.js -->
    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1"></script>
 
@@ -65,7 +66,7 @@
           <ul class="nav nav-pills my-2 mb-3 " id="SigninSignUp">
 
             <li class="nav-item signin-pill">
-              <a href="#" class="nav-link text-small" x-on:click.prevent="formToShow = 'signup'" :class="{ 'active': formToShow === 'signup' }">Sign up</a>
+              <a href="#" class="nav-link text-small active" x-on:click.prevent="formToShow = 'signup'" :class="{ 'active': formToShow === 'signup' }">Sign up</a>
             </li>
             <li class="nav-item signup-pill">
               <a href="#" class="nav-link text-small" x-on:click.prevent="formToShow = 'signin'" :class="{ 'active': formToShow === 'signin' }">Sign in</a>
@@ -85,11 +86,7 @@
                 <label for="fullName" class="form-label">Name</label>
                 <input autocomplete="given-name" placeholder="enter your name.." type="text" class="form-control text-small" id="fullName" name="fullName" minlength="0">
               </div>
-              <!-- <div class="mb-3">
-              <div class="mb-3">
-                <label for="company" class="form-label">Company</label>
-                <input autocomplete="company" placeholder="company name.." type="text" class="form-control text-small" id="company" name="company" minlength="0">
-              </div> -->
+
               <div class="mb-3">
                 <label for="signup-email" class="form-label">Email address</label>
                 <input autocomplete="email" placeholder="email.." type="email" class="form-control text-small" id="signup-email" name="email" aria-describedby="emailHelp" required>
@@ -410,7 +407,7 @@
                     The first step is your <a href=# x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews';">discovery interview</a> - ready to dive in?
 
                   </p>
-                <button class="btn btn-primary btn-lg mt-3" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Interview me</button>
+                <button id="InterviewMe" class="btn btn-primary btn-lg mt-3" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Interview me</button>
               </div><!-- /.welcome-message -->
 
             </div><!-- /#welcome -->
@@ -447,6 +444,11 @@
           x-transition:enter.duration.600ms>
             <!-- Interview screen markup -->
 
+
+
+
+            <!-- welcome message -->
+            <!--
             <div  x-show="Alpine.store('onboarding').current === 'welcome'" class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-2   col-md-7 ">
 
 
@@ -470,13 +472,15 @@
                 <p>Later you'll be able to add additional interviews, upload audio transcripts, and add market research.</p>
                 But first, we need to hear from you, in your own words. The more you write the better the results. So, let's get started.</p>
 
-              </div><!-- /interviw-welcome-message -->
+              </div>
+            </div>
+            -->
+            <!-- /interviw-welcome-message -->
 
-            </div><!-- /#interview-welcome -->
 
             <div class="row interview-form-info">
               <!-- interview-form-card -->
-              <div   class="interview-form-card card shadow my-4 p-3 col-md-7">
+              <div   class="interview-form-card card shadow my-4 p-4 col-md-7">
 
 
 
@@ -485,35 +489,141 @@
 
                   <p class="card-text"  id="InterviewTabs">
 
-                    <div class="row" x-data="{ activeTab: 'YourBrand', tabs: ['YourBrand', 'YourCustomer', 'YourBuyer', 'YourCompetition', 'YourSolution', 'YourPricing'], changeTab: function (direction) { let currentIndex = this.tabs.indexOf(this.activeTab); let newIndex = currentIndex + direction; if (newIndex >= 0 && newIndex < this.tabs.length) { this.activeTab = this.tabs[newIndex]; this.scrollToInterviewTabs(); } }, scrollToInterviewTabs: function () { document.getElementById('InterviewTabs').scrollIntoView({ behavior: 'smooth' }); } }">
+                    <div class="row"
+                    x-data="
+                    {
+                      activeTab: 'YourBrand', tabs: ['YourBrand', 'YourCustomer', 'YourBuyer', 'YourCompetition', 'YourSolution', 'YourPricing'],
+                      changeTab: function (direction) { let currentIndex = this.tabs.indexOf(this.activeTab); let newIndex = currentIndex + direction; if (newIndex >= 0 && newIndex < this.tabs.length) { this.activeTab = this.tabs[newIndex]; this.scrollToInterviewTabs(); } },
+                      scrollToInterviewTabs: function () { document.getElementById('InterviewTabs').scrollIntoView({ behavior: 'smooth' }); },
+                      activeQuestion: '',
+                      scrollToElementWithOffset: function (elementId, yOffset, questionLabel) {
+                      const element = document.getElementById(elementId);
+                      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                      window.scrollTo({ top: y, behavior: 'smooth' });
+                      element.focus();
+                      this.activeQuestion = questionLabel;},
+                      checkVisibleFormElements() {
+
+                        const questions = JSON.parse(localStorage.getItem('interviewQuestions'));
+                        // console.log('Stored questions from local storage:', Alpine.store('questions')); // Debugging: Check the stored questions
+
+
+                        questions.forEach((question) => {
+                          const element = document.getElementById('input-' + question.question_label);
+                          // Check if the element exists before accessing its properties
+                          if (element) {
+                            const rect = element.getBoundingClientRect();
+                            const isVisible = (rect.top >= 0) && (rect.bottom <= window.innerHeight);
+                            if (isVisible) {
+                              this.activeQuestion = question.question_label;
+                              console.log('Active question:', this.activeQuestion); // Debugging: Check the value of activeQuestion
+
+                            }
+                          }
+                        });
+                      }
+                    }"
+
+                    x-init="() => {
+                      // Add the scroll event listener
+                      // window.addEventListener('scroll', checkVisibleFormElements.bind(this));
+                    }">
 
                     <ul class="nav nav-pills mb-5 sticky-sub-element col-md-2" id="TheInterview">
-                      <li class="nav-item brand">
-                        <a href="#" class="nav-link text-small" :class="{ 'active': activeTab === 'YourBrand'}" @click.prevent="activeTab = 'YourBrand'">Brand/Story<span class="completed-tab"><span class="material-symbols-outlined tiny brand">check_circle</span></a>
+                      <li class="nav-item brand" :class="{ 'active': activeTab === 'YourBrand'}" @click.prevent="activeTab = 'YourBrand'">
+                        <a href="#" class="nav-link text-small">Brand/Story<span class="completed-tab"><span class="material-symbols-outlined tiny brand">check_circle</span></a>
 
                         <ul class="nav-sub-items">
                           <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_brand_story') : [])" :key="question.id">
                             <li class="nav-sub-item">
-                              <a class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')"></label>
+                              <a class="text-secondary nav-sub-item-link"
+                              x-text="question.question_label.replaceAll('_', ' ')"
+                              x-init="() => $el.setAttribute('href', '#' + 'input-' + question.question_label)"
+                              @click.prevent="scrollToElementWithOffset('input-' + question.question_label, -127, question.question_label)"
+                              :class="{ 'active': activeQuestion === question.question_label }"></a>
                             </li>
                         </template>
                       </ul>
 
                       </li>
-                      <li class="nav-item customer">
-                        <a href="#" class="nav-link text-small" :class="{ 'active': activeTab === 'YourCustomer'}" @click.prevent="activeTab = 'YourCustomer'">Customer/Market<span class="material-symbols-outlined tiny customer">check_circle</span></a>
+                      <li class="nav-item customer" :class="{ 'active': activeTab === 'YourCustomer'}" @click.prevent="activeTab = 'YourCustomer'">
+                        <a href="#" class="nav-link text-small">Customer/Market<span class="material-symbols-outlined tiny customer">check_circle</span></a>
+
+
+                        <ul class="nav-sub-items">
+                          <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_customer_market') : [])" :key="question.id">
+                            <li class="nav-sub-item">
+                              <a class="text-secondary nav-sub-item-link"
+                              x-text="question.question_label.replaceAll('_', ' ')"
+                              x-init="() => $el.setAttribute('href', '#' + 'input-' + question.question_label)" @click.prevent="scrollToElementWithOffset('input-' + question.question_label, -127, question.question_label)"
+                              :class="{ 'active': activeQuestion === question.question_label }"></a>
+                            </li>
+                          </template>
+                        </ul>
+
                       </li>
-                      <li class="nav-item buyer">
-                        <a href="#" class="nav-link text-small" :class="{ 'active': activeTab === 'YourBuyer'}" @click.prevent="activeTab = 'YourBuyer'">Buyer/Problem<span class="material-symbols-outlined tiny buyer">check_circle</span></a>
+                      <li class="nav-item buyer" :class="{ 'active': activeTab === 'YourBuyer'}" @click.prevent="activeTab = 'YourBuyer'">
+                        <a href="#" class="nav-link text-small">Buyer/Problem<span class="material-symbols-outlined tiny buyer">check_circle</span></a>
+                        <ul class="nav-sub-items">
+                          <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_buyer_problem') : [])" :key="question.id">
+                            <li class="nav-sub-item">
+                              <a class="text-secondary nav-sub-item-link"
+                              x-text="question.question_label.replaceAll('_', ' ')"
+                              x-init="() => $el.setAttribute('href', '#' + 'input-' + question.question_label)" @click.prevent="scrollToElementWithOffset('input-' + question.question_label, -127, question.question_label)"
+                              :class="{ 'active': activeQuestion === question.question_label }"></a>
+                            </li>
+                          </template>
+                        </ul>
+
                       </li>
-                      <li class="nav-item competition">
-                        <a href="#" class="nav-link text-small" :class="{ 'active': activeTab === 'YourCompetition'}" @click.prevent="activeTab = 'YourCompetition'">Competition/Positioning<span class="material-symbols-outlined tiny competition">check_circle</span></a>
+                      <li class="nav-item competition" :class="{ 'active': activeTab === 'YourCompetition'}" @click.prevent="activeTab = 'YourCompetition'">
+                        <a href="#" class="nav-link text-small">Competition/Positioning<span class="material-symbols-outlined tiny competition">check_circle</span></a>
+
+
+                        <ul class="nav-sub-items">
+                          <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_competitor_positioning') : [])" :key="question.id">
+                            <li class="nav-sub-item">
+                              <a class="text-secondary nav-sub-item-link"
+                              x-text="question.question_label.replaceAll('_', ' ')"
+                              x-init="() => $el.setAttribute('href', '#' + 'input-' + question.question_label)" @click.prevent="scrollToElementWithOffset('input-' + question.question_label, -127, question.question_label)"
+                              :class="{ 'active': activeQuestion === question.question_label }"></a>
+                            </li>
+                          </template>
+                        </ul>
+
                       </li>
-                      <li class="nav-item solution">
-                        <a href="#" class="nav-link text-small" :class="{ 'active': activeTab === 'YourSolution'}" @click.prevent="activeTab = 'YourSolution'">Solution/UVP<span class="material-symbols-outlined tiny competition">check_circle</span></a>
+                      <li class="nav-item solution" :class="{ 'active': activeTab === 'YourSolution'}" @click.prevent="activeTab = 'YourSolution'">
+                        <a href="#" class="nav-link text-small" >Solution/UVP<span class="material-symbols-outlined tiny competition">check_circle</span></a>
+
+
+                        <ul class="nav-sub-items">
+                          <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'solution_uvp') : [])" :key="question.id">
+                            <li class="nav-sub-item">
+                              <a class="text-secondary nav-sub-item-link"
+                              x-text="question.question_label.replaceAll('_', ' ')"
+                              x-init="() => $el.setAttribute('href', '#' + 'input-' + question.question_label)" @click.prevent="scrollToElementWithOffset('input-' + question.question_label, -127, question.question_label)"
+                              :class="{ 'active': activeQuestion === question.question_label }"></a>
+                            </li>
+                          </template>
+                        </ul>
+
+
                       </li>
-                      <li class="nav-item pricing">
-                        <a href="#" class="nav-link text-small" :class="{ 'active': activeTab === 'YourPricing'}" @click.prevent="activeTab = 'YourPricing'">Sales/Pricing<span class="material-symbols-outlined tiny competition">check_circle</span></a>
+                      <li class="nav-item pricing" :class="{ 'active': activeTab === 'YourPricing'}" @click.prevent="activeTab = 'YourPricing'">
+                        <a href="#" class="nav-link text-small" >Sales/Pricing<span class="material-symbols-outlined tiny competition">check_circle</span></a>
+
+
+
+                        <ul class="nav-sub-items">
+                          <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'sales_pricing') : [])" :key="question.id">
+                            <li class="nav-sub-item">
+                              <a class="text-secondary nav-sub-item-link"
+                              x-text="question.question_label.replaceAll('_', ' ')"
+                              x-init="() => $el.setAttribute('href', '#' + 'input-' + question.question_label)" @click.prevent="scrollToElementWithOffset('input-' + question.question_label, -127, question.question_label)"
+                              :class="{ 'active': activeQuestion === question.question_label }"></a>
+                            </li>
+                          </template>
+                        </ul>
                       </li>
                     </ul>
 
@@ -521,21 +631,83 @@
 
 
 
-                      <!-- Your Brand -->
-                      <div x-show="activeTab === 'YourBrand'" id="YourBrand">
-                        <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_brand_story') : [])" :key="question.id">
-                            <div x-init="() => $el.setAttribute('id', 'question-' + question.id)" class="form-group">
-                                <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
-                                <div x-text="question.question_text"></div>
-                                <textarea x-init="() => $el.setAttribute('id', 'input-' + question.question_label)"></textarea>
-                                <div class="help text-small text-secondary" x-text="question.question_help"></div>
-                            </div>
-                        </template>
-                      </div>
-                      <!-- /#YourBrand -->
+                        <!-- Your Brand -->
+                        <div x-show="activeTab === 'YourBrand'" id="YourBrand" class="category-fieldset">
+                          <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_brand_story') : [])" :key="question.id">
+                              <div x-init="() => $el.setAttribute('id', 'question-' + question.question_label)" @click="activeQuestion = question.question_label" class="form-group">
+                                  <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
+                                  <div x-text="question.question_text"></div>
+                                  <textarea
+                                  oninput="handleTextareaInput(event)"
+                                  x-init="() => {
+                                    $el.setAttribute('id', 'input-' + question.question_label);
+                                    $el.setAttribute('data-question-id', question.id); // Set the question_id as a data attribute
+                                  }"></textarea>
+
+                                  <div id="snackbar" class="snackbar">Autosaved</div>
+
+                                  <div class="help text-small text-secondary" x-text="question.question_help"></div>
+                              </div>
+                          </template>
+                        </div>
+                        <!-- /#YourBrand -->
+
+                        <style>
+                          /* Define the background color for the autosave indicator */
+                         .autosaveIndicator {
+                           background-color: lightgreen;
+                         }
+
+                         /* Snackbar styles */
+                         .snackbar {
+                           visibility: hidden;
+                           min-width: 250px;
+                           margin-left: -125px;
+                           background-color: #333;
+                           color: #fff;
+                           text-align: center;
+                           border-radius: 2px;
+                           padding: 16px;
+                           position: fixed;
+                           z-index: 1;
+                           left: 50%;
+                           bottom: 30px;
+                           font-size: 17px;
+                         }
+
+                         .snackbar.show {
+                           visibility: visible;
+                           -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                           animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                         }
+
+                         @-webkit-keyframes fadein {
+                           from {bottom: 0; opacity: 0;}
+                           to {bottom: 30px; opacity: 1;}
+                         }
+
+                         @keyframes fadein {
+                           from {bottom: 0; opacity: 0;}
+                           to {bottom: 30px; opacity: 1;}
+                         }
+
+                         @-webkit-keyframes fadeout {
+                           from {bottom: 30px; opacity: 1;}
+                           to {bottom: 0; opacity: 0;}
+                         }
+
+                         @keyframes fadeout {
+                           from {bottom: 30px; opacity: 1;}
+                           to {bottom: 0; opacity: 0;}
+                         }
+
+
+                         </style>
+
+
 
                         <!-- /#YourCustomer -->
-                        <div x-show="activeTab === 'YourCustomer'" id="YourCustomer">
+                        <div x-show="activeTab === 'YourCustomer'" id="YourCustomer" class="category-fieldset">
                           <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_customer_market') : [])" :key="question.id">
                             <div x-init="() => $el.setAttribute('id', 'question-' + question.id)" class="form-group">
                                 <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
@@ -548,7 +720,7 @@
                         <!-- /#YourCustomer -->
 
                         <!-- Your Buyer -->
-                        <div x-show="activeTab === 'YourBuyer'" id="YourBuyer">
+                        <div x-show="activeTab === 'YourBuyer'" id="YourBuyer" class="category-fieldset">
                           <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_buyer_problem') : [])" :key="question.id">
                             <div x-init="() => $el.setAttribute('id', 'question-' + question.id)" class="form-group">
                                 <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
@@ -561,7 +733,7 @@
                         <!-- /#YourBuyer -->
 
                         <!-- /#YourCompetition -->
-                        <div x-show="activeTab === 'YourCompetition'" id="YourCompetition">
+                        <div x-show="activeTab === 'YourCompetition'" id="YourCompetition" class="category-fieldset">
                           <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_competitor_positioning') : [])" :key="question.id">
                             <div x-init="() => $el.setAttribute('id', 'question-' + question.id)" class="form-group">
                                 <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
@@ -574,7 +746,7 @@
                         <!-- /#YourCompetition -->
 
                         <!-- YourSolution -->
-                        <div x-show="activeTab === 'YourSolution'" id="YourSolution">
+                        <div x-show="activeTab === 'YourSolution'" id="YourSolution" class="category-fieldset">
                           <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'solution_uvp') : [])" :key="question.id">
                             <div x-init="() => $el.setAttribute('id', 'question-' + question.id)" class="form-group">
                                 <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
@@ -587,7 +759,7 @@
                         <!-- /#YourSolution -->
 
                         <!-- YourPricing -->
-                        <div x-show="activeTab === 'YourPricing'" id="YourPricing">
+                        <div x-show="activeTab === 'YourPricing'" id="YourPricing" class="category-fieldset">
                           <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'sales_pricing') : [])" :key="question.id">
                             <div x-init="() => $el.setAttribute('id', 'question-' + question.id)" class="form-group">
                                 <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
@@ -602,8 +774,8 @@
                         <!-- Previous/Next buttons -->
                         <div class="row  my-5">
                           <div class=" col-md-6 text-start" id="PreviousNext">
-                            <button @click.prevent="changeTab(-1)" class="btn btn-primary previous" :disabled="activeTab === tabs[0]"><span class="material-symbols-outlined p-0 small">arrow_back_ios_new</span>Previous </button>
-                            <button @click.prevent="changeTab(1)" class="btn btn-primary next" :disabled="activeTab === tabs[tabs.length - 1]">Next<span class="material-symbols-outlined p-0 small">arrow_forward_ios</span></button>
+                            <a @click.prevent="changeTab(-1)" class="previous text-secondary text-small" :disabled="activeTab === tabs[0]" disabled="disabled">&lt; previous section</a>
+                            <a @click.prevent="changeTab(1)" class="next  text-secondary text-small" :disabled="activeTab === tabs[tabs.length - 1]">next section &gt;</a>
                           </div>
                           <div class="col-md-6 text-end ">
                             <button name="submit" type="submit" class="btn btn-primary mb-1 disabled">Complete and Review</button>
