@@ -116,7 +116,9 @@ button.btn.btn-primary {
 }
 
 
-
+#TheInterview li.nav-item {
+  width: 100%;
+}
 
 a.navlink {
   text-decoration: none;
@@ -129,6 +131,7 @@ a.navlink {
   border-radius: 1.5rem;
   width: 200px;
   height: fit-content;
+  padding-right: 0;
 }
 
 

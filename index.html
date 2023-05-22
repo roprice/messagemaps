@@ -29,6 +29,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 
+
    <!-- Supabase.js -->
    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1"></script>
 
@@ -341,8 +342,8 @@
         <header class="p-3 border-bottom bg-white shadow-sm sticky-element">
           <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start me-2">
 
-            <div class="custom-breadcrumb text-small text-secondary ms-4 ps-2">
-              <span class="" x-text="Alpine.store('currentScreen').current"></span>
+            <div class="custom-breadcrumb text-small text-secondary ms-4 ps-2" x-data>
+              <span  x-text="Alpine.store('currentScreen').current"></span>
             </div>
 
             <div id="userMenu" class=" text-end ms-auto me-0">
@@ -791,13 +792,63 @@
               </div>
               <!-- /.interview-form-card -->
 
+
+
+
               <!-- /#interview-info-card -->
               <div class="interview-info-card card my-4 p-3 col-md-4" style="height: fit-content;">
                 <div class="card-header">
-                      <h5 class="card-title" id="interview-name"><span class="user-firstname" x-text="$store.userData.firstName"></span>'s First Interview</h5>
-                      <div class="text-small text-secondary created">Created: <span>2021-08-01 12:17</span></div>
-                      <div class="text-small text-secondary last-saved">Last saved: <span>2021-08-01 12:54</span></div>
+                      <h5 class="card-title" id="interview-name"><span class="user-firstname"
+                        x-text="$store.userData.firstName"
+                      ></span>'s First Interview</h5>
+
+
+                      <div class="text-small text-secondary created">Created:
+
+                          <span x-text="new Date($store.interviewData.updatedDate).toLocaleDateString()"></span>
+
+                        </div>
+
+                      <div class="text-small text-secondary created">Updated:
+
+
+
+
+                        <span x-text="formatDateTime($store.interviewData.createdDate)"></span>
+
+                        <script>
+                        function formatDateTime(dateString) {
+
+                            const date = new Date(dateString);
+
+                            const options = {
+                                year: 'numeric',
+                                month: 'numeric',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric'
+                            };
+                            console.log("date 1: ", date);
+                            return date.toLocaleString([], options);
+
+                        }
+                        </script>
+
+
+
+
+                      </div>
+
+
+
+
+
+
+
+
                       <button name="submit" type="submit" class="btn btn-primary my-2 disabled w-150">Review</button>
+                      <button id="DeleteInterview" name="submit" type="submit" class="btn btn-primary my-2 w-150">Delete</button>
+
                       <p class="text-small text-secondary py-2">Complete the interview, review your answers, generate your message map. Note: this form <strong>auto-saves</strong> as you type</p>
                 </div><!-- /.card-header -->
 
@@ -825,7 +876,7 @@
                     <div class="card-body">
                       <h5 class="card-title">Interview</h5>
                       <p class="card-text">Your [first] interview is only 45% complete</p>
-                      <a href="#" class="btn my-3 btn-primary" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews';">Finish It</a>
+                      <a href="#" class="btn my-3 btn-primary  work-on-interview" >Finish It</a>
                       <p class="card-text">You can also use an interview from a team member - instead of or in addition to your own</p>
                       <p><a href="#">Add recorded Zoom interviews</a></p>
                     </div>
@@ -835,7 +886,13 @@
                     <div class="card-body">
                       <h5 class="card-title">Brand Strategy</h5>
                       <p class="card-text">Complete your interview to unveil your brand strategy</p>
-                      <p><a href="#" class="btn btn-seconday" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">Finish It</a></p>
+                      <p>
+
+
+                        <a href="#" class="btn btn-seconday work-on-interview" >Finish It</a>
+
+
+                      </p>
                     </div>
                   </div>
 

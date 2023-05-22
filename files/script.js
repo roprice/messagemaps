@@ -79,7 +79,7 @@ const logInSubmitted = async (event) => {
   const password = event.target[1].value;
   try {
     const response = await supabase.auth.signIn({ email, password });
-    console.log('Signup response:', response);
+    console.log('Signin response:', response);
     if (response.error) {
       Alpine.store('formStatus').showErrorMessage(response.error.message);
     } else {
@@ -88,20 +88,28 @@ const logInSubmitted = async (event) => {
       Alpine.store('formStatus').showSuccessMessage('Success! Loading...');
       await delay(500);
       setToken(response);
-      getInterviewQuestions();
+
       Alpine.store('authenticationStatus').current = 'loggedIn';
-      console.log('signin successful');
+      console.log('Signin successful');
       // Get user profile after successful login
+
+      const userId = response.user.id;
+
       const { data: userProfile, error } = await supabase
         .from('user_profiles')
         .select('*')
-        .eq('user_id', response.user.id)
+        .eq('user_id', userId)
         .single();
 
       if (userProfile) {
         // Save the userProfile data in local storage or in a state
         window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
       }
+
+      await getInterview(userId);
+
+
+      getInterviewQuestions();
     }
   } catch (err) {
     Alpine.store('formStatus').showErrorMessage(err.message);
@@ -136,20 +144,6 @@ async function createMessageMap(userId, firstName) {
 
 
 
-async function createInterview(userId, name) {
-  const { data, error } = await supabase
-  .from('interviews')
-  .insert({
-    user_id: userId,
-    name: name,
-  });
-
-  if (error) {
-    console.error('Error creating interview:', error);
-  } else {
-    console.log('Interview created successfully:', data);
-  }
-}
 
 
 
@@ -166,14 +160,123 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Pull the user profile from local storage
     const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
 
+    console.log('userProfile when called by eventlistener for #InterviewMe:', userProfile);
+
     // Extract the user's ID and full name from the profile
-    const userId = userProfile.user_id;
-    const name = userProfile.full_name;
+    const userId = userProfile[0].user_id;
+
+
+
+    console.log('userID value when called by eventlistener for #InterviewMe:', userId);
 
     // Create the interview
-    await createInterview(userId, name);
+    await createInterview(userId);
+    await getInterview(userId);
   });
 });
+
+
+
+async function createInterview(userId) {
+  const { data, error } = await supabase
+  .from('interviews')
+  .insert({
+    user_id: userId,
+  });
+
+  if (error) {
+    console.error('Error creating interview:', error);
+  } else {
+    console.log('Interview created successfully:', data);
+  }
+}
+
+
+
+async function getInterview(userId) {
+  console.log('getInterview called');
+  console.log('User ID called in GetInterview(userID):', userId);
+  try {
+    const { data: interview, error } = await supabase
+      .from('interviews')
+      .select('id, created_at, updated_at') // Include the 'id' field in the select statement
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error) {
+      console.error('Error fetching interview:', error.message);
+      return null;
+    }
+
+    if (interview) {
+      console.log('Interview data:', interview);
+      Alpine.store('interviewData').createdDate = interview.created_at;
+      Alpine.store('interviewData').updatedDate = interview.updated_at;
+      Alpine.store('interviewData').interviewID = interview.id;
+
+      return interview.id; // Return the interview ID
+    } else {
+      console.warn('No interview found for this user.');
+      return null;
+    }
+  } catch (err) {
+    console.error('Exception thrown during interview fetch:', err.message);
+    return null;
+  }
+}
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  // Ensure the DOM is fully loaded before setting up the event listener
+
+  const deleteButton = document.getElementById('DeleteInterview');
+
+  // Add an event listener to the button
+  deleteButton.addEventListener('click', async () => {
+    // Pull the user profile from local storage
+    const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
+
+
+    // Extract the user's ID from the profile
+    const userId = userProfile.user_id;
+
+
+    // Fetch the most recent interview
+    const interviewId = await getInterview(userId);
+
+    // Delete the interview
+    if (interviewId) {
+      await deleteInterview(interviewId);
+    } else {
+      console.log('No interview found to delete.');
+    }
+  });
+});
+
+
+async function deleteInterview(interviewId) {
+  const { data, error } = await supabase
+    .from('interviews')
+    .delete()
+    .eq('id', interviewId);
+
+  if (error) {
+    console.error('Error deleting interview:', error);
+  } else {
+    console.log('Interview deleted successfully:', data);
+  }
+}
+
+
+
+
 
 
 
@@ -271,7 +374,7 @@ const logoutSubmitted = (event) => {
 
 // Alpine.js state management
 document.addEventListener('alpine:init', function() {
-
+  console.log('Alpine.js has been initialized');
     Alpine.store('authenticationStatus', {
       current: 'loggedOut',
       items: ['loggedIn', 'loggedOut'],
@@ -286,13 +389,9 @@ document.addEventListener('alpine:init', function() {
       },
     });
 
-
     if (localStorage.getItem('supabase.auth.token')) {
       Alpine.store('authenticationStatus').current = 'loggedIn';
     }
-
-
-
 
     Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
 
@@ -322,22 +421,21 @@ document.addEventListener('alpine:init', function() {
       }
     });
 
-  // Create a new Alpine store
   Alpine.store('userData', {
     firstName: '',
   });
 
+  Alpine.store('interviewData', {
+    createdDate: null,
+    updatedDate: null,
+  });
 
-  // site-level states
   Alpine.store('currentPage', {
     current: 'login',
     items: ['signup', 'login']
   });
-  // app-level states
-  Alpine.store('currentScreen', {
-    current: 'dashboard',
-    items: ['account','dashboard','maps','interviews','strategies','assets','newMap']
-  });
+
+
   // app-level states
   Alpine.store('onboarding', {
     current: 'welcome',
@@ -357,7 +455,43 @@ document.addEventListener('alpine:init', function() {
     }
   });
 
+
+  Alpine.store('currentScreen', {
+    current: localStorage.getItem('currentScreen') || 'dashboard',
+    items: ['account','dashboard','maps','interviews','strategies','assets','newMap'],
 });
+
+
+
+  });
+
+
+
+window.addEventListener('load', (event) => {
+
+  // Get all elements with the class 'work-on-interview'
+  var buttons = document.querySelectorAll('.work-on-interview');
+
+  // Loop through all the elements and attach a click event listener to each
+  for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener('click', function(event) {
+
+        console.log('Button clicked');  // debugging line
+
+          // Prevent the default action
+          event.preventDefault();
+
+          Alpine.store('currentScreen').current = 'interviews';
+          localStorage.setItem('currentScreen', 'interviews');
+
+          // Confirm the state update
+          console.log('currentScreen state updated to:', Alpine.store('currentScreen').current);
+      });
+  }
+});
+
+
+
 
 function handleError(error) {
   console.error(error);
@@ -366,13 +500,15 @@ function handleError(error) {
 
 function bodyClasses() {
   return [
-    Alpine.store('userData').firstName,
+
     Alpine.store('authenticationStatus').current,
+    Alpine.store('userData').firstName,
     Alpine.store('currentPage').current,
     Alpine.store('currentScreen').current,
     Alpine.store('lightDarkMode').current,
     Alpine.store('sidebarStatus').current,
     Alpine.store('onboarding').current,
+
   ].join(' ');
 }
 
@@ -438,6 +574,7 @@ function handleTextareaInput(event, interviewId, userId) {
   const questionId = event.target.dataset.questionId;
   const inputValue = textarea.value;
 
+
   if (inputValue.length >= 5) {
     debouncedSave(interviewId, questionId, inputValue, userId, textarea);
   }
@@ -459,19 +596,4 @@ document.addEventListener('DOMContentLoaded', function (event) {
   logoutButtons.forEach(function (logoutButton) {
     logoutButton.onclick = logoutSubmitted.bind(logoutButton)
   })
-
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
+})
