@@ -29,6 +29,14 @@
  * SECTION 9 - Component Logic
  *   - Define the behavior of your app's components, render templates, handle component-specific events, etc.
  *
+ *      9.1 - Miscellaneous component logic
+ *
+ *      9.2 - Build Interview Form
+ *
+ *      9.3 Create and manage interview object
+ *
+ *      9.4 - autoave interview answers
+ *
  * SECTION 10 - Event Handlers
  *   - User interactions like button clicks, form submissions, keyboard events, etc.
  *
@@ -225,15 +233,6 @@ async function getUserData(userId) {
 
 
 
-
-
-
-
-
-
-
-
-
 // SECTION 6 - Signup
 
 const signUpSubmitted = async (event) => {
@@ -366,7 +365,7 @@ const logoutSubmitted = (event) => {
 
 
 
-// assign body classes
+//  9.1 - Miscellaneous component logic
 
 function bodyClasses() {
   return [
@@ -384,7 +383,7 @@ function bodyClasses() {
 
 
 
-// create webform component
+//  9.2 - Build Interview Form
 
 async function getInterviewQuestions() {
   try {
@@ -406,7 +405,7 @@ async function getInterviewQuestions() {
 
 
 
-// deal with interview object
+// 9.3 Create and manage interview object
 
 async function createInterview(userId) {
   const { data, error } = await supabase
@@ -458,7 +457,6 @@ async function getInterview(userId) {
 }
 
 
-
 async function deleteInterview(interviewId) {
   const { data, error } = await supabase
     .from('interviews')
@@ -476,7 +474,74 @@ async function deleteInterview(interviewId) {
 
 
 
+//  9.4 - autoave interview answers
 
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+}
+
+
+
+async function saveAnswer(interviewId, questionId, answer, userId) {
+  if (!interviewId) {
+    throw new Error('Invalid interviewId');
+  }
+  try {
+    const { data, error } = await supabase
+      .from('interview_answers')
+      .insert({
+        interview_id: interviewId,
+        question_id: questionId,
+        answer: answer,
+        user_id: userId,
+      });
+
+    if (error) {
+      throw error;
+    } else {
+      console.log('Answer saved successfully:', data);
+    }
+  } catch (error) {
+    console.error('Error saving answer:', error);
+  }
+}
+
+const debouncedSave = debounce(async function (interviewId, questionId, answer, userId, textarea) {
+  try {
+    await saveAnswer(interviewId, questionId, answer, userId);
+
+    // Show the snackbar notification
+    const snackbar = document.getElementById("snackbar");
+    snackbar.className = "snackbar show";
+    setTimeout(() => {
+      snackbar.className = "snackbar";
+    }, 3000);
+
+    // Change the background color of the textarea
+    textarea.classList.add("autosaveIndicator");
+    setTimeout(() => {
+      textarea.classList.remove("autosaveIndicator");
+    }, 2000);
+  } catch (error) {
+    console.error('Error saving answer:', error);
+  }
+}, 2000);
+
+function handleTextareaInput(event, interviewId, userId) {
+  const textarea = event.target;
+  const questionId = event.target.dataset.questionId;
+  const inputValue = textarea.value;
+
+
+  if (inputValue.length >= 5) {
+    debouncedSave(interviewId, questionId, inputValue, userId, textarea);
+  }
+}
 
 
 
@@ -562,10 +627,7 @@ window.addEventListener('load', (event) => {
 
 
 
-
 // SECTION 12 - Error Handling
-
-
 
 
 function handleError(error) {
@@ -578,84 +640,7 @@ function handleError(error) {
 
 
 
-
 // SECTION 14 - Deployment
-
-
-
-
-
-
-function debounce(func, wait) {
-  let timeout;
-  return function (...args) {
-    const context = this;
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(context, args), wait);
-  };
-}
-
-
-
-async function saveAnswer(interviewId, questionId, answer, userId) {
-  if (!interviewId) {
-    throw new Error('Invalid interviewId');
-  }
-  try {
-    const { data, error } = await supabase
-      .from('interview_answers')
-      .insert({
-        interview_id: interviewId,
-        question_id: questionId,
-        answer: answer,
-        user_id: userId,
-      });
-
-    if (error) {
-      throw error;
-    } else {
-      console.log('Answer saved successfully:', data);
-    }
-  } catch (error) {
-    console.error('Error saving answer:', error);
-  }
-}
-
-const debouncedSave = debounce(async function (interviewId, questionId, answer, userId, textarea) {
-  try {
-    await saveAnswer(interviewId, questionId, answer, userId);
-
-    // Show the snackbar notification
-    const snackbar = document.getElementById("snackbar");
-    snackbar.className = "snackbar show";
-    setTimeout(() => {
-      snackbar.className = "snackbar";
-    }, 3000);
-
-    // Change the background color of the textarea
-    textarea.classList.add("autosaveIndicator");
-    setTimeout(() => {
-      textarea.classList.remove("autosaveIndicator");
-    }, 2000);
-  } catch (error) {
-    console.error('Error saving answer:', error);
-  }
-}, 2000);
-
-function handleTextareaInput(event, interviewId, userId) {
-  const textarea = event.target;
-  const questionId = event.target.dataset.questionId;
-  const inputValue = textarea.value;
-
-
-  if (inputValue.length >= 5) {
-    debouncedSave(interviewId, questionId, inputValue, userId, textarea);
-  }
-}
-
-
-
-
 
 
 
