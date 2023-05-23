@@ -1,3 +1,54 @@
+/*
+ * TABLE OF CONTENTS:
+ *
+ * SECTION 1 - Configuration
+ *   - API endpoints, authentication credentials, environment variables, etc.
+ *
+ * SECTION 2 - Imports
+ *   - External libraries, modules, third-party libraries, etc.
+ *
+ * SECTION 3 - Initialization
+ *   - Initial setup, state initialization, event listeners, service workers, etc.
+ *   - Handle page reload events and their implications on the app.
+ *
+ * SECTION 4 - Authentication to Supabase
+ *   - Handle the authentication with Supabase
+ *
+ * SECTION 5 - State Management
+ *   - Manage the state of the app, data storage and retrieval, UI updates, etc.
+ *
+ * SECTION 6 - Signup
+ *   - Signup functionality.
+ *
+ * SECTION 7 - Login
+ *   - Login functionality.
+ *
+ * SECTION 8 - Logout
+ *   - Logout functionality.
+ *
+ * SECTION 9 - Component Logic
+ *   - Define the behavior of your app's components, render templates, handle component-specific events, etc.
+ *
+ * SECTION 10 - Event Handlers
+ *   - User interactions like button clicks, form submissions, keyboard events, etc.
+ *
+ * SECTION 11 - Helper Functions
+ *   - Helper and utility functions, formatting, validation, async operations, etc.
+ *
+ * SECTION 12 - Error Handling
+ *   - Handle errors and exceptions, network errors, user input errors, server errors, etc.
+ *
+ * SECTION 13 - Testing
+ *   - Code related to testing the app, unit tests, integration tests, end-to-end tests, etc.
+ *
+ * SECTION 14 - Deployment
+ *   - Code related to deploying your app, building and packaging, server configuration, hosting service deployment, etc.
+ */
+
+
+
+
+// SECTION 1 - Configuration
 
 
 // Handle the authentication with Supabase
@@ -6,304 +57,6 @@ var SUPABASE_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvZ2l2anNocW9wZWd1Y2R1Y3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NzU4MzQsImV4cCI6MTk5NDA1MTgzNH0.zj-QBJknPolKZ6TZ_t3r7aPXbhVB1bf9mmoNBBif9OM'
 var supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 window.userToken = null
-
-
-
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-// Sign the user up
-const signUpSubmitted = async (event) => {
-  event.preventDefault();
-  Alpine.store('formStatus').disableSubmitButton();
-  const fullName = event.target[0].value; // Get the full name from the form
-  const [firstName, lastName] = fullName.split(' '); // Get the first and last name
-  const email = event.target[1].value; // Get the email address from the form
-  const password = event.target[2].value;
-
-  try {
-    const response = await supabase.auth.signUp({ email, password });
-    console.log('Signup response:', response);
-
-    if (response.error) {
-      Alpine.store('formStatus').showErrorMessage(response.error.message);
-    } else {
-      setToken(response);
-      Alpine.store('formStatus').showSuccessMessage('Success!');
-      await delay(1000);
-      Alpine.store('formStatus').showSuccessMessage('Success! Accounted Created.');
-      await delay(800);
-      Alpine.store('formStatus').showSuccessMessage('Success! Accounted Created. Logging you in now..');
-      await delay(500);
-      Alpine.store('authenticationStatus').current = 'loggedIn';
-
-
-
-
-
-      // Get the current user's ID
-      const userId = response.user.id;
-
-      // Create a new profile entry in the 'user_profiles' table
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .insert(
-          {
-            user_id: userId,
-            first_name: firstName,
-            last_name: lastName,
-            full_name: fullName,
-          }
-        );
-
-      if (error) {
-        console.error('Error creating profile:', error);
-      } else {
-        window.localStorage.setItem('userProfile', JSON.stringify(data));
-        console.log('Profile stored successfully:', data);
-      }
-    }
-  } catch (err) {
-    Alpine.store('formStatus').showErrorMessage(err.message);
-  } finally {
-    Alpine.store('formStatus').enableSubmitButton();
-  }
-};
-
-
-
-// Log the user in
-const logInSubmitted = async (event) => {
-  event.preventDefault();
-  Alpine.store('formStatus').disableSubmitButton();
-  const email = event.target[0].value;
-  const password = event.target[1].value;
-  try {
-    const response = await supabase.auth.signIn({ email, password });
-    console.log('Signin response:', response);
-    if (response.error) {
-      Alpine.store('formStatus').showErrorMessage(response.error.message);
-    } else {
-      Alpine.store('formStatus').showSuccessMessage('Success!');
-      await delay(800);
-      Alpine.store('formStatus').showSuccessMessage('Success! Loading...');
-      await delay(500);
-      setToken(response);
-
-      Alpine.store('authenticationStatus').current = 'loggedIn';
-      console.log('Signin successful');
-      // Get user profile after successful login
-
-      const userId = response.user.id;
-
-      const { data: userProfile, error } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('user_id', userId)
-        .single();
-
-      if (userProfile) {
-        // Save the userProfile data in local storage or in a state
-        window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
-      }
-
-      await getInterview(userId);
-
-
-      getInterviewQuestions();
-    }
-  } catch (err) {
-    Alpine.store('formStatus').showErrorMessage(err.message);
-  } finally {
-    Alpine.store('formStatus').enableSubmitButton();
-  }
-};
-
-
-
-
-
-/* Modify the createMessageMap function
-async function createMessageMap(userId, firstName) {
-  const { data, error } = await supabase
-  .from('message_maps')
-  .insert({
-    user_id: userId,
-    map_name: `${firstName}'s map`, // Use the firstName passed as an argument
-    // Add any other default interview data here if needed
-  });
-
-  if (error) {
-    console.error('Error creating the message map:', error);
-    return null; // Return null if there's an error
-  } else {
-    console.log('message map created successfully:', data);
-    return data[0]; // Return the created message map
-  }
-}*/
-
-
-
-
-
-
-
-
-// Assuming this is the file/scope where 'createInterview' is defined:
-
-document.addEventListener('DOMContentLoaded', (event) => {
-  // Ensure the DOM is fully loaded before setting up the event listener
-
-  const interviewButton = document.getElementById('InterviewMe');
-
-  // Add an event listener to the button
-  interviewButton.addEventListener('click', async () => {
-    // Pull the user profile from local storage
-    const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-
-    console.log('userProfile when called by eventlistener for #InterviewMe:', userProfile);
-
-    // Extract the user's ID and full name from the profile
-    const userId = userProfile[0].user_id;
-
-
-
-    console.log('userID value when called by eventlistener for #InterviewMe:', userId);
-
-    // Create the interview
-    await createInterview(userId);
-    await getInterview(userId);
-  });
-});
-
-
-
-async function createInterview(userId) {
-  const { data, error } = await supabase
-  .from('interviews')
-  .insert({
-    user_id: userId,
-  });
-
-  if (error) {
-    console.error('Error creating interview:', error);
-  } else {
-    console.log('Interview created successfully:', data);
-  }
-}
-
-
-
-async function getInterview(userId) {
-  console.log('getInterview called');
-  console.log('User ID called in GetInterview(userID):', userId);
-  try {
-    const { data: interview, error } = await supabase
-      .from('interviews')
-      .select('id, created_at, updated_at') // Include the 'id' field in the select statement
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
-
-    if (error) {
-      console.error('Error fetching interview:', error.message);
-      return null;
-    }
-
-    if (interview) {
-      console.log('Interview data:', interview);
-      Alpine.store('interviewData').createdDate = interview.created_at;
-      Alpine.store('interviewData').updatedDate = interview.updated_at;
-      Alpine.store('interviewData').interviewID = interview.id;
-
-      return interview.id; // Return the interview ID
-    } else {
-      console.warn('No interview found for this user.');
-      return null;
-    }
-  } catch (err) {
-    console.error('Exception thrown during interview fetch:', err.message);
-    return null;
-  }
-}
-
-
-
-
-
-
-
-document.addEventListener('DOMContentLoaded', (event) => {
-  // Ensure the DOM is fully loaded before setting up the event listener
-
-  const deleteButton = document.getElementById('DeleteInterview');
-
-  // Add an event listener to the button
-  deleteButton.addEventListener('click', async () => {
-    // Pull the user profile from local storage
-    const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-
-
-    // Extract the user's ID from the profile
-    const userId = userProfile.user_id;
-
-
-    // Fetch the most recent interview
-    const interviewId = await getInterview(userId);
-
-    // Delete the interview
-    if (interviewId) {
-      await deleteInterview(interviewId);
-    } else {
-      console.log('No interview found to delete.');
-    }
-  });
-});
-
-
-async function deleteInterview(interviewId) {
-  const { data, error } = await supabase
-    .from('interviews')
-    .delete()
-    .eq('id', interviewId);
-
-  if (error) {
-    console.error('Error deleting interview:', error);
-  } else {
-    console.log('Interview deleted successfully:', data);
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-async function getUserData(userId) {
-  const { data, error } = await supabase
-    .from('user_profiles')
-    .select('first_name')
-    .eq('user_id', userId)
-    .single();
-
-  if (error) {
-    console.error('Error fetching user data:', error);
-  } else {
-    // Update the Alpine store with the fetched data
-    Alpine.store('userData').firstName = data.first_name;
-
-  }
-}
-
-
-
-
-
 
 
 function setToken(response) {
@@ -320,44 +73,13 @@ function setToken(response) {
 }
 
 
-//
 
-
-async function getInterviewQuestions() {
-  try {
-    const { data, error } = await supabase
-      .from('interview_questions')
-      .select('*');
-    if (error) {
-      throw error; // Throw the error to be caught by the catch block
-    }
-    localStorage.setItem('interviewQuestions', JSON.stringify(data)); // Store the interview questions in the local storage
-    Alpine.store('questions', data); // Update the Alpine store with the interview questions
-    console.log('Stored questions:', Alpine.store('questions')); // Debugging: Check the stored questions
-
-  } catch (err) {
-    console.error('Error fetching interview questions:', err);
-  }
-}
+// SECTION 2 - Imports
 
 
 
-// Log the user out
-const logoutSubmitted = (event) => {
-  console.log('logoutSubmitted called')
-  event.preventDefault()
-  supabase.auth
-    .signOut()
-    .then((_response) => {
-      console.log('logout successful')
-      Alpine.store('authenticationStatus').updateAuthStatus();
-    })
-    .catch((err) => {
-      console.log('signOut error', err)
-      alert(err.response.text)
-    })
-}
 
+// SECTION 3 - Initialization
 
 // Call this function when the page loads
 (async function() {
@@ -370,6 +92,20 @@ const logoutSubmitted = (event) => {
     await getInterviewQuestions();
   }
 })();
+
+
+
+// SECTION 4 - Authentication to Supabase
+
+
+
+
+// SECTION 5 - State Management
+
+
+
+
+
 
 
 // Alpine.js state management
@@ -463,16 +199,345 @@ document.addEventListener('alpine:init', function() {
 
 
 
+});
+
+
+
+
+// update state with user info
+async function getUserData(userId) {
+  const { data, error } = await supabase
+    .from('user_profiles')
+    .select('first_name')
+    .eq('user_id', userId)
+    .single();
+
+  if (error) {
+    console.error('Error fetching user data:', error);
+  } else {
+    // Update the Alpine store with the fetched data
+    Alpine.store('userData').firstName = data.first_name;
+
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// SECTION 6 - Signup
+
+const signUpSubmitted = async (event) => {
+  event.preventDefault();
+  Alpine.store('formStatus').disableSubmitButton();
+  const fullName = event.target[0].value; // Get the full name from the form
+  const [firstName, lastName] = fullName.split(' '); // Get the first and last name
+  const email = event.target[1].value; // Get the email address from the form
+  const password = event.target[2].value;
+
+  try {
+    const response = await supabase.auth.signUp({ email, password });
+    console.log('Signup response:', response);
+
+    if (response.error) {
+      Alpine.store('formStatus').showErrorMessage(response.error.message);
+    } else {
+      setToken(response);
+      Alpine.store('formStatus').showSuccessMessage('Success!'); await delay(1000);
+      Alpine.store('formStatus').showSuccessMessage('Success! Accounted Created.'); await delay(800);
+      Alpine.store('formStatus').showSuccessMessage('Success! Accounted Created. Logging you in now..'); await delay(500);
+      Alpine.store('authenticationStatus').current = 'loggedIn';
+
+      // Get the current user's ID
+      const userId = response.user.id;
+
+      // Create a new profile entry in the 'user_profiles' table
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .insert(
+          {
+            user_id: userId,
+            first_name: firstName,
+            last_name: lastName,
+            full_name: fullName,
+          }
+        );
+
+      if (error) {
+        console.error('Error creating profile:', error);
+      } else {
+        window.localStorage.setItem('userProfile', JSON.stringify(data));
+        console.log('Profile stored successfully:', data);
+      }
+    }
+  } catch (err) {
+    Alpine.store('formStatus').showErrorMessage(err.message);
+  } finally {
+    Alpine.store('formStatus').enableSubmitButton();
+  }
+};
+
+
+
+
+// SECTION 7 - Login
+
+// Log the user in
+const logInSubmitted = async (event) => {
+  event.preventDefault();
+  Alpine.store('formStatus').disableSubmitButton();
+  const email = event.target[0].value;
+  const password = event.target[1].value;
+  try {
+    const response = await supabase.auth.signIn({ email, password });
+    console.log('Signin response:', response);
+    if (response.error) {
+      Alpine.store('formStatus').showErrorMessage(response.error.message);
+    } else {
+      Alpine.store('formStatus').showSuccessMessage('Success!');
+      await delay(800);
+      Alpine.store('formStatus').showSuccessMessage('Success! Loading...');
+      await delay(500);
+      setToken(response);
+
+      Alpine.store('authenticationStatus').current = 'loggedIn';
+      console.log('Signin successful');
+      // Get user profile after successful login
+
+      const userId = response.user.id;
+
+      const { data: userProfile, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+      if (userProfile) {
+        // Save the userProfile data in local storage or in a state
+        window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
+      }
+
+      await getInterview(userId);
+
+
+      getInterviewQuestions();
+    }
+  } catch (err) {
+    Alpine.store('formStatus').showErrorMessage(err.message);
+  } finally {
+    Alpine.store('formStatus').enableSubmitButton();
+  }
+};
+
+
+
+
+// SECTION 8 - Logout
+
+
+// Log the user out - state becomes "logged out"
+const logoutSubmitted = (event) => {
+  console.log('logoutSubmitted called')
+  event.preventDefault()
+  supabase.auth
+    .signOut()
+    .then((_response) => {
+      console.log('logout successful')
+      Alpine.store('authenticationStatus').updateAuthStatus();
+    })
+    .catch((err) => {
+      console.log('signOut error', err)
+      alert(err.response.text)
+    })
+}
+
+
+
+// SECTION 9 - Component Logic
+
+
+
+// assign body classes
+
+function bodyClasses() {
+  return [
+
+    Alpine.store('authenticationStatus').current,
+    Alpine.store('userData').firstName,
+    Alpine.store('currentPage').current,
+    Alpine.store('currentScreen').current,
+    Alpine.store('lightDarkMode').current,
+    Alpine.store('sidebarStatus').current,
+    Alpine.store('onboarding').current,
+
+  ].join(' ');
+}
+
+
+
+// create webform component
+
+async function getInterviewQuestions() {
+  try {
+    const { data, error } = await supabase
+      .from('interview_questions')
+      .select('*');
+    if (error) {
+      throw error; // Throw the error to be caught by the catch block
+    }
+    localStorage.setItem('interviewQuestions', JSON.stringify(data)); // Store the interview questions in the local storage
+    Alpine.store('questions', data); // Update the Alpine store with the interview questions
+    console.log('Stored questions:', Alpine.store('questions')); // Debugging: Check the stored questions
+
+  } catch (err) {
+    console.error('Error fetching interview questions:', err);
+  }
+}
+
+
+
+
+// deal with interview object
+
+async function createInterview(userId) {
+  const { data, error } = await supabase
+  .from('interviews')
+  .insert({
+    user_id: userId,
   });
 
+  if (error) {
+    console.error('Error creating interview:', error);
+  } else {
+    console.log('Interview created successfully:', data);
+  }
+}
 
+
+async function getInterview(userId) {
+  console.log('getInterview called');
+  console.log('User ID called in GetInterview(userID):', userId);
+  try {
+    const { data: interview, error } = await supabase
+      .from('interviews')
+      .select('id, created_at, updated_at') // Include the 'id' field in the select statement
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error) {
+      console.error('Error fetching interview:', error.message);
+      return null;
+    }
+
+    if (interview) {
+      console.log('Interview data:', interview);
+      Alpine.store('interviewData').createdDate = interview.created_at;
+      Alpine.store('interviewData').updatedDate = interview.updated_at;
+      Alpine.store('interviewData').interviewID = interview.id;
+
+      return interview.id; // Return the interview ID
+    } else {
+      console.warn('No interview found for this user.');
+      return null;
+    }
+  } catch (err) {
+    console.error('Exception thrown during interview fetch:', err.message);
+    return null;
+  }
+}
+
+
+
+async function deleteInterview(interviewId) {
+  const { data, error } = await supabase
+    .from('interviews')
+    .delete()
+    .eq('id', interviewId);
+
+  if (error) {
+    console.error('Error deleting interview:', error);
+  } else {
+    console.log('Interview deleted successfully:', data);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// SECTION 10 - Event Handlers / Listeners
+
+
+document.addEventListener('DOMContentLoaded', async (event) => {
+  var signUpForm = document.querySelector('#signup');
+  signUpForm.onsubmit = signUpSubmitted.bind(signUpForm);
+
+  var logInForm = document.querySelector('#signin');
+  logInForm.onsubmit = logInSubmitted.bind(logInForm);
+
+  var logoutButtons = document.querySelectorAll('.logout-button');
+  logoutButtons.forEach(function (logoutButton) {
+    logoutButton.onclick = logoutSubmitted.bind(logoutButton);
+  });
+
+  const interviewButton = document.getElementById('InterviewMe');
+  interviewButton.addEventListener('click', async () => {
+    // Pull the user profile from local storage
+    const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
+    console.log('userProfile when called by eventlistener for #InterviewMe:', userProfile);
+
+    // Extract the user's ID and full name from the profile
+    const userId = userProfile[0].user_id;
+    console.log('userID value when called by eventlistener for #InterviewMe:', userId);
+
+    // Create the interview
+    await createInterview(userId);
+    await getInterview(userId);
+  });
+
+  const deleteButton = document.getElementById('DeleteInterview');
+  deleteButton.addEventListener('click', async () => {
+    // Pull the user profile from local storage
+    const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
+
+    // Extract the user's ID from the profile
+    const userId = userProfile.user_id;
+
+    // Fetch the most recent interview
+    const interviewId = await getInterview(userId);
+
+    // Delete the interview
+    if (interviewId) {
+      await deleteInterview(interviewId);
+    } else {
+      console.log('No interview found to delete.');
+    }
+  });
+});
 
 window.addEventListener('load', (event) => {
 
   // Get all elements with the class 'work-on-interview'
   var buttons = document.querySelectorAll('.work-on-interview');
 
-  // Loop through all the elements and attach a click event listener to each
   for (var i = 0; i < buttons.length; i++) {
       buttons[i].addEventListener('click', function(event) {
 
@@ -492,25 +557,33 @@ window.addEventListener('load', (event) => {
 
 
 
+// SECTION 11 - Helper Functions
+
+
+
+
+
+// SECTION 12 - Error Handling
+
+
+
 
 function handleError(error) {
   console.error(error);
-  // Handle the error as needed (e.g. display an error message to the user)
 }
 
-function bodyClasses() {
-  return [
 
-    Alpine.store('authenticationStatus').current,
-    Alpine.store('userData').firstName,
-    Alpine.store('currentPage').current,
-    Alpine.store('currentScreen').current,
-    Alpine.store('lightDarkMode').current,
-    Alpine.store('sidebarStatus').current,
-    Alpine.store('onboarding').current,
+// SECTION 13 - Testing
 
-  ].join(' ');
-}
+
+
+
+
+// SECTION 14 - Deployment
+
+
+
+
 
 
 function debounce(func, wait) {
@@ -584,16 +657,9 @@ function handleTextareaInput(event, interviewId, userId) {
 
 
 
-// Wait for the page to load and then attach the event handlers
-document.addEventListener('DOMContentLoaded', function (event) {
-  var signUpForm = document.querySelector('#signup')
-  signUpForm.onsubmit = signUpSubmitted.bind(signUpForm)
 
-  var logInForm = document.querySelector('#signin')
-  logInForm.onsubmit = logInSubmitted.bind(logInForm)
 
-  var logoutButtons = document.querySelectorAll('.logout-button')
-  logoutButtons.forEach(function (logoutButton) {
-    logoutButton.onclick = logoutSubmitted.bind(logoutButton)
-  })
-})
+
+// SECTION 11 - Helper Functions
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)); // Helper function to delay the execution of an async function
