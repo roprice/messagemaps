@@ -7,7 +7,7 @@
  * SECTION 2 - Imports
  *   - External libraries, modules, third-party libraries, etc.
  *
- * SECTION 3 - Initialization
+ * SECTION 3 - Reload/Initialization
  *   - Initial setup, state initialization, event listeners, service workers, etc.
  *   - Handle page reload events and their implications on the app.
  *
@@ -87,7 +87,7 @@ function setToken(response) {
 
 
 
-// SECTION 3 - Initialization
+// SECTION 3 - Reload/Initialization
 
 // Call this function when the page loads
 (async function() {
@@ -96,8 +96,12 @@ function setToken(response) {
     // if the user is already authenticated, load their data
     await getUserData(user.id);
 
-    // Call the getInterviewQuestions function directly
+    // load the questions for the interview form
     await getInterviewQuestions();
+
+    // load the interview ID if it exists
+
+
   }
 })();
 
@@ -169,8 +173,8 @@ document.addEventListener('alpine:init', function() {
   Alpine.store('interviewData', {
     createdDate: null,
     updatedDate: null,
-    interviewName: '',
-    interviewId: '',
+    interviewName: null,
+    interviewId: null,
   });
 
   Alpine.store('currentPage', {
@@ -213,7 +217,7 @@ async function getUserData(userId) {
     console.error('Error fetching user data:', error);
   } else {
     // Update the Alpine store with the fetched data
-    Alpine.store('userData').firstName = 'data.first_name';
+    Alpine.store('userData').firstName = data.first_name;
 
   }
 }
@@ -261,10 +265,19 @@ const signUpSubmitted = async (event) => {
       if (error) {
         console.error('Error creating profile:', error);
       } else {
-        window.localStorage.setItem('userProfile', JSON.stringify(data));
-        console.log('Profile stored to local storage:', data);
+
+        const userProfile = data[0];
+
+        if (userProfile) {
+          // Save the userProfile data in local storage or in a state
+          window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
+        }
+
+
+        console.log('userProfile stored to local storage:', userProfile);
       }
     }
+
   } catch (err) {
     Alpine.store('formStatus').showErrorMessage(err.message);
   } finally {
@@ -301,16 +314,19 @@ const logInSubmitted = async (event) => {
 
       const userId = response.user.id;
 
-      const { data: userProfile, error } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('user_id', userId)
-        .single();
+      const { data, error } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('user_id', userId)
 
-      if (userProfile) {
-        // Save the userProfile data in local storage or in a state
+      if (data && data.length > 0) {
+        const userProfile = data[0];
+
+        // Save the object, not the array
         window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
       }
+
+      await getInterviewQuestions();
 
       const interviewId = await getInterview(userId);
       if (interviewId === null) {
@@ -318,7 +334,7 @@ const logInSubmitted = async (event) => {
         Alpine.store('currentScreen').current = 'dashboard';
         Alpine.store('onboarding').current = 'welcome';
       } else {
-        // getInterviewQuestions();
+        //
       }
 
     }
@@ -343,6 +359,7 @@ const logoutSubmitted = (event) => {
     .signOut()
     .then((_response) => {
       console.log('logout successful')
+      localStorage.clear();
       Alpine.store('authenticationStatus').updateAuthStatus();
     })
     .catch((err) => {
@@ -399,8 +416,11 @@ async function createInterview() {
   let userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
   //console.log('userProfile called in createInterview():', userProfile);
 
-  const userId = userProfile[0].user_id;
+  const userId = userProfile.user_id;
   //console.log('userId called in createInterview():', userId);
+
+
+
 
   // First, check if the user already has an interview
   const existingInterviewId = await getInterview(userId);
@@ -409,7 +429,8 @@ async function createInterview() {
     return null;
   }
 
-  const interviewName = `${userProfile[0].full_name} Interview`;
+  const fullName = userProfile.full_name
+  const interviewName = `${fullName} Interview`;
 
   const { data, error } = await supabase
   .from('interviews')
@@ -424,7 +445,6 @@ async function createInterview() {
     console.log('Interview created successfully:', data);
     // If interview creation was successful, update the userData store with the interview name
 
-    Alpine.store('userData').interviewName = capitalizeWords(interviewName);
   }
  }
 
@@ -606,15 +626,16 @@ document.addEventListener('DOMContentLoaded', async (event) => {
   interviewButton.addEventListener('click', async () => {
     // Pull the user profile from local storage
     const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-    //console.log('userProfile when called by eventlistener for #InterviewMe:', userProfile);
+    console.log('userProfile when called by eventlistener for #InterviewMe:', userProfile);
 
     // Extract the user's ID and full name from the profile
-    const userId = userProfile[0].user_id;
-    //console.log('userID value when called by eventlistener for #InterviewMe:', userId);
+    const userId = userProfile.user_id;
+    console.log('userID value when called by eventlistener for #InterviewMe:', userProfile.user_id);
+
 
     // Create the interview
     await createInterview();
-    await getInterview(userId);
+
   });
 
   const deleteButton = document.getElementById('DeleteInterview');
@@ -667,7 +688,6 @@ window.addEventListener('load', (event) => {
 
 
 // SECTION 12 - Error Handling
-
 
 function handleError(error) {
   console.error(error);
