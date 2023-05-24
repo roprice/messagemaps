@@ -551,11 +551,13 @@ async function saveAnswer(interviewId, questionId, answer, userId) {
   try {
     const { data, error } = await supabase
       .from('interview_answers')
-      .insert({
+      .upsert({
         interview_id: interviewId,
         question_id: questionId,
         answer: answer,
         user_id: userId,
+      },{
+        onConflict: ['interview_id', 'question_id', 'user_id']
       });
 
     if (error) {
@@ -568,7 +570,10 @@ async function saveAnswer(interviewId, questionId, answer, userId) {
   }
 }
 
-const debouncedSave = debounce(async function (interviewId, questionId, answer, userId, textarea) {
+
+const debouncedSave = debounce(
+
+  async function (interviewId, questionId, answer, userId, textarea) {
   try {
     await saveAnswer(interviewId, questionId, answer, userId);
 
