@@ -414,13 +414,9 @@ async function createInterview() {
 
   // Pull the user profile from local storage
   let userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-  //console.log('userProfile called in createInterview():', userProfile);
-
+  //console.log('userProfile called in createInterview():', userProfile)
   const userId = userProfile.user_id;
   //console.log('userId called in createInterview():', userId);
-
-
-
 
   // First, check if the user already has an interview
   const existingInterviewId = await getInterview(userId);
@@ -429,8 +425,9 @@ async function createInterview() {
     return null;
   }
 
+  // Second, create the interview if the user does not already have one
   const fullName = userProfile.full_name
-  const interviewName = `${fullName} Interview`;
+  const interviewName = `${fullName} interview`;
 
   const { data, error } = await supabase
   .from('interviews')
