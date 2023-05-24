@@ -406,6 +406,32 @@ async function getInterviewQuestions() {
 }
 
 
+// 9.25 get the answers with which to populate the interview form
+
+async function fetchAnswers(interviewId, userId) {
+  try {
+    const { data, error } = await supabase
+      .from('interview_answers')
+      .select('question_id, answer')
+      .eq('interview_id', interviewId)
+      .eq('user_id', userId);
+
+    if (error) {
+      throw error;
+    } else {
+      console.log('Fetched answers:', data);
+      return data;  // Return the fetched answers
+    }
+  } catch (error) {
+    console.error('Error fetching answers:', error);
+  }
+}
+
+
+
+
+
+
 
 // 9.3 Create and manage interview object
 

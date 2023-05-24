@@ -293,7 +293,7 @@
                 <span class="material-symbols-outlined medium me-2">dashboard_customize</span>Brand Assets</a>
             </li>
             <div class="dropdown-divider"></div>
-            <li class="my-2 newMap">
+            <li class="my-2 newMap disabled">
               <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'; ">
                 <span class="material-symbols-outlined medium me-2">add_circle</span>Get a new map</a>
             </li>
@@ -644,12 +644,39 @@
                               <div x-init="() => $el.setAttribute('id', 'question-' + question.question_label)" @click="activeQuestion = question.question_label" class="form-group">
                                   <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
                                   <div x-text="question.question_text"></div>
+
+
+
                                   <textarea
                                   oninput="handleTextareaInput(event)"
                                   x-init="() => {
                                     $el.setAttribute('id', 'input-' + question.question_label);
                                     $el.setAttribute('data-question-id', question.id); // Set the question_id as a data attribute
-                                  }"></textarea>
+
+                                    // Retrieve interviewId and userId from local storage
+                                    const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
+                                    const interviewId = interviewData.interviewID;
+
+                                    const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
+                                    const userId = userProfile.user_id;
+
+                                    fetchAnswers(interviewId, userId).then(answers => {
+                                      // Use the answers
+                                    });
+
+                                    // Fetch the answers when the page loads
+                                    fetchAnswers(interviewId, userId).then(answers => {
+                                      // Find the answer for the current question
+                                      const answer = answers.find(answer => answer.question_id === question.id);
+                                      if (answer) {
+                                        // Set the saved answer as the value of the textarea
+                                        $el.value = answer.answer;
+                                      }
+                                    });
+                                  }">
+                                </textarea>
+
+
 
                                   <div id="snackbar" class="snackbar">Autosaved</div>
 
@@ -662,7 +689,7 @@
                         <style>
                           /* Define the background color for the autosave indicator */
                          .autosaveIndicator {
-                           background-color: lightgreen;
+                           background-color: rgb(193, 211, 193);
                          }
 
                          /* Snackbar styles */
