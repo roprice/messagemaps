@@ -823,7 +823,7 @@
                         <span x-text="formatDateTime($store.interviewData.createdDate)"></span>
 
                         <script>
-                        function formatDateTime(dateString) {
+                        function formatDateTime(dateString = new Date()) {
 
                             const date = new Date(dateString);
 
@@ -834,7 +834,7 @@
                                 hour: 'numeric',
                                 minute: 'numeric'
                             };
-                            console.log("date 1: ", date);
+                            // console.log("date 1: ", date);
                             return date.toLocaleString([], options);
 
                         }

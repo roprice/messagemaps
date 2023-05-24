@@ -380,7 +380,6 @@ async function getInterviewQuestions() {
     }
     localStorage.setItem('interviewQuestions', JSON.stringify(data)); // Store the interview questions in the local storage
     Alpine.store('questions', data); // Update the Alpine store with the interview questions
-    console.log('Stored questions:', Alpine.store('questions')); // Debugging: Check the stored questions
 
   } catch (err) {
     console.error('Error fetching interview questions:', err);
