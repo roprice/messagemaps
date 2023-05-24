@@ -111,11 +111,6 @@ function setToken(response) {
 // SECTION 5 - State Management
 
 
-
-
-
-
-
 // Alpine.js state management
 document.addEventListener('alpine:init', function() {
   console.log('Alpine.js has been initialized');
@@ -167,6 +162,8 @@ document.addEventListener('alpine:init', function() {
 
   Alpine.store('userData', {
     firstName: '',
+    fullName: '',
+    interviewName: '',
   });
 
   Alpine.store('interviewData', {
@@ -178,9 +175,10 @@ document.addEventListener('alpine:init', function() {
     current: 'login',
     items: ['signup', 'login']
   });
-
-
-  // app-level states
+  Alpine.store('currentScreen', {
+    current: localStorage.getItem('currentScreen') || 'dashboard',
+    items: ['account','dashboard','maps','interviews','strategies','assets','newMap'],
+  });
   Alpine.store('onboarding', {
     current: 'welcome',
     items: ['welcome','hiddenwelcome']
@@ -198,18 +196,7 @@ document.addEventListener('alpine:init', function() {
       localStorage.setItem('sidebarStatus', this.current);
     }
   });
-
-
-  Alpine.store('currentScreen', {
-    current: localStorage.getItem('currentScreen') || 'dashboard',
-    items: ['account','dashboard','maps','interviews','strategies','assets','newMap'],
 });
-
-
-
-});
-
-
 
 
 // update state with user info
@@ -228,8 +215,6 @@ async function getUserData(userId) {
 
   }
 }
-
-
 
 
 
@@ -325,10 +310,15 @@ const logInSubmitted = async (event) => {
         window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
       }
 
-      await getInterview(userId);
+      const interviewId = await getInterview(userId);
+      if (interviewId === null) {
+        console.log('No interview found for user. Redirecting to onboarding...');
+        Alpine.store('currentScreen').current = 'dashboard';
+        Alpine.store('onboarding').current = 'welcome';
+      } else {
+        // getInterviewQuestions();
+      }
 
-
-      getInterviewQuestions();
     }
   } catch (err) {
     Alpine.store('formStatus').showErrorMessage(err.message);
@@ -363,10 +353,7 @@ const logoutSubmitted = (event) => {
 
 // SECTION 9 - Component Logic
 
-
-
 //  9.1 - Miscellaneous component logic
-
 function bodyClasses() {
   return [
 
@@ -382,9 +369,7 @@ function bodyClasses() {
 }
 
 
-
 //  9.2 - Build Interview Form
-
 async function getInterviewQuestions() {
   try {
     const { data, error } = await supabase
@@ -404,10 +389,18 @@ async function getInterviewQuestions() {
 
 
 
-
 // 9.3 Create and manage interview object
 
+// make a new interview
 async function createInterview(userId) {
+
+ // Check if the user already has an interview
+ const existingInterviewId = await getInterview(userId);
+ if (existingInterviewId !== null) {
+   console.log('User already has an interview. No new interview created.');
+   return null;
+ }
+
   const { data, error } = await supabase
   .from('interviews')
   .insert({
@@ -421,42 +414,7 @@ async function createInterview(userId) {
   }
 }
 
-
-async function getInterview(userId) {
-  console.log('getInterview called');
-  console.log('User ID called in GetInterview(userID):', userId);
-  try {
-    const { data: interview, error } = await supabase
-      .from('interviews')
-      .select('id, created_at, updated_at') // Include the 'id' field in the select statement
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
-
-    if (error) {
-      console.error('Error fetching interview:', error.message);
-      return null;
-    }
-
-    if (interview) {
-      console.log('Interview data:', interview);
-      Alpine.store('interviewData').createdDate = interview.created_at;
-      Alpine.store('interviewData').updatedDate = interview.updated_at;
-      Alpine.store('interviewData').interviewID = interview.id;
-
-      return interview.id; // Return the interview ID
-    } else {
-      console.warn('No interview found for this user.');
-      return null;
-    }
-  } catch (err) {
-    console.error('Exception thrown during interview fetch:', err.message);
-    return null;
-  }
-}
-
-
+//
 async function deleteInterview(interviewId) {
   const { data, error } = await supabase
     .from('interviews')
@@ -470,12 +428,61 @@ async function deleteInterview(interviewId) {
   }
 }
 
+// get the users interview to review, edit, etc
+async function getInterview(userId) {
+  console.log('User ID called in GetInterview(userID):', userId);
+  try {
+
+    // Check if an interview exists for the user
+    const { data: countData, error: countError, count } = await supabase
+      .from('interviews')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId);
 
 
+    if (countError) {
+      console.error('Error counting interviews:', countError.message);
+      return null;
+    }
+
+    const interviewCount = parseInt(count);
+
+
+
+    // If no interview exists, return null immediately
+    if (interviewCount === 0) {
+      console.warn('No interview found for this user.');
+      return null;
+    }
+
+
+    // If an interview does exist, proceed with fetching it
+    const { data: interview, error } = await supabase
+      .from('interviews')
+      .select('id, created_at, updated_at')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .single();
+
+    if (error) {
+      console.error('Error fetching interview:', error.message);
+      return null;
+    }
+
+    console.log('Interview data:', interview);
+    Alpine.store('interviewData').createdDate = interview.created_at;
+    Alpine.store('interviewData').updatedDate = interview.updated_at;
+    Alpine.store('interviewData').interviewID = interview.id;
+
+    return interview.id;
+  } catch (err) {
+    console.error('Exception thrown during interview fetch:', err.message);
+    return null;
+  }
+}
 
 
 //  9.4 - autoave interview answers
-
 function debounce(func, wait) {
   let timeout;
   return function (...args) {
@@ -484,8 +491,6 @@ function debounce(func, wait) {
     timeout = setTimeout(() => func.apply(context, args), wait);
   };
 }
-
-
 
 async function saveAnswer(interviewId, questionId, answer, userId) {
   if (!interviewId) {
@@ -550,7 +555,6 @@ function handleTextareaInput(event, interviewId, userId) {
 
 // SECTION 10 - Event Handlers / Listeners
 
-
 document.addEventListener('DOMContentLoaded', async (event) => {
   var signUpForm = document.querySelector('#signup');
   signUpForm.onsubmit = signUpSubmitted.bind(signUpForm);
@@ -570,7 +574,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
     console.log('userProfile when called by eventlistener for #InterviewMe:', userProfile);
 
     // Extract the user's ID and full name from the profile
-    const userId = userProfile[0].user_id;
+    const userId = userProfile.user_id;
     console.log('userID value when called by eventlistener for #InterviewMe:', userId);
 
     // Create the interview

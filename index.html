@@ -408,6 +408,12 @@
                     The first step is your <a href=# x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews';">discovery interview</a> - ready to dive in?
 
                   </p>
+
+                <!-- clicking 'Interview me' will:
+                  a. create a new interview, if one doesn't already exists for  user
+                  b. not create an interview, if an interview already exists for  user
+                  c. take user to the interview screen, whether or not an interview was created
+                -->
                 <button id="InterviewMe" class="btn btn-primary btn-lg mt-3" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Interview me</button>
               </div><!-- /.welcome-message -->
 
