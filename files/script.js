@@ -589,7 +589,15 @@ const debouncedSave = debounce(async function (interviewId, questionId, answer, 
   }
 }, 2000);
 
-function handleTextareaInput(event, interviewId, userId) {
+function handleTextareaInput(event) {
+
+  // Retrieve userId and interviewId from local storage
+  const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
+  const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
+  const userId = userProfile.user_id;
+  const interviewId = interviewData.interviewID;
+
+
   const textarea = event.target;
   const questionId = event.target.dataset.questionId;
   const inputValue = textarea.value;
