@@ -169,6 +169,8 @@ document.addEventListener('alpine:init', function() {
   Alpine.store('interviewData', {
     createdDate: null,
     updatedDate: null,
+    interviewName: '',
+    interviewId: '',
   });
 
   Alpine.store('currentPage', {
@@ -211,7 +213,7 @@ async function getUserData(userId) {
     console.error('Error fetching user data:', error);
   } else {
     // Update the Alpine store with the fetched data
-    Alpine.store('userData').firstName = data.first_name;
+    Alpine.store('userData').firstName = 'data.first_name';
 
   }
 }
@@ -260,7 +262,7 @@ const signUpSubmitted = async (event) => {
         console.error('Error creating profile:', error);
       } else {
         window.localStorage.setItem('userProfile', JSON.stringify(data));
-        console.log('Profile stored successfully:', data);
+        console.log('Profile stored to local storage:', data);
       }
     }
   } catch (err) {
@@ -391,27 +393,41 @@ async function getInterviewQuestions() {
 // 9.3 Create and manage interview object
 
 // make a new interview
-async function createInterview(userId) {
+async function createInterview() {
 
- // Check if the user already has an interview
- const existingInterviewId = await getInterview(userId);
- if (existingInterviewId !== null) {
-   console.log('User already has an interview. No new interview created.');
-   return null;
- }
+  // Pull the user profile from local storage
+  let userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
+  //console.log('userProfile called in createInterview():', userProfile);
+
+  const userId = userProfile[0].user_id;
+  //console.log('userId called in createInterview():', userId);
+
+  // First, check if the user already has an interview
+  const existingInterviewId = await getInterview(userId);
+  if (existingInterviewId !== null) {
+    console.log('User already has an interview. No new interview created.');
+    return null;
+  }
+
+  const interviewName = `${userProfile[0].full_name} Interview`;
 
   const { data, error } = await supabase
   .from('interviews')
   .insert({
     user_id: userId,
+    interview_name: interviewName // This is the name of the interview
   });
 
   if (error) {
     console.error('Error creating interview:', error);
   } else {
     console.log('Interview created successfully:', data);
+    // If interview creation was successful, update the userData store with the interview name
+
+    Alpine.store('userData').interviewName = capitalizeWords(interviewName);
   }
-}
+ }
+
 
 //
 async function deleteInterview(interviewId) {
@@ -429,7 +445,7 @@ async function deleteInterview(interviewId) {
 
 // get the users interview to review, edit, etc
 async function getInterview(userId) {
-  console.log('User ID called in GetInterview(userID):', userId);
+  //console.log('User ID called in GetInterview(userId):', userId);
   try {
 
     // Check if an interview exists for the user
@@ -458,7 +474,7 @@ async function getInterview(userId) {
     // If an interview does exist, proceed with fetching it
     const { data: interview, error } = await supabase
       .from('interviews')
-      .select('id, created_at, updated_at')
+      .select('id, created_at, updated_at, interview_name')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .single();
@@ -468,12 +484,32 @@ async function getInterview(userId) {
       return null;
     }
 
-    console.log('Interview data:', interview);
+
+    // Store interview data to Alpine store
+    Alpine.store('interviewData').interviewName = interview.interview_name;
     Alpine.store('interviewData').createdDate = interview.created_at;
     Alpine.store('interviewData').updatedDate = interview.updated_at;
     Alpine.store('interviewData').interviewID = interview.id;
 
+    // Create a new JavaScript object
+    const interviewData = {
+      interviewName: interview.interview_name,
+      createdDate: interview.created_at,
+      updatedDate: interview.updated_at,
+      interviewID: interview.id
+    };
+
+    // Convert the object to a JSON string
+    const interviewDataString = JSON.stringify(interviewData);
+
+    // Store the string in localStorage
+    window.localStorage.setItem('interviewData', interviewDataString);
+
+    console.log('Interview data:', interview);
+
+    // Return the ID of the existing interview
     return interview.id;
+
   } catch (err) {
     console.error('Exception thrown during interview fetch:', err.message);
     return null;
@@ -570,14 +606,14 @@ document.addEventListener('DOMContentLoaded', async (event) => {
   interviewButton.addEventListener('click', async () => {
     // Pull the user profile from local storage
     const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-    console.log('userProfile when called by eventlistener for #InterviewMe:', userProfile);
+    //console.log('userProfile when called by eventlistener for #InterviewMe:', userProfile);
 
     // Extract the user's ID and full name from the profile
-    const userId = userProfile.user_id;
-    console.log('userID value when called by eventlistener for #InterviewMe:', userId);
+    const userId = userProfile[0].user_id;
+    //console.log('userID value when called by eventlistener for #InterviewMe:', userId);
 
     // Create the interview
-    await createInterview(userId);
+    await createInterview();
     await getInterview(userId);
   });
 
@@ -651,3 +687,9 @@ function handleError(error) {
 // SECTION 11 - Helper Functions
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)); // Helper function to delay the execution of an async function
+
+function capitalizeWords(str) {
+  return str.replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
+}
