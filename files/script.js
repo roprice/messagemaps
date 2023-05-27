@@ -31,11 +31,18 @@
  *
  *      9.1 - Miscellaneous component logic
  *
+ *
  *      9.2 - Build Interview Form
+ *       - Load the interview questions
+ *       - Build the interview form
  *
- *      9.3 Create and manage interview object
+ *      9.3 Create and manage interviews
+ *       - Create a new interview
+ *       - Update an existing interview
+ *       - Delete an interview
+ *       - Load an existing interview
  *
- *      9.4 - autoave interview answers
+ *      9.4 - Autoave interview answers
  *
  * SECTION 10 - Event Handlers
  *   - User interactions like button clicks, form submissions, keyboard events, etc.
@@ -429,11 +436,7 @@ async function fetchAnswers(interviewId, userId) {
 
 
 
-
-
-
-
-// 9.3 Create and manage interview object
+// 9.3 Create and manage interviews
 
 // make a new interview
 async function createInterview() {
@@ -472,7 +475,84 @@ async function createInterview() {
  }
 
 
-//
+// edit an interview (by adding brand name)
+
+async function updateInterview(interviewId, brandName) {
+  try {
+    const { data, error } = await supabase
+      .from('interviews')
+      .update({ brand_name: brandName })
+      .eq('id', interviewId);
+
+    if (error) {
+      console.error('Error updating interview:', error.message);
+      return null;
+    }
+
+    console.log('Interview updated successfully:', data);
+
+    return data; // Return the updated interview data if needed
+
+  } catch (err) {
+    console.error('Exception thrown during interview update:', err.message);
+    return null;
+  }
+}
+
+// update intereview with extracted inerview name
+function handleTextareaBlur(event) {
+  const characterCount = event.target.value.length;
+
+  if (characterCount >= 2) {
+    const interviewDataString = window.localStorage.getItem('interviewData');
+    if (interviewDataString) {
+      const interviewData = JSON.parse(interviewDataString);
+      const interviewId = interviewData.interviewID;
+
+      // call OpenAI function to extract brand name
+      extractBrandName(event.target.value)
+        .then(brandName => {
+          console.log('Brand name entered:', brandName);
+          return updateInterview(interviewId, brandName);
+        })
+        .then(() => {
+          console.log('Interview updated successfully!');
+        })
+        .catch((error) => {
+          console.error('Error updating interview:', error);
+        });
+    }
+  }
+}
+
+
+
+async function extractBrandName(text) {
+  // Replace with the URL of your deployed function
+  const functionUrl = 'https://supabase.com/dashboard/project/wogivjshqopegucducyz/functions/llm/invoke';
+
+  // Make a POST request to your function, sending the text as JSON
+  const response = await fetch(functionUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      text: text,
+    }),
+  });
+
+  const data = await response.json();
+  const brandName = data.choices[0].message.content.trim();
+  return brandName;
+}
+
+
+
+
+
+
+// delete interview
 async function deleteInterview(interviewId) {
   const { data, error } = await supabase
     .from('interviews')

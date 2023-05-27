@@ -529,11 +529,6 @@
                           }
                         });
                       }
-                    }"
-
-                    x-init="() => {
-                      // Add the scroll event listener
-                      // window.addEventListener('scroll', checkVisibleFormElements.bind(this));
                     }">
 
                     <ul class="nav nav-pills mb-5 sticky-sub-element col-md-2" id="TheInterview">
@@ -648,6 +643,7 @@
 
 
                                   <textarea
+                                  onblur="handleTextareaBlur(event)"
                                   oninput="handleTextareaInput(event)"
                                   x-init="() => {
                                     $el.setAttribute('id', 'input-' + question.question_label);
