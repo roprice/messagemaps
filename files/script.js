@@ -529,7 +529,7 @@ function handleTextareaBlur(event) {
 
 async function extractBrandName(text) {
   // Replace with the URL of your deployed function
-  const functionUrl = 'https://supabase.com/dashboard/project/wogivjshqopegucducyz/functions/llm/invoke';
+  const functionUrl = 'https://wogivjshqopegucducyz.functions.supabase.co/llm';
 
   // Make a POST request to your function, sending the text as JSON
   const response = await fetch(functionUrl, {
