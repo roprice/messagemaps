@@ -75,16 +75,23 @@ window.userToken = null
 
 
 function setToken(response) {
-  if (response.user.confirmation_sent_at) {
-    if (!response || !response.session || !response.session.access_token) {
-      console.log('Confirmation Email Sent');
-    } else {
-      console.log('sT Access Token:', response.session.access_token);
-      console.log('Refresh Token:', response.session.refresh_token);
-      console.log('Logged in as', response.user.email);
-      Alpine.store('authenticationStatus').updateAuthStatus();
-    }
+  if (!response || !response.session || !response.session.access_token) {
+    console.log('No access token in the response');
+  } else {
+    localStorage.setItem('supabase.auth.token', response.session.access_token); // store the token in local storage
+    console.log('Access Token:', response.session.access_token);
+    Alpine.store('authenticationStatus').updateAuthStatus(); // update the authentication status
+    console.log('Access Token:', response.session.access_token);
+    console.log('Refresh Token:', response.session.refresh_token);
+    console.log('Logged in as', response.user.email);
+
   }
+}
+
+
+function setTokenOnReload(user) {
+  localStorage.setItem('supabase.auth.token', user.access_token);
+  Alpine.store('authenticationStatus').updateAuthStatus();
 }
 
 
@@ -97,20 +104,25 @@ function setToken(response) {
 // SECTION 3 - Reload/Initialization
 
 // Call this function when the page loads
+
 (async function() {
+
   const user = supabase.auth.user();
+
   if (user) {
+
     // if the user is already authenticated, load their data
     await getUserData(user.id);
 
     // load the questions for the interview form
     await getInterviewQuestions();
 
-    // load the interview ID if it exists
-
+    // Set the token from the response
+    setTokenOnReload(user);
 
   }
 })();
+
 
 
 
@@ -531,21 +543,33 @@ async function extractBrandName(text) {
   // Replace with the URL of your deployed function
   const functionUrl = 'https://wogivjshqopegucducyz.functions.supabase.co/llm';
 
+  console.log('extractBrandName called')
+
   // Make a POST request to your function, sending the text as JSON
   const response = await fetch(functionUrl, {
     method: 'POST',
     headers: {
+      'Authorization': `Bearer ${supabase.auth.session().access_token}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      text: text,
+      query: text,
     }),
   });
 
   const data = await response.json();
-  const brandName = data.choices[0].message.content.trim();
-  return brandName;
+
+  console.log("data: ", data); // Add this line to inspect the response
+
+  // Check that the choices array is defined and has at least one element
+  if (data.choices && data.choices.length > 0) {
+    const brandName = data.choices[0].message.content.trim();
+    return brandName;
+  } else {
+    throw new Error('The function response did not include any choices');
+  }
 }
+
 
 
 
