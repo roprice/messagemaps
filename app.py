@@ -3,7 +3,8 @@ import logging  # Import the logging module
 
 app = Flask(__name__)
 
-import logging
+print(app.debug)
+
 
 if not app.debug:
     # Create a file handler
