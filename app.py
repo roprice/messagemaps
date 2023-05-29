@@ -1,29 +1,29 @@
-from flask import Flask, request, jsonify
-import logging  # Import the logging module
+from flask import Flask
+import logging
 
 app = Flask(__name__)
 
-print(app.debug)
+# Create a file handler
+file_handler = logging.FileHandler('flask.log')
+file_handler.setLevel(logging.DEBUG)
+
+# Create a logging format
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# Add the formatter to the handler
+file_handler.setFormatter(formatter)
+
+# Add the file handler to the app's logger
+app.logger.addHandler(file_handler)
+
+app.logger.info('Flask app logging is set up.')
+
+@app.route('/')
+def hello_world():
+    app.logger.info('Request received to /')
+    return 'Hello, World!'
 
 
-if not app.debug:
-    # Create a file handler
-    file_handler = logging.FileHandler('flask.log')
-    file_handler.setLevel(logging.DEBUG)
-
-    # Create a logging format
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    file_handler.setFormatter(formatter)
-
-    # Add the handlers to the logger
-    app.logger.addHandler(file_handler)
-
-    app.logger.info('Flask application logging is set up.')
-
-
-@app.route('/app/api/hello')
-def hello():
-    return 'Hello World!'
 
 @app.route('/app/api/extract', methods=['POST'])
 def extract():
@@ -32,6 +32,7 @@ def extract():
    text = data.get('text', '')
    brand_name = "Message Maps"
    return jsonify({'message': 'Brand name extracted!', 'brandName': brand_name})
+
 
 
 
