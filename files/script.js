@@ -537,58 +537,20 @@ function handleTextareaBlur(event) {
   }
 }
 
-
-
 async function extractBrandName(text) {
-
   console.log('extractBrandName called');
-/*
-  const functionUrl = 'https://wogivjshqopegucducyz.functions.supabase.co/llm';
 
-
-  let reqBody;
-  try {
-    reqBody = { query: text };
-    console.log('Prompt:', reqBody);
-  } catch (err) {
-    console.log('Error creating request body:', err);
-  }
-
-  let body;
-  try {
-    body = JSON.stringify(reqBody);
-
-  } catch (err) {
-    console.log('Error stringifying request body:', err);
-  }
-
-  const response = await fetch(functionUrl, {
+  const response = await fetch('https://messagemaps.io:8000/extract', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${supabase.auth.session().access_token}`,
       'Content-Type': 'application/json',
     },
-    body,
+    body: JSON.stringify({ text: text }),
   });
 
-  console.log('Response status:', response.status);
-  console.log('Response headers:', response.headers);
-
-  const data = await response.json();
-
-  console.log('Response data:', data);
-
-  if (data.choices && data.choices.length > 0) {
-    const brandName = data.choices[0].message.content.trim();
-    return brandName;
-  } else {
-    throw new Error('The openai request didnt return expected data - probaby because of a malformed request');
-  }
-  */
+  const data = await response.text(); // or response.json() if you're receiving JSON
+  console.log("Extracted brand name: ", data); // show extracted brand name
 }
-
-
-
 
 
 

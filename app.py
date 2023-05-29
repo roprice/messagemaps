@@ -6,11 +6,12 @@ app = Flask(__name__)
 def hello():
     return 'Hello World!'
 
-@app.route('/extract')
+@app.route('/extract', methods=['POST'])
 def extract():
-    message = 'Brand name extracted!'
-    print(message)
-    return message
+    data = request.get_json() # parse as JSON
+    text = data.get('text', '') # get text from POST request
+    print(text)  # do something with text
+    return jsonify({'message': 'Brand name extracted!'}) #  return JSON response
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
