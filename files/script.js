@@ -553,9 +553,9 @@ async function extractBrandName(text) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json(); // or response.text() if you're receiving text
+    const data = await response.json(); // Parse response as JSON
     console.log("Extracted brand name: ", data); // show extracted brand name
-    return data; // Return the data here
+    return data.brandName; // Return the brand name from the response
   } catch (error) {
     console.log("An error occurred:", error);
   }
