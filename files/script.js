@@ -541,7 +541,7 @@ async function extractBrandName(text) {
   console.log('extractBrandName called');
 
   try {
-    const response = await fetch('https://messagemaps.io:5000/extract', {
+    const response = await fetch('/app/api/extract', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
