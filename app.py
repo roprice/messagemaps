@@ -14,18 +14,17 @@ def extract():
     return jsonify({'message': 'Brand name extracted!'}) #  return JSON response
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='localhost', port=8000, debug=True)
+
 
 # before running the server, turn on virtual environment:
 # source env/bin/activate, if no (env)
 #
 # then for flask (development mode), run:
 # python3 app.py
-# (include debug=-True for autoreloading and debugging)
+# (toggle debug=-True for autoreloading and debugging)
 #
 # then for production mode, run:
-# gunicorn --bind=0.0.0.0:8000 --workers=5 app:app
-# OR gunicorn --bind=0.0.0.0:8000 --workers=3 --reload app:app (for auto reloading)
-
-
-
+# gunicorn --bind=localhost:8000 --workers=5 app:app
+# OR
+# gunicorn --bind=localhost:8000 --workers=5 --reload app:app (for auto reloading)
