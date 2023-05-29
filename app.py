@@ -1,8 +1,7 @@
 # app.py
 from flask import Flask
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+app = Flask(__name__)
 
 @app.route('/hello')
 def hello():
@@ -11,6 +10,9 @@ def hello():
 @app.route('/extract')
 def extract():
     return 'Brand name extracted ok!'
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
 
 
 # before running the server, turn on virtual environment:
