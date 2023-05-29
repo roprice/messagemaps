@@ -540,9 +540,11 @@ function handleTextareaBlur(event) {
 
 
 async function extractBrandName(text) {
-  const functionUrl = 'https://wogivjshqopegucducyz.functions.supabase.co/llm';
 
   console.log('extractBrandName called');
+/*
+  const functionUrl = 'https://wogivjshqopegucducyz.functions.supabase.co/llm';
+
 
   let reqBody;
   try {
@@ -582,6 +584,7 @@ async function extractBrandName(text) {
   } else {
     throw new Error('The openai request didnt return expected data - probaby because of a malformed request');
   }
+  */
 }
 
 
