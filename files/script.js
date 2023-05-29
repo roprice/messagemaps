@@ -522,6 +522,7 @@ function handleTextareaBlur(event) {
       const interviewId = interviewData.interviewID;
 
       // call OpenAI function to extract brand name
+      console.log("value pass to extractBrandName(): ", event.target.value)
       extractBrandName(event.target.value)
         .then(brandName => {
           console.log('Brand name entered:', brandName);
