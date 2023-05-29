@@ -537,20 +537,27 @@ function handleTextareaBlur(event) {
     }
   }
 }
-
 async function extractBrandName(text) {
   console.log('extractBrandName called');
 
-  const response = await fetch('https://messagemaps.io:8000/extract', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ text: text }),
-  });
+  try {
+    const response = await fetch('https://messagemaps.io:5000/extract', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: text }),
+    });
 
-  const data = await response.text(); // or response.json() if you're receiving JSON
-  console.log("Extracted brand name: ", data); // show extracted brand name
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.text(); // or response.json() if you're receiving JSON
+    console.log("Extracted brand name: ", data); // show extracted brand name
+  } catch (error) {
+    console.log("An error occurred:", error);
+  }
 }
 
 
