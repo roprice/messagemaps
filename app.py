@@ -8,7 +8,9 @@ def hello():
 
 @app.route('/extract')
 def extract():
-    return 'Brand name extracted!'
+    message = 'Brand name extracted!'
+    print(message)
+    return message
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
