@@ -35,6 +35,7 @@ if __name__ == "__main__":
 # source env/bin/activate, if no (env)
 #
 # then for flask (development mode), run:
+# export FLASK_ENV=development
 # python3 app.py
 # (toggle debug=-True for autoreloading and debugging)
 #
