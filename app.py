@@ -1,9 +1,16 @@
+# app.py
 from flask import Flask
+
 app = Flask(__name__)
 
 @app.route('/hello')
 def hello():
-    return 'Hello!'
+    return 'Hello World!'
 
-if __name__ == '__main__':
-    app.run()
+@app.route('/extract')
+def extract():
+    return 'Brand name extracted!'
+
+
+# run with: source env/bin/activate, if no (env)
+# then: gunicorn --bind=0.0.0.0:8000 --workers=3 app:app
