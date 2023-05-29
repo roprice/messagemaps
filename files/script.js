@@ -521,7 +521,6 @@ function handleTextareaBlur(event) {
       const interviewData = JSON.parse(interviewDataString);
       const interviewId = interviewData.interviewID;
 
-      // call OpenAI function to extract brand name
       console.log("value pass to extractBrandName(): ", event.target.value)
       extractBrandName(event.target.value)
         .then(brandName => {
@@ -538,7 +537,7 @@ function handleTextareaBlur(event) {
   }
 }
 async function extractBrandName(text) {
-  console.log('extractBrandName called');
+  console.log('extractBrandName called with:', text);
 
   try {
     const response = await fetch('/app/api/extract', {
