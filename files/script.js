@@ -513,6 +513,7 @@ async function updateInterview(interviewId, brandName) {
 
 // update intereview with extracted inerview name
 function handleTextareaBlur(event) {
+  console.log(event);
   const characterCount = event.target.value.length;
 
   if (characterCount >= 2) {
