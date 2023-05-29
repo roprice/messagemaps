@@ -2,11 +2,11 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/hello')
+@app.route('/app/api/hello')
 def hello():
     return 'Hello World!'
 
-@app.route('/extract', methods=['POST'])
+@app.route('/app/api/extract', methods=['POST'])
 def extract():
     data = request.get_json() # parse as JSON
     text = data.get('text', '') # get text from POST request
