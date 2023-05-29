@@ -3,6 +3,8 @@ import logging  # Import the logging module
 
 app = Flask(__name__)
 
+import logging
+
 if not app.debug:
     # Create a file handler
     file_handler = logging.FileHandler('flask.log')
@@ -14,6 +16,8 @@ if not app.debug:
 
     # Add the handlers to the logger
     app.logger.addHandler(file_handler)
+
+    app.logger.info('Flask application logging is set up.')
 
 
 @app.route('/app/api/hello')
