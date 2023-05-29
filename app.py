@@ -1,6 +1,20 @@
 from flask import Flask, request, jsonify
+import logging  # Import the logging module
 
 app = Flask(__name__)
+
+if not app.debug:
+    # Create a file handler
+    file_handler = logging.FileHandler('flask.log')
+    file_handler.setLevel(logging.WARNING)
+
+    # Create a logging format
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
+
+    # Add the handlers to the logger
+    app.logger.addHandler(file_handler)
+
 
 @app.route('/app/api/hello')
 def hello():
