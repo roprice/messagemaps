@@ -25,15 +25,13 @@ if not app.debug:
 def hello():
     return 'Hello World!'
 
-
 @app.route('/app/api/extract', methods=['POST'])
 def extract():
-    data = request.get_json() # parse as JSON
-    text = data.get('text', '') # get text from POST request
-    # Assuming you have a function `extract_brand_name` that does the actual extraction
-    brand_name = "Message Maps"
-    return jsonify({'message': 'Brand name extracted!', 'brandName': brand_name})
-
+   app.logger.info('Entered extract route handler')
+   data = request.get_json()
+   text = data.get('text', '')
+   brand_name = "Message Maps"
+   return jsonify({'message': 'Brand name extracted!', 'brandName': brand_name})
 
 
 
