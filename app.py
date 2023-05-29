@@ -9,7 +9,7 @@ def hello():
 
 @app.route('/extract')
 def extract():
-    return 'Brand name extracted!'
+    return 'Brand name extracted ok!'
 
 
 # run with: source env/bin/activate, if no (env)
