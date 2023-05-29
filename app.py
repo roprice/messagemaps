@@ -8,7 +8,7 @@ def hello():
 
 @app.route('/extract')
 def extract():
-    return 'Brand name extracted ok!'
+    return 'Brand name extracted!'
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
@@ -23,3 +23,6 @@ if __name__ == "__main__":
 # then for production mode, run:
 # gunicorn --bind=0.0.0.0:8000 --workers=5 app:app
 # OR gunicorn --bind=0.0.0.0:8000 --workers=3 --reload app:app (for auto reloading)
+
+
+
