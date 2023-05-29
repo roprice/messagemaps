@@ -25,12 +25,17 @@ if not app.debug:
 def hello():
     return 'Hello World!'
 
+
 @app.route('/app/api/extract', methods=['POST'])
 def extract():
     data = request.get_json() # parse as JSON
     text = data.get('text', '') # get text from POST request
-    print(text)  # do something with text
-    return jsonify({'message': 'Brand name extracted!'}) #  return JSON response
+    # Assuming you have a function `extract_brand_name` that does the actual extraction
+    brand_name = "Message Maps"
+    return jsonify({'message': 'Brand name extracted!', 'brandName': brand_name})
+
+
+
 
 if __name__ == "__main__":
     app.run(host='localhost', port=8000, debug=True)
