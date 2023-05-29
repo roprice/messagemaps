@@ -60,7 +60,7 @@
  *   - Code related to deploying your app, building and packaging, server configuration, hosting service deployment, etc.
  */
 
-
+// curl -L -X POST 'https://wogivjshqopegucducyz.functions.supabase.co/llm' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvZ2l2anNocW9wZWd1Y2R1Y3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NzU4MzQsImV4cCI6MTk5NDA1MTgzNH0.zj-QBJknPolKZ6TZ_t3r7aPXbhVB1bf9mmoNBBif9OM' --data '{"name":"Functions"}'
 
 
 // SECTION 1 - Configuration
@@ -540,36 +540,49 @@ function handleTextareaBlur(event) {
 
 
 async function extractBrandName(text) {
-  // Replace with the URL of your deployed function
   const functionUrl = 'https://wogivjshqopegucducyz.functions.supabase.co/llm';
 
-  console.log('extractBrandName called')
+  console.log('extractBrandName called');
 
-  // Make a POST request to your function, sending the text as JSON
+  let reqBody;
+  try {
+    reqBody = { query: text };
+    console.log('Prompt:', reqBody);
+  } catch (err) {
+    console.log('Error creating request body:', err);
+  }
+
+  let body;
+  try {
+    body = JSON.stringify(reqBody);
+
+  } catch (err) {
+    console.log('Error stringifying request body:', err);
+  }
+
   const response = await fetch(functionUrl, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${supabase.auth.session().access_token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      query: text,
-    }),
+    body,
   });
+
+  console.log('Response status:', response.status);
+  console.log('Response headers:', response.headers);
 
   const data = await response.json();
 
-  console.log("data: ", data); // Add this line to inspect the response
+  console.log('Response data:', data);
 
-  // Check that the choices array is defined and has at least one element
   if (data.choices && data.choices.length > 0) {
     const brandName = data.choices[0].message.content.trim();
     return brandName;
   } else {
-    throw new Error('The function response did not include any choices');
+    throw new Error('The openai request didnt return expected data - probaby because of a malformed request');
   }
 }
-
 
 
 
