@@ -78,7 +78,6 @@ function setToken(response) {
   if (!response || !response.session || !response.session.access_token) {
     console.log('No access token in the response');
   } else {
-    localStorage.setItem('supabase.auth.token', response.session.access_token); // store the token in local storage
     console.log('Access Token:', response.session.access_token);
     Alpine.store('authenticationStatus').updateAuthStatus(); // update the authentication status
     console.log('Access Token:', response.session.access_token);
