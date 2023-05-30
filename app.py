@@ -44,14 +44,14 @@ def handle_500(error):  # error is an instance of HTTPException
 
 app.logger.info('Flask app logging is set up.')
 
-@app.route('/')
+@app.route('api/')
 def hello_world():
     app.logger.info('Request received to /')
-    return 'Hello, World!'
+    return 'Hello, Warld!'
 
 
 
-@app.route('/app/api/extract', methods=['POST'])
+@app.route('/api/extract', methods=['POST'])
 def extract():
    app.logger.info('Entered extract route handler')
    data = request.get_json()
