@@ -44,7 +44,7 @@ def handle_500(error):  # error is an instance of HTTPException
 
 app.logger.info('Flask app logging is set up.')
 
-@app.route('api/')
+@app.route('/api/')
 def hello_world():
     app.logger.info('Request received to /')
     return 'Hello, Warld!'
