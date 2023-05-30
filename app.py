@@ -4,7 +4,7 @@ import logging
 app = Flask(__name__)
 
 # Create a file handler
-file_handler = logging.FileHandler('/var/log/flask/flask.log')
+file_handler = logging.FileHandler('/var/www/html/app/flask.log')
 file_handler.setLevel(logging.DEBUG)
 
 # Create a logging format
