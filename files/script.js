@@ -544,7 +544,7 @@ async function extractBrandName(text) {
   console.log('extractBrandName called with:', text);
 
   try {
-    const response = await fetch('/app/api/extract', {
+    const response = await fetch('/api/extract', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
