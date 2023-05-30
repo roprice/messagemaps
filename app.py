@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 import logging
 
 app = Flask(__name__)
@@ -15,6 +15,32 @@ file_handler.setFormatter(formatter)
 
 # Add the file handler to the app's logger
 app.logger.addHandler(file_handler)
+
+
+# Create a file handler
+file_handler = logging.FileHandler('/var/www/html/app/flask.log')
+file_handler.setLevel(logging.DEBUG)
+
+# Create a logging format
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# Add the formatter to the handler
+file_handler.setFormatter(formatter)
+
+# Add the file handler to the app's logger
+app.logger.addHandler(file_handler)
+
+@app.errorhandler(404)
+def handle_404(error):  # error is an instance of HTTPException
+    app.logger.error(f"Error: {error}, status: {error.code}")
+    return 'Resource not found!', 404
+
+@app.errorhandler(500)
+def handle_500(error):  # error is an instance of HTTPException
+    app.logger.error(f"Error: {error}, status: {error.code}")
+    return 'Internal Server Error!', 500
+
+
 
 app.logger.info('Flask app logging is set up.')
 
