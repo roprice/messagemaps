@@ -637,8 +637,8 @@
                         <div x-show="activeTab === 'YourBrand'" id="YourBrand" class="category-fieldset">
                           <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_brand_story') : [])" :key="question.id">
                               <div x-init="() => $el.setAttribute('id', 'question-' + question.question_label)" @click="activeQuestion = question.question_label" class="form-group">
-                                  <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
-                                  <div x-text="question.question_text"></div>
+                                  <label class="question-label text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
+                                  <div class="question-text" x-text="question.question_text"></div>
 
 
 
@@ -671,9 +671,9 @@
 								 	 }">
 							  		</textarea>
 
-	<div class="answer-feedback" x-init="() => {
-	  $el.setAttribute('id', 'feedback-on-question-' + question.id);
-	}">
+									<div class="followup-question text-small text-secondary" x-init="() => {
+									  $el.setAttribute('id', 'followup-to-question-id-' + question.id);
+									}">
 	
 
 

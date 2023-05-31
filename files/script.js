@@ -686,69 +686,83 @@ const autoSave = debounce(
 
 
 
-async function getFeedback(questionId, answer, questionText, questionLabel, questionHelp) {
-  try {
-    // Prepare the data to send in the body of the POST request
-    const postData = {
-      questionId: questionId,
-      answer: answer,
-      questionText: questionText,
-      questionLabel: questionLabel,
-      questionHelp: questionHelp,
-    };
+	async function getFollowup(questionId, answer, questionText, questionLabel) {
+		
+	  try {
+	    // Prepare the data to send in the body of the POST request
+	    const postData = {
+	      questionId: questionId,
+	      answer: answer,
+	      questionText: questionText,
+	      questionLabel: questionLabel,
+	    };
+		console.log("data prepared")
 
-    // Call your Flask endpoint here. This is just an example; adjust as needed.
-    const response = await fetch(`/api/feedback`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(postData)
-    });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+	    const response = await fetch(`/api/followup`, {
+	      method: 'POST',
+	      headers: {
+	        'Content-Type': 'application/json'
+	      },
+	      body: JSON.stringify(postData)
+	    });
 
-    const feedback = await response.json();
+	    if (!response.ok) {
+	      throw new Error(`HTTP error! status: ${response.status}`);
+	    }
 
-    console.log('Feedback received:', feedback);
+	    const followup_question = await response.json();
 
-    // Display the feedback in the HTML element
-    document.getElementById('feedback-on-question-' + feedback.questionId).textContent = feedback.newQuestion;
+	    console.log('Followup question received: ', followup_question);
+
+	    // Display the follow-up question in the HTML element
+	    document.getElementById('followup-to-question-id-' + followup_question.questionId).textContent = followup_question.followupQuestion;
    
 
-    return feedback;
-  } catch (error) {
-    console.error('Error getting feedback:', error);
-  }
-}
+	    return followup_question;
+	  } catch (error) {
+	    console.error('Error getting followup_question:', error);
+	  }
+	}
 
-function handleTextareaInput(event) {
-  // Retrieve userId and interviewId from local storage
-  const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-  const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
-  const userId = userProfile.user_id;
-  const interviewId = interviewData.interviewID;
 
-  const textarea = event.target;
-  const questionId = event.target.dataset.questionId;
-  const inputValue = textarea.value;
 
-  // Retrieve associated question information from the parent element
-  const questionElement = textarea.parentNode;
-  const questionText = questionElement.querySelector('div').textContent;
-  const questionLabel = questionElement.querySelector('label').textContent;
-  const questionHelp = questionElement.querySelector('.help').textContent;
+	let followup_questionCalledFlags = {};  // At the start of the script
 
-  if (inputValue.length >= 5) {
-    autoSave(interviewId, questionId, inputValue, userId, textarea);
+	// ...
 
-    // Call getFeedback function
-    getFeedback(questionId, inputValue, questionText, questionLabel, questionHelp);
-  }
-}
+	function handleTextareaInput(event) {
+	  // Retrieve userId and interviewId from local storage
+	  const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
+	  const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
+	  const userId = userProfile.user_id;
+	  const interviewId = interviewData.interviewID;
 
+	  const textarea = event.target;
+	  const questionId = event.target.dataset.questionId;
+	  const inputValue = textarea.value;
+
+	  // Retrieve associated question information from the parent element
+	  const questionElement = textarea.parentNode;
+	  const questionText = questionElement.querySelector('.question-text').textContent;
+	  const questionLabel = questionElement.querySelector('.question-label').textContent;
+
+	  // Check if we have a flag for this questionId, if not initialize it to false
+	  if (followup_questionCalledFlags[questionId] === undefined) {
+	    followup_questionCalledFlags[questionId] = false;
+	  }
+
+	  if (inputValue.length >= 5) {
+	    autoSave(interviewId, questionId, inputValue, userId, textarea);
+	  }
+
+	  if (inputValue.length >= 50 && !followup_questionCalledFlags[questionId]) {
+	    
+	    getFollowup(questionId, inputValue, questionText, questionLabel);
+
+	    followup_questionCalledFlags[questionId] = true;  // Set the flag to true after getFollowup has been called
+	  }
+	}
 
 
 
