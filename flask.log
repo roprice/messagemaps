@@ -1,0 +1,102 @@
+2023-05-30 10:02:10,269 - app - INFO - Flask app logging is set up.
+2023-05-30 10:11:19,518 - app - INFO - Flask app logging is set up.
+2023-05-30 10:11:19,518 - app - INFO - Flask app logging is set up.
+2023-05-30 10:13:11,120 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 10:13:11,120 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 10:43:37,857 - app - INFO - Flask app logging is set up.
+2023-05-30 10:43:37,857 - app - INFO - Flask app logging is set up.
+2023-05-30 10:43:38,045 - app - INFO - Flask app logging is set up.
+2023-05-30 10:43:38,045 - app - INFO - Flask app logging is set up.
+2023-05-30 10:51:29,614 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 10:51:29,614 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 10:52:05,331 - app - INFO - Entered extract route handler
+2023-05-30 10:52:05,331 - app - INFO - Entered extract route handler
+2023-05-30 10:52:16,977 - app - INFO - Entered extract route handler
+2023-05-30 10:52:16,977 - app - INFO - Entered extract route handler
+2023-05-30 10:53:28,176 - app - INFO - Entered extract route handler
+2023-05-30 10:53:28,176 - app - INFO - Entered extract route handler
+2023-05-30 10:53:32,825 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 10:53:32,825 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 10:55:05,255 - app - INFO - Request received to /
+2023-05-30 10:55:05,255 - app - INFO - Request received to /
+2023-05-30 10:55:55,499 - app - INFO - Request received to /
+2023-05-30 10:55:55,499 - app - INFO - Request received to /
+2023-05-30 11:08:40,847 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 11:08:40,847 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 11:09:12,093 - app - INFO - Entered extract route handler
+2023-05-30 11:09:12,093 - app - INFO - Entered extract route handler
+2023-05-30 11:09:40,929 - app - INFO - Request received to /
+2023-05-30 11:09:40,929 - app - INFO - Request received to /
+2023-05-30 11:09:46,710 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 11:09:46,710 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 11:09:52,022 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 11:09:52,022 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 11:10:30,057 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 11:10:30,057 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 11:10:35,978 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 11:10:35,978 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 11:10:41,903 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 11:10:41,903 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 11:11:14,486 - app - INFO - Request received to /
+2023-05-30 11:11:14,486 - app - INFO - Request received to /
+2023-05-30 11:13:39,340 - app - INFO - Flask app logging is set up.
+2023-05-30 11:13:39,340 - app - INFO - Flask app logging is set up.
+2023-05-30 11:13:39,553 - app - INFO - Flask app logging is set up.
+2023-05-30 11:13:39,553 - app - INFO - Flask app logging is set up.
+2023-05-30 11:19:01,730 - app - INFO - Entered extract route handler
+2023-05-30 11:19:01,730 - app - INFO - Entered extract route handler
+2023-05-30 11:26:53,493 - app - INFO - Entered extract route handler
+2023-05-30 11:26:53,493 - app - INFO - Entered extract route handler
+2023-05-30 11:27:42,447 - app - INFO - Entered extract route handler
+2023-05-30 11:27:42,447 - app - INFO - Entered extract route handler
+2023-05-30 12:38:47,952 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:38:47,952 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:38:51,826 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:38:51,826 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:38:56,034 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:38:56,034 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:39:00,153 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:39:00,153 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:39:17,945 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:39:17,945 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:39:22,553 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:39:22,553 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:39:49,279 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:39:49,279 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:42:56,832 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 12:42:56,832 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 13:05:10,564 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 13:05:10,564 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 13:06:12,931 - app - INFO - Flask app logging is set up.
+2023-05-30 13:06:12,931 - app - INFO - Flask app logging is set up.
+2023-05-30 13:08:26,545 - app - INFO - Flask app logging is set up.
+2023-05-30 13:08:26,545 - app - INFO - Flask app logging is set up.
+2023-05-30 13:08:26,810 - app - INFO - Flask app logging is set up.
+2023-05-30 13:08:26,810 - app - INFO - Flask app logging is set up.
+2023-05-30 13:08:29,857 - app - INFO - Entered extract route handler
+2023-05-30 13:08:29,857 - app - INFO - Entered extract route handler
+2023-05-30 13:10:46,781 - app - INFO - Entered extract route handler
+2023-05-30 13:10:46,781 - app - INFO - Entered extract route handler
+2023-05-30 13:13:55,607 - app - INFO - Entered extract route handler
+2023-05-30 13:13:55,607 - app - INFO - Entered extract route handler
+2023-05-30 13:14:45,500 - app - INFO - Entered extract route handler
+2023-05-30 13:14:45,500 - app - INFO - Entered extract route handler
+2023-05-30 14:09:13,642 - app - INFO - Flask app logging is set up.
+2023-05-30 14:09:13,642 - app - INFO - Flask app logging is set up.
+2023-05-30 14:09:56,647 - app - INFO - Flask app logging is set up.
+2023-05-30 14:09:56,647 - app - INFO - Flask app logging is set up.
+2023-05-30 14:09:59,077 - app - INFO - Flask app logging is set up.
+2023-05-30 14:09:59,077 - app - INFO - Flask app logging is set up.
+2023-05-30 15:26:26,588 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 15:26:26,588 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 15:26:27,662 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 15:26:27,662 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 17:53:22,507 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 17:53:22,507 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 17:53:22,638 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 17:53:22,638 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 18:06:31,911 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 18:06:32,143 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 18:06:32,235 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-05-30 21:37:02,135 - app - INFO - Flask app logging is set up.
+2023-05-31 13:36:10,343 - app - INFO - Flask app logging is set up.

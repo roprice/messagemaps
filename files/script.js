@@ -191,9 +191,15 @@ document.addEventListener('alpine:init', function() {
   Alpine.store('interviewData', {
     createdDate: null,
     updatedDate: null,
-    interviewName: null,
+    interviewName: window.localStorage.getItem('updatedInterviewName') || null,
     interviewId: null,
+
+    // Method to update the interview name from localStorage
+    refreshInterviewName() {
+      this.interviewName = window.localStorage.getItem('updatedInterviewName');
+    }
   });
+
 
   Alpine.store('currentPage', {
     current: 'login',
@@ -488,82 +494,46 @@ async function createInterview() {
 
 // edit an interview (by adding brand name)
 
-async function updateInterview(interviewId, brandName) {
-  try {
-    const { data, error } = await supabase
-      .from('interviews')
-      .update({ brand_name: brandName })
-      .eq('id', interviewId);
+ async function updateInterview(interviewId, brandName, fullName) {
+   try {
+     const newInterviewName = `${brandName} discovery interview, ${fullName}`;
+     const { data, error } = await supabase
+       .from('interviews')
+       .update({
+         brand_name: brandName,
+         interview_name: newInterviewName
+       })
+       .eq('id', interviewId);
 
-    if (error) {
-      console.error('Error updating interview:', error.message);
-      return null;
-    }
+     if (error) {
+       console.error('Error updating interview:', error.message);
+       return null;
+     }
 
-    console.log('Interview updated successfully:', data);
+     console.log('Interview updated successfully:', data);
 
-    return data; // Return the updated interview data if needed
+	 window.localStorage.setItem('updatedInterviewName', newInterviewName);
+	 
+     // Update the Alpine store with the new interview name
+     Alpine.store('interviewData').interviewName = newInterviewName;
+	 
+	 
+     // Add highlight class
+     document.getElementById('interview-name').classList.add('highlight-welcome');
 
-  } catch (err) {
-    console.error('Exception thrown during interview update:', err.message);
-    return null;
-  }
-}
+     // Remove highlight class after a timeout
+     setTimeout(() => {
+       document.getElementById('interview-name').classList.remove('highlight-welcome');
+     }, 2000); // Adjust this value as needed
+   
 
-// update intereview with extracted inerview name
-function handleTextareaBlur(event) {
+     return data; // Return the updated interview data if needed
 
-
-  console.log('event.target:', event.target);
-  console.log('event.target.value:', event.target.value);
-
-  const characterCount = event.target.value.length;
-
-  if (characterCount >= 2) {
-    const interviewDataString = window.localStorage.getItem('interviewData');
-    if (interviewDataString) {
-      const interviewData = JSON.parse(interviewDataString);
-      const interviewId = interviewData.interviewID;
-
-      console.log("value pass to extractBrandName(): ", event.target.value)
-      extractBrandName(event.target.value)
-        .then(brandName => {
-          console.log('Brand name entered:', brandName);
-          return updateInterview(interviewId, brandName);
-        })
-        .then(() => {
-          console.log('Interview updated successfully!');
-        })
-        .catch((error) => {
-          console.error('Error updating interview:', error);
-        });
-    }
-  }
-}
-async function extractBrandName(text) {
-  console.log('extractBrandName called with:', text);
-
-  try {
-    const response = await fetch('/api/extract', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text: text }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json(); // Parse response as JSON
-    console.log("Extracted brand name: ", data); // show extracted brand name
-    return data.brandName; // Return the brand name from the response
-  } catch (error) {
-    console.log("An error occurred:", error);
-  }
-}
-
+   } catch (err) {
+     console.error('Exception thrown during interview update:', err.message);
+     return null;
+   }
+ }
 
 
 
@@ -690,9 +660,7 @@ async function saveAnswer(interviewId, questionId, answer, userId) {
     console.error('Error saving answer:', error);
   }
 }
-
-
-const debouncedSave = debounce(
+const autoSave = debounce(
 
   async function (interviewId, questionId, answer, userId, textarea) {
   try {
@@ -715,22 +683,69 @@ const debouncedSave = debounce(
   }
 }, 2000);
 
-function handleTextareaInput(event) {
 
+
+
+async function getFeedback(questionId, answer, questionText, questionLabel, questionHelp) {
+  try {
+    // Prepare the data to send in the body of the POST request
+    const postData = {
+      questionId: questionId,
+      answer: answer,
+      questionText: questionText,
+      questionLabel: questionLabel,
+      questionHelp: questionHelp,
+    };
+
+    // Call your Flask endpoint here. This is just an example; adjust as needed.
+    const response = await fetch(`/api/feedback`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(postData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const feedback = await response.json();
+
+    console.log('Feedback received:', feedback);
+
+    // Display the feedback in the HTML element
+    document.getElementById('feedback-on-question-' + feedback.questionId).textContent = feedback.newQuestion;
+   
+
+    return feedback;
+  } catch (error) {
+    console.error('Error getting feedback:', error);
+  }
+}
+
+function handleTextareaInput(event) {
   // Retrieve userId and interviewId from local storage
   const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
   const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
   const userId = userProfile.user_id;
   const interviewId = interviewData.interviewID;
 
-
   const textarea = event.target;
   const questionId = event.target.dataset.questionId;
   const inputValue = textarea.value;
 
+  // Retrieve associated question information from the parent element
+  const questionElement = textarea.parentNode;
+  const questionText = questionElement.querySelector('div').textContent;
+  const questionLabel = questionElement.querySelector('label').textContent;
+  const questionHelp = questionElement.querySelector('.help').textContent;
 
   if (inputValue.length >= 5) {
-    debouncedSave(interviewId, questionId, inputValue, userId, textarea);
+    autoSave(interviewId, questionId, inputValue, userId, textarea);
+
+    // Call getFeedback function
+    getFeedback(questionId, inputValue, questionText, questionLabel, questionHelp);
   }
 }
 
@@ -739,20 +754,118 @@ function handleTextareaInput(event) {
 
 
 
+// 9.5 parse interview answers
+// Function that attaches the appropriate event handler based on the textarea's ID
+function attachEventHandlers(textareaId) {
+  const textarea = document.getElementById(textareaId);
+  if (!textarea) return;
+
+  // Map of textarea IDs to event handlers
+  const eventHandlers = {
+    "input-brand_name": handleTextareaBlur,  // replace with actual function
+    //"competitor_sites": evaluateCompetitors, // replace with actual function
+    // ... add as many handlers as you need
+  };
+
+  const handler = eventHandlers[textareaId];
+  if (handler) {
+    textarea.addEventListener('blur', handler);
+  }
+}
+
+// update intereview with extracted inerview name
+function handleTextareaBlur(event) {
+
+  console.log('event.target:', event.target);
+  console.log('event.target.value:', event.target.value);
+
+  const characterCount = event.target.value.length;
+
+  if (characterCount >= 2) {
+    const interviewDataString = window.localStorage.getItem('interviewData');
+    const userProfileString = window.localStorage.getItem('userProfile');
+    
+    if (interviewDataString && userProfileString) {
+      const interviewData = JSON.parse(interviewDataString);
+      const userProfile = JSON.parse(userProfileString);
+      const interviewId = interviewData.interviewID;
+      const fullName = userProfile.full_name;
+
+      console.log("value pass to extractBrandName(): ", event.target.value)
+	  
+      extractBrandName(event.target.value)
+        .then(brandName => {
+          console.log('Brand name entered:', brandName);
+          return updateInterview(interviewId, brandName, fullName);
+        })
+        .then(() => {
+          console.log('Interview updated successfully!');
+        })
+        .catch((error) => {
+          console.error('Error updating interview:', error);
+        });
+    }
+  }
+}
+
+async function extractBrandName(text) {
+  console.log('extractBrandName called with:', text);
+
+  try {
+    const response = await fetch('/api/extract', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: text }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json(); // Parse response as JSON
+    console.log("Extracted brand name: ", data); // show extracted brand name
+    return data.brandName; // Return the brand name from the response
+  } catch (error) {
+    console.log("An error occurred:", error);
+  }
+}
+
+
+
+
+
 // SECTION 10 - Event Handlers / Listeners
 
 document.addEventListener('DOMContentLoaded', async (event) => {
+  
+  // user signs up
   var signUpForm = document.querySelector('#signup');
   signUpForm.onsubmit = signUpSubmitted.bind(signUpForm);
 
+  // user logsin
   var logInForm = document.querySelector('#signin');
   logInForm.onsubmit = logInSubmitted.bind(logInForm);
 
+  // user logs out
   var logoutButtons = document.querySelectorAll('.logout-button');
   logoutButtons.forEach(function (logoutButton) {
     logoutButton.onclick = logoutSubmitted.bind(logoutButton);
   });
 
+  // user edits and blurs (leaves) brand name textarea
+	// Get the textarea element using its ID
+ 	const textarea = document.getElementById("input-brand_name");
+
+  	// Check if the textarea exists before attaching an event listener
+  	if (textarea) {
+    	// Add an event listener to the textarea
+    	textarea.addEventListener('blur', handleTextareaBlur);
+  	}
+
+
+  //create interview clicked
   const interviewButton = document.getElementById('InterviewMe');
   interviewButton.addEventListener('click', async () => {
     // Pull the user profile from local storage
@@ -763,12 +876,12 @@ document.addEventListener('DOMContentLoaded', async (event) => {
     const userId = userProfile.user_id;
     console.log('userID value when called by eventlistener for #InterviewMe:', userProfile.user_id);
 
-
-    // Create the interview
+    // load CreateInterview
     await createInterview();
 
   });
 
+  // delete interview clicked
   const deleteButton = document.getElementById('DeleteInterview');
   deleteButton.addEventListener('click', async () => {
     // Pull the user profile from local storage
@@ -787,28 +900,6 @@ document.addEventListener('DOMContentLoaded', async (event) => {
       console.log('No interview found to delete.');
     }
   });
-});
-
-window.addEventListener('load', (event) => {
-
-  // Get all elements with the class 'work-on-interview'
-  var buttons = document.querySelectorAll('.work-on-interview');
-
-  for (var i = 0; i < buttons.length; i++) {
-      buttons[i].addEventListener('click', function(event) {
-
-        console.log('Button clicked');  // debugging line
-
-          // Prevent the default action
-          event.preventDefault();
-
-          Alpine.store('currentScreen').current = 'interviews';
-          localStorage.setItem('currentScreen', 'interviews');
-
-          // Confirm the state update
-          console.log('currentScreen state updated to:', Alpine.store('currentScreen').current);
-      });
-  }
 });
 
 
