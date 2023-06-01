@@ -70,6 +70,9 @@
 }
 
 
+
+
+
 .highlight-welcome {
   animation: highlight 2s;
 }
@@ -81,6 +84,23 @@
     background-color: transparent;
   }
 }
+
+.fade-in {
+  animation: fadeIn ease 2s;
+}
+
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+.highlight {
+  background-color: yellow;
+  transition: background-color 1s ease;
+}
+
+
+
 
 
   form#InterviewForm {
@@ -520,15 +540,29 @@ a.disabled.navlink.linkdark {
 
 
 textarea {
-  width: 100%;
+width: 94%;
   border-radius: 6px;
   padding: 8px 10px;
-  min-height: 100px; 
-  height: 100px; 
-  resize: none; 
+  min-height: 100px;
   overflow: hidden; 
   transition: height 0.3s ease-out;
+  box-sizing: content-box; /* add this line */
 }
+
+
+.followup-question {
+    margin-top: 20px;
+}
+.followup-question p {
+    margin: 0 0 3px 0;
+}
+.followup-question textarea {
+    min-height: 30px;
+}
+.followup-question textarea.show {
+    display:block!important;
+}
+
 
 
 .sidebar-toggle-icon {

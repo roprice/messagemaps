@@ -353,13 +353,14 @@ const logInSubmitted = async (event) => {
       await getInterviewQuestions();
 
       const interviewId = await getInterview(userId);
-      if (interviewId === null) {
+      if (interview !== null && interview !== undefined) {
         console.log('No interview found for user. Redirecting to onboarding...');
         Alpine.store('currentScreen').current = 'dashboard';
         Alpine.store('onboarding').current = 'welcome';
-      } else {
-        //
-      }
+    } else {
+      // Store the interviewId in localStorage immediately after login
+      window.localStorage.setItem('interviewData', JSON.stringify(interview));
+    }
 
     }
   } catch (err) {
@@ -736,9 +737,34 @@ const autoSave = debounce(
 
 	    console.log('Followup question received: ', followup_question);
 
-	    // Display the follow-up question in the HTML element
-	    document.getElementById('followup-to-question-id-' + followup_question.questionId).textContent = followup_question.followupQuestion;
-   
+
+		// Display the follow-up question in the HTML element
+		const followUpContainer = document.getElementById('followup-to-question-id-' + followup_question.questionId);
+
+		// Get the first (and in your case, only) p tag within the followUpContainer
+		const followUpParagraph = followUpContainer.querySelector('p');
+
+		// Now, instead of directly setting the textContent of the followUpContainer,
+		// you're setting the textContent of the nested p tag.
+		followUpParagraph.textContent = followup_question.followupQuestion;
+		
+		
+		// Get the first (and in your case, only) p tag within the followUpContainer
+		const followUpTextarea = followUpContainer.querySelector('textarea');
+		followUpTextarea.classList.add('show');
+
+		followUpContainer.classList.add('fade-in');
+
+		// After 2 seconds (which is the duration of our fade-in animation), add the highlight class
+		setTimeout(() => {
+		  followUpParagraph.classList.add('highlight');
+
+		  // Then, after another 2 seconds, remove the highlight class
+		  setTimeout(() => {
+		    followUpParagraph.classList.remove('highlight');
+		  }, 2000);
+		}, 2000);
+
 
 	    return followup_question;
 	  } catch (error) {
@@ -778,14 +804,14 @@ const autoSave = debounce(
 	  let currentQuestionId = interviewQuestions.find(q => q.id == questionId);
 	  let questionText = currentQuestionId.question_text;
 
-	  if (inputValue.length >= 50 && !followup_questionCalledFlags[questionId]) {
-	    
-	    getFollowup(questionId, inputValue, questionText);
+	  if (inputValue.length >= 50 && !followup_questionCalledFlags[questionId] && inputValue[inputValue.length - 1] === ' ') {
+	      setTimeout(() => {
+	        getFollowup(questionId, inputValue, questionText);
 
-	    followup_questionCalledFlags[questionId] = true;  // Set the flag to true after getFollowup has been called
+	        followup_questionCalledFlags[questionId] = true;  // Set the flag to true after getFollowup has been called
+	      }, 7000);  // 7000 milliseconds = 7 seconds
+	    }
 	  }
-	}
-
 
 
 
@@ -798,8 +824,8 @@ function attachEventHandlers(textareaId) {
 
   // Map of textarea IDs to event handlers
   const eventHandlers = {
-    "input-brand_name": handleTextareaBlur,  // replace with actual function
-    //"competitor_sites": evaluateCompetitors, // replace with actual function
+    "input-brand_name": handleTextareaBlur,  
+    //"competitor_sites": evaluateCompetitors, 
     // ... add as many handlers as you need
   };
 
@@ -872,9 +898,10 @@ async function extractBrandName(text) {
 
 
 
+
 // SECTION 10 - Event Handlers / Listeners
 
-document.addEventListener('DOMContentLoaded', async (event) => {
+document.addEventListener('DOMContentLoaded', async (event) => { // 
   
   // user signs up
   var signUpForm = document.querySelector('#signup');
@@ -889,6 +916,58 @@ document.addEventListener('DOMContentLoaded', async (event) => {
   logoutButtons.forEach(function (logoutButton) {
     logoutButton.onclick = logoutSubmitted.bind(logoutButton);
   });
+
+
+
+
+
+
+
+  function expandTextarea(textarea) {
+      // Reset textarea height if text was deleted
+      textarea.style.height = 'auto';
+
+      // Get and set the scroll height to the textarea height
+      // This will make the textarea wrap all the text it contains
+      textarea.style.height = `${textarea.scrollHeight}px`;
+  }
+  
+  
+  // Select the node that will be observed for mutations
+  var targetNode = document.getElementById('InterviewForm');
+
+  // Options for the observer (which mutations to observe)
+  var config = { attributes: false, childList: true, subtree: true };
+
+  // Callback function to execute when mutations are observed
+  var callback = function(mutationsList, observer) {
+      for(let mutation of mutationsList) {
+          if (mutation.type === 'childList') {
+              // New nodes added or removed
+              let textareas = targetNode.querySelectorAll('textarea');
+              textareas.forEach(textarea => {
+                 
+
+                  // add keyup event listener to each textarea
+                  textarea.addEventListener('keyup', function() {
+                      expandTextarea(this);
+                  });
+              });
+          }
+      }
+  };
+
+  // Create an observer instance linked to the callback function
+  var observer = new MutationObserver(callback);
+
+  // Start observing the target node for configured mutations
+  observer.observe(targetNode, config);
+
+
+
+
+
+
 
   // user edits and blurs (leaves) brand name textarea
 	// Get the textarea element using its ID

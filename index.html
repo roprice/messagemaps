@@ -25,6 +25,9 @@
   <link href="files/styles.css" rel="stylesheet">
 
 
+
+
+
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -34,6 +37,7 @@
    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1"></script>
 
    <script src="files/script.js"></script>
+
 
 
 
@@ -160,7 +164,7 @@
 
       </div>
 
-      <div class="col-md-7  m-0 p-0 vh-100  d-flex align-items-end justify-content-end"  style="background-image: url('files/bg.png');background-size: cover;background-position: center left;opacity:0.5">
+      <div class="col-md-7  m-0 p-0 vh-100  d-flex align-items-end justify-content-end"  style="background:#FF575750 str">
 
       </div>
   </div>
@@ -641,71 +645,64 @@
                                   <div class="question-text" x-text="question.question_text"></div>
 
 
-<div x-data="textareaComponent()">
+									
 
-	<textarea 
+									<textarea 
+									    x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
+										
+									    x-on:input.space="handleTextareaInput(event);"
+									    x-init="() => {
+									        $el.setAttribute('id', 'input-' + question.question_label);
+									        $el.setAttribute('data-question-id', question.id);
 
- x-model="text"  
-  x-ref="textarea"
-  x-on:input="resize();handleTextareaInput(event);"
-	   
-	    x-init="() => {
-	        $el.setAttribute('id', 'input-' + question.question_label);
-	        $el.setAttribute('data-question-id', question.id);
+									        // Retrieve interviewId and userId from local storage
+									        const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
+									        const interviewId = interviewData.interviewID;
 
-	        // Retrieve interviewId and userId from local storage
-	        const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
-	        const interviewId = interviewData.interviewID;
+									        const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
+									        const userId = userProfile.user_id;
 
-	        const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-	        const userId = userProfile.user_id;
+									        setTimeout(() => {
+									            fetchAnswers(interviewId, userId).then(answers => {
+									                const answer = answers.find(answer => answer.question_id === question.id);
+									                if (answer) {
+									                    console.log('Before setting value: scrollHeight = ', $el.scrollHeight, ', clientHeight = ', $el.clientHeight);
 
-	        fetchAnswers(interviewId, userId).then(answers => {
-	            const answer = answers.find(answer => answer.question_id === question.id);
-	            if (answer) {
-	                $el.value = answer.answer;
-	                this.txt = answer.answer; // Sync the model with fetched answer
-	            }
-	        });
+									                    $el.value = answer.answer;
+									                    this.txt = answer.answer; // Sync the model with fetched answer
+					
+									                }
+									            });
 
-	        // Attach the appropriate event handler based on the textarea's ID
-	        attachEventHandlers($el.getAttribute('id'));
+									            // Attach the appropriate event handler based on the textarea's ID
+									            attachEventHandlers($el.getAttribute('id'));
+									        }, 0);
+									    }"
+									>
+									</textarea>
 
-	 
-
-	       
-	    }"
-	    
-	>
-	</textarea>
-</div>
-<script>
-function textareaComponent() {
-  return {
-    text: '',
-    resize() {
-      this.$refs.textarea.style.height = 'auto';
-      this.$refs.textarea.style.height = this.$refs.textarea.scrollHeight + 20 + 'px';
-    }
-  };
-}
-</script>
-
-<style>
-textarea {
-  overflow: hidden;
-  transition: height 0.2s ease;
-}  
-</style>
-									<div class="followup-question text-small text-secondary" x-init="() => {
-									  $el.setAttribute('id', 'followup-to-question-id-' + question.id);
-									}"></div>
-	
+							
+						
 
 
                                   <div id="snackbar" class="snackbar">Autosaved</div>
 
                                   <div class="help text-small text-secondary" x-text="question.question_help"></div>
+								  
+								  
+								  
+									<div class="followup-question text-small" x-data="{ text: '' }" 
+									x-init="() => { $el.setAttribute('id', 'followup-to-question-id-' + question.id); }">
+									    <p x-init="() => { $el.setAttribute('id', 'p-followup-to-question-id-' + question.id); }" 
+											x-text="text"></p>
+									    <textarea 
+										x-init="() => { $el.setAttribute('id', 'textarea-followup-to-question-id-' + question.id); }" 
+										x-show="text.length > 0"></textarea>
+									</div>
+
+									
+								</div>
+								  
                               </div>
                           </template>
                         </div>

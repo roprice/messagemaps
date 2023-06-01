@@ -105,6 +105,8 @@ def followup():
     The original question was: "{original_question}"
     The response to that question was: "{answer}"
     Based on this, please generate a follow-up question that starts with "Why" and asks about something specific from the response.
+    Never use the word "you" more than once in a question.
+    Single-clause questions only.
     ''')
 
     
