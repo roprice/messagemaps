@@ -433,6 +433,19 @@ async function getInterviewQuestions() {
 // 9.25 get the answers with which to populate the interview form
 
 async function fetchAnswers(interviewId, userId) {
+  // Generate the key based on interviewId and userId
+  const localStorageKey = `interviewAnswers_${interviewId}_${userId}`;
+
+  // Try to get answers from localStorage
+  const storedAnswers = localStorage.getItem(localStorageKey);
+
+  // If there are answers in the localStorage, parse them and return
+  if (storedAnswers !== null) {
+    console.log('Answers retrieved from localStorage:', JSON.parse(storedAnswers));
+    return JSON.parse(storedAnswers);
+  }
+
+  // If there are no answers in localStorage, fetch them from the backend
   try {
     const { data, error } = await supabase
       .from('interview_answers')
@@ -440,16 +453,24 @@ async function fetchAnswers(interviewId, userId) {
       .eq('interview_id', interviewId)
       .eq('user_id', userId);
 
+    // If there's an error with the fetch, throw an error
     if (error) {
       throw error;
     } else {
       console.log('Fetched answers:', data);
+      
+      // Save the fetched answers in localStorage for future use
+      localStorage.setItem(localStorageKey, JSON.stringify(data));
+
       return data;  // Return the fetched answers
     }
   } catch (error) {
     console.error('Error fetching answers:', error);
   }
 }
+
+
+
 
 
 
@@ -686,7 +707,7 @@ const autoSave = debounce(
 
 
 
-	async function getFollowup(questionId, answer, questionText, questionLabel) {
+	async function getFollowup(questionId, answer, questionText) {
 		
 	  try {
 	    // Prepare the data to send in the body of the POST request
@@ -694,7 +715,7 @@ const autoSave = debounce(
 	      questionId: questionId,
 	      answer: answer,
 	      questionText: questionText,
-	      questionLabel: questionLabel,
+	      
 	    };
 		console.log("data prepared")
 
@@ -742,10 +763,7 @@ const autoSave = debounce(
 	  const questionId = event.target.dataset.questionId;
 	  const inputValue = textarea.value;
 
-	  // Retrieve associated question information from the parent element
-	  const questionElement = textarea.parentNode;
-	  const questionText = questionElement.querySelector('.question-text').textContent;
-	  const questionLabel = questionElement.querySelector('.question-label').textContent;
+	
 
 	  // Check if we have a flag for this questionId, if not initialize it to false
 	  if (followup_questionCalledFlags[questionId] === undefined) {
@@ -755,10 +773,14 @@ const autoSave = debounce(
 	  if (inputValue.length >= 5) {
 	    autoSave(interviewId, questionId, inputValue, userId, textarea);
 	  }
+	  
+	  let interviewQuestions = JSON.parse(window.localStorage.getItem('interviewQuestions'));
+	  let currentQuestionId = interviewQuestions.find(q => q.id == questionId);
+	  let questionText = currentQuestionId.question_text;
 
 	  if (inputValue.length >= 50 && !followup_questionCalledFlags[questionId]) {
 	    
-	    getFollowup(questionId, inputValue, questionText, questionLabel);
+	    getFollowup(questionId, inputValue, questionText);
 
 	    followup_questionCalledFlags[questionId] = true;  // Set the flag to true after getFollowup has been called
 	  }
