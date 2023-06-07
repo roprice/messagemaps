@@ -476,40 +476,39 @@
                         <a href="#" class="nav-link text-small">Brand/Story<span class="completed-tab"><span class="material-symbols-outlined tiny brand">check_circle</span></a>
 
                         <ul class="nav-sub-items">
-                          <template
-                          x-data="{
-                            userId: JSON.parse(window.localStorage.getItem('userProfile')) ? JSON.parse(window.localStorage.getItem('userProfile')).user_id : null,
-                            interviewId: JSON.parse(window.localStorage.getItem('interviewData')) ? JSON.parse(window.localStorage.getItem('interviewData')).interviewID : null,
-                            answeredQuestions: {},
-                            fetchAnsweredQuestions: async function () {
-                              if (!this.userId || !this.interviewId) {
-                                // If userId or interviewId are null, don't fetch questions.
-                                console.warn('Cannot fetch questions: user or interview data is missing.');
-                                return;
-                              }
+<template
+  x-data="{
+    userId: JSON.parse(window.localStorage.getItem('userProfile')) ? JSON.parse(window.localStorage.getItem('userProfile')).user_id : null,
+    interviewId: JSON.parse(window.localStorage.getItem('interviewData')) ? JSON.parse(window.localStorage.getItem('interviewData')).interviewID : null,
+    answeredQuestions: {},
+    fetchAnsweredQuestions: async function () {
+      if (!this.userId || !this.interviewId) {
+        // If userId or interviewId are null, don't fetch questions.
+        console.warn('Cannot fetch questions: user or interview data is missing.');
+        return;
+      }
 
-                              const { data, error } = await supabase
-                                .from('interview_answers')
-                                .select('question_id, answer')
-                                .eq('interview_id', this.interviewId)
-                                .eq('user_id', this.userId);
-                              if (error) {
-                                console.error('Error fetching answered questions:', error);
-                                return;
-                              }
+      const { data, error } = await supabase
+        .from('interview_answers')
+        .select('question_id, answer')
+        .eq('interview_id', this.interviewId)
+        .eq('user_id', this.userId);
+      if (error) {
+        console.error('Error fetching answered questions:', error);
+        return;
+      }
 
-                              // Transform the data into a shape that's easy to check if a question has been answered
-                              this.answeredQuestions = data.reduce((acc, item) => {
-                                acc[item.question_id] = item.answer;
-                                return acc;
-                              }, {});
-                            },
-                          }"
-                          x-init="fetchAnsweredQuestions()"
-                          x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_brand_story') : [])"
-                          :key="question.id"
-                        >
-
+      // Transform the data into a shape that's easy to check if a question has been answered
+      this.answeredQuestions = data.reduce((acc, item) => {
+        acc[item.question_id] = item.answer;
+        return acc;
+      }, {});
+    },
+  }"
+  x-init="fetchAnsweredQuestions()"
+  x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_brand_story') : [])"
+  :key="question.id"
+>
 
 
   <li
@@ -634,18 +633,15 @@
 
 
 
-
-                <textarea
-                  x-show="userId && interviewId"
-                  x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
-                  x-on:input.space="handleTextareaInput(event);"
-                  x-init="setTimeout(() => { fetchAnswerForThisQuestion(question.id); $el.setAttribute('id', 'input-' + question.id); $el.setAttribute('data-question-id', question.id); setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0); }, 0);"
-                  x-text="txt"
-                  x-data="{
-                      userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id,
-                      interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID,
-                      txt: '',
-                      fetchAnswerForThisQuestion: async function (questionId) {
+									<textarea
+								    x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
+								    x-on:input.space="handleTextareaInput(event);"
+								    x-init="fetchAnswerForThisQuestion(question.id); $el.setAttribute('id', 'input-' + question.id); $el.setAttribute('data-question-id', question.id); setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0);"
+								    x-text="txt"
+									    x-data="{
+									        userId: JSON.parse(window.localStorage.getItem('userProfile')).user_id,
+									        interviewId: JSON.parse(window.localStorage.getItem('interviewData')).interviewID,
+									        txt: '',
 									        fetchAnswerForThisQuestion: async function (questionId) {
 									            const { data, error } = await supabase
 									                .from('interview_answers')
