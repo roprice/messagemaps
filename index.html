@@ -165,7 +165,7 @@
 	  <div class="col-md-7 m-0 p-0 vh-100 d-flex align-items-center justify-content-center" style="background:#FF5757">
 	      <h2 class="statement">Find your message instantly, position your product, and make it easy as f*ck to sell</h2>
 	  </div>
-      
+
   </div>
   </div><!-- /CurrentPage.login -->
 
@@ -199,16 +199,16 @@
               <img class="mb-auto" src="files/logo-40x40.png" alt="" width="40" height="40">
             </a>
           </div>
-  
+
 
           <ul class="nav sidebar-nav flex-column mb-auto pt-2 py-5 d-flex justify-content-center">
-            <!-- hide dashboard 
+            <!-- hide dashboard
 			<li class="my-2 text-center dashboard">
               <a class="navlink linkdark p-2 px-2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
                 <span class="material-symbols-outlined medium">dashboard</span>
               </a>
             </li>
-			 -->		
+			 -->
             <li class="my-2 text-center maps">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
                 <span class="material-symbols-outlined medium">map</span>
@@ -264,7 +264,7 @@
           </div>
 
           <ul class="nav sidebar-nav nav-pills flex-column mb-auto pt-2 pb-2">
-			<!-- hide dashboard 
+			<!-- hide dashboard
             <li class="my-2 dashboard">
               <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'; ">
                 <span class="material-symbols-outlined medium me-2">dashboard</span>Dashboard</a>
@@ -294,8 +294,8 @@
                 <span class="material-symbols-outlined medium me-2">add_circle</span>Get a new map</a>
             </li>
           </ul>
-		  
-		  
+
+
         </div>
 
 
@@ -377,12 +377,12 @@
 
 
             <div id="MapView" x-show="Alpine.store('currentScreen').current === 'maps'">
-       
-			  
+
+
                 <div  class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-2 col-md-8 mb-4 ">
 
-             
-  			 <!-- hide close 
+
+  			 <!-- hide close
   			    <div class="welcome-message-control position-relative m-0">
                     <a href="#" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
                     data-bs-toggle="tooltip"
@@ -402,7 +402,7 @@
                     <p class="col-md-11"><b></b> If you ever need anything or just want to chat, reach me
                       <a href="#">Slack</a> or by email at <a href="#">rowan@messagemaps.io</a>.</p>
 
-                      <p class="col-md-12">Your message map has three steps: 
+                      <p class="col-md-12">Your message map has three steps:
 						<ol>
 						  	<li><span>A discovery interview</span>
 							<li><span >A brand strategy brief </span>
@@ -415,7 +415,7 @@
 
                   </p>
 
- 
+
   					  <button id="InterviewMe" class="btn btn-primary btn-lg mt-3 large-button" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Yes, I will tell you everything!!</button>
                   </div><!-- /.welcome-message -->
 
@@ -424,9 +424,9 @@
                </div>
 
 
-				
-		 <div  id="InterviewView" x-show="Alpine.store('currentScreen').current === 'interviews'"   x-transition:enter.duration.500ms>		
-				
+
+		 <div  id="InterviewView" x-show="Alpine.store('currentScreen').current === 'interviews'"   x-transition:enter.duration.500ms>
+
 
             <div class="row interview-form-info">
               <!-- interview-form-card -->
@@ -476,9 +476,9 @@
                         <a href="#" class="nav-link text-small">Brand/Story<span class="completed-tab"><span class="material-symbols-outlined tiny brand">check_circle</span></a>
 
                         <ul class="nav-sub-items">
-<template 
+<template
   x-data="{
-    userId: JSON.parse(window.localStorage.getItem('userProfile')).user_id,  
+    userId: JSON.parse(window.localStorage.getItem('userProfile')).user_id,
     interviewId: JSON.parse(window.localStorage.getItem('interviewData')).interviewID,
     answeredQuestions: {},
     fetchAnsweredQuestions: async function () {
@@ -491,7 +491,7 @@
         console.error('Error fetching answered questions:', error);
         return;
       }
-      
+
       // Transform the data into a shape that's easy to check if a question has been answered
       this.answeredQuestions = data.reduce((acc, item) => {
         acc[item.question_id] = item.answer;
@@ -500,15 +500,15 @@
     },
   }"
   x-init="fetchAnsweredQuestions()"
-  x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_brand_story') : [])" 
+  x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_brand_story') : [])"
   :key="question.id"
 >
-  <li 
-    class="nav-sub-item" 
+  <li
+    class="nav-sub-item"
     :class="{ 'completed': answeredQuestions[question.id] && answeredQuestions[question.id].trim() !== '' }"
     :id="'question-' + question.id"
-  >  
-    <a 
+  >
+    <a
       class="text-secondary nav-sub-item-link"
       x-text="question.question_label.replaceAll('_', ' ')"
       x-init="() => $el.setAttribute('href', '#' + 'input-' + question.question_label)"
@@ -523,9 +523,9 @@
 
 
 
-						
-						
-						
+
+
+
 
                       </ul>
 
@@ -623,15 +623,15 @@
                                   <div class="question-text" x-text="question.question_text"></div>
 
 
-									
 
-									<textarea 
+
+									<textarea
 								    x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
 								    x-on:input.space="handleTextareaInput(event);"
-								    x-init="fetchAnswerForThisQuestion(question.id); $el.setAttribute('id', 'input-' + question.question_label); $el.setAttribute('data-question-id', question.id); setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0);"
+								    x-init="fetchAnswerForThisQuestion(question.id); $el.setAttribute('id', 'input-' + question.id); $el.setAttribute('data-question-id', question.id); setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0);"
 								    x-text="txt"
 									    x-data="{
-									        userId: JSON.parse(window.localStorage.getItem('userProfile')).user_id,  
+									        userId: JSON.parse(window.localStorage.getItem('userProfile')).user_id,
 									        interviewId: JSON.parse(window.localStorage.getItem('interviewData')).interviewID,
 									        txt: '',
 									        fetchAnswerForThisQuestion: async function (questionId) {
@@ -654,36 +654,36 @@
 
 									>
 									</textarea>
-	
 
-							
-						
+
+
+
 
 
                                   <div id="snackbar" class="snackbar">Autosaved</div>
 
                                   <div class="help text-small text-secondary" x-text="question.question_help"></div>
-								  
-								  
-								  
-									<div class="followup-question text-small" x-data="{ text: '' }" 
+
+
+
+									<div class="followup-question text-small" x-data="{ text: '' }"
 									x-init="() => { $el.setAttribute('id', 'followup-to-question-id-' + question.id); }">
-									    <p x-init="() => { $el.setAttribute('id', 'p-followup-to-question-id-' + question.id); }" 
+									    <p x-init="() => { $el.setAttribute('id', 'p-followup-to-question-id-' + question.id); }"
 											x-text="text"></p>
-									    <textarea 
-										x-init="() => { $el.setAttribute('id', 'textarea-followup-to-question-id-' + question.id); }" 
+									    <textarea
+										x-init="() => { $el.setAttribute('id', 'textarea-followup-to-question-id-' + question.id); }"
 										x-show="text.length > 0"></textarea>
 									</div>
 
-									
+
 								</div>
-								  
+
                               </div>
                           </template>
                         </div>
                         <!-- /#YourBrand -->
 
-   
+
 
 
 
@@ -771,10 +771,10 @@
                       </form>
 
 				   </div>
-                      
+
                   </p><!-- card-text -->
 
-                
+
               </div>
               <!-- /.interview-form-card -->
 
@@ -833,17 +833,17 @@
           </div>
 
             <div x-show="Alpine.store('currentScreen').current === 'strategies'">
-              
+
               <h4>Strategy Map</h4>
             </div>
 
             <div x-show="Alpine.store('currentScreen').current === 'assets'">
-              
+
               <h4>Brand Assets for Sales and Marketing</h4>
             </div>
 
             <div x-show="Alpine.store('currentScreen').current === 'accounts'">
-             
+
               <h4>Your Account</h4>
 
               <form id="profileForm">
@@ -858,8 +858,8 @@
 
 
             </div>
-			
-			
+
+
           </div>
 
 

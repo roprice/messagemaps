@@ -897,17 +897,17 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
           // add blur event listener to each textarea
           textarea.addEventListener('blur', function() {
-            const questionLabel = this.id.replace('input-', '');
-            const correspondingLi = document.getElementById('question-' + questionLabel);
+            const questionId = this.id.replace('input-', '');
+            const correspondingLi = document.getElementById('question-' + questionId);
             if (this.value.trim() === '') {
               if (correspondingLi) {
                 correspondingLi.classList.remove('completed');
-                console.log(`Removing 'completed' class from question-${questionLabel}`);
+                console.log(`Removing 'completed' class from question-${questionId}`);
               }
             } else {
               if (correspondingLi) {
                 correspondingLi.classList.add('completed');
-                console.log(`Adding 'completed' class to question-${questionLabel}`);
+                console.log(`Adding 'completed' class to question-${questionId}`);
               }
             }
           });
