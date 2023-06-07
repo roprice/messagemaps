@@ -80,18 +80,25 @@ function setToken(response) {
   } else {
     console.log('Access Token:', response.session.access_token);
     Alpine.store('authenticationStatus').updateAuthStatus(); // update the authentication status
-    console.log('Access Token:', response.session.access_token);
     console.log('Refresh Token:', response.session.refresh_token);
     console.log('Logged in as', response.user.email);
 
+    // Store the token in the local storage
+    localStorage.setItem('supabase.auth.token', response.session.access_token);
   }
 }
 
 
 function setTokenOnReload(user) {
+  if (!user || !user.access_token) {
+    console.log('No access token in the user object');
+    return;
+  }
+  console.log('supabase.auth.token', user.access_token);
   localStorage.setItem('supabase.auth.token', user.access_token);
   Alpine.store('authenticationStatus').updateAuthStatus();
 }
+
 
 
 
