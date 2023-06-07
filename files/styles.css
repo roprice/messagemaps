@@ -103,7 +103,7 @@
 
 
 
-  form#InterviewForm {
+  form#InterviewQuestions {
     width: calc(100% - 200px);
 
     padding: 0;
@@ -136,7 +136,7 @@ button.btn.btn-primary {
 }
 
 
-#TheInterview li.nav-item {
+#InterviewNav li.nav-item {
   width: 100%;
 }
 
@@ -146,7 +146,7 @@ a.navlink {
   font-size: 15px!important;
 }
 
-#light #TheInterview.nav-pills {
+#light #InterviewNav.nav-pills {
   background-color:  hsl(210, 14%, 97%);
   border-radius: 1.5rem;
   width: 200px;
@@ -173,7 +173,7 @@ a.navlink {
     background-color: #f7c326;
 }
 
-#light #TheInterview .nav-pills .nav-link {
+#light #InterviewNav .nav-pills .nav-link {
 
   width: 200px;
 }
@@ -252,7 +252,7 @@ h2.statement {
     padding: 150px;
 }
 
-#TheInterview .nav-sub-items li.completed::after {
+#InterviewNav .nav-sub-items li.completed::after {
 	
 	    content: "\2713";
 	    font-size: 13px;

@@ -11,8 +11,7 @@
  *   - Initial setup, state initialization, event listeners, service workers, etc.
  *   - Handle page reload events and their implications on the app.
  *
- * SECTION 4 - Authentication to Supabase
- *   - Handle the authentication with Supabase
+ * SECTION 4 - TBD
  *
  * SECTION 5 - State Management
  *   - Manage the state of the app, data storage and retrieval, UI updates, etc.
@@ -61,79 +60,6 @@
  */
 
 // curl -L -X POST 'https://wogivjshqopegucducyz.functions.supabase.co/llm' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvZ2l2anNocW9wZWd1Y2R1Y3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NzU4MzQsImV4cCI6MTk5NDA1MTgzNH0.zj-QBJknPolKZ6TZ_t3r7aPXbhVB1bf9mmoNBBif9OM' --data '{"name":"Functions"}'
-
-
-// SECTION 1 - Configuration
-
-
-// Handle the authentication with Supabase
-var SUPABASE_URL = 'https://wogivjshqopegucducyz.supabase.co'
-var SUPABASE_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvZ2l2anNocW9wZWd1Y2R1Y3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NzU4MzQsImV4cCI6MTk5NDA1MTgzNH0.zj-QBJknPolKZ6TZ_t3r7aPXbhVB1bf9mmoNBBif9OM'
-var supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-window.userToken = null
-
-
-function setToken(response) {
-  if (!response || !response.session || !response.session.access_token) {
-    console.log('No access token in the response');
-  } else {
-    console.log('Access Token:', response.session.access_token);
-    Alpine.store('authenticationStatus').updateAuthStatus(); // update the authentication status
-    console.log('Refresh Token:', response.session.refresh_token);
-    console.log('Logged in as', response.user.email);
-
-    // Store the token in the local storage
-    localStorage.setItem('supabase.auth.token', response.session.access_token);
-  }
-}
-
-
-function setTokenOnReload(user) {
-  if (!user || !user.access_token) {
-    console.log('No access token in the user object');
-    return;
-  }
-  console.log('supabase.auth.token', user.access_token);
-  localStorage.setItem('supabase.auth.token', user.access_token);
-  Alpine.store('authenticationStatus').updateAuthStatus();
-}
-
-
-
-
-// SECTION 2 - Imports
-
-
-
-
-// SECTION 3 - Reload/Initialization
-
-// Call this function when the page loads
-
-(async function() {
-
-  const user = supabase.auth.user();
-
-  if (user) {
-
-    // if the user is already authenticated, load their data
-    await getUserData(user.id);
-
-    // load the questions for the interview form
-    await getInterviewQuestions();
-
-    // Set the token from the response
-    setTokenOnReload(user);
-
-  }
-})();
-
-
-
-
-// SECTION 4 - Authentication to Supabase
-
 
 
 
@@ -234,6 +160,49 @@ document.addEventListener('alpine:init', function() {
     }
   });
 });
+
+
+
+// SECTION 1, 2 and 3 - Configuration, Imports, Initialization
+
+
+// Handle the authentication with Supabase
+var SUPABASE_URL = 'https://wogivjshqopegucducyz.supabase.co'
+var SUPABASE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvZ2l2anNocW9wZWd1Y2R1Y3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NzU4MzQsImV4cCI6MTk5NDA1MTgzNH0.zj-QBJknPolKZ6TZ_t3r7aPXbhVB1bf9mmoNBBif9OM'
+var supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+window.userToken = null
+
+
+
+// listen for authentication state changes
+supabase.auth.onAuthStateChange((event, session) => {
+  console.log('Authentication state changed', event);
+  console.log('Current Session', session);
+  // Check if the user is logged in
+  if (session) {
+    Alpine.store('authenticationStatus').current = 'loggedIn';
+    // The token is automatically stored by Supabase client, no need to manually store it
+  } else {
+    Alpine.store('authenticationStatus').current = 'loggedOut';
+    // Token is automatically removed by Supabase client when the session ends, no need to manually remove it
+  }
+});
+
+
+
+// Call this function when the page loads
+(async function() {
+  const session = supabase.auth.session();
+  const user = session ? session.user : null;
+  if (user) {
+    // if the user is already authenticated, load their data
+    await getUserData(user.id);
+    // load the questions for the interview form
+    await getInterviewQuestions();
+  }
+})();
+
 
 
 // update state with user info
@@ -448,7 +417,21 @@ async function getInterviewQuestions() {
 }
 
 
+function formatDateTime(dateString = new Date()) {
 
+	const date = new Date(dateString);
+
+	const options = {
+	year: 'numeric',
+	month: 'numeric',
+	day: 'numeric',
+	hour: 'numeric',
+	minute: 'numeric'
+	};
+	// console.log("date 1: ", date);
+	return date.toLocaleString([], options);
+
+}
 
 
 
@@ -463,9 +446,9 @@ async function createInterview() {
   let userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
   //console.log('userProfile called in createInterview():', userProfile)
   const userId = userProfile.user_id;
-
+  
   const foo = JSON.parse(window.localStorage.getItem('userProfile')).user_id
-
+  
   // First, check if the user already has an interview
   const existingInterviewId = await getInterview(userId);
   if (existingInterviewId !== null) {
@@ -515,11 +498,11 @@ async function createInterview() {
      console.log('Interview updated successfully:', data);
 
 	 window.localStorage.setItem('updatedInterviewName', newInterviewName);
-
+	 
      // Update the Alpine store with the new interview name
      Alpine.store('interviewData').interviewName = newInterviewName;
-
-
+	 
+	 
      // Add highlight class
      document.getElementById('interview-name').classList.add('highlight-welcome');
 
@@ -527,7 +510,7 @@ async function createInterview() {
      setTimeout(() => {
        document.getElementById('interview-name').classList.remove('highlight-welcome');
      }, 2000); // Adjust this value as needed
-
+   
 
      return data; // Return the updated interview data if needed
 
@@ -689,14 +672,14 @@ const autoSave = debounce(
 
 
 	async function getFollowup(questionId, answer, questionText) {
-
+		
 	  try {
 	    // Prepare the data to send in the body of the POST request
 	    const postData = {
 	      questionId: questionId,
 	      answer: answer,
 	      questionText: questionText,
-
+	      
 	    };
 		console.log("data prepared")
 
@@ -727,8 +710,8 @@ const autoSave = debounce(
 		// Now, instead of directly setting the textContent of the followUpContainer,
 		// you're setting the textContent of the nested p tag.
 		followUpParagraph.textContent = followup_question.followupQuestion;
-
-
+		
+		
 		// Get the first (and in your case, only) p tag within the followUpContainer
 		const followUpTextarea = followUpContainer.querySelector('textarea');
 		followUpTextarea.classList.add('show');
@@ -769,7 +752,7 @@ const autoSave = debounce(
 	  const questionId = event.target.dataset.questionId;
 	  const inputValue = textarea.value;
 
-
+	
 
 	  // Check if we have a flag for this questionId, if not initialize it to false
 	  if (followup_questionCalledFlags[questionId] === undefined) {
@@ -779,7 +762,7 @@ const autoSave = debounce(
 	  if (inputValue.length != undefined) {
 	    autoSave(interviewId, questionId, inputValue, userId, textarea);
 	  }
-
+	  
 	  let interviewQuestions = JSON.parse(window.localStorage.getItem('interviewQuestions'));
 	  let currentQuestionId = interviewQuestions.find(q => q.id == questionId);
 	  let questionText = currentQuestionId.question_text;
@@ -804,8 +787,8 @@ function attachEventHandlers(textareaId) {
 
   // Map of textarea IDs to event handlers
   const eventHandlers = {
-    "input-brand_name": handleTextareaBlur,
-    //"competitor_sites": evaluateCompetitors,
+    "input-brand_name": handleTextareaBlur,  
+    //"competitor_sites": evaluateCompetitors, 
     // ... add as many handlers as you need
   };
 
@@ -826,7 +809,7 @@ function handleTextareaBlur(event) {
   if (characterCount >= 2) {
     const interviewDataString = window.localStorage.getItem('interviewData');
     const userProfileString = window.localStorage.getItem('userProfile');
-
+    
     if (interviewDataString && userProfileString) {
       const interviewData = JSON.parse(interviewDataString);
       const userProfile = JSON.parse(userProfileString);
@@ -834,7 +817,7 @@ function handleTextareaBlur(event) {
       const fullName = userProfile.full_name;
 
       console.log("value pass to extractBrandName(): ", event.target.value)
-
+	  
       extractBrandName(event.target.value)
         .then(brandName => {
           console.log('Brand name entered:', brandName);
@@ -874,21 +857,83 @@ async function extractBrandName(text) {
   }
 }
 
-
+  
 
 
 
 
 // SECTION 10 - Event Handlers / Listeners
 
-document.addEventListener('DOMContentLoaded', async (event) => { //
+document.addEventListener('DOMContentLoaded', async (event) => { // 
+  
+  
+  
+  // user signs up
+  var signUpForm = document.querySelector('#signup');
+  signUpForm.onsubmit = signUpSubmitted.bind(signUpForm);
 
+  // user logsin
+  var logInForm = document.querySelector('#signin');
+  logInForm.onsubmit = logInSubmitted.bind(logInForm);
+
+  // user logs out
+  var logoutButtons = document.querySelectorAll('.logout-button');
+  logoutButtons.forEach(function (logoutButton) {
+    logoutButton.onclick = logoutSubmitted.bind(logoutButton);
+  });
+
+
+
+  document.querySelectorAll('textarea').forEach((textarea) => {
+	  
+    textarea.addEventListener('blur', function() {
+		log.console('blurred off text area');
+      if (this.value.trim() === '') {
+        const questionLabel = this.id.replace('input-', '');
+        const correspondingLi = document.getElementById('question-' + questionLabel);
+        if (correspondingLi) {
+          correspondingLi.classList.remove('completed');
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll('textarea').forEach((textarea) => {
+    textarea.addEventListener('input', function() {
+      const questionLabel = this.id.replace('input-', '');
+      const correspondingLi = document.getElementById('question-' + questionLabel);
+    
+      if (this.value.trim() === '') {
+        if (correspondingLi) {
+          correspondingLi.classList.remove('completed');
+        }
+      } else {
+        if (correspondingLi && !correspondingLi.classList.contains('completed')) {
+          correspondingLi.classList.add('completed');
+        }
+      }
+    });
+  });
+
+
+
+  function expandTextarea(textarea) {
+      // Reset textarea height if text was deleted
+      textarea.style.height = 'auto';
+
+      // Get and set the scroll height to the textarea height
+      // This will make the textarea wrap all the text it contains
+      textarea.style.height = `${textarea.scrollHeight}px`;
+  }
+  
+  //## MUTATION OBSERVER
   // Select the node that will be observed for mutations
-  var targetNode = document.getElementById('InterviewForm');
+  var targetNode = document.getElementById('Interview');
 
   // Options for the observer (which mutations to observe)
   var config = { attributes: false, childList: true, subtree: true };
 
+  // Callback function to execute when mutations are observed
   // Callback function to execute when mutations are observed
   var callback = function(mutationsList, observer) {
     for(let mutation of mutationsList) {
@@ -923,63 +968,12 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
     }
   };
 
-
-
   // Create an observer instance linked to the callback function
   var observer = new MutationObserver(callback);
 
   // Start observing the target node for configured mutations
   observer.observe(targetNode, config);
-
-
-
-  // user signs up
-  var signUpForm = document.querySelector('#signup');
-  signUpForm.onsubmit = signUpSubmitted.bind(signUpForm);
-
-  // user logsin
-  var logInForm = document.querySelector('#signin');
-  logInForm.onsubmit = logInSubmitted.bind(logInForm);
-
-  // user logs out
-  var logoutButtons = document.querySelectorAll('.logout-button');
-  logoutButtons.forEach(function (logoutButton) {
-    logoutButton.onclick = logoutSubmitted.bind(logoutButton);
-  });
-
-
-
-
-
-  document.querySelectorAll('textarea').forEach((textarea) => {
-    textarea.addEventListener('input', function() {
-      const questionLabel = this.id.replace('input-', '');
-      const correspondingLi = document.getElementById('question-' + questionLabel);
-
-      if (this.value.trim() === '') {
-        if (correspondingLi) {
-          correspondingLi.classList.remove('completed');
-        }
-      } else {
-        if (correspondingLi && !correspondingLi.classList.contains('completed')) {
-          correspondingLi.classList.add('completed');
-        }
-      }
-    });
-  });
-
-
-
-  function expandTextarea(textarea) {
-      // Reset textarea height if text was deleted
-      textarea.style.height = 'auto';
-
-      // Get and set the scroll height to the textarea height
-      // This will make the textarea wrap all the text it contains
-      textarea.style.height = `${textarea.scrollHeight}px`;
-  }
-
-
+  //## /MUSTATION OBSERVER
 
 
   // user edits and blurs (leaves) brand name textarea
