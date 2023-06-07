@@ -634,15 +634,18 @@
 
 
 
-									<textarea
-								    x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
-								    x-on:input.space="handleTextareaInput(event);"
-								    x-init="fetchAnswerForThisQuestion(question.id); $el.setAttribute('id', 'input-' + question.id); $el.setAttribute('data-question-id', question.id); setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0);"
-								    x-text="txt"
-									    x-data="{
-									        userId: JSON.parse(window.localStorage.getItem('userProfile')).user_id,
-									        interviewId: JSON.parse(window.localStorage.getItem('interviewData')).interviewID,
-									        txt: '',
+
+                <textarea
+                  x-show="userId && interviewId"
+                  x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
+                  x-on:input.space="handleTextareaInput(event);"
+                  x-init="setTimeout(() => { fetchAnswerForThisQuestion(question.id); $el.setAttribute('id', 'input-' + question.id); $el.setAttribute('data-question-id', question.id); setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0); }, 0);"
+                  x-text="txt"
+                  x-data="{
+                      userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id,
+                      interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID,
+                      txt: '',
+                      fetchAnswerForThisQuestion: async function (questionId) {
 									        fetchAnswerForThisQuestion: async function (questionId) {
 									            const { data, error } = await supabase
 									                .from('interview_answers')
