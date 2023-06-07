@@ -206,7 +206,7 @@ document.addEventListener('alpine:init', function() {
     items: ['signup', 'login']
   });
   Alpine.store('currentScreen', {
-    current: localStorage.getItem('currentScreen') || 'dashboard',
+    current: localStorage.getItem('currentScreen') || 'maps',
     items: ['account','dashboard','maps','interviews','strategies','assets','newMap'],
   });
   Alpine.store('onboarding', {
@@ -298,7 +298,17 @@ const signUpSubmitted = async (event) => {
         }
 
 
-        console.log('userProfile stored to local storage:', userProfile);
+        await getInterviewQuestions();
+
+        const interviewId = await getInterview(userId);
+        if (interview !== null && interview !== undefined) {
+          console.log('No interview found for user. Redirecting to onboarding...');
+          Alpine.store('currentScreen').current = 'maps';
+          Alpine.store('onboarding').current = 'welcome';
+      } else {
+        // Store the interviewId in localStorage immediately after login
+        window.localStorage.setItem('interviewData', JSON.stringify(interview));
+      }
       }
     }
 
@@ -355,7 +365,7 @@ const logInSubmitted = async (event) => {
       const interviewId = await getInterview(userId);
       if (interview !== null && interview !== undefined) {
         console.log('No interview found for user. Redirecting to onboarding...');
-        Alpine.store('currentScreen').current = 'dashboard';
+        Alpine.store('currentScreen').current = 'maps';
         Alpine.store('onboarding').current = 'welcome';
     } else {
       // Store the interviewId in localStorage immediately after login
@@ -484,8 +494,9 @@ async function createInterview() {
   let userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
   //console.log('userProfile called in createInterview():', userProfile)
   const userId = userProfile.user_id;
-  //console.log('userId called in createInterview():', userId);
-
+  
+  const foo = JSON.parse(window.localStorage.getItem('userProfile')).user_id
+  
   // First, check if the user already has an interview
   const existingInterviewId = await getInterview(userId);
   if (existingInterviewId !== null) {
@@ -796,7 +807,7 @@ const autoSave = debounce(
 	    followup_questionCalledFlags[questionId] = false;
 	  }
 
-	  if (inputValue.length >= 5) {
+	  if (inputValue.length != undefined) {
 	    autoSave(interviewId, questionId, inputValue, userId, textarea);
 	  }
 	  
@@ -894,7 +905,7 @@ async function extractBrandName(text) {
   }
 }
 
-
+  
 
 
 
@@ -919,6 +930,17 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
+  document.querySelectorAll('textarea').forEach((textarea) => {
+    textarea.addEventListener('blur', function() {
+      if (this.value.trim() === '') {
+        const questionLabel = this.id.replace('input-', '');
+        const correspondingLi = document.getElementById('question-' + questionLabel);
+        if (correspondingLi) {
+          correspondingLi.classList.remove('completed');
+        }
+      }
+    });
+  });
 
 
 

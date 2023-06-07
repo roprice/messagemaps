@@ -247,13 +247,22 @@ a.previous.text-secondary.text-small {
 
 
 
+h2.statement {
+    color: white;
+    padding: 150px;
+}
 
-
-
+#TheInterview .nav-sub-items li.completed::after {
+	
+	    content: "\2713";
+	    font-size: 13px;
+	    margin-left: -5px;
+	
+}
 
 
 span.material-symbols-outlined {
-font-size: 20px;
+font-size: 24px;
 }
 
 span.material-symbols-outlined.tiny {
@@ -539,6 +548,19 @@ a.disabled.navlink.linkdark {
 }
 
 
+.large-button {
+  font-size: 20px; /* Increase the font size to make the text larger */
+  padding: 25px 40px; /* Increase the padding to make the button larger */
+}
+
+
+button#InterviewMe {
+    padding: 20px 60px!important;
+    border-radius: 60px;
+}
+
+
+
 textarea {
 width: 94%;
   border-radius: 6px;
@@ -745,6 +767,63 @@ html, body {
   .sidebar-nav li.disabled:hover {
       background:transparent!important
   }
+   .sidebar-nav .disabled a.navlink.linkdark.p-2.px-3.my-2.d-flex.align-items-center {
+      color: #ccc;
+  }
+  
+  /* Define the background color for the autosave indicator */
+ .autosaveIndicator {
+   background-color: rgb(193, 211, 193);
+ }
+
+ /* Snackbar styles */
+ .snackbar {
+   visibility: hidden;
+   min-width: 250px;
+   margin-left: -125px;
+   background-color: #333;
+   color: #fff;
+   text-align: center;
+   border-radius: 2px;
+   padding: 16px;
+   position: fixed;
+   z-index: 1;
+   left: 50%;
+   bottom: 30px;
+   font-size: 17px;
+ }
+
+ .snackbar.show {
+   visibility: visible;
+   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+   animation: fadein 0.5s, fadeout 0.5s 2.5s;
+ }
+
+ @-webkit-keyframes fadein {
+   from {bottom: 0; opacity: 0;}
+   to {bottom: 30px; opacity: 1;}
+ }
+
+ @keyframes fadein {
+   from {bottom: 0; opacity: 0;}
+   to {bottom: 30px; opacity: 1;}
+ }
+
+ @-webkit-keyframes fadeout {
+   from {bottom: 30px; opacity: 1;}
+   to {bottom: 0; opacity: 0;}
+ }
+
+ @keyframes fadeout {
+   from {bottom: 30px; opacity: 1;}
+   to {bottom: 0; opacity: 0;}
+ }
+  
+  
+  
+  
+  
+  
 
   .dashboard li.dashboard,
   .maps li.maps,

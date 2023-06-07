@@ -25,12 +25,8 @@
   <link href="files/styles.css" rel="stylesheet">
 
 
-
-
-
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
 
 
    <!-- Supabase.js -->
@@ -45,6 +41,8 @@
 </head>
 
 <body id="light" x-data x-bind:class="bodyClasses()">
+
+
 
 <!-- Logged Out States -->
 <div id="Logged_Out_States" x-cloak  x-show="Alpine.store('authenticationStatus').current === 'loggedOut'" x-transition:enter.duration.500ms>
@@ -62,7 +60,7 @@
 
 
           <div class="logo my-3 mb-4 middle text-center">
-            <a href="#" class="mx-auto my-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
+            <a href="#" class="mx-auto mb-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
               <img class="mb-2" src="files/logo-80x80.png" alt="" width="80" height="80">
             </a>
             <div class="brand-name fw-bold h3">MESSAGE <span class="">MAPS</span></div>
@@ -164,20 +162,12 @@
 
       </div>
 
-      <div class="col-md-7  m-0 p-0 vh-100  d-flex align-items-end justify-content-end"  style="background:#FF575750 str">
-
-      </div>
+	  <div class="col-md-7 m-0 p-0 vh-100 d-flex align-items-center justify-content-center" style="background:#FF5757">
+	      <h2 class="statement">Find your message, change  instantly, and make it easy as f*ck to sell</h2>
+	  </div>
+      
   </div>
   </div><!-- /CurrentPage.login -->
-
-
-    <!-- sign up -->
-    <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'signup'" x-transition>
-      <div class="row no-gutters h-100 align-items-center home-inner">
-        Terms and Conditions
-      </div>
-    </div>
-    <!-- /sign up -->
 
 </div>
 <!--  /#Logged_Out_States -->
@@ -195,10 +185,7 @@
       x-show="Alpine.store('sidebarStatus').current === 'collapsed'"
       x-transition:enter.duration.100ms>
 
-
-
         <div class="sidenav-wrapper  py-0 px-2 sticky-element">
-
 
           <div class="position-relative m-0 sidebar-toggle-icon">
             <a href="#" class="text-secondary expandSidebar text-small navlink linkdark p-0 position-absolute top-0 end-0 border-small d-flex align-items-center" x-on:click.prevent="Alpine.store('sidebarStatus').current = 'expanded'">
@@ -206,18 +193,22 @@
             </a>
           </div>
 
-          <div class="logo mb-3 pt-2 middle text-center">
-            <a href="#" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
+
+          <div class="logo mb-3  ms-3 pt-4 middle ">
+            <a href="#" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
               <img class="mb-auto" src="files/logo-40x40.png" alt="" width="40" height="40">
             </a>
           </div>
+  
 
           <ul class="nav sidebar-nav flex-column mb-auto pt-2 py-5 d-flex justify-content-center">
-            <li class="my-2 text-center dashboard">
+            <!-- hide dashboard 
+			<li class="my-2 text-center dashboard">
               <a class="navlink linkdark p-2 px-2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
                 <span class="material-symbols-outlined medium">dashboard</span>
               </a>
             </li>
+			 -->		
             <li class="my-2 text-center maps">
               <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
                 <span class="material-symbols-outlined medium">map</span>
@@ -266,18 +257,19 @@
             </a>
         </div>
 
-          <div class="logo mb-3 pt-2 middle text-center">
-            <a href="#" class="mx-auto my-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'">
+          <div class="logo mb-3 ms-3 pt-4 middle">
+            <a href="#" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
               <img class="mb-auto" src="files/logo-40x40.png" alt="" width="40" height="40">
             </a>
           </div>
 
           <ul class="nav sidebar-nav nav-pills flex-column mb-auto pt-2 pb-2">
-
+			<!-- hide dashboard 
             <li class="my-2 dashboard">
               <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'dashboard'; ">
                 <span class="material-symbols-outlined medium me-2">dashboard</span>Dashboard</a>
             </li>
+			 -->
             <li class="my-2 maps" >
               <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'; ">
                 <span class="material-symbols-outlined medium me-2">map</span>
@@ -298,10 +290,12 @@
             </li>
             <div class="dropdown-divider"></div>
             <li class="my-2 newMap disabled">
-              <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'; ">
+              <a class="navlink disabled linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'; ">
                 <span class="material-symbols-outlined medium me-2">add_circle</span>Get a new map</a>
             </li>
           </ul>
+		  
+		  
         </div>
 
 
@@ -378,124 +372,66 @@
 
 
 
-        <!-- main section with views of various states-->
-        <div class="view-wrapper  my-5 mx-5">
+        <!-- #MainViews - main section with views of various states-->
+        <div id="MainViews" class="view-wrapper  my-5 mx-5">
 
-          <div class="dashboard-view" x-show="Alpine.store('currentScreen').current === 'dashboard'"
-          x-transition.delay.50ms
-          x-transition:enter.duration.00ms>
-            <!-- Dashboard screen markup -->
 
-            <div  x-show="Alpine.store('onboarding').current === 'welcome'" class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-2  ">
+            <div id="MapView" x-show="Alpine.store('currentScreen').current === 'maps'">
+       
+			  
+                <div  class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-2 col-md-8 mb-4 ">
 
-              <div class="welcome-message-control position-relative m-0">
-                <a href="#" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
-                data-bs-toggle="tooltip"
-                data-bs-title="To remove this welcome message forever, click the X" data-bs-placement="top"
-                data-bs-trigger="hover"
-                x-on:click.prevent="Alpine.store('onboarding').current = 'hiddenwelcome'"
+             
+  			 <!-- hide close 
+  			    <div class="welcome-message-control position-relative m-0">
+                    <a href="#" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
+                    data-bs-toggle="tooltip"
+                    data-bs-title="To remove this welcome message forever, click the X" data-bs-placement="top"
+                    data-bs-trigger="hover"
+                    x-on:click.prevent="Alpine.store('onboarding').current = 'hiddenwelcome'"
 
-                >close
-                  <span class="material-symbols-outlined p-0 small ">close</span>
-                </a>
-              </div>
+                    >close
+                      <span class="material-symbols-outlined p-0 small ">close</span>
+                    </a>
+                  </div>
+  			-->
 
-              <div class="welcome-message container-fluid py-5">
-                <h3 class="display fw-bold mb-4">Welcome <span class="user-firstname" x-text="$store.userData.firstName"></span></h3>
+                  <div class="welcome-message container-fluid py-5">
+                    <h3 class="display fw-bold mb-4">Welcome<span class="user-firstname" x-text="$store.userData.firstName"></span>!</h3>
 
-                <p class="col-md-12"><b>First, I'm  glad you're here.</b> If you ever need anything or just want to chat, reach me
-                  <a href="#">Slack</a> or by email at <a href="#">rowan@messagemaps.io</a>.</p>
+                    <p class="col-md-11"><b></b> If you ever need anything or just want to chat, reach me
+                      <a href="#">Slack</a> or by email at <a href="#">rowan@messagemaps.io</a>.</p>
 
-                  <p class="col-md-12"><b>Second, a brief overview</b>: each message map you creat e consist of three parts: <ol><li ><span >A discovery interview (or multiple interviews)</span></span><li><span >A brand strategy brief <li><span >Brand messaging assets</span></ol></p>
+                      <p class="col-md-12">Your message map has three steps: 
+						<ol>
+						  	<li><span>A discovery interview</span>
+							<li><span >A brand strategy brief </span>
+							<li><span >A sales deck</span>
+						</ol>
+					</p>
 
                   <p  class="col-md-12">
-                    The first step is your <a href=# x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews';">discovery interview</a> - ready to dive in?
+                   I'll review and refine your work after each step. But first, your next move is finishing your <a href=# x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews';">discovery interview</a> - ready?
 
                   </p>
 
-                <!-- clicking 'Interview me' will:
-                  a. create a new interview, if one doesn't already exists for  user
-                  b. not create an interview, if an interview already exists for  user
-                  c. take user to the interview screen, whether or not an interview was created
-                -->
-                <button id="InterviewMe" class="btn btn-primary btn-lg mt-3" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Interview me</button>
-              </div><!-- /.welcome-message -->
+ 
+  					  <button id="InterviewMe" class="btn btn-primary btn-lg mt-3 large-button" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Yes, I will tell you everything!!</button>
+                  </div><!-- /.welcome-message -->
 
-            </div><!-- /#welcome -->
+                </div><!-- /#welcome -->
 
-            <div x-show="Alpine.store('onboarding').current === 'hiddenwelcome'"
-            x-transition:enter.delay.200ms
-            x-transition:enter.duration.500ms>
-
-              <div   class="card shadow my-5 p-3 col-md-4">
-                <div class="card-body">
-                  <h5 class="card-title">Time to get started</h5>
-                  <p class="card-text">Dashboard items will show up here, but there's not much to see. Get started on improving your messaging by completing an interview</p>
-                  <a href="#" class="btn btn-primary" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">Let's Go</a>
-                </div>
-              </div>
-
-              <div   class="card shadow my-5 p-3 col-md-4">
-                <div class="card-body">
-                  <h5 class="card-title">Help and Support</h5>
-                  <p class="card-text">
-                    <p>We're <a href=#>here on Slack at all<a > times.</p>
-                    <p>You can also use our email-based support system.</p>
-                    <p>See <a>our FAQs</a> and <a>product roadmap</a></p>
-                  </p>
-
-                </div>
-              </div>
-
-            </div><!-- /#hiddenwelcome -->
-          </div><!-- /.dashboard-view -->
-
-          <div class="interviews-view" x-show="Alpine.store('currentScreen').current === 'interviews'"
-          x-transition.delay.50ms
-          x-transition:enter.duration.600ms>
-            <!-- Interview screen markup -->
+               </div>
 
 
-
-
-            <!-- welcome message -->
-            <!--
-            <div  x-show="Alpine.store('onboarding').current === 'welcome'" class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-2   col-md-7 ">
-
-
-              <div class="welcome-message-control position-relative m-0 ">
-                <a href="#" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
-                data-bs-toggle="tooltip"
-                data-bs-title="To remove this welcome message forever, click the X" data-bs-placement="top"
-                data-bs-trigger="hover"
-                x-on:click.prevent="Alpine.store('onboarding').current = 'hiddenwelcome'"
-
-                >close
-                  <span class="material-symbols-outlined p-0 small ">close</span>
-                </a>
-              </div>
-
-              <div class="intervew-welcome-message container-fluid py-5  ">
-
-                <h3 class="display fw-bold mb-4">The more you write the better.</h3>
-
-                <p class="col-md-12"><b>You're about to do your first interview.</b> Interviews probe your brand, your competitors, your customers, your value propositions, and more. Your answers  help create a brand strategy brief and actual messaging assets.</p>
-                <p>Later you'll be able to add additional interviews, upload audio transcripts, and add market research.</p>
-                But first, we need to hear from you, in your own words. The more you write the better the results. So, let's get started.</p>
-
-              </div>
-            </div>
-            -->
-            <!-- /interviw-welcome-message -->
-
+				
+		 <div  id="InterviewView" x-show="Alpine.store('currentScreen').current === 'interviews'"   x-transition:enter.duration.500ms>		
+				
 
             <div class="row interview-form-info">
               <!-- interview-form-card -->
               <div   class="interview-form-card card shadow my-4 p-4 col-md-7">
-
-
-
-                <div class="card-body the-interview-card">
+				  <div class="card-body the-interview-card">
 
 
                   <p class="card-text"  id="InterviewTabs">
@@ -540,15 +476,57 @@
                         <a href="#" class="nav-link text-small">Brand/Story<span class="completed-tab"><span class="material-symbols-outlined tiny brand">check_circle</span></a>
 
                         <ul class="nav-sub-items">
-                          <template x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_brand_story') : [])" :key="question.id">
-                            <li class="nav-sub-item">
-                              <a class="text-secondary nav-sub-item-link"
-                              x-text="question.question_label.replaceAll('_', ' ')"
-                              x-init="() => $el.setAttribute('href', '#' + 'input-' + question.question_label)"
-                              @click.prevent="scrollToElementWithOffset('input-' + question.question_label, -127, question.question_label)"
-                              :class="{ 'active': activeQuestion === question.question_label }"></a>
-                            </li>
-                        </template>
+<template 
+  x-data="{
+    userId: JSON.parse(window.localStorage.getItem('userProfile')).user_id,  
+    interviewId: JSON.parse(window.localStorage.getItem('interviewData')).interviewID,
+    answeredQuestions: {},
+    fetchAnsweredQuestions: async function () {
+      const { data, error } = await supabase
+        .from('interview_answers')
+        .select('question_id, answer')
+        .eq('interview_id', this.interviewId)
+        .eq('user_id', this.userId);
+      if (error) {
+        console.error('Error fetching answered questions:', error);
+        return;
+      }
+      
+      // Transform the data into a shape that's easy to check if a question has been answered
+      this.answeredQuestions = data.reduce((acc, item) => {
+        acc[item.question_id] = item.answer;
+        return acc;
+      }, {});
+    },
+  }"
+  x-init="fetchAnsweredQuestions()"
+  x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_brand_story') : [])" 
+  :key="question.id"
+>
+  <li 
+    class="nav-sub-item" 
+    :class="{ 'completed': answeredQuestions[question.id] && answeredQuestions[question.id].trim() !== '' }"
+    :id="'question-' + question.id"
+  >  
+    <a 
+      class="text-secondary nav-sub-item-link"
+      x-text="question.question_label.replaceAll('_', ' ')"
+      x-init="() => $el.setAttribute('href', '#' + 'input-' + question.question_label)"
+      @click.prevent="scrollToElementWithOffset('input-' + question.question_label, -127, question.question_label)"
+      :class="{ 'active': activeQuestion === question.question_label }"
+    ></a>
+  </li>
+</template>
+
+
+
+
+
+
+						
+						
+						
+
                       </ul>
 
                       </li>
@@ -633,7 +611,7 @@
                       </li>
                     </ul>
 
-                      <form class="col-md-10" id="InterviewForm">
+                    <form class="col-md-10" id="InterviewForm">
 
 
 
@@ -647,39 +625,35 @@
 
 									
 
-									<textarea 
-									    x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
-										
-									    x-on:input.space="handleTextareaInput(event);"
-									    x-init="() => {
-									        $el.setAttribute('id', 'input-' + question.question_label);
-									        $el.setAttribute('data-question-id', question.id);
-
-									        // Retrieve interviewId and userId from local storage
-									        const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
-									        const interviewId = interviewData.interviewID;
-
-									        const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-									        const userId = userProfile.user_id;
-
-									        setTimeout(() => {
-									            fetchAnswers(interviewId, userId).then(answers => {
-									                const answer = answers.find(answer => answer.question_id === question.id);
-									                if (answer) {
-									                    console.log('Before setting value: scrollHeight = ', $el.scrollHeight, ', clientHeight = ', $el.clientHeight);
-
-									                    $el.value = answer.answer;
-									                    this.txt = answer.answer; // Sync the model with fetched answer
-					
-									                }
-									            });
-
-									            // Attach the appropriate event handler based on the textarea's ID
-									            attachEventHandlers($el.getAttribute('id'));
-									        }, 0);
-									    }"
-									>
-									</textarea>
+	<textarea 
+	    x-data="{
+	        userId: JSON.parse(window.localStorage.getItem('userProfile')).user_id,  
+	        interviewId: JSON.parse(window.localStorage.getItem('interviewData')).interviewID,
+	        txt: '',
+	        fetchAnswerForThisQuestion: async function (questionId) {
+	            const { data, error } = await supabase
+	                .from('interview_answers')
+	                .select('answer')
+	                .eq('interview_id', this.interviewId)
+	                .eq('user_id', this.userId)
+	                .eq('question_id', questionId);
+	            if (error) {
+	                console.error('Error fetching answer for question:', error);
+	                return;
+	            }
+	            // If there's an answer for this question, set it as the value of the textarea
+	            if (data[0]) {
+	                this.txt = data[0].answer;
+	            }
+	        },
+	    }"
+	    x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
+	    x-on:input.space="handleTextareaInput(event);"
+	    x-init="fetchAnswerForThisQuestion(question.id); $el.setAttribute('id', 'input-' + question.question_label); $el.setAttribute('data-question-id', question.id); setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0);"
+	    x-text="txt"
+	>
+	</textarea>
+	
 
 							
 						
@@ -708,57 +682,7 @@
                         </div>
                         <!-- /#YourBrand -->
 
-                        <style>
-                          /* Define the background color for the autosave indicator */
-                         .autosaveIndicator {
-                           background-color: rgb(193, 211, 193);
-                         }
-
-                         /* Snackbar styles */
-                         .snackbar {
-                           visibility: hidden;
-                           min-width: 250px;
-                           margin-left: -125px;
-                           background-color: #333;
-                           color: #fff;
-                           text-align: center;
-                           border-radius: 2px;
-                           padding: 16px;
-                           position: fixed;
-                           z-index: 1;
-                           left: 50%;
-                           bottom: 30px;
-                           font-size: 17px;
-                         }
-
-                         .snackbar.show {
-                           visibility: visible;
-                           -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-                           animation: fadein 0.5s, fadeout 0.5s 2.5s;
-                         }
-
-                         @-webkit-keyframes fadein {
-                           from {bottom: 0; opacity: 0;}
-                           to {bottom: 30px; opacity: 1;}
-                         }
-
-                         @keyframes fadein {
-                           from {bottom: 0; opacity: 0;}
-                           to {bottom: 30px; opacity: 1;}
-                         }
-
-                         @-webkit-keyframes fadeout {
-                           from {bottom: 30px; opacity: 1;}
-                           to {bottom: 0; opacity: 0;}
-                         }
-
-                         @keyframes fadeout {
-                           from {bottom: 30px; opacity: 1;}
-                           to {bottom: 0; opacity: 0;}
-                         }
-
-
-                         </style>
+   
 
 
 
@@ -975,10 +899,11 @@
 
                       </form>
 
-                      </div><!-- /#TheInterview -->
+				   </div>
+                      
                   </p><!-- card-text -->
 
-                </div>
+                
               </div>
               <!-- /.interview-form-card -->
 
@@ -998,8 +923,6 @@
                         </div>
 
                       <div class="text-small text-secondary created">Updated:
-
-
 
 
                         <span x-text="formatDateTime($store.interviewData.createdDate)"></span>
@@ -1023,15 +946,7 @@
                         </script>
 
 
-
-
                       </div>
-
-
-
-
-
-
 
 
                       <button name="submit" type="submit" class="btn btn-primary my-2 disabled w-150">Review</button>
@@ -1046,71 +961,19 @@
 
           </div>
 
-            <div x-show="Alpine.store('currentScreen').current === 'maps'">
-              <!-- Message Map screen markup -->
-              <h4>Your Message Map: "<span class="user-firstname" x-text="$store.userData.firstName"></span>'s First Map"</h4>
-              <b>"Extracted quote"</b>
-              <p>You're building a map for the [acme] brand belonging to [company name]. This is your [first] message map.</p>
-              <p>Other people who can see your map are [team member 1] and [team member 2]</p>
-              <p>Status: your interview isn't complete yet. You need to <a href=#>complete the interview<a > before you can build your map.</p>
-
-
-
-
-
-
-                <div class="row container-fluid">
-                  <div class="card shadow m-3 ms-0 col-md-4 p-3  col">
-                    <div class="card-body">
-                      <h5 class="card-title">Interview</h5>
-                      <p class="card-text">Your [first] interview is only 45% complete</p>
-                      <a href="#" class="btn my-3 btn-primary  work-on-interview" >Finish It</a>
-                      <p class="card-text">You can also use an interview from a team member - instead of or in addition to your own</p>
-                      <p><a href="#">Add recorded Zoom interviews</a></p>
-                    </div>
-                  </div>
-
-                  <div class="card shadow m-3 p-3 col-md-3 col">
-                    <div class="card-body">
-                      <h5 class="card-title">Brand Strategy</h5>
-                      <p class="card-text">Complete your interview to unveil your brand strategy</p>
-                      <p>
-
-
-                        <a href="#" class="btn btn-seconday work-on-interview" >Finish It</a>
-
-
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="card shadow m-3 me-0  p-3 col-md-3 col">
-                    <div class="card-body">
-                      <h5 class="card-title">Brand Assets</h5>
-                      <p class="card-text">no marketing assets :(</p>
-                      <p class="card-text">no sales assets:(</p>
-                      <p><a href="#" class="" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; window.history.pushState(null, null, '/interview')">Finish your interview</a> and brand strategy to get started making assets</p>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
             <div x-show="Alpine.store('currentScreen').current === 'strategies'">
-              <!-- Message Map screen markup -->
+              
               <h4>Strategy Map</h4>
             </div>
 
             <div x-show="Alpine.store('currentScreen').current === 'assets'">
-              <!-- Interview screen markup -->
+              
               <h4>Brand Assets for Sales and Marketing</h4>
             </div>
 
             <div x-show="Alpine.store('currentScreen').current === 'accounts'">
-              <!-- Dashboard screen markup -->
+             
               <h4>Your Account</h4>
-
-
 
               <form id="profileForm">
                 <label for="gegfirstName">First Name:</label>
@@ -1119,20 +982,18 @@
                 <label for="getlastName">Last Name:</label>
                 <input type="text" id="getlastName" name="lastName" optional>
 
-                <label for="getrole">Role:</label>
-                <input type="text" id="getrole" name="role" optional>
-
                 <button type="submit">Update Profile</button>
               </form>
 
 
-
-
             </div>
+			
+			
           </div>
 
 
-        </div><!-- /.screen-wrapper -->
+        </div>
+		<!-- #MainViews - main section with views of various states -->
 
 
       </div><!-- /#Main -->

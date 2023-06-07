@@ -59,21 +59,26 @@ app.logger.info('Flask app logging is set up.')
 
 
 
+
+
+
+
 # Section 3 - extract brand name
 # Init OpenAI for "/api/extract" endpoint
-openai = OpenAI(temperature=0.2, max_tokens=300)
+openai_extractor = OpenAI(temperature=0.1, max_tokens=300)
 
 # Define the prompt template
 prompt_template_extractname = PromptTemplate(
     input_variables=["text"],
-    template="To kick off an interview, the interviewee has been asked 'What's the name of the brand I'm interviewing you about?' This is their response: '{text}'.  Now - please extract the brand name out of this response and tell me what it is. Don't say anything but the brand name. Verbose mode off."
+    template="""To kick off an interview, the interviewee has been asked 'What's the name of the brand I'm interviewing you about?' This is their response: '{text}'.  Now - please extract the brand name out of this response and tell me what it is. Don't say anything but the brand name. Verbose mode off."""  
 )
 
 @app.route("/api/extract", methods=['POST'])
 def predict():
     input_text = request.json.get("text")
-    extract_prompt = prompt_template_extractname.format(text=input_text)   
-    output = openai(extract_prompt)
+    extraction_prompt = prompt_template_extractname.format(text=input_text)  
+    print (f"Final Prompt: {extraction_prompt}")  
+    output = openai_extractor(extraction_prompt)
     output = output.strip()
     return jsonify({"brandName": output})
 
@@ -81,8 +86,11 @@ def predict():
 
 
 
-# Section 4 - provide followup question
-chat = ChatOpenAI(temperature=0)
+
+
+
+# Section 4 - provide initial followup question
+chat = ChatOpenAI(temperature=0.2)
 
 #prompt_template_followup = PromptTemplate(
  #   input_variables=["original_question", "answer"],
@@ -119,6 +127,54 @@ def followup():
     followup_question = response.content
 
     return jsonify({"followupQuestion": followup_question, "questionId": question_id})
+
+
+
+
+
+# Section 5 - provide  followup question 2
+
+#@app.route("/api/followup_answer", methods=['POST'])
+#def followup_answer():
+  #  question_id = request.json.get("questionId")
+  #  original_question = request.json.get("question")
+  #  answer = request.json.get("answer")
+  #  followup_question1 = request.json.get("followupQuestion1")
+  #  followup_answer1 = request.json.get("followupQuestion1")
+
+    # Define the system message
+   # system_message = SystemMessage(content='''Provide a single question, as in an iterative 5 Why interview''')
+    
+    # Define the human message
+ #   human_message = HumanMessage(content=f'''
+ #   The original question was: "{original_question}"
+ #   The response to that question was: "{answer}"
+ #   The follow-up question was: "{followup_question_1}"
+ #   The response to that question was "{followup_answer_1}"
+ #   Based on this, please generate a next follow-up question that starts with "Why" and asks about something specific from the response.
+ #   Never use the word "you" more than once in a question.
+  #  Single-clause questions only.
+  #  ''')
+
+    # Combine both messages
+  #  messages = [system_message, human_message]
+
+    # Generate the response using the model
+   # response = chat(messages)
+    
+  #  next_followup_question = response.content
+
+  # return jsonify({"followupQuestion2": next_followup_question, "questionId": question_id})
+
+
+
+
+
+
+
+
+
+
 
 
 
