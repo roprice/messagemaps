@@ -456,9 +456,9 @@ async function createInterview() {
   let userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
   //console.log('userProfile called in createInterview():', userProfile)
   const userId = userProfile.user_id;
-  
+
   const foo = JSON.parse(window.localStorage.getItem('userProfile')).user_id
-  
+
   // First, check if the user already has an interview
   const existingInterviewId = await getInterview(userId);
   if (existingInterviewId !== null) {
@@ -508,11 +508,11 @@ async function createInterview() {
      console.log('Interview updated successfully:', data);
 
 	 window.localStorage.setItem('updatedInterviewName', newInterviewName);
-	 
+
      // Update the Alpine store with the new interview name
      Alpine.store('interviewData').interviewName = newInterviewName;
-	 
-	 
+
+
      // Add highlight class
      document.getElementById('interview-name').classList.add('highlight-welcome');
 
@@ -520,7 +520,7 @@ async function createInterview() {
      setTimeout(() => {
        document.getElementById('interview-name').classList.remove('highlight-welcome');
      }, 2000); // Adjust this value as needed
-   
+
 
      return data; // Return the updated interview data if needed
 
@@ -682,14 +682,14 @@ const autoSave = debounce(
 
 
 	async function getFollowup(questionId, answer, questionText) {
-		
+
 	  try {
 	    // Prepare the data to send in the body of the POST request
 	    const postData = {
 	      questionId: questionId,
 	      answer: answer,
 	      questionText: questionText,
-	      
+
 	    };
 		console.log("data prepared")
 
@@ -720,8 +720,8 @@ const autoSave = debounce(
 		// Now, instead of directly setting the textContent of the followUpContainer,
 		// you're setting the textContent of the nested p tag.
 		followUpParagraph.textContent = followup_question.followupQuestion;
-		
-		
+
+
 		// Get the first (and in your case, only) p tag within the followUpContainer
 		const followUpTextarea = followUpContainer.querySelector('textarea');
 		followUpTextarea.classList.add('show');
@@ -762,7 +762,7 @@ const autoSave = debounce(
 	  const questionId = event.target.dataset.questionId;
 	  const inputValue = textarea.value;
 
-	
+
 
 	  // Check if we have a flag for this questionId, if not initialize it to false
 	  if (followup_questionCalledFlags[questionId] === undefined) {
@@ -772,7 +772,7 @@ const autoSave = debounce(
 	  if (inputValue.length != undefined) {
 	    autoSave(interviewId, questionId, inputValue, userId, textarea);
 	  }
-	  
+
 	  let interviewQuestions = JSON.parse(window.localStorage.getItem('interviewQuestions'));
 	  let currentQuestionId = interviewQuestions.find(q => q.id == questionId);
 	  let questionText = currentQuestionId.question_text;
@@ -797,8 +797,8 @@ function attachEventHandlers(textareaId) {
 
   // Map of textarea IDs to event handlers
   const eventHandlers = {
-    "input-brand_name": handleTextareaBlur,  
-    //"competitor_sites": evaluateCompetitors, 
+    "input-brand_name": handleTextareaBlur,
+    //"competitor_sites": evaluateCompetitors,
     // ... add as many handlers as you need
   };
 
@@ -819,7 +819,7 @@ function handleTextareaBlur(event) {
   if (characterCount >= 2) {
     const interviewDataString = window.localStorage.getItem('interviewData');
     const userProfileString = window.localStorage.getItem('userProfile');
-    
+
     if (interviewDataString && userProfileString) {
       const interviewData = JSON.parse(interviewDataString);
       const userProfile = JSON.parse(userProfileString);
@@ -827,7 +827,7 @@ function handleTextareaBlur(event) {
       const fullName = userProfile.full_name;
 
       console.log("value pass to extractBrandName(): ", event.target.value)
-	  
+
       extractBrandName(event.target.value)
         .then(brandName => {
           console.log('Brand name entered:', brandName);
@@ -867,17 +867,17 @@ async function extractBrandName(text) {
   }
 }
 
-  
+
 
 
 
 
 // SECTION 10 - Event Handlers / Listeners
 
-document.addEventListener('DOMContentLoaded', async (event) => { // 
-  
-  
-  
+document.addEventListener('DOMContentLoaded', async (event) => { //
+
+
+
   // user signs up
   var signUpForm = document.querySelector('#signup');
   signUpForm.onsubmit = signUpSubmitted.bind(signUpForm);
@@ -894,25 +894,13 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
-  document.querySelectorAll('textarea').forEach((textarea) => {
-	  
-    textarea.addEventListener('blur', function() {
-		log.console('blurred off text area');
-      if (this.value.trim() === '') {
-        const questionLabel = this.id.replace('input-', '');
-        const correspondingLi = document.getElementById('question-' + questionLabel);
-        if (correspondingLi) {
-          correspondingLi.classList.remove('completed');
-        }
-      }
-    });
-  });
+
 
   document.querySelectorAll('textarea').forEach((textarea) => {
     textarea.addEventListener('input', function() {
       const questionLabel = this.id.replace('input-', '');
       const correspondingLi = document.getElementById('question-' + questionLabel);
-    
+
       if (this.value.trim() === '') {
         if (correspondingLi) {
           correspondingLi.classList.remove('completed');
@@ -935,8 +923,8 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
       // This will make the textarea wrap all the text it contains
       textarea.style.height = `${textarea.scrollHeight}px`;
   }
-  
-  
+
+
   // Select the node that will be observed for mutations
   var targetNode = document.getElementById('InterviewForm');
 
@@ -945,21 +933,31 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
   // Callback function to execute when mutations are observed
   var callback = function(mutationsList, observer) {
-      for(let mutation of mutationsList) {
-          if (mutation.type === 'childList') {
-              // New nodes added or removed
-              let textareas = targetNode.querySelectorAll('textarea');
-              textareas.forEach(textarea => {
-                 
+    for(let mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        // New nodes added or removed
+        let textareas = targetNode.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+          // add keyup event listener to each textarea
+          textarea.addEventListener('keyup', function() {
+            expandTextarea(this);
+          });
 
-                  // add keyup event listener to each textarea
-                  textarea.addEventListener('keyup', function() {
-                      expandTextarea(this);
-                  });
-              });
-          }
+          // add blur event listener to each textarea
+          textarea.addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+              const questionLabel = this.id.replace('input-', '');
+              const correspondingLi = document.getElementById('question-' + questionLabel);
+              if (correspondingLi) {
+                correspondingLi.classList.remove('completed');
+              }
+            }
+          });
+        });
       }
+    }
   };
+
 
   // Create an observer instance linked to the callback function
   var observer = new MutationObserver(callback);
