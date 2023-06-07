@@ -441,44 +441,6 @@ async function getInterviewQuestions() {
 }
 
 
-// 9.25 get the answers with which to populate the interview form
-
-async function fetchAnswers(interviewId, userId) {
-  // Generate the key based on interviewId and userId
-  const localStorageKey = `interviewAnswers_${interviewId}_${userId}`;
-
-  // Try to get answers from localStorage
-  const storedAnswers = localStorage.getItem(localStorageKey);
-
-  // If there are answers in the localStorage, parse them and return
-  if (storedAnswers !== null) {
-    console.log('Answers retrieved from localStorage:', JSON.parse(storedAnswers));
-    return JSON.parse(storedAnswers);
-  }
-
-  // If there are no answers in localStorage, fetch them from the backend
-  try {
-    const { data, error } = await supabase
-      .from('interview_answers')
-      .select('question_id, answer')
-      .eq('interview_id', interviewId)
-      .eq('user_id', userId);
-
-    // If there's an error with the fetch, throw an error
-    if (error) {
-      throw error;
-    } else {
-      console.log('Fetched answers:', data);
-      
-      // Save the fetched answers in localStorage for future use
-      localStorage.setItem(localStorageKey, JSON.stringify(data));
-
-      return data;  // Return the fetched answers
-    }
-  } catch (error) {
-    console.error('Error fetching answers:', error);
-  }
-}
 
 
 
@@ -914,6 +876,8 @@ async function extractBrandName(text) {
 
 document.addEventListener('DOMContentLoaded', async (event) => { // 
   
+  
+  
   // user signs up
   var signUpForm = document.querySelector('#signup');
   signUpForm.onsubmit = signUpSubmitted.bind(signUpForm);
@@ -931,7 +895,9 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
   document.querySelectorAll('textarea').forEach((textarea) => {
+	  
     textarea.addEventListener('blur', function() {
+		log.console('blurred off text area');
       if (this.value.trim() === '') {
         const questionLabel = this.id.replace('input-', '');
         const correspondingLi = document.getElementById('question-' + questionLabel);
@@ -942,6 +908,22 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
     });
   });
 
+  document.querySelectorAll('textarea').forEach((textarea) => {
+    textarea.addEventListener('input', function() {
+      const questionLabel = this.id.replace('input-', '');
+      const correspondingLi = document.getElementById('question-' + questionLabel);
+    
+      if (this.value.trim() === '') {
+        if (correspondingLi) {
+          correspondingLi.classList.remove('completed');
+        }
+      } else {
+        if (correspondingLi && !correspondingLi.classList.contains('completed')) {
+          correspondingLi.classList.add('completed');
+        }
+      }
+    });
+  });
 
 
 
@@ -984,11 +966,6 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
   // Start observing the target node for configured mutations
   observer.observe(targetNode, config);
-
-
-
-
-
 
 
   // user edits and blurs (leaves) brand name textarea

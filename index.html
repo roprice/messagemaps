@@ -163,7 +163,7 @@
       </div>
 
 	  <div class="col-md-7 m-0 p-0 vh-100 d-flex align-items-center justify-content-center" style="background:#FF5757">
-	      <h2 class="statement">Find your message, change  instantly, and make it easy as f*ck to sell</h2>
+	      <h2 class="statement">Find your message instantly, position your product, and make it easy as f*ck to sell</h2>
 	  </div>
       
   </div>
@@ -625,34 +625,35 @@
 
 									
 
-	<textarea 
-	    x-data="{
-	        userId: JSON.parse(window.localStorage.getItem('userProfile')).user_id,  
-	        interviewId: JSON.parse(window.localStorage.getItem('interviewData')).interviewID,
-	        txt: '',
-	        fetchAnswerForThisQuestion: async function (questionId) {
-	            const { data, error } = await supabase
-	                .from('interview_answers')
-	                .select('answer')
-	                .eq('interview_id', this.interviewId)
-	                .eq('user_id', this.userId)
-	                .eq('question_id', questionId);
-	            if (error) {
-	                console.error('Error fetching answer for question:', error);
-	                return;
-	            }
-	            // If there's an answer for this question, set it as the value of the textarea
-	            if (data[0]) {
-	                this.txt = data[0].answer;
-	            }
-	        },
-	    }"
-	    x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
-	    x-on:input.space="handleTextareaInput(event);"
-	    x-init="fetchAnswerForThisQuestion(question.id); $el.setAttribute('id', 'input-' + question.question_label); $el.setAttribute('data-question-id', question.id); setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0);"
-	    x-text="txt"
-	>
-	</textarea>
+									<textarea 
+								    x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
+								    x-on:input.space="handleTextareaInput(event);"
+								    x-init="fetchAnswerForThisQuestion(question.id); $el.setAttribute('id', 'input-' + question.question_label); $el.setAttribute('data-question-id', question.id); setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0);"
+								    x-text="txt"
+									    x-data="{
+									        userId: JSON.parse(window.localStorage.getItem('userProfile')).user_id,  
+									        interviewId: JSON.parse(window.localStorage.getItem('interviewData')).interviewID,
+									        txt: '',
+									        fetchAnswerForThisQuestion: async function (questionId) {
+									            const { data, error } = await supabase
+									                .from('interview_answers')
+									                .select('answer')
+									                .eq('interview_id', this.interviewId)
+									                .eq('user_id', this.userId)
+									                .eq('question_id', questionId);
+									            if (error) {
+									                console.error('Error fetching answer for question:', error);
+									                return;
+									            }
+									            // If there's an answer for this question, set it as the value of the textarea
+									            if (data[0]) {
+									                this.txt = data[0].answer;
+									            }
+									        },
+									    }"
+
+									>
+									</textarea>
 	
 
 							
@@ -692,33 +693,7 @@
                             <div x-init="() => $el.setAttribute('id', 'question-' + question.id)" class="form-group">
                                 <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
                                 <div x-text="question.question_text"></div>
-								<textarea
-								  oninput="handleTextareaInput(event)"
-								  x-init="() => {
-									  $el.setAttribute('id', 'input-' + question.question_label);
-									  $el.setAttribute('data-question-id', question.id);
-
-									  // Retrieve interviewId and userId from local storage
-									  const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
-									  const interviewId = interviewData.interviewID;
-
-									  const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-									  const userId = userProfile.user_id;
-
-									  fetchAnswers(interviewId, userId).then(answers => {
-										  // Use the answers
-									  });
-
-									  fetchAnswers(interviewId, userId).then(answers => {
-										  const answer = answers.find(answer => answer.question_id === question.id);
-										  if (answer) {
-											  $el.value = answer.answer;
-										  }
-									  });
-
-									  // Attach the appropriate event handler based on the textarea's ID
-									  attachEventHandlers($el.getAttribute('id'));
-								  }">
+								<textarea>
 							  	</textarea>
                                 <div class="help text-small text-secondary" x-text="question.question_help"></div>
                             </div>
@@ -732,34 +707,8 @@
                             <div x-init="() => $el.setAttribute('id', 'question-' + question.id)" class="form-group">
                                 <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
                                 <div x-text="question.question_text"></div>
-							<textarea
-							  oninput="handleTextareaInput(event)"
-							  x-init="() => {
-								  $el.setAttribute('id', 'input-' + question.question_label);
-								  $el.setAttribute('data-question-id', question.id);
-
-								  // Retrieve interviewId and userId from local storage
-								  const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
-								  const interviewId = interviewData.interviewID;
-
-								  const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-								  const userId = userProfile.user_id;
-
-								  fetchAnswers(interviewId, userId).then(answers => {
-									  // Use the answers
-								  });
-
-								  fetchAnswers(interviewId, userId).then(answers => {
-									  const answer = answers.find(answer => answer.question_id === question.id);
-									  if (answer) {
-										  $el.value = answer.answer;
-									  }
-								  });
-
-								  // Attach the appropriate event handler based on the textarea's ID
-								  attachEventHandlers($el.getAttribute('id'));
-							  }">
-						  	</textarea>
+								<textarea>
+							  	</textarea>
                                 <div class="help text-small text-secondary" x-text="question.question_help"></div>
                             </div>
                         </template>
@@ -772,34 +721,8 @@
                             <div x-init="() => $el.setAttribute('id', 'question-' + question.id)" class="form-group">
                                 <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
                                 <div x-text="question.question_text"></div>
-								<textarea
-								  oninput="handleTextareaInput(event)"
-								  x-init="() => {
-									  $el.setAttribute('id', 'input-' + question.question_label);
-									  $el.setAttribute('data-question-id', question.id);
-
-									  // Retrieve interviewId and userId from local storage
-									  const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
-									  const interviewId = interviewData.interviewID;
-
-									  const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-									  const userId = userProfile.user_id;
-
-									  fetchAnswers(interviewId, userId).then(answers => {
-										  // Use the answers
-									  });
-
-									  fetchAnswers(interviewId, userId).then(answers => {
-										  const answer = answers.find(answer => answer.question_id === question.id);
-										  if (answer) {
-											  $el.value = answer.answer;
-										  }
-									  });
-
-									  // Attach the appropriate event handler based on the textarea's ID
-									  attachEventHandlers($el.getAttribute('id'));
-								  }">
-							  	</textarea>
+			<textarea>
+		  	</textarea>
                                 <div class="help text-small text-secondary" x-text="question.question_help"></div>
                             </div>
                         </template>
@@ -812,34 +735,8 @@
                             <div x-init="() => $el.setAttribute('id', 'question-' + question.id)" class="form-group">
                                 <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
                                 <div x-text="question.question_text"></div>
-								<textarea
-								  oninput="handleTextareaInput(event)"
-								  x-init="() => {
-									  $el.setAttribute('id', 'input-' + question.question_label);
-									  $el.setAttribute('data-question-id', question.id);
-
-									  // Retrieve interviewId and userId from local storage
-									  const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
-									  const interviewId = interviewData.interviewID;
-
-									  const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-									  const userId = userProfile.user_id;
-
-									  fetchAnswers(interviewId, userId).then(answers => {
-										  // Use the answers
-									  });
-
-									  fetchAnswers(interviewId, userId).then(answers => {
-										  const answer = answers.find(answer => answer.question_id === question.id);
-										  if (answer) {
-											  $el.value = answer.answer;
-										  }
-									  });
-
-									  // Attach the appropriate event handler based on the textarea's ID
-									  attachEventHandlers($el.getAttribute('id'));
-								  }">
-							  	</textarea>
+		<textarea>
+	  	</textarea>
                                 <div class="help text-small text-secondary" x-text="question.question_help"></div>
                             </div>
                         </template>
@@ -852,34 +749,8 @@
                             <div x-init="() => $el.setAttribute('id', 'question-' + question.id)" class="form-group">
                                 <label class="text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
                                 <div x-text="question.question_text"></div>
-								<textarea
-								  oninput="handleTextareaInput(event)"
-								  x-init="() => {
-									  $el.setAttribute('id', 'input-' + question.question_label);
-									  $el.setAttribute('data-question-id', question.id);
-
-									  // Retrieve interviewId and userId from local storage
-									  const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
-									  const interviewId = interviewData.interviewID;
-
-									  const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-									  const userId = userProfile.user_id;
-
-									  fetchAnswers(interviewId, userId).then(answers => {
-										  // Use the answers
-									  });
-
-									  fetchAnswers(interviewId, userId).then(answers => {
-										  const answer = answers.find(answer => answer.question_id === question.id);
-										  if (answer) {
-											  $el.value = answer.answer;
-										  }
-									  });
-
-									  // Attach the appropriate event handler based on the textarea's ID
-									  attachEventHandlers($el.getAttribute('id'));
-								  }">
-							  	</textarea>
+	<textarea>
+  	</textarea>
                                 <div class="help text-small text-secondary" x-text="question.question_help"></div>
                             </div>
                         </template>
