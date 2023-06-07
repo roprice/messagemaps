@@ -876,6 +876,54 @@ async function extractBrandName(text) {
 
 document.addEventListener('DOMContentLoaded', async (event) => { //
 
+  // Select the node that will be observed for mutations
+  var targetNode = document.getElementById('InterviewForm');
+
+  // Options for the observer (which mutations to observe)
+  var config = { attributes: false, childList: true, subtree: true };
+
+  // Callback function to execute when mutations are observed
+  var callback = function(mutationsList, observer) {
+    for(let mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        console.log('Child list has changed');
+        // New nodes added or removed
+        let textareas = targetNode.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+          // add keyup event listener to each textarea
+          textarea.addEventListener('keyup', function() {
+            expandTextarea(this);
+          });
+
+          // add blur event listener to each textarea
+          textarea.addEventListener('blur', function() {
+            const questionLabel = this.id.replace('input-', '');
+            const correspondingLi = document.getElementById('question-' + questionLabel);
+            if (this.value.trim() === '') {
+              if (correspondingLi) {
+                correspondingLi.classList.remove('completed');
+                console.log(`Removing 'completed' class from question-${questionLabel}`);
+              }
+            } else {
+              if (correspondingLi) {
+                correspondingLi.classList.add('completed');
+                console.log(`Adding 'completed' class to question-${questionLabel}`);
+              }
+            }
+          });
+        });
+      }
+    }
+  };
+
+
+
+  // Create an observer instance linked to the callback function
+  var observer = new MutationObserver(callback);
+
+  // Start observing the target node for configured mutations
+  observer.observe(targetNode, config);
+
 
 
   // user signs up
@@ -925,45 +973,6 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
   }
 
 
-  // Select the node that will be observed for mutations
-  var targetNode = document.getElementById('InterviewForm');
-
-  // Options for the observer (which mutations to observe)
-  var config = { attributes: false, childList: true, subtree: true };
-
-  // Callback function to execute when mutations are observed
-  var callback = function(mutationsList, observer) {
-    for(let mutation of mutationsList) {
-      if (mutation.type === 'childList') {
-        // New nodes added or removed
-        let textareas = targetNode.querySelectorAll('textarea');
-        textareas.forEach(textarea => {
-          // add keyup event listener to each textarea
-          textarea.addEventListener('keyup', function() {
-            expandTextarea(this);
-          });
-
-          // add blur event listener to each textarea
-          textarea.addEventListener('blur', function() {
-            if (this.value.trim() === '') {
-              const questionLabel = this.id.replace('input-', '');
-              const correspondingLi = document.getElementById('question-' + questionLabel);
-              if (correspondingLi) {
-                correspondingLi.classList.remove('completed');
-              }
-            }
-          });
-        });
-      }
-    }
-  };
-
-
-  // Create an observer instance linked to the callback function
-  var observer = new MutationObserver(callback);
-
-  // Start observing the target node for configured mutations
-  observer.observe(targetNode, config);
 
 
   // user edits and blurs (leaves) brand name textarea
