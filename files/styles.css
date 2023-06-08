@@ -155,16 +155,14 @@ a.navlink {
 }
 
 
-
-
 #light .nav-pills .nav-link {
-  padding: 14px 31px 13px 32px;
-  background-color: hsl(210, 14%, 97%);
-  color: #000;
-  border-radius: 1.5rem;
-  position: relative;
-  font-size: 12px;
-
+    padding: 14px 31px 13px 32px;
+    background-color: #cccccc36;
+    color: #000;
+    border-radius: 1.5rem;
+    position: relative;
+    font-size: 12px;
+    margin-bottom: 1px;
 }
 
 #light .nav-pills .nav-item .nav-link.active,

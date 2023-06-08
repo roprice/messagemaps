@@ -302,13 +302,22 @@ const signUpSubmitted = async (event) => {
 
 // Log the user in
 const logInSubmitted = async (event) => {
+	
+	window.localStorage.setItem('test', 'testValue');
+	console.log(window.localStorage.getItem('test')); // should log 'testValue'
+	
+	
   event.preventDefault();
   Alpine.store('formStatus').disableSubmitButton();
   const email = event.target[0].value;
   const password = event.target[1].value;
   try {
     const response = await supabase.auth.signIn({ email, password });
+	
     console.log('Signin response:', response);
+	
+	console.log('After sign-in response'); // New log statement
+	
     if (response.error) {
       Alpine.store('formStatus').showErrorMessage(response.error.message);
     } else {
@@ -316,10 +325,17 @@ const logInSubmitted = async (event) => {
       await delay(800);
       Alpine.store('formStatus').showSuccessMessage('Success! Loading...');
       await delay(500);
-      setToken(response);
+      
+	  //setToken(response);
+	  console.log('After setToken');
 
       Alpine.store('authenticationStatus').current = 'loggedIn';
+	  
+	  console.log('After setting loggedIn status'); // New log statement
+	  
       console.log('Signin successful');
+	  
+	  
       // Get user profile after successful login
 
       const userId = response.user.id;
@@ -328,6 +344,9 @@ const logInSubmitted = async (event) => {
       .from('user_profiles')
       .select('*')
       .eq('user_id', userId)
+
+	  console.log('Profile data:', data);
+	  console.log('Profile error:', error);
 
       if (data && data.length > 0) {
         const userProfile = data[0];
