@@ -25,14 +25,12 @@
   <link href="files/styles.css" rel="stylesheet">
 
 
-  <!-- Alpine.js -->
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+   <script defer src="https://unpkg.com/alpinejs@3.12.1/dist/cdn.min.js"></script>
 
-   <!-- Supabase.js -->
    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1"></script>
 
-   <script src="files/script.js"></script>
+   <script src="files/script.js" ></script>
 
 
 
@@ -381,13 +379,16 @@
 					                      activeTab: 'YourBrand', tabs: ['YourBrand', 'YourCustomer', 'YourBuyer', 'YourCompetition', 'YourSolution', 'YourPricing'],
 					                      changeTab: function (direction) { let currentIndex = this.tabs.indexOf(this.activeTab); let newIndex = currentIndex + direction; if (newIndex >= 0 && newIndex < this.tabs.length) { this.activeTab = this.tabs[newIndex]; this.scrollToInterviewTabs(); } },
 					                      scrollToInterviewTabs: function () { document.getElementById('InterviewTabs').scrollIntoView({ behavior: 'smooth' }); },
+										  
 					                      activeQuestion: '',
+										  
 					                      scrollToElementWithOffset: function (elementId, yOffset, questionLabel) {
 					                      const element = document.getElementById(elementId);
 					                      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
 					                      window.scrollTo({ top: y, behavior: 'smooth' });
 					                      element.focus();
 					                      this.activeQuestion = questionLabel;},
+										  
 					                      checkVisibleFormElements() {
 
 					                        const questions = JSON.parse(localStorage.getItem('interviewQuestions'));
@@ -405,7 +406,11 @@
 					                            }
 					                          }
 					                        });
-					                      }
+					                      },
+										  
+										  
+										  
+										  
 					                    }">
 							<!-- #InterviewNav -->
 										<ul id="InterviewNav" class="nav nav-pills mb-5 sticky-sub-element col-md-2" id="TheInterview">
@@ -448,11 +453,12 @@
 														<li class="nav-sub-item" 
 															:class="{ 'completed': answeredQuestions[question.id] && answeredQuestions[question.id].trim() !== '' }"
 															:id="'question-' + question.id">  
-															<a class="text-secondary nav-sub-item-link"
-																  x-text="question.question_label.replaceAll('_', ' ')"
-																  x-init="() => $el.setAttribute('href', '#' + 'input-' + question.question_label)"
-																  @click.prevent="scrollToElementWithOffset('input-' + question.question_label, -127, question.question_label)"
-																  :class="{ 'active': activeQuestion === question.question_label }"></a>
+<a class="text-secondary nav-sub-item-link"
+   x-text="question.question_label.replaceAll('_', ' ')"
+   :href="'#question-' + question.question_label"
+   @click.prevent="scrollToElementWithOffset('question-' + question.question_label, -127, question.question_label)"
+   :class="{ 'active': activeQuestion === question.question_label }"></a>
+
 														</li>
 													</template>
 
@@ -509,61 +515,101 @@
 											<!-- Your Brand -->
 											<div x-show="activeTab === 'YourBrand'" id="YourBrand" class="category-fieldset">
 
-												<template x-for="
-												(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_brand_story') : [])" :key="question.id">
-													<div class="template-inner" x-init="() => $el.setAttribute('id', 'question-' + question.question_label)" @click="activeQuestion = question.question_label" class="form-group">
+												<template 
+													x-for="(question, index) in ($store.questions ? $store.questions.filter(question => question.question_category === 'category_brand_story') : [])" :key="question.id">
+													<div class="template-inner"
+														x-data="{
+															
+															userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,  
+															interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null,
+															txt: '',
+															hasInput: false,
+															
+															fetchAnswerForThisQuestion: async function (questionId) {
+																if (!questionId) {
+																	console.error(`Invalid questionId: ${questionId}`);
+																	return;
+																}
+																const { data, error } = await supabase
+																	.from('interview_answers')
+																	.select('answer')
+																	.eq('interview_id', this.interviewId)
+																	.eq('user_id', this.userId)
+																	.eq('question_id', questionId);
+																if (error) {
+																	console.error('Error fetching answer for question:', error);
+																	return;
+																}
+																// If there's an answer for this question, set it as the value of the textarea
+																if (data[0]) {
+																	this.txt = data[0].answer;
+																}
+															},
+														}" 
+												        x-bind:class="{ 'active': activeQuestion === question.question_label }"
 														
+														x-init="() => {
+															$el.setAttribute('id', 'question-' + question.question_label); 
+															fetchAnswerForThisQuestion(question.id);
+														}" 
+														@click="activeQuestion = question.question_label" 
+														class="form-group">
+		
 														<label class="question-label text-secondary" x-text="question.question_label.replaceAll('_', ' ')" x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
 														<div class="question-text" x-text="question.question_text"></div>
 
-														<textarea
-															x-show="window.localStorage.getItem('userProfile')" 
-															x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
-															x-on:input.space="handleTextareaInput(event);"
-															x-init="fetchAnswerForThisQuestion(question.id); $el.setAttribute('id', 'input-' + question.id); $el.setAttribute('data-question-id', question.id); setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0);"
-															x-text="txt"
-															x-data="{
-																userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,  
-																interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null,
-															
-																txt: '',
-																fetchAnswerForThisQuestion: async function (questionId) {
-																    if (!questionId) {
-																      console.error(`Invalid questionId: ${questionId}`);
-																      return;
-																    }
-																    const { data, error } = await supabase
-																        .from('interview_answers')
-																        .select('answer')
-																        .eq('interview_id', this.interviewId)
-																        .eq('user_id', this.userId)
-																        .eq('question_id', questionId);
-																    if (error) {
-																        console.error('Error fetching answer for question:', error);
-																        return;
-																    }
-																    // If there's an answer for this question, set it as the value of the textarea
-																    if (data[0]) {
-																        this.txt = data[0].answer;
-																    }
-																},
-																}">
-														</textarea>
+														<div class="textarea-container">
+															<div class="snackbar"															
+																x-init="
+																$el.setAttribute('id', 'save-confirmation-' + question.id); 
+																$el.setAttribute('save-confirmation-id', question.id); ""
+																>Autosaved</div><!-- #snackbar -->
+															<textarea
+																x-ref="textarea"
+																x-model="txt" 
+																@input="hasInput = txt.length > 10"
+																
+																x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
+																x-on:input.space="handleTextareaInput(event);"
+																
+																x-init="
+																	$el.setAttribute('id', 'input-' + question.id); 
+																	$el.setAttribute('data-question-id', question.id); 
+																	setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0);"
+																x-text="txt"
+															></textarea>
+																
+															<div class="clear-textarea" 
+																
+																x-show="txt.length > 0" 
+																@click="txt = ''; $refs.textarea.focus()" 
+																x-transition:enter.delay.250ms x-transition:enter.duration.250ms>
+															    <span class="material-symbols-outlined medium">close</span>
+															</div>
+		
+														</div><!-- .textarea-container -->
+		
+														<div class="answer-feedback" x-init="$el.setAttribute('id', 'answer-feedback-' + question.id);">
+															<span class="material-symbols-outlined medium encouragement">check</span>
+														
+															<p x-init="$el.setAttribute('id', 'answer-verbal-feedback-' + question.id);">Well done!!</p>
 
-														<div id="snackbar" class="snackbar">Autosaved</div><!-- /.div -->
-
-														<div class="help text-small text-secondary" x-text="question.question_help"></div><!-- /.help -->
+														</div>
+		
+														<div class="help text-small text-secondary" x-show="hasInput" x-transition:enter.delay.500ms x-transition:enter.duration.2000ms x-text="question.question_help"></div>
+														<!-- /.help -->
 
 														<div class="followup-question text-small" x-data="{ text: '' }"
-														x-init="() => { $el.setAttribute('id', 'followup-to-question-id-' + question.id); }">
+															x-init="() => { $el.setAttribute('id', 'followup-to-question-id-' + question.id); }">
 															<p x-init="() => { $el.setAttribute('id', 'p-followup-to-question-id-' + question.id); }"
-															x-text="text"></p>
+																x-text="text"></p>
 															<textarea x-init="() => { $el.setAttribute('id', 'textarea-followup-to-question-id-' + question.id); }"
-															x-show="text.length > 0"></textarea>
+																x-show="text.length > 0"></textarea>
 														</div><!-- /.followup-question -->
 
 													</div><!--/.template-inner-->
 												</template>
+
 											</div><!-- /#YourBrand -->
 
 					                        <!-- /#YourCustomer -->

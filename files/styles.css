@@ -33,13 +33,43 @@
 }
 
 
+.template-inner.active {
+    opacity: 1;
+}
+.template-inner {
+    opacity: .7;
+}
+
+#InterviewQuestions .template-inner {
+    padding-bottom: 150px;
+	position: relative;
+}
+
+span.material-symbols-outlined.medium.encouragement {
+    color: green;
+    font-size: 40px;
+}
+
+
+#InterviewQuestions .answer-feedback {
+position: absolute;
+visibility:hidden;
+right: -370px;
+top: 40px;
+width:300px;
+height:300px;
+z-index:10;
+}
+
+#InterviewQuestions div#answer-feedback-1 {display:none;}
+
 .card {
   border-radius: .9rem!important;
 }
 
 
 .card-header {
-  padding: 2rem 0rem .5rem 1rem;
+  padding: 2rem 0.5rem .5rem 1rem;
   margin: 1rem;
   color: var(--bs-card-cap-color);
   background-color: hsl(210, 14%, 97%);
@@ -559,16 +589,19 @@ button#InterviewMe {
 
 
 
-textarea {
-width: 94%;
-  border-radius: 6px;
-  padding: 8px 10px;
-  min-height: 100px;
-  overflow: hidden; 
-  transition: height 0.3s ease-out;
-  box-sizing: content-box; /* add this line */
-}
+.clear-textarea {position: absolute; top: 5px; right: 1px; cursor: pointer;}
 
+.textarea-container {position: relative;}
+
+textarea {
+	width: 94%;
+	border-radius: 6px;
+	padding: 8px 20px 8px 10px;
+	min-height: 70px;
+	overflow: hidden; 
+	transition: height 0.3s ease-out;
+	box-sizing: content-box; 
+}
 
 .followup-question {
     margin-top: 20px;
@@ -774,52 +807,50 @@ html, body {
    background-color: rgb(193, 211, 193);
  }
 
- /* Snackbar styles */
- .snackbar {
-   visibility: hidden;
-   min-width: 250px;
-   margin-left: -125px;
-   background-color: #333;
-   color: #fff;
-   text-align: center;
-   border-radius: 2px;
-   padding: 16px;
-   position: fixed;
-   z-index: 1;
-   left: 50%;
-   bottom: 30px;
-   font-size: 17px;
+
+ .question-text {
+     padding: 0 30px 0 0;
  }
 
- .snackbar.show {
-   visibility: visible;
-   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-   animation: fadein 0.5s, fadeout 0.5s 2.5s;
- }
 
- @-webkit-keyframes fadein {
-   from {bottom: 0; opacity: 0;}
-   to {bottom: 30px; opacity: 1;}
- }
 
+ /* Add keyframes for the animations */
  @keyframes fadein {
-   from {bottom: 0; opacity: 0;}
-   to {bottom: 30px; opacity: 1;}
- }
-
- @-webkit-keyframes fadeout {
-   from {bottom: 30px; opacity: 1;}
-   to {bottom: 0; opacity: 0;}
+   from {opacity: 0;}
+   to {opacity: 1;}
  }
 
  @keyframes fadeout {
-   from {bottom: 30px; opacity: 1;}
-   to {bottom: 0; opacity: 0;}
+   from {opacity: 1;}
+   to {opacity: 0;}
  }
-  
-  
-  
-  
+
+ .snackbar {
+
+     min-width: auto;
+     margin-left: 0;
+     background-color: #f2e6274f;
+     text-align: center;
+     padding: 3px 7px;
+     position: absolute;
+     z-index: 1000;
+     right: 0;
+     top: -28px;
+     font-size: 12px;
+     border-radius: 10px;
+     height:30px;
+   opacity: 0;
+   transition: opacity 0.3s linear;
+ }
+
+ .snackbar.show {
+   opacity: 1;
+   animation: fadein 0.3s, hold 3.2s, fadeout 0.5s;
+ }
+
+ @keyframes hold {
+   0%, 100% { opacity: 1; }
+ }
   
   
 
@@ -882,53 +913,5 @@ input, .form-control {
 }
 
 
-
- /* Define the background color for the autosave indicator */
-.autosaveIndicator {
-  background-color: rgb(193, 211, 193);
-}
-
-/* Snackbar styles */
-.snackbar {
-  visibility: hidden;
-  min-width: 250px;
-  margin-left: -125px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 2px;
-  padding: 16px;
-  position: fixed;
-  z-index: 1;
-  left: 50%;
-  bottom: 30px;
-  font-size: 17px;
-}
-
-.snackbar.show {
-  visibility: visible;
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-
-@-webkit-keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
-}
-
-@keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
-}
-
-@-webkit-keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 0; opacity: 0;}
-}
-
-@keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 0; opacity: 0;}
-}
 
 

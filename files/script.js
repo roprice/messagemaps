@@ -70,6 +70,7 @@
 document.addEventListener('alpine:init', function() {
   console.log('Alpine.js has been initialized');
     Alpine.store('authenticationStatus', {
+	
       current: 'loggedOut',
       items: ['loggedIn', 'loggedOut'],
       updateAuthStatus: function () {
@@ -82,6 +83,8 @@ document.addEventListener('alpine:init', function() {
         }
       },
     });
+
+
 
     if (localStorage.getItem('supabase.auth.token')) {
       Alpine.store('authenticationStatus').current = 'loggedIn';
@@ -140,12 +143,9 @@ document.addEventListener('alpine:init', function() {
   });
   Alpine.store('currentScreen', {
     current: localStorage.getItem('currentScreen') || 'maps',
-    items: ['account','dashboard','maps','interviews','strategies','assets','newMap'],
+    items: ['account','maps','interviews','strategies','assets','newMap'],
   });
-  Alpine.store('onboarding', {
-    current: 'welcome',
-    items: ['welcome','hiddenwelcome']
-  });
+
   Alpine.store('lightDarkMode', {
     current: 'light',
     items: ['light','dark']
@@ -171,23 +171,29 @@ var SUPABASE_URL = 'https://wogivjshqopegucducyz.supabase.co'
 var SUPABASE_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvZ2l2anNocW9wZWd1Y2R1Y3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NzU4MzQsImV4cCI6MTk5NDA1MTgzNH0.zj-QBJknPolKZ6TZ_t3r7aPXbhVB1bf9mmoNBBif9OM'
 var supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-window.userToken = null
+
 
 
 
 // listen for authentication state changes
-supabase.auth.onAuthStateChange((event, session) => {
-  console.log('Authentication state changed', event);
-  console.log('Current Session', session);
-  // Check if the user is logged in
-  if (session) {
-    Alpine.store('authenticationStatus').current = 'loggedIn';
-    // The token is automatically stored by Supabase client, no need to manually store it
-  } else {
-    Alpine.store('authenticationStatus').current = 'loggedOut';
-    // Token is automatically removed by Supabase client when the session ends, no need to manually remove it
-  }
+
+document.addEventListener('DOMContentLoaded', (event) => {
+	supabase.auth.onAuthStateChange((event, session) => {
+	  console.log('Authentication state changed', event);
+	  console.log('Current Session', session);
+	  // Check if the user is logged in
+	  if (session) {
+	    Alpine.store('authenticationStatus').current = 'loggedIn';
+	    // The token is automatically stored by Supabase client, no need to manually store it
+	  } else {
+	    Alpine.store('authenticationStatus').current = 'loggedOut';
+	    // Token is automatically removed by Supabase client when the session ends, no need to manually remove it
+	  }
+	});
 });
+
+
+
 
 
 
@@ -227,7 +233,12 @@ async function getUserData(userId) {
 // SECTION 6 - Signup
 
 const signUpSubmitted = async (event) => {
-  event.preventDefault();
+
+    event.preventDefault();
+  
+    localStorage.clear();
+
+
   Alpine.store('formStatus').disableSubmitButton();
   const fullName = event.target[0].value; // Get the full name from the form
   const [firstName, lastName] = fullName.split(' '); // Get the first and last name
@@ -241,7 +252,7 @@ const signUpSubmitted = async (event) => {
     if (response.error) {
       Alpine.store('formStatus').showErrorMessage(response.error.message);
     } else {
-      setToken(response);
+      
       Alpine.store('formStatus').showSuccessMessage('Success!'); await delay(1000);
       Alpine.store('formStatus').showSuccessMessage('Success! Accounted Created.'); await delay(800);
       Alpine.store('formStatus').showSuccessMessage('Success! Accounted Created. Logging you in now..'); await delay(500);
@@ -279,12 +290,18 @@ const signUpSubmitted = async (event) => {
         const interviewId = await getInterview(userId);
         if (interview !== null && interview !== undefined) {
           console.log('No interview found for user. Redirecting to onboarding...');
-          Alpine.store('currentScreen').current = 'maps';
-          Alpine.store('onboarding').current = 'welcome';
+          
+		  Alpine.store('currentScreen').current = 'maps';
+  
       } else {
-        // Store the interviewId in localStorage immediately after login
+       
+		
+		// Store the interviewId in localStorage immediately after login
         window.localStorage.setItem('interviewData', JSON.stringify(interview));
-      }
+		
+		Alpine.store('currentScreen').current = 'interviews';
+      
+	  }
       }
     }
 
@@ -303,20 +320,19 @@ const signUpSubmitted = async (event) => {
 // Log the user in
 const logInSubmitted = async (event) => {
 	
-	window.localStorage.setItem('test', 'testValue');
-	console.log(window.localStorage.getItem('test')); // should log 'testValue'
+	
 	
 	
   event.preventDefault();
+  
+  localStorage.clear();
+  
+  
   Alpine.store('formStatus').disableSubmitButton();
   const email = event.target[0].value;
   const password = event.target[1].value;
   try {
     const response = await supabase.auth.signIn({ email, password });
-	
-    console.log('Signin response:', response);
-	
-	console.log('After sign-in response'); // New log statement
 	
     if (response.error) {
       Alpine.store('formStatus').showErrorMessage(response.error.message);
@@ -325,46 +341,38 @@ const logInSubmitted = async (event) => {
       await delay(800);
       Alpine.store('formStatus').showSuccessMessage('Success! Loading...');
       await delay(500);
-      
-	  //setToken(response);
-	  console.log('After setToken');
 
       Alpine.store('authenticationStatus').current = 'loggedIn';
-	  
-	  console.log('After setting loggedIn status'); // New log statement
-	  
-      console.log('Signin successful');
-	  
-	  
-      // Get user profile after successful login
 
       const userId = response.user.id;
-
       const { data, error } = await supabase
       .from('user_profiles')
       .select('*')
       .eq('user_id', userId)
 
-	  console.log('Profile data:', data);
-	  console.log('Profile error:', error);
+	  if (data && data.length > 0) {
+	    const userProfile = data[0];
+	    window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
+	  }
 
-      if (data && data.length > 0) {
-        const userProfile = data[0];
+        await getInterviewQuestions();
 
-        // Save the object, not the array
-        window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
-      }
-
-      await getInterviewQuestions();
-
-      const interviewId = await getInterview(userId);
-      if (interview !== null && interview !== undefined) {
-        console.log('No interview found for user. Redirecting to onboarding...');
-        Alpine.store('currentScreen').current = 'maps';
-        Alpine.store('onboarding').current = 'welcome';
-    } else {
-      // Store the interviewId in localStorage immediately after login
-      window.localStorage.setItem('interviewData', JSON.stringify(interview));
+      	const interviewId = await getInterview(userId);
+		console.log(interviewId);
+	  
+	  	// this is where we figure out where to send the user on logi
+      	if (interview === null || !interview.hasOwnProperty('interviewID')) {
+        
+        	Alpine.store('currentScreen').current = 'maps';
+        
+    	} else {
+		
+		
+			// Store the interviewId in localStorage immediately after login
+        	window.localStorage.setItem('interviewData', JSON.stringify(interview));
+		
+			Alpine.store('currentScreen').current = 'interviews';
+		
     }
 
     }
@@ -403,19 +411,7 @@ const logoutSubmitted = (event) => {
 // SECTION 9 - Component Logic
 
 //  9.1 - Miscellaneous component logic
-function bodyClasses() {
-  return [
 
-    Alpine.store('authenticationStatus').current,
-    Alpine.store('userData').firstName,
-    Alpine.store('currentPage').current,
-    Alpine.store('currentScreen').current,
-    Alpine.store('lightDarkMode').current,
-    Alpine.store('sidebarStatus').current,
-    Alpine.store('onboarding').current,
-
-  ].join(' ');
-}
 
 
 //  9.2 - Build Interview Form
@@ -664,28 +660,48 @@ async function saveAnswer(interviewId, questionId, answer, userId) {
     console.error('Error saving answer:', error);
   }
 }
+let animationRunning = false;  // global flag to track animation state
+
 const autoSave = debounce(
-
   async function (interviewId, questionId, answer, userId, textarea) {
-  try {
-    await saveAnswer(interviewId, questionId, answer, userId);
+    try {
+      await saveAnswer(interviewId, questionId, answer, userId);
 
-    // Show the snackbar notification
-    const snackbar = document.getElementById("snackbar");
-    snackbar.className = "snackbar show";
-    setTimeout(() => {
-      snackbar.className = "snackbar";
-    }, 3000);
+      // Show the snackbar notification
+      const snackbar = document.getElementById(`save-confirmation-${questionId}`);
+      if (!animationRunning) {
+        snackbar.classList.add('show');
+        animationRunning = true;
 
-    // Change the background color of the textarea
-    textarea.classList.add("autosaveIndicator");
-    setTimeout(() => {
-      textarea.classList.remove("autosaveIndicator");
-    }, 2000);
-  } catch (error) {
-    console.error('Error saving answer:', error);
-  }
-}, 2000);
+		setTimeout(() => {
+		  animationRunning = false;
+		  snackbar.classList.remove('show');
+		}, 4000);  // Matches the total duration of the CSS animations
+
+      }
+	  
+	  
+      // check if the user has entered at least 100 characters
+      if (answer.length >= 100) {
+          // get the feedback div for this question
+          const feedbackDiv = document.getElementById('answer-feedback-' + questionId);
+          if (feedbackDiv) {
+              // make the feedback div visible
+              feedbackDiv.style.visibility = "visible";
+          }
+      }
+
+      // Change the background color of the textarea
+      textarea.classList.add("autosaveIndicator");
+      setTimeout(() => {
+        textarea.classList.remove("autosaveIndicator");
+      }, 2000);
+    } catch (error) {
+      console.error('Error saving answer:', error);
+    }
+  }, 3000);
+
+
 
 
 
@@ -903,36 +919,7 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
-  document.querySelectorAll('textarea').forEach((textarea) => {
-	  
-    textarea.addEventListener('blur', function() {
-		log.console('blurred off text area');
-      if (this.value.trim() === '') {
-        const questionLabel = this.id.replace('input-', '');
-        const correspondingLi = document.getElementById('question-' + questionLabel);
-        if (correspondingLi) {
-          correspondingLi.classList.remove('completed');
-        }
-      }
-    });
-  });
 
-  document.querySelectorAll('textarea').forEach((textarea) => {
-    textarea.addEventListener('input', function() {
-      const questionLabel = this.id.replace('input-', '');
-      const correspondingLi = document.getElementById('question-' + questionLabel);
-    
-      if (this.value.trim() === '') {
-        if (correspondingLi) {
-          correspondingLi.classList.remove('completed');
-        }
-      } else {
-        if (correspondingLi && !correspondingLi.classList.contains('completed')) {
-          correspondingLi.classList.add('completed');
-        }
-      }
-    });
-  });
 
 
 
@@ -981,6 +968,11 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
                 console.log(`Adding 'completed' class to question-${questionId}`);
               }
             }
+			
+
+
+			
+			
           });
         });
       }
@@ -1057,7 +1049,22 @@ function handleError(error) {
 }
 
 
-// SECTION 13 - Testing
+// SECTION 13 - Testing & debugging 
+
+
+function bodyClasses() {
+  return [
+
+    Alpine.store('authenticationStatus').current,
+    Alpine.store('userData').firstName,
+    Alpine.store('currentPage').current,
+    Alpine.store('currentScreen').current,
+    Alpine.store('lightDarkMode').current,
+    Alpine.store('sidebarStatus').current,
+
+
+  ].join(' ');
+}
 
 
 
