@@ -1,3 +1,5 @@
+.signin-signup {min-height:600px;width:250px;text-align: center;margin: auto;}
+
 
 
 .sticky-element {
@@ -19,6 +21,13 @@
   background-color: #ddd;
 }
 
+.interview-review-container {
+width: 800px;
+    border: 1px solid #ccc;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+	}
 
 .btn.disabled, .btn:disabled, fieldset:disabled .btn {
  opacity: 0.7;
@@ -31,6 +40,7 @@
 .interview-form-card {
   margin-right: 40px;
 }
+
 
 
 .template-inner.active {

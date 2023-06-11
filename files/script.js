@@ -84,11 +84,14 @@ document.addEventListener('alpine:init', function() {
       },
     });
 
-
-
     if (localStorage.getItem('supabase.auth.token')) {
       Alpine.store('authenticationStatus').current = 'loggedIn';
     }
+	
+    Alpine.store('currentScreen', {
+      current: localStorage.getItem('currentScreen') || 'maps',
+      items: ['account','maps','interviews','interview-review','strategies','strategy-review','assets','newMap'],
+    });
 
     Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
 
@@ -136,15 +139,11 @@ document.addEventListener('alpine:init', function() {
     }
   });
 
-
   Alpine.store('currentPage', {
     current: 'login',
     items: ['signup', 'login']
   });
-  Alpine.store('currentScreen', {
-    current: localStorage.getItem('currentScreen') || 'maps',
-    items: ['account','maps','interviews','strategies','assets','newMap'],
-  });
+
 
   Alpine.store('lightDarkMode', {
     current: 'light',
@@ -782,12 +781,9 @@ const autoSave = debounce(
 	  const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
 	  const userId = userProfile.user_id;
 	  const interviewId = interviewData.interviewID;
-
 	  const textarea = event.target;
 	  const questionId = event.target.dataset.questionId;
 	  const inputValue = textarea.value;
-
-	
 
 	  // Check if we have a flag for this questionId, if not initialize it to false
 	  if (followup_questionCalledFlags[questionId] === undefined) {
@@ -810,8 +806,6 @@ const autoSave = debounce(
 	      }, 7000);  // 7000 milliseconds = 7 seconds
 	    }
 	  }
-
-
 
 
 // 9.5 parse interview answers
@@ -892,15 +886,10 @@ async function extractBrandName(text) {
   }
 }
 
-  
-
-
-
 
 // SECTION 10 - Event Handlers / Listeners
 
 document.addEventListener('DOMContentLoaded', async (event) => { // 
-  
   
   
   // user signs up
@@ -916,11 +905,6 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
   logoutButtons.forEach(function (logoutButton) {
     logoutButton.onclick = logoutSubmitted.bind(logoutButton);
   });
-
-
-
-
-
 
 
   function expandTextarea(textarea) {
@@ -968,11 +952,6 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
                 console.log(`Adding 'completed' class to question-${questionId}`);
               }
             }
-			
-
-
-			
-			
           });
         });
       }
@@ -1051,26 +1030,19 @@ function handleError(error) {
 
 // SECTION 13 - Testing & debugging 
 
-
 function bodyClasses() {
   return [
-
     Alpine.store('authenticationStatus').current,
     Alpine.store('userData').firstName,
     Alpine.store('currentPage').current,
     Alpine.store('currentScreen').current,
     Alpine.store('lightDarkMode').current,
     Alpine.store('sidebarStatus').current,
-
-
   ].join(' ');
 }
 
 
-
-
 // SECTION 14 - Deployment
-
 
 
 
@@ -1082,4 +1054,11 @@ function capitalizeWords(str) {
   return str.replace(/\w\S*/g, function(txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
+}
+
+
+
+function toHtml(markdownText) {
+    var md = window.markdownit();
+    return md.render(markdownText);
 }

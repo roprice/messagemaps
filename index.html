@@ -2,40 +2,41 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>Message Maps</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<title>Message Maps</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-  <!-- Google Material Icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
-  <!-- Google Variable Fonts-->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-
-  <!-- Custom CSS -->
-  <link href="files/styles.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 
-
-   <script defer src="https://unpkg.com/alpinejs@3.12.1/dist/cdn.min.js"></script>
-
-   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1"></script>
-
-   <script src="files/script.js" ></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked@5.0.5/lib/marked.umd.min.js"></script>
 
 
+<script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
 
 
-  <style>[x-cloak] { display: none !important; }</style>
+	<!-- Google Material Icons -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+	<!-- Google Variable Fonts-->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+	<link href="files/styles.css" rel="stylesheet">
+
+	<script defer src="https://unpkg.com/alpinejs@3.12.1/dist/cdn.min.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1"></script>
+
+	<script src="files/script.js" ></script>
+
+	<style>[x-cloak] { display: none !important; }</style>
+	
+	
 </head>
 
 <body id="light" x-data x-bind:class="bodyClasses()">
@@ -48,11 +49,7 @@
 
       <div class="col col-md-5  my-5">
 
-        <main class="signin-signup forms m-auto"  style="min-height:600px;width:250px;text-align: center;margin: auto;"
-        x-data="{ formToShow: 'signup' }" x-init="formToShow = 'signup'">
-
-
-
+        <main class="signin-signup forms m-auto"  x-data="{ formToShow: 'signup' }" x-init="formToShow = 'signup'">
 
           <div class="logo my-3 mb-4 middle text-center">
             <a href="#" class="mx-auto mb-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
@@ -62,14 +59,12 @@
           </div>
 
           <ul class="nav nav-pills my-2 mb-3 " id="SigninSignUp">
-
             <li class="nav-item signin-pill">
               <a href="#" class="nav-link text-small active" x-on:click.prevent="formToShow = 'signup'" :class="{ 'active': formToShow === 'signup' }">Sign up</a>
             </li>
             <li class="nav-item signup-pill">
               <a href="#" class="nav-link text-small" x-on:click.prevent="formToShow = 'signin'" :class="{ 'active': formToShow === 'signin' }">Sign in</a>
             </li>
-
           </ul>
 
           <!-- signup-form -->
@@ -124,7 +119,6 @@
 
           <form id="signin" action="#" method="POST" style="text-align:left;">
 
-
             <div class="mb-3">
               <label for="login-email" class="form-label">Email address</label>
               <input autocomplete="username" type="email"  placeholder="Enter email.." class="form-control text-secondary text-small" id="login-email" name="email" aria-describedby="emailHelp" required>
@@ -151,10 +145,7 @@
           </form>
 
         </div><!-- /signin-form -->
-
       </main>
-
-
       </div>
 
 	  <div class="col-md-7 m-0 p-0 vh-100 d-flex align-items-center justify-content-center" style="background:#FF5757">
@@ -321,7 +312,6 @@
 	                </div>
 	              </div>
 	            </div><!-- /#userMenu -->
-
 	          </div>
 	        </header>
 
@@ -352,15 +342,10 @@
 							I'll review and refine your work after each step. But first, your next move is finishing your <a href=# x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews';">discovery interview</a> - ready?
 							</p>
 
-
 							<button id="InterviewMe" class="btn btn-primary btn-lg mt-3 large-button" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Yes, I will tell you everything!!</button>
-
 						</div><!-- /.welcome-message -->
-
 					</div><!-- /.onboard-welcome -->
-
-				</div>
-				<!-- /#MapView -->
+				</div><!-- /#MapView -->
 
 				<!-- #InterviewView -->
 			 	<div id="InterviewView" x-show="Alpine.store('currentScreen').current === 'interviews' && window.localStorage.getItem('userProfile')" x-transition:enter.duration.500ms="" style="display: none;">
@@ -373,69 +358,69 @@
 								<!-- #Interview -->
 								<div id="Interview" class="card-text"  style="display:block">
 									<!-- .x-data-for-form -->
-<div class="row x-data-for-form"
-    x-data="
-    {
-      activeTab: 'YourBrand',
+									<div class="row x-data-for-form"
+									    x-data="
+									    {
+									      activeTab: 'YourBrand',
       
-	  tabs: ['YourBrand', 'YourCustomer', 'YourBuyer', 'YourCompetition', 'YourSolution', 'YourPricing'],
+										  tabs: ['YourBrand', 'YourCustomer', 'YourBuyer', 'YourCompetition', 'YourSolution', 'YourPricing'],
       
-	  changeTab: function (direction) {
-        let currentIndex = this.tabs.indexOf(this.activeTab);
-        let newIndex = currentIndex + direction;
-        if (newIndex >= 0 && newIndex < this.tabs.length) {
-          this.activeTab = this.tabs[newIndex];
-          this.scrollToInterviewTabs();
-        }
-      },
+										  changeTab: function (direction) {
+									        let currentIndex = this.tabs.indexOf(this.activeTab);
+									        let newIndex = currentIndex + direction;
+									        if (newIndex >= 0 && newIndex < this.tabs.length) {
+									          this.activeTab = this.tabs[newIndex];
+									          this.scrollToInterviewTabs();
+									        }
+									      },
       
-	  scrollToInterviewTabs: function () {
-        document.getElementById('InterviewTabs').scrollIntoView({ behavior: 'smooth' });
-      },
+										  scrollToInterviewTabs: function () {
+									        document.getElementById('InterviewTabs').scrollIntoView({ behavior: 'smooth' });
+									      },
       
-	  categories: [
-        {id: 'category_brand_story', label: 'YourBrand'},
-        {id: 'category_customer_market', label: 'YourCustomer'},
-        {id: 'category_buyer_problem', label: 'YourBuyer'},
-        {id: 'category_competitor_positioning', label: 'YourCompetition'},
-        {id: 'solution_uvp', label: 'YourSolution'},
-        {id: 'sales_pricing', label: 'YourPricing'}
-      ],
+										  categories: [
+									        {id: 'category_brand_story', label: 'YourBrand'},
+									        {id: 'category_customer_market', label: 'YourCustomer'},
+									        {id: 'category_buyer_problem', label: 'YourBuyer'},
+									        {id: 'category_competitor_positioning', label: 'YourCompetition'},
+									        {id: 'solution_uvp', label: 'YourSolution'},
+									        {id: 'sales_pricing', label: 'YourPricing'}
+									      ],
       
-	  activeQuestion: '',
+										  activeQuestion: '',
       
-	  scrollToElementWithOffset: function (elementId, yOffset, questionLabel) {
-        const element = document.getElementById(elementId);
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-        element.focus();
-        this.activeQuestion = questionLabel;
-      },
-      userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,
-      interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null,
+										  scrollToElementWithOffset: function (elementId, yOffset, questionLabel) {
+									        const element = document.getElementById(elementId);
+									        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+									        window.scrollTo({ top: y, behavior: 'smooth' });
+									        element.focus();
+									        this.activeQuestion = questionLabel;
+									      },
+									      userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,
+									      interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null,
       
-	  answeredQuestions: {},
+										  answeredQuestions: {},
       
-	  fetchAnsweredQuestions: async function () {
-        if (this.userId && this.interviewId) {
-          const { data, error } = await supabase
-            .from('interview_answers')
-            .select('question_id, answer')
-            .eq('interview_id', this.interviewId)
-            .eq('user_id', this.userId);
-          if (error) {
-            console.error('Error fetching answered questions:', error);
-            return;
-          }
-          this.answeredQuestions = data.reduce((acc, item) => {
-            acc[item.question_id] = item.answer;
-            return acc;
-          }, {});
-        }
-      },
-    }"
-    x-init="fetchAnsweredQuestions()"
->
+										  fetchAnsweredQuestions: async function () {
+									        if (this.userId && this.interviewId) {
+									          const { data, error } = await supabase
+									            .from('interview_answers')
+									            .select('question_id, answer')
+									            .eq('interview_id', this.interviewId)
+									            .eq('user_id', this.userId);
+									          if (error) {
+									            console.error('Error fetching answered questions:', error);
+									            return;
+									          }
+									          this.answeredQuestions = data.reduce((acc, item) => {
+									            acc[item.question_id] = item.answer;
+									            return acc;
+									          }, {});
+									        }
+									      },
+									    }"
+									    x-init="fetchAnsweredQuestions()"
+									>
 										
 										<!-- #InterviewNav -->
 										<ul id="InterviewNav" class="nav nav-pills mb-5 sticky-sub-element col-md-2" id="TheInterview">
@@ -484,7 +469,6 @@
 													<template 
 														x-for="(question, qIndex) in ($store.questions ? $store.questions.filter(question => question.question_category === category.id) : [])" :key="question.id">
 											
-	
 														<div class="template-inner"
 															x-data="{
 			
@@ -535,11 +519,11 @@
 																	$el.setAttribute('id', 'save-confirmation-' + question.id); 
 																	$el.setAttribute('save-confirmation-id', question.id); ""
 																	>Autosaved</div><!-- #snackbar -->
-																<textarea
+						<textarea
 																	x-ref="textarea"
 																	x-model="txt" 
 																	@input="hasInput = txt.length > 10"
-				
+																    @blur="autoSave(interviewId, question.id, txt, userId, $refs.textarea)"
 																	x-on:focus="$el.style.height = 'auto'; $el.style.height = `${$el.scrollHeight}px`;"
 																	x-on:input.space="handleTextareaInput(event);"
 				
@@ -551,7 +535,6 @@
 																></textarea>
 				
 																<div class="clear-textarea" 
-				
 																	x-show="txt.length > 0" 
 																	@click="txt = ''; $refs.textarea.focus()" 
 																	x-transition:enter.delay.250ms x-transition:enter.duration.250ms>
@@ -590,16 +573,10 @@
 					                            <a @click.prevent="changeTab(-1)" class="previous text-secondary text-small" :disabled="activeTab === tabs[0]" disabled="disabled">&lt; previous section</a>
 					                            <a @click.prevent="changeTab(1)" class="next  text-secondary text-small" :disabled="activeTab === tabs[tabs.length - 1]">next section &gt;</a>
 					                          </div><!-- /#Previous/Next buttons -->
-					                          <div class="col-md-6 text-end ">
-					                            <button name="submit" type="submit" class="btn btn-primary mb-1 disabled">Complete and Review</button>
-					                          </div>
+					                         
 					                        </div><!-- /.row.previous-next-tabs -->
 
 										</form><!-- /#InterviewForm -->
-
-
-	
-
 
 							   		</div><!-- /x-data-for-form -->
 
@@ -628,8 +605,10 @@
 								</div>
 								<!-- /.updated -->
 
-								<button name="submit" type="submit" class="btn btn-primary my-2 disabled w-150">Review</button>
-								<button id="DeleteInterview" name="submit" type="submit" class="btn btn-primary my-2 w-150">Delete</button>
+								<button id="ReviewInterview" name="submit" type="submit" class="btn btn-primary my-2  w-150"
+									 href="#discovery-interview-review" x-on:click.prevent="Alpine.store('currentScreen').current = 'interview-review'"
+									 >Get the Interview Report</button>
+								<p>View a summary analysis of your interview, download/export it, and generate a strategy map</p>
 
 								<p class="text-small text-secondary py-2">Complete the interview, review your answers, generate your message map. Note: this form <strong>auto-saves</strong> as you type</p>
 
@@ -642,11 +621,157 @@
 
 	            </div><!-- /#InterviewView -->
 
+
+
+
+   
+   
+    <!-- /#InterviewReviewView -->
+	<div id="InterviewReviewView" x-data="InterviewReviewView()" x-init="init()" x-cloak>
+	<div class="interview-review-container">
+	 <div class="interview-intro row">
+	 	
+		
+			<div class="interview-analysis col-md-6">
+				<div  class="interview-summary">Summary:</div>
+				<div  class="interview-summary">Percentage of questions answered:</div>
+				<div  class="interview-summary">Most completed section:</div>
+				<div  class="interview-summary">Longest answer:</div>
+			</div>
+		
+			<div  class="interview-meta col-md-6">
+				<!-- .interview-info-card.card-header -->
+				<div class="card-header">
+					<h5 class="card-title" id="interview-name"><span class="user-firstname" x-text="$store.interviewData.interviewName" ></span></h5>
+
+					<!-- .updated -->
+					<div class="text-small text-secondary updated">Updated:
+						<span x-text="formatDateTime($store.interviewData.createdDate)"></span>
+					</div>
+					<!-- /.updated -->
+
+					<button id="ReviewInterview" name="submit" type="submit" class="btn btn-primary my-2  w-150"
+						 href="#discovery-interview-review" x-on:click.prevent="Alpine.store('currentScreen').current = 'interview-review'"
+						 >Approved - give me strategy</button>
+						 <p>Approve this interview to save it to your profile, get a copy in your email, and generate your Brand Strategy</p>
+						 <p><checkbox> Get feedback from the consulting team</p>
+				</div>
+				<!-- .interview-info-card.card-header -->
+			</div><!--  /.intervew-meta -->
+	 </div>
+			
+       <!-- Iterate over each category -->
+       <template x-for="(category, index) in categories" :key="index">
+           <div class="interview-category">
+               <!-- Print category name -->
+               <h2 x-text="category.replaceAll('_', ' ')"></h2>
+            
+               <!-- Iterate over each question in this category -->
+               <template 
+                   x-for="(question, qIndex) in ($store.questions ? $store.questions.filter(question => question.question_category === category) : [])"
+                   :key="question.id"
+               >
+                   <div>
+                       <!-- Print question label and text, and answer -->
+                       <h4 x-text="question.question_label.replaceAll('_', ' ')">   </h4> <span x-text="question.question_text"></span>
+                     
+                       <p x-text="answeredQuestions[question.id] ? answeredQuestions[question.id] : 'No answer yet'"></p>
+                   </div>
+               </template>
+           </div>
+       </template>
+
+    <script>
+		function InterviewReviewView() {
+		    return {
+		        categories: ['category_brand_story', 'category_customer_market', 'category_buyer_problem', 'category_competitor_positioning', 'solution_uvp', 'sales_pricing'],
+		        userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,
+		        interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null,
+		        answeredQuestions: {},
+		        questions: {}, // Store the question objects here
+		        fetchQuestions: async function () {
+		            console.log("Fetching all questions...");
+		            if (this.userId) {
+		                const { data, error } = await supabase
+		                    .from('interview_questions')
+		                    .select('*')
+		                    .eq('user_id', this.userId);
+		                if (error) {
+		                    console.error('Error fetching questions:', error);
+		                    return {};
+		                }
+		                return data.reduce((acc, item) => {
+		                    acc[item.id] = item;
+		                    return acc;
+		                }, {});
+		            }
+		            return {};
+		        },
+		        fetchAnsweredQuestions: async function () {
+		            console.log("Fetching answered questions...");
+		            if (this.userId && this.interviewId) {
+		                const { data, error } = await supabase
+		                    .from('interview_answers')
+		                    .select('question_id, answer')
+		                    .eq('interview_id', this.interviewId)
+		                    .eq('user_id', this.userId);
+		                if (error) {
+		                    console.error('Error fetching answered questions:', error);
+		                    return;
+		                }
+		                this.answeredQuestions = data.reduce((acc, item) => {
+		                    acc[item.question_id] = item.answer ? item.answer : 'No answer yet';
+		                    return acc;
+		                }, {});
+		                console.log("Answered questions fetched: ", this.answeredQuestions);
+		            }
+		        },
+		        toHtml(markdownText) {
+		            var md = window.markdownit();
+		            return md.render(markdownText);
+		        },
+		        toMarkdown: function(category, question_id, answer) {
+		            let question = this.questions[question_id]; // Get the question object
+		            console.log("Answered questions fetched: ", question);
+		            if (!question) {
+		                console.info('Question not found:', question_id);
+		                return '';
+		            }
+		            console.log("category: ", category);
+		            console.log("question: ", question);
+		            return `
+		            ### ${category.replaceAll('_', ' ')}
+		            # ${question.question_label.replaceAll('_', ' ')} - ${question.question_text}
+		            ## ${answer}
+		            `;
+		        },
+		        markdownContent: '', // Initialize the markdown content
+		        async generateMarkdownContent() {
+		            await this.fetchAnsweredQuestions(); // Make sure to load the answers first
+		            this.markdownContent = Object.keys(this.answeredQuestions).map(question_id => {
+		                let category = this.questions[question_id]?.question_category;
+		                let answer = this.answeredQuestions[question_id];
+		                return this.toMarkdown(category, question_id, answer);
+		            }).join('\n');
+		        },
+		        async init() {
+		            this.questions = await this.fetchQuestions();
+		            await this.generateMarkdownContent(); // Generate the Markdown content when the component is initialized
+		        }
+		    }
+		}
+    </script>
+</div>
+</div>
+
+
+
+
+
 				<!-- #StrategyView -->
 	            <div id="StrategyView" x-show="Alpine.store('currentScreen').current === 'strategies'">
 	              <h4>Strategy Map</h4>
-	            </div>
-				<!-- /#StrategyView -->
+	            </div><!-- /#StrategyView -->
 
 				<!-- #MessagingView -->
 	            <div id="MessagingView" x-show="Alpine.store('currentScreen').current === 'assets'">
