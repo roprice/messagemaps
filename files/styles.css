@@ -1,5 +1,25 @@
+
+
 .signin-signup {min-height:600px;width:250px;text-align: center;margin: auto;}
 
+.question-label-text {
+    font-weight: 500;
+    color: #777;
+}
+
+.interview-category {
+    max-width: 650px;
+}
+
+p.review.question-answer {
+    
+    margin-top: 12px;
+}
+
+.question-label-text-answer {
+    margin-bottom: 60px;
+}
+.download-export-share a {padding-right:10px;}
 
 
 .sticky-element {
@@ -37,10 +57,10 @@ width: 800px;
 
 }
 
-.interview-form-card {
-  margin-right: 40px;
-}
 
+span.interview-analysis {
+    font-weight: 800;
+}
 
 
 .template-inner.active {
@@ -922,6 +942,88 @@ input, .form-control {
   color: #ccc;
 }
 
+
+
+
+@media print {
+    /* Hide elements that are not needed in print view */
+	#Logged_Out_States,
+	#CollapsedSidebar, 
+	#ExpandedSidebar, 
+	header, 
+	.hide-for-print {
+        display: none;
+    }
+    /* You may want to increase font size for print view */
+    body {
+        font-size: 14pt;
+    }
+    /* And other stylings as needed */
+	 #Main,
+	 #MainViews,
+	 #InterviewReviewView,
+	 #Main .interview-review-container,
+	 #Main .interview-meta, 
+	 #Main .interview-analysis,
+	 #Main .interview-category,
+	 #Main .card-header,
+	 #Main .row {
+ 	    border:none!important;
+ 	    background: white!important;
+ 	    padding: 0!important;
+ 	    border-radius: 0!important;
+		margin:0!important;
+	 }
+	 
+	 #Main .interview-review-container
+	 #Main .interview-meta, 
+	 #Main .interview-analysis,
+	 #Main .interview-category,
+	 #Main .card-header {
+ 	    width:100%;
+	 }
+	 
+	 #Main #InterviewReviewView {
+	     padding: 60px!important;
+	     margin: 0!important;
+	 }
+	 
+
+	 #Main #InterviewReviewView .interview-analysis,
+	 #Main #InterviewReviewView .interview-meta,
+	 #Main #InterviewReviewView .interview-category
+	 {
+		 margin-bottom:40px!important;
+	 	
+	 }
+	
+    .interview-meta {
+        order: 1;
+    }
+
+    .interview-analysis {
+        order: 2;
+    }
+	.question-label-text {
+	    font-weight: 500;
+	}
+	.question-label-text-answer {
+	    margin-bottom: 35px;
+	}
+	
+	.print-header {display:block;}
+	
+	
+	
+}
+@page {
+    @bottom-center {
+        content: "MessageMaps.io - Perfect Your Message";
+        font-size: 12px;
+        padding: 0px;
+        text-align: right; /* Align text to the right */
+    }
+}
 
 
 

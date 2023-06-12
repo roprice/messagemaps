@@ -386,6 +386,9 @@
 									        {id: 'solution_uvp', label: 'YourSolution'},
 									        {id: 'sales_pricing', label: 'YourPricing'}
 									      ],
+							       
+										  
+							            
       
 										  activeQuestion: '',
       
@@ -590,7 +593,7 @@
 						<div class="interview-info-card card my-4 p-3 col-md-4" style="height: fit-content;">
 
 							<!-- .interview-info-card.card-header -->
-							<div class="card-header">
+							<div class="card-header" x-data="InterviewReviewView()">
 								<h5 class="card-title" id="interview-name"><span class="user-firstname" x-text="$store.interviewData.interviewName" ></span></h5>
 
 								<!-- .created -->
@@ -605,12 +608,24 @@
 								</div>
 								<!-- /.updated -->
 
-								<button id="ReviewInterview" name="submit" type="submit" class="btn btn-primary my-2  w-150"
-									 href="#discovery-interview-review" x-on:click.prevent="Alpine.store('currentScreen').current = 'interview-review'"
-									 >Get the Interview Report</button>
-								<p>View a summary analysis of your interview, download/export it, and generate a strategy map</p>
+								<div x-data="InterviewReviewView()" x-init="init">
+								    <button 
+								        title="View a summary analysis of your interview, download/export it, and generate a strategy map"
+								        id="ReviewInterview" 
+								        name="submit" 
+								        type="submit" 
+								        class="btn btn-primary my-2  w-150"
+								        x-on:click.prevent="
+								            init(); 
+								            mostEngagementCategory();
+								            leastEngagementCategory();
+								            Alpine.store('currentScreen').current = 'interview-review';
+								        "
+								    >
+								        Get the Interview Report
+								    </button>
+								</div>
 
-								<p class="text-small text-secondary py-2">Complete the interview, review your answers, generate your message map. Note: this form <strong>auto-saves</strong> as you type</p>
 
 							</div>
 							<!-- .interview-info-card.card-header -->
@@ -621,152 +636,74 @@
 
 	            </div><!-- /#InterviewView -->
 
-
-
-
-   
-   
-    <!-- /#InterviewReviewView -->
-	<div id="InterviewReviewView" x-data="InterviewReviewView()" x-init="init()" x-cloak>
-	<div class="interview-review-container">
-	 <div class="interview-intro row">
-	 	
+			    <!-- /#InterviewReviewView -->
+				<div id="InterviewReviewView" x-data="InterviewReviewView()" x-init="init()" x-cloak>
+					<div class="interview-review-container">
+						<div class="print-header text-small text-secondary" style="display: block;text-align:right">Conducted by MessageMaps.io</div>
+						<a class="edit text-small text-secondary" style="display:block" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">< Edit your interview</a>
+				 	 	<div class="interview-intro row">		
+							<div class="interview-analysis text-small text-secondary col-md-6">
+								<div  class="interview-summary">Summary: <span class="interview-analysis summary"></span></div>
+								<div  class="interview-questions-answered">Percentage of questions answered: <span class="interview-analysis percent-answered" x-text="percentAnswered() + '%'"></span></div>
+								<div  class="interview-deepest-engagement">Section with most engagement: <span class="interview-analysis deepest-engagement" x-text="mostEngagementCategory() || 'Loading...'"></span></div>
+								<div  class="interview-most-completed-section">Section with least engagement: <span class="interview-analysis least-engagement" x-text="leastEngagementCategory() || 'Loading...'"></span></div>
+								<div  class="interview-longest-answer">Question with longest answer: <span class="interview-analysis longest-answer"  x-text="longestAnswer()"></span></div>
+								<div  class="interview-most-charged">Most emotionally charged answer: <span class="interview-analysis summary"></span></div>
+								
+							</div><!--  /.intervew-analysis -->
 		
-			<div class="interview-analysis col-md-6">
-				<div  class="interview-summary">Summary:</div>
-				<div  class="interview-summary">Percentage of questions answered:</div>
-				<div  class="interview-summary">Most completed section:</div>
-				<div  class="interview-summary">Longest answer:</div>
-			</div>
-		
-			<div  class="interview-meta col-md-6">
-				<!-- .interview-info-card.card-header -->
-				<div class="card-header">
-					<h5 class="card-title" id="interview-name"><span class="user-firstname" x-text="$store.interviewData.interviewName" ></span></h5>
+							<div  class="interview-meta col-md-6">
+								<!-- .interview-info-card.card-header -->
+								<div class="card-header">
+									<h5 class="card-title" id="interview-name"><span class="user-firstname" x-text="$store.interviewData.interviewName" ></span></h5>
 
-					<!-- .updated -->
-					<div class="text-small text-secondary updated">Updated:
-						<span x-text="formatDateTime($store.interviewData.createdDate)"></span>
-					</div>
-					<!-- /.updated -->
-
-					<button id="ReviewInterview" name="submit" type="submit" class="btn btn-primary my-2  w-150"
-						 href="#discovery-interview-review" x-on:click.prevent="Alpine.store('currentScreen').current = 'interview-review'"
-						 >Approved - give me strategy</button>
-						 <p>Approve this interview to save it to your profile, get a copy in your email, and generate your Brand Strategy</p>
-						 <p><checkbox> Get feedback from the consulting team</p>
-				</div>
-				<!-- .interview-info-card.card-header -->
-			</div><!--  /.intervew-meta -->
-	 </div>
+									<!-- .updated -->
+									<div class="text-small text-secondary updated">Last edited:
+										<span x-text="formatDateTime($store.interviewData.createdDate)"></span>
+									</div>
+									<!-- /.updated -->
+					
+									<div class="hide-for-print">
+										<button id="ReviewInterview" name="submit" type="submit" class="btn btn-primary my-2  w-150"
+										 href="#discovery-interview-review" x-on:click.prevent="Alpine.store('currentScreen').current = 'interview-review'"
+										 >Approve - now give me strategy</button>
+										  <p class="text-small text-secondary"><input type=checkbox> Get consulting team feedback</p>
+										<p class="text-small text-secondary pt-1 pb-">Approve to save to your profile and generate your Brand Strategy</p>
+										<p class="download-export-share text-small text-secondary pt-0">
+										    <a title="Print nicely formatted" id="PrintHTML" href="#interview-report-print">Print</a> 
+										    <a title="Download a simple, low file-size markdown document" id="DownloadMarkdown" href="#interview-report-download-markdown">Download markdown</a> 
+										    <a title="Export as a CSV for Google Sheets, Excel, etc" id="ExportCSV" href="#interview-report-export-csv">Export CSV</a>
+										</p>
+									</div><!-- hide for print -->
+								</div><!-- .interview-info-card.card-header -->
+							</div><!--  /.intervew-meta -->
+				 		</div><!--  /.intervew-intro.row -->
 			
-       <!-- Iterate over each category -->
-       <template x-for="(category, index) in categories" :key="index">
-           <div class="interview-category">
-               <!-- Print category name -->
-               <h2 x-text="category.replaceAll('_', ' ')"></h2>
+			       	 	<!-- Iterate over each category -->
+			       	 	<template x-for="(category, index) in categories" :key="index">
+			           		<div class="interview-category">
+				               <!-- Print category name -->
+				               <div class="question-category h6" x-text="category.label"></div>
             
-               <!-- Iterate over each question in this category -->
-               <template 
-                   x-for="(question, qIndex) in ($store.questions ? $store.questions.filter(question => question.question_category === category) : [])"
-                   :key="question.id"
-               >
-                   <div>
-                       <!-- Print question label and text, and answer -->
-                       <h4 x-text="question.question_label.replaceAll('_', ' ')">   </h4> <span x-text="question.question_text"></span>
-                     
-                       <p x-text="answeredQuestions[question.id] ? answeredQuestions[question.id] : 'No answer yet'"></p>
-                   </div>
-               </template>
-           </div>
-       </template>
-
-    <script>
-		function InterviewReviewView() {
-		    return {
-		        categories: ['category_brand_story', 'category_customer_market', 'category_buyer_problem', 'category_competitor_positioning', 'solution_uvp', 'sales_pricing'],
-		        userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,
-		        interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null,
-		        answeredQuestions: {},
-		        questions: {}, // Store the question objects here
-		        fetchQuestions: async function () {
-		            console.log("Fetching all questions...");
-		            if (this.userId) {
-		                const { data, error } = await supabase
-		                    .from('interview_questions')
-		                    .select('*')
-		                    .eq('user_id', this.userId);
-		                if (error) {
-		                    console.error('Error fetching questions:', error);
-		                    return {};
-		                }
-		                return data.reduce((acc, item) => {
-		                    acc[item.id] = item;
-		                    return acc;
-		                }, {});
-		            }
-		            return {};
-		        },
-		        fetchAnsweredQuestions: async function () {
-		            console.log("Fetching answered questions...");
-		            if (this.userId && this.interviewId) {
-		                const { data, error } = await supabase
-		                    .from('interview_answers')
-		                    .select('question_id, answer')
-		                    .eq('interview_id', this.interviewId)
-		                    .eq('user_id', this.userId);
-		                if (error) {
-		                    console.error('Error fetching answered questions:', error);
-		                    return;
-		                }
-		                this.answeredQuestions = data.reduce((acc, item) => {
-		                    acc[item.question_id] = item.answer ? item.answer : 'No answer yet';
-		                    return acc;
-		                }, {});
-		                console.log("Answered questions fetched: ", this.answeredQuestions);
-		            }
-		        },
-		        toHtml(markdownText) {
-		            var md = window.markdownit();
-		            return md.render(markdownText);
-		        },
-		        toMarkdown: function(category, question_id, answer) {
-		            let question = this.questions[question_id]; // Get the question object
-		            console.log("Answered questions fetched: ", question);
-		            if (!question) {
-		                console.info('Question not found:', question_id);
-		                return '';
-		            }
-		            console.log("category: ", category);
-		            console.log("question: ", question);
-		            return `
-		            ### ${category.replaceAll('_', ' ')}
-		            # ${question.question_label.replaceAll('_', ' ')} - ${question.question_text}
-		            ## ${answer}
-		            `;
-		        },
-		        markdownContent: '', // Initialize the markdown content
-		        async generateMarkdownContent() {
-		            await this.fetchAnsweredQuestions(); // Make sure to load the answers first
-		            this.markdownContent = Object.keys(this.answeredQuestions).map(question_id => {
-		                let category = this.questions[question_id]?.question_category;
-		                let answer = this.answeredQuestions[question_id];
-		                return this.toMarkdown(category, question_id, answer);
-		            }).join('\n');
-		        },
-		        async init() {
-		            this.questions = await this.fetchQuestions();
-		            await this.generateMarkdownContent(); // Generate the Markdown content when the component is initialized
-		        }
-		    }
-		}
-    </script>
-</div>
-</div>
-
-
-
-
+								<!-- Iterate over each question in this category -->
+								<template 
+								    x-for="(question, qIndex) in ($store.questions ? $store.questions.filter(question => question.question_category === category.id) : [])"
+								    :key="question.id">
+								    <!-- Print question label and text, and answer -->
+								    <div class="question-label-text-answer">
+								        <!-- Print question label, colon, and question text in a single element -->
+								        <div class="question-label-text d-flex align-items-center">
+								            <span x-text="question.question_label.charAt(0).toUpperCase() + question.question_label.slice(1).replaceAll('_', ' ') + ': ' + question.question_text.charAt(0).toLowerCase() + question.question_text.slice(1)"></span>
+								        </div><!-- /.question-label-text -->
+     
+									   <p class="review question-answer" x-text="answeredQuestions[question.id] ? answeredQuestions[question.id].answer : 'No answer yet'"></p>
+								       
+								    </div><!-- /.question-label-text-answer -->
+								</template>
+				           	</div><!-- /.interview-category -->
+				      	</template>
+					</div><!-- /.interview-review-container -->
+				</div><!-- /#InterviewReviewView -->
 
 				<!-- #StrategyView -->
 	            <div id="StrategyView" x-show="Alpine.store('currentScreen').current === 'strategies'">

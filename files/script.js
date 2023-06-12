@@ -887,9 +887,194 @@ async function extractBrandName(text) {
 }
 
 
+
+function InterviewReviewView() {
+    return {
+        categories: [
+            {id: 'category_brand_story', label: 'Brand and Background'},
+            {id: 'category_customer_market', label: 'Market and Audience'},
+            {id: 'category_buyer_problem', label: 'Buyer and Problem'},
+            {id: 'category_competitor_positioning', label: 'ompetition and Positioning'},
+            {id: 'solution_uvp', label: 'Solution and UVP'},
+            {id: 'sales_pricing', label: 'Sales and Pricing'}
+        ],		        
+		userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,
+        interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null,
+        answeredQuestions: {},
+        questions: {}, // Store the question objects here
+        fetchQuestions: async function () {
+            console.log("Fetching all questions...");
+            if (this.userId) {
+                const { data, error } = await supabase
+                    .from('interview_questions')
+                    .select('*')
+                    .eq('user_id', this.userId);
+                if (error) {
+                    console.error('Error fetching questions:', error);
+                    return {};
+                }
+                return data.reduce((acc, item) => {
+                    acc[item.id] = item;
+                    return acc;
+                }, {});
+            }
+            return {};
+        },
+		fetchAnsweredQuestions: async function () {
+		    console.log("Fetching answered questions...");
+		    if (this.userId && this.interviewId) {
+		        const { data, error } = await supabase
+		            .from('interview_answers')
+		            .select('question_id, answer, interview_questions:question_id (question_text, question_category)') // Include question_category here
+		            .eq('interview_id', this.interviewId)
+		            .eq('user_id', this.userId);
+		        if (error) {
+		            console.error('Error fetching answered questions:', error);
+		            return;
+		        }
+		        this.answeredQuestions = data.reduce((acc, item) => {
+		            acc[item.question_id] = { 
+		                answer: item.answer ? item.answer : 'No answer yet', 
+		                question_text: item.interview_questions.question_text,
+		                question_category: item.interview_questions.question_category // Store question_category here
+		            };
+		            return acc;
+		        }, {});
+		        console.log("Answered questions fetched: ", this.answeredQuestions);
+		    }
+		},
+
+
+        toHtml(markdownText) {
+            var md = window.markdownit();
+            return md.render(markdownText);
+        },
+        toMarkdown: function(category, question_id, answer) {
+            let question = this.questions[question_id]; // Get the question object
+            console.log("Answered questions fetched: ", question);
+            if (!question) {
+                console.info('Question not found:', question_id);
+                return '';
+            }
+            console.log("category: ", category);
+            console.log("question: ", question);
+            return `
+            ### ${category.replaceAll('_', ' ')}
+            ** ${question.question_label.replaceAll('_', ' ')} - ${question.question_text} **
+             ${answer}
+            `;
+        },
+        markdownContent: '', // Initialize the markdown content
+        async generateMarkdownContent() {
+            await this.fetchAnsweredQuestions(); // Make sure to load the answers first
+            this.markdownContent = Object.keys(this.answeredQuestions).map(question_id => {
+                let category = this.questions[question_id]?.question_category;
+                let answer = this.answeredQuestions[question_id];
+                return this.toMarkdown(category, question_id, answer);
+            }).join('\n');
+        },
+        async init() {
+            this.questions = await this.fetchQuestions();
+            await this.generateMarkdownContent(); // Generate the Markdown content when the component is initialized
+        },
+	    percentAnswered: function() {
+			let totalQuestions = 45;
+	        let answeredQuestions = Object.keys(this.answeredQuestions).length;
+	        return Math.round((answeredQuestions / totalQuestions) * 100);
+	    },
+		mostAnsweredCategory: function() {
+		    let categoryCounts = this.categories.map(category => ({
+		        category: category.label,
+		        count: Object.values(this.answeredQuestions).filter(a => a.question_category === category.id).length
+		    }));
+		    let maxCategory = categoryCounts.reduce((a, b) => a.count > b.count ? a : b);
+		    return maxCategory.category;
+		},
+		longestAnswer: function() {
+		    if(Object.keys(this.answeredQuestions).length === 0){
+		        return '';
+		    }
+
+		    let maxAnswerQuestionId = Object.keys(this.answeredQuestions).reduce((a, b) => this.answeredQuestions[a].answer.length > this.answeredQuestions[b].answer.length ? a : b);
+		    return this.answeredQuestions[maxAnswerQuestionId].question_text;
+		},
+		mostEngagementCategory: async function() {
+		    // Ensure we have the answered questions data
+		    await this.fetchAnsweredQuestions();
+
+		    // Create an array to store engagement scores per category
+		    let engagementScores = this.categories.map(category => ({
+		        category: category.label,
+		        score: 0
+		    }));
+
+		    // For each answered question
+		    for (let question_id in this.answeredQuestions) {
+		        // Get the question category
+		        let question_category = this.answeredQuestions[question_id].question_category;
+
+		        // Find the corresponding category in the engagementScores array
+		        let category = engagementScores.find(cat => cat.category === this.categories.find(c => c.id === question_category).label);
+
+		        // Add the length of the answer to the score of the corresponding category
+		        if (category) {
+		            category.score += this.answeredQuestions[question_id].answer.length;
+		        }
+		    }
+
+		    // Find the category with the highest engagement score
+		    let mostEngagedCategory = engagementScores.reduce((a, b) => a.score > b.score ? a : b);
+
+		    return mostEngagedCategory.category;
+		},
+
+		leastEngagementCategory: async function() {
+		    // Ensure we have the answered questions data
+		    await this.fetchAnsweredQuestions();
+
+		    // Create an array to store engagement scores per category
+		    let engagementScores = this.categories.map(category => ({
+		        category: category.label,
+		        score: 0
+		    }));
+
+		    // For each answered question
+		    for (let question_id in this.answeredQuestions) {
+		        // Get the question category
+		        let question_category = this.answeredQuestions[question_id].question_category;
+
+		        // Find the corresponding category in the engagementScores array
+		        let category = engagementScores.find(cat => cat.category === this.categories.find(c => c.id === question_category).label);
+
+		        // Add the length of the answer to the score of the corresponding category
+		        if (category) {
+		            category.score += this.answeredQuestions[question_id].answer.length;
+		        }
+		    }
+
+		    // Find the category with the lowest engagement score
+		    let leastEngagedCategory = engagementScores.reduce((a, b) => a.score < b.score ? a : b);
+
+		    return leastEngagedCategory.category;
+		},
+
+
+	
+		
+    }
+}
+
+
+
+
 // SECTION 10 - Event Handlers / Listeners
 
 document.addEventListener('DOMContentLoaded', async (event) => { // 
+  
+  
+
+  
+  
   
   
   // user signs up
@@ -905,6 +1090,25 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
   logoutButtons.forEach(function (logoutButton) {
     logoutButton.onclick = logoutSubmitted.bind(logoutButton);
   });
+
+
+document.getElementById("PrintHTML").addEventListener("click", function(event){
+    event.preventDefault();  // Prevent the default link click action
+    window.print();  // Call the browser print function
+});
+
+/*
+document.getElementById("DownloadMarkdown").addEventListener("click", function(event){
+    event.preventDefault();  // Prevent the default link click action
+    downloadAsMarkdown();  // Call the function to download as Markdown
+});
+
+document.getElementById("ExportCSV").addEventListener("click", function(event){
+    event.preventDefault();  // Prevent the default link click action
+    downloadAsCSV();  // Call the function to download as CSV
+});
+*/
+
 
 
   function expandTextarea(textarea) {
@@ -994,6 +1198,7 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
   });
 
   // delete interview clicked
+  /*
   const deleteButton = document.getElementById('DeleteInterview');
   deleteButton.addEventListener('click', async () => {
     // Pull the user profile from local storage
@@ -1012,6 +1217,8 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
       console.log('No interview found to delete.');
     }
   });
+  */
+  
 });
 
 
