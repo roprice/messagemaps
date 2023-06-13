@@ -1,16 +1,22 @@
 
-
+.interview-info-card.card.my-4.p-3.col-md-4 {
+    margin-left: 20px;
+}
 .signin-signup {min-height:600px;width:250px;text-align: center;margin: auto;}
 
 .question-label-text {
     font-weight: 500;
     color: #777;
 }
-
+.interview-analysis {
+    margin-bottom: 21px;
+}
 .interview-category {
     max-width: 650px;
 }
-
+.interview-analysis span {
+    font-weight: 600;
+}
 p.review.question-answer {
     
     margin-top: 12px;
@@ -309,6 +315,22 @@ h2.statement {
     color: white;
     padding: 150px;
 }
+
+#InterviewNav  li.toplevel.completed a::after {
+	
+	    content: "\2713";
+	    font-size: 13px;
+	    margin-left: 5px;
+		color: #777;
+	
+}
+
+#InterviewNav  li.toplevel.completed li a::after {
+	
+	display:none;
+	
+}
+
 
 #InterviewNav .nav-sub-items li.completed::after {
 	
@@ -662,6 +684,77 @@ textarea {
 }
 
 
+.dropdown {
+  position: relative;
+}
+
+.dropdown-toggle::after {
+  display:none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  margin: 0.125rem 0 0;
+  font-size: 1rem;
+  color: #212529;
+  text-align: left;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 0.25rem 1.5rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  color: #1e2125;
+  text-decoration: none;
+  background-color: #f8f9fa;
+}
+
+.dropdown-divider {
+  height: 0;
+  margin: 0.5rem 0;
+  overflow: hidden;
+  border-top: 1px solid #e9ecef;
+}
+.dropdown-toggle { outline: 0; }
+
+
+.profile {
+  width: 40px;
+  height: 40px;
+  background-color: #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  color: #222;
+  font-size: 12px;
+  letter-spacing:-2;
+}
+
+
 
 
 
@@ -688,7 +781,6 @@ body {font-family: Inter;}
 
 
 
-.dropdown-toggle { outline: 0; }
 
 
 /* Left Nav */
@@ -766,10 +858,6 @@ body {font-family: Inter;}
 
   .text-small {
     font-size: 85%;
-  }
-
-  .dropdown-toggle {
-    outline: 0;
   }
 
   #CollapsedSidebar {

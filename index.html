@@ -10,12 +10,12 @@
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 
 
-	<script src="https://cdn.jsdelivr.net/npm/marked@5.0.5/lib/marked.umd.min.js"></script>
 
-
-<script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
 
 
 	<!-- Google Material Icons -->
@@ -176,33 +176,33 @@
 			    </a>
 			  </div>
 			  <div class="logo mb-3  ms-3 pt-4 middle ">
-			    <a href="#" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+			    <a href="#message-map" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
 			      <img class="mb-auto" src="files/logo-40x40.png" alt="" width="40" height="40">
 			    </a>
 			  </div>
 			  <ul class="nav sidebar-nav flex-column mb-auto pt-2 py-5 d-flex justify-content-center">
-			    <li class="my-2 text-center maps">
-			      <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+			    <li class="my-2 text-center maps" title="Your Message Map">
+			      <a class="navlink linkdark p-2  2 my-2" href="#message-map" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
 			        <span class="material-symbols-outlined medium">map</span>
 			      </a>
 			    </li>
-			    <li class="my-2 text-center interviews child">
-			      <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
+			    <li class="my-2 text-center interviews child"  title="Discovery Interview">
+			      <a class="navlink linkdark p-2  2 my-2" href="#discovery-interview" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
 			        <span class="material-symbols-outlined medium">auto_detect_voice</span>
 			      </a>
 			    </li>
-			    <li class="my-2 text-center strategy child disabled">
-			      <a class="navlink linkdark p-2  2 my-2 disabled" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">
+			    <li class="my-2 text-center strategy child disabled"  title="Strategic Messaging">
+			      <a class="navlink linkdark p-2  2 my-2 disabled" href="#strategic-messaging" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">
 			        <span class="material-symbols-outlined medium">explore</span>
 			      </a>
 			    </li>
-			    <li class="my-2 text-center assets child disabled">
-			      <a class="navlink linkdark p-2  2 my-2 disabled" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'">
+			    <li class="my-2 text-center assets child disabled"  title="Sales and Marketing Assets">
+			      <a class="navlink linkdark p-2  2 my-2 disabled" href="#sales-and-marketing-assets" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'">
 			        <span class="material-symbols-outlined medium">dashboard_customize</span>
 			      </a>
 			    </li>
-			    <li class="my-2 text-center newMap">
-			      <a class="navlink linkdark p-2  2 my-2" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'">
+			    <li class="my-2 text-center newMap"  title="Get a new Message Map">
+			      <a class="disabled navlink linkdark p-2  2 my-2" href="#get-message-map" x-on:click.prevent="">
 			        <span class="material-symbols-outlined medium">add</span>&nbsp;
 			      </a>
 			    </li>
@@ -217,39 +217,39 @@
 			<!-- .sidenav-wrapper -->
 			<div class="sidenav-wrapper py-0 px-2 sticky-element">
 				<div class="position-relative m-0 sidebar-toggle-icon">
-					<a href="#" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
+					<a href="" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
 					x-on:click.prevent="Alpine.store('sidebarStatus').current = 'collapsed'">
 					<span class="material-symbols-outlined p-0 small ">left_panel_close</span>
 					</a>
 				</div>
 				<div class="logo mb-3 ms-3 pt-4 middle">
-					<a href="#" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+					<a href="#message-map" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
 					<img class="mb-auto" src="files/logo-40x40.png" alt="" width="40" height="40">
 					</a>
 				</div>
 
 				<ul class="nav sidebar-nav nav-pills flex-column mb-auto pt-2 pb-2">
-				<li class="my-2 maps" >
-				  <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'; ">
+				<li class="my-2 maps"  title="Your Message Map">
+				  <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#message-map" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'; ">
 				    <span class="material-symbols-outlined medium me-2">map</span>
 				    Message Map
 				  </a>
 				</li>
-				<li class="my-2 interviews child">
-				  <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; ">
-				    <span class="material-symbols-outlined medium me-2">auto_detect_voice</span> Interview</a>
+				<li class="my-2 interviews child"  title="Discovery Interview">
+				  <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#discovery-interview" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; ">
+				    <span class="material-symbols-outlined medium me-2">auto_detect_voice</span>Discovery</a>
 				</li>
-				<li class="my-2 strategy child disabled">
-				  <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">
-				    <span class="material-symbols-outlined medium me-2">explore</span>Brand Strategy</a>
+				<li class="my-2 strategy child disabled" title="Strategic Messaging">
+				  <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#strategic-messaging" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">
+				    <span class="material-symbols-outlined medium me-2">explore</span>Strategic Messaging</a>
 				</li>
-				<li class="my-2 assets child disabled">
-				  <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'; " >
-				    <span class="material-symbols-outlined medium me-2">dashboard_customize</span>Brand Assets</a>
+				<li class="my-2 assets child disabled" title="Sales and Marketing Assets">
+				  <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#sales-and-marketing-assets" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'; " >
+				    <span class="material-symbols-outlined medium me-2">dashboard_customize</span>Assets</a>
 				</li>
 				<div class="dropdown-divider"></div>
-				<li class="my-2 newMap disabled">
-				  <a class="navlink disabled linkdark p-2 px-3 my-2 d-flex align-items-center" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'; ">
+				<li class="my-2 newMap disabled"  title="Get a new Message Map">
+				  <a class="disabled navlink disabled linkdark p-2 px-3 my-2 d-flex align-items-center" href="#get-message-map" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'; ">
 				    <span class="material-symbols-outlined medium me-2">add_circle</span>Get a new map</a>
 				</li>
 				</ul>
@@ -262,15 +262,15 @@
 			    <div class="d-flex align-items-center">
 			      <a class="user-settings mt-2 me-1 navlink linkdark " href="#"><span class="material-symbols-outlined medium me-2">tune</span></a>
 			      <div class="dropdown">
-			        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><img src="https://avatars.githubusercontent.com/u/19863?v=4" alt="" width="40" height="40" class="rounded-circle"></a>
+					<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+					  <div class="rounded-circle profile" x-text="Alpine.store('userProfile').getInitials()"></div>
+				    </a>
 			        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-			          <li><a class="dropdown-item" href="#">New Map</a></li>
+			          <li><a class="dropdown-item" href="#account" x-on:click.prevent="Alpine.store('currentScreen').current = 'accounts'; ">Account & Settings</a></li>
+			          <!--<li><a class="dropdown-item" href="#settings">Settings</a></li>-->
+			          <li><a class="dropdown-item" href="mailto:rowan@messagemaps.io?subject='Help me please!'">Help</a></li>
 			          <li><hr class="dropdown-divider"></li>
-			          <li><a class="dropdown-item" href="#"  x-on:click.prevent="Alpine.store('currentScreen').current = 'accounts'; ">My Account</a></li>
-			          <li><a class="dropdown-item" href="#">Settings</a></li>
-			          <li><a class="dropdown-item" href="#">Help</a></li>
-			          <li><hr class="dropdown-divider"></li>
-			          <li><a class="dropdown-item logout-button" href="#">Logout Bro</a></li>
+			          <li><a class="dropdown-item logout-button" href="#">Logout</a></li>
 			        </ul>
 			      </div>
 			    </div>
@@ -283,37 +283,35 @@
 		'main-expanded': Alpine.store('sidebarStatus').current === 'expanded',
 		'main-collapsed': Alpine.store('sidebarStatus').current === 'collapsed'
 		}">
-	        <header class="p-3 border-bottom bg-white shadow-sm sticky-element">
-	          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start me-2">
+			<header class="p-3 border-bottom bg-white shadow-sm sticky-element">
+			  <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start me-2">
 
-	            <div class="custom-breadcrumb text-small text-secondary ms-4 ps-2" x-data>
-	              <span  x-text="Alpine.store('currentScreen').current"></span>
-	            </div>
+			    <div class="custom-breadcrumb text-small text-secondary ms-4 ps-2">
+			      <span x-text="Alpine.store('currentScreen').showName()"></span>
+			    </div>
 
-	            <div id="userMenu" class=" text-end ms-auto me-0">
-	              <div class="d-flex align-items-center">
-	                <span class="user-welcome mt-1 me-2 pb-1 small title-case  highlight-welcome">Welcome <span class="user-firstname" x-text="$store.userData.firstName"></span></span>
-	                <a class="user-settings mt-2 me-1 navlink linkdark " href="#"><span class="material-symbols-outlined medium me-2">tune</span></a>
-	                <div class="dropdown">
+			    <div id="userMenu" class="text-end ms-auto me-0">
+			      <div class="d-flex align-items-center">
+			        <span class="user-welcome mt-1 me-2 pb-1 small title-case highlight-welcome">Welcome <span class="user-firstname" x-text="$store.userProfile.firstName"></span></span>
+			        <a class="user-settings mt-2 me-1 navlink linkdark" href="#"><span class="material-symbols-outlined medium me-2">tune</span></a>
+			        <div class="dropdown">
+					<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+					  <div class="rounded-circle profile" x-text="Alpine.store('userProfile').getInitials()"></div>
+				    </a>
+			          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+  			         	<li><a class="dropdown-item" href="#account" x-on:click.prevent="Alpine.store('currentScreen').current = 'accounts'; ">Account & Settings</a></li>
+  			          	<!--<li><a class="dropdown-item" href="#settings">Settings</a></li>-->
+			            <li><a class="dropdown-item" href="mailto:rowan@messagemaps.io?subject='Help me please!'">Help</a></li>
+			            <li><hr class="dropdown-divider"></li>
+			            <li><a class="dropdown-item logout-button" href="#">Logout</a></li>
+			          </ul>
+			        </div><!-- /.dropdown-->
+			      </div>
+			    </div><!-- /#userMenu -->
+			  </div>
+		  	</header>
 
-	                  <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-	                    <img src="https://avatars.githubusercontent.com/u/19863?v=4" alt="" width="40" height="40" class="rounded-circle">
-	                  <!--<div class="avatar avatar-sidebar">hi</div>-->
-	                  </a>
-	                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-	                    <li><a class="dropdown-item" href="#">New Map</a></li>
-	                    <li><hr class="dropdown-divider"></li>
-	                    <li><a class="dropdown-item" href="#" id="user-button">My Account</a></li>
-	                    <li><a class="dropdown-item" href="#">Settings</a></li>
-	                    <li><a class="dropdown-item" href="#">Help</a></li>
-	                    <li><hr class="dropdown-divider"></li>
-	                    <li><a class="dropdown-item logout-button" href="#">Logout</a></li>
-	                  </ul>
-	                </div>
-	              </div>
-	            </div><!-- /#userMenu -->
-	          </div>
-	        </header>
+
 
 	        <!-- #MainViews - main section with views of various states-->
 	        <div id="MainViews" class="view-wrapper  my-5 mx-5">
@@ -326,7 +324,7 @@
 
 						<!-- .welcome-message-->
 						<div class="welcome-message container-fluid py-5">
-							<h3 class="display fw-bold mb-4">Welcome<span class="user-firstname" x-text="$store.userData.firstName"></span>!</h3>
+							<h3 class="display fw-bold mb-4">Welcome <span class="user-firstname" x-text="$store.userProfile.firstName"></span>!</h3>
 
 							<p class="col-md-11"><b></b> If you ever need anything or just want to chat, reach me <a href="#">Slack</a> or by email at <a href="#">rowan@messagemaps.io</a>.</p>
 
@@ -380,16 +378,13 @@
       
 										  categories: [
 									        {id: 'category_brand_story', label: 'YourBrand'},
-									        {id: 'category_customer_market', label: 'YourCustomer'},
+									        {id: 'category_customer_market', label: 'YourMarket'},
 									        {id: 'category_buyer_problem', label: 'YourBuyer'},
 									        {id: 'category_competitor_positioning', label: 'YourCompetition'},
 									        {id: 'solution_uvp', label: 'YourSolution'},
 									        {id: 'sales_pricing', label: 'YourPricing'}
 									      ],
-							       
-										  
-							            
-      
+					
 										  activeQuestion: '',
       
 										  scrollToElementWithOffset: function (elementId, yOffset, questionLabel) {
@@ -399,10 +394,18 @@
 									        element.focus();
 									        this.activeQuestion = questionLabel;
 									      },
+										  
+
+										  
+										  
+										  
+										  
 									      userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,
 									      interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null,
       
 										  answeredQuestions: {},
+										  
+
       
 										  fetchAnsweredQuestions: async function () {
 									        if (this.userId && this.interviewId) {
@@ -421,14 +424,48 @@
 									          }, {});
 									        }
 									      },
+										  questions: {},
+								          fetchQuestions: async function () {
+								              
+								              if (this.userId) {
+								                  const { data, error } = await supabase
+								                      .from('interview_questions')
+								                      .select('*');
+								                  if (error) {
+								                      console.error('Error fetching questions:', error);
+								                      return {};
+								                  }
+								  		        //console.log('Fetched questions data:', data);  // Add this line
+				
+								  		        this.questions = data.reduce((acc, item) => {
+								  		            acc[item.id] = item;
+								  		            return acc;
+								  		        }, {});
+
+								              }
+								              return {};
+								          },
+										  isCategoryCompleted: function (categoryId) {
+										    let questionsInCategory = Object.values(this.questions).filter(question => question.question_category === categoryId);
+										    return questionsInCategory.every(question => this.answeredQuestions[question.id] && this.answeredQuestions[question.id].trim() !== '');
+										  },
+										  
+										  
 									    }"
-									    x-init="fetchAnsweredQuestions()"
+									    x-init="fetchAnsweredQuestions(); fetchQuestions();"
 									>
 										
 										<!-- #InterviewNav -->
 										<ul id="InterviewNav" class="nav nav-pills mb-5 sticky-sub-element col-md-2" id="TheInterview">
 										  <template x-for="(category, index) in categories" :key="index">
-										    <li class="nav-item" :class="{'active': activeTab === category.label}" @click.prevent="activeTab = category.label">
+											  
+											  
+											<li class="nav-item toplevel"
+											    :class="{'active': activeTab === category.label, 'completed': isCategoryCompleted(category.id)}"
+											    @click.prevent="activeTab = category.label"> 
+											  
+												
+												
 										      <a href="#" class="nav-link text-small" x-text="category.label">
 										        <span class="material-symbols-outlined tiny">check_circle</span>
 										      </a>
@@ -481,25 +518,34 @@
 																hasInput: false,
 			
 																fetchAnswerForThisQuestion: async function (questionId) {
-																	if (!questionId) {
-																		console.error(`Invalid questionId: ${questionId}`);
-																		return;
-																	}
-																	const { data, error } = await supabase
-																		.from('interview_answers')
-																		.select('answer')
-																		.eq('interview_id', this.interviewId)
-																		.eq('user_id', this.userId)
-																		.eq('question_id', questionId);
-																	if (error) {
-																		console.error('Error fetching answer for question:', error);
-																		return;
-																	}
-																	// If there's an answer for this question, set it as the value of the textarea
-																	if (data[0]) {
-																		this.txt = data[0].answer;
-																	}
-																},
+																    if (!questionId) {
+																        console.error(`Invalid questionId: ${questionId}`);
+																        return;
+																    }
+																    const questions = Alpine.store('questions'); // Get questions from the Alpine store
+																    const question = questions.find(question => 
+																        question.id === questionId
+																    );
+																    // If there's a question with this id, fetch the answer for it
+																    if (question) {
+																        const { data, error } = await supabase
+																            .from('interview_answers')
+																            .select('answer')
+																            .eq('interview_id', this.interviewId)
+																            .eq('user_id', this.userId)
+																            .eq('question_id', questionId);
+																        if (error) {
+																            console.error('Error fetching answer for question:', error);
+																            return;
+																        }
+																        // If there's an answer for this question, set it as the value of the textarea
+																        if (data[0]) {
+																            this.txt = data[0].answer;
+																        }
+																    }
+																}
+																
+		
 															}" 
 													        x-bind:class="{ 'active': activeQuestion === question.question_label }"
 															x-bind:class="{ 'active': $parent.activeQuestion === question.question_label }"
@@ -556,12 +602,16 @@
 															<div class="help text-small text-secondary" x-show="hasInput" x-transition:enter.delay.500ms x-transition:enter.duration.2000ms x-text="question.question_help"></div>
 															<!-- /.help -->
 
-															<div class="followup-question text-small" x-data="{ text: '' }"
-																x-init="() => { $el.setAttribute('id', 'followup-to-question-id-' + question.id); }">
-																<p x-init="() => { $el.setAttribute('id', 'p-followup-to-question-id-' + question.id); }"
-																	x-text="text"></p>
-																<textarea x-init="() => { $el.setAttribute('id', 'textarea-followup-to-question-id-' + question.id); }"
-																	x-show="text.length > 0"></textarea>
+															<div class="followup-question text-small" x-data="{ text: '', followupText: '' }"
+															    x-init="() => { $el.setAttribute('id', 'followup-to-question-id-' + question.id); }">
+															    <p x-init="() => { $el.setAttribute('id', 'p-followup-to-question-id-' + question.id); }"
+															        x-text="text"></p>
+																<textarea 
+																  x-init="() => { $el.setAttribute('id', 'textarea-followup-to-question-id-' + question.id); }"
+																  x-show="text.length > 0"
+																  x-model="followupText"
+																  @blur="autoSaveFollowup(interviewId, question.id, followupText, userId, $refs.textarea)">
+																</textarea>
 															</div><!-- /.followup-question -->
 
 														</div><!--/.template-inner-->
@@ -637,18 +687,18 @@
 	            </div><!-- /#InterviewView -->
 
 			    <!-- /#InterviewReviewView -->
-				<div id="InterviewReviewView" x-data="InterviewReviewView()" x-init="init()" x-cloak>
+				<div id="InterviewReviewView" x-data="InterviewReviewView()" x-init="init()"  x-show="Alpine.store('currentScreen').current === 'interview-review'" x-cloak x-transition:enter.duration.500ms> 
 					<div class="interview-review-container">
 						<div class="print-header text-small text-secondary" style="display: block;text-align:right">Conducted by MessageMaps.io</div>
 						<a class="edit text-small text-secondary" style="display:block" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">< Edit your interview</a>
-				 	 	<div class="interview-intro row">		
-							<div class="interview-analysis text-small text-secondary col-md-6">
-								<div  class="interview-summary">Summary: <span class="interview-analysis summary"></span></div>
-								<div  class="interview-questions-answered">Percentage of questions answered: <span class="interview-analysis percent-answered" x-text="percentAnswered() + '%'"></span></div>
-								<div  class="interview-deepest-engagement">Section with most engagement: <span class="interview-analysis deepest-engagement" x-text="mostEngagementCategory() || 'Loading...'"></span></div>
-								<div  class="interview-most-completed-section">Section with least engagement: <span class="interview-analysis least-engagement" x-text="leastEngagementCategory() || 'Loading...'"></span></div>
-								<div  class="interview-longest-answer">Question with longest answer: <span class="interview-analysis longest-answer"  x-text="longestAnswer()"></span></div>
-								<div  class="interview-most-charged">Most emotionally charged answer: <span class="interview-analysis summary"></span></div>
+				 	 	<div class="interview-intro row mt-2">		
+							<div class="interview-analysis text-small text-secondary col-md-6  mt-4">
+								<!--<div  class="interview-summary">Summary: <span class="interview-analysis summary"></span></div>-->
+								<div  class="interview-questions-answered interview-analysis">Percentage of questions answered: <span class="percent-answered" x-text="percentAnswered() + '%'"></span></div>
+								<div  class="interview-deepest-engagement interview-analysis">Section with most engagement: <span class="deepest-engagement" x-text="mostEngagementCategory() || 'Loading...'"></span></div>
+								<div  class="interview-most-completed-section interview-analysis">Section with least engagement: <span class="least-engagement" x-text="leastEngagementCategory() || 'Loading...'"></span></div>
+								<div  class="interview-longest-answer interview-analysis">Question with longest answer: <span class="longest-answer"  x-text="longestAnswer()"></span></div>
+								<!--<div  class="interview-most-charged">Most emotionally charged answer: <span class="interview-analysis summary"></span></div>-->
 								
 							</div><!--  /.intervew-analysis -->
 		
@@ -671,7 +721,9 @@
 										<p class="text-small text-secondary pt-1 pb-">Approve to save to your profile and generate your Brand Strategy</p>
 										<p class="download-export-share text-small text-secondary pt-0">
 										    <a title="Print nicely formatted" id="PrintHTML" href="#interview-report-print">Print</a> 
-										    <a title="Download a simple, low file-size markdown document" id="DownloadMarkdown" href="#interview-report-download-markdown">Download markdown</a> 
+										    <a title="Download a simple, low file-size markdown document"  @click="downloadInterview()" href="#interview-report-download-markdown">Download markdown</a> 
+											
+
 										    <a title="Export as a CSV for Google Sheets, Excel, etc" id="ExportCSV" href="#interview-report-export-csv">Export CSV</a>
 										</p>
 									</div><!-- hide for print -->

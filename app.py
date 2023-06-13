@@ -167,8 +167,24 @@ def followup():
   # return jsonify({"followupQuestion2": next_followup_question, "questionId": question_id})
 
 
+# Stratregy
+#Transcription and Note Review: The first step is to transcribe and review all notes taken during the interview. If the interviews were recorded, it's useful to transcribe them so that no information is lost or misunderstood.
 
+#Identification of Key Points: The next step involves identifying the key points that were brought up during the interviews. This could be significant challenges the company is facing, potential opportunities, key strengths and weaknesses, as well as other relevant topics.
 
+#Thematic Analysis: Organize the key points into common themes. For example, a theme could be internal communication, customer retention, or product development. This makes it easier to summarize and present the information later on.
+
+#Cross-Verification: Cross-verify the identified themes with other data sources, if available. This could be other interviews, data from the company, or even third-party research. This helps to validate the themes and ensure they're not based on one-off comments.
+
+#SWOT Analysis: One way to analyze the information is by conducting a SWOT analysis - identifying the company's Strengths, Weaknesses, Opportunities, and Threats based on the interview data. This can provide a quick snapshot of the current situation of the company.
+
+#Gap Analysis: Determine the gap between the current state of the company and where it wants to be. This gives insight into the areas that need focus.
+
+#Stakeholder Analysis: Understand the interests and influence of different stakeholders within the company. This will provide context for some of the responses and help identify potential roadblocks or allies when implementing the strategy.
+
+#Problem Statement Definition: Based on the analysis, define the primary problem(s) that need to be solved. This helps to focus the strategy on what matters most to the company.
+
+#Visualize Data: If possible, visualize the data in a way that makes it easier to understand the overall picture. This could be a diagram, a flowchart, a graph, or any other visual representation that makes the information more digestible.
 
 
 
