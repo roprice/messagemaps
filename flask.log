@@ -105,3 +105,157 @@
 2023-06-09 12:50:39,834 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
 2023-06-12 06:09:31,141 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
 2023-06-12 06:09:31,354 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-13 14:05:25,007 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-13 14:05:25,105 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-14 19:00:12,839 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-14 19:00:15,385 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-14 21:07:04,815 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-14 21:07:05,313 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-14 21:07:05,683 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-14 21:07:06,060 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 00:09:50,017 - app - ERROR - Exception on /api/extract [POST]
+Traceback (most recent call last):
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/var/www/html/app/app.py", line 122, in extract
+    print("\n")  # This will print a line break.
+OSError: [Errno 5] Input/output error
+2023-06-15 00:09:50,020 - app - ERROR - Error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application., status: 500
+2023-06-15 00:10:40,723 - app - ERROR - Exception on /api/extract [POST]
+Traceback (most recent call last):
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/var/www/html/app/app.py", line 122, in extract
+    print("\n")  # This will print a line break.
+OSError: [Errno 5] Input/output error
+2023-06-15 00:10:40,724 - app - ERROR - Error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application., status: 500
+2023-06-15 00:11:37,014 - app - ERROR - Exception on /api/extract [POST]
+Traceback (most recent call last):
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/var/www/html/app/app.py", line 122, in extract
+    print("\n")  # This will print a line break.
+OSError: [Errno 5] Input/output error
+2023-06-15 00:11:37,015 - app - ERROR - Error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application., status: 500
+2023-06-15 00:13:53,806 - app - ERROR - Exception on /api/extract [POST]
+Traceback (most recent call last):
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/var/www/html/app/app.py", line 122, in extract
+    print("\n")  # This will print a line break.
+OSError: [Errno 5] Input/output error
+2023-06-15 00:13:53,807 - app - ERROR - Error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application., status: 500
+2023-06-15 00:18:22,102 - app - ERROR - Exception on /api/extract [POST]
+Traceback (most recent call last):
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/var/www/html/app/app.py", line 155, in extract
+    return jsonify({"brandName": sanitized_bran_name})
+NameError: name 'sanitized_bran_name' is not defined
+2023-06-15 00:18:22,105 - app - ERROR - Error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application., status: 500
+2023-06-15 00:19:37,849 - app - ERROR - Exception on /api/extract [POST]
+Traceback (most recent call last):
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/var/www/html/app/app.py", line 155, in extract
+    return jsonify({"brandName": brand_name})
+NameError: name 'sanitized_bran_name' is not defined
+2023-06-15 00:19:37,850 - app - ERROR - Error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application., status: 500
+2023-06-15 00:19:39,525 - app - ERROR - Exception on /api/extract [POST]
+Traceback (most recent call last):
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/var/www/html/app/app.py", line 155, in extract
+    return jsonify({"brandName": brand_name})
+NameError: name 'sanitized_bran_name' is not defined
+2023-06-15 00:19:39,526 - app - ERROR - Error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application., status: 500
+2023-06-15 01:15:42,379 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 01:15:44,328 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 01:15:48,310 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 04:16:41,261 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 05:48:08,677 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 09:13:55,659 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 09:14:06,236 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 09:38:04,572 - app - ERROR - Exception on /api/extract [POST]
+Traceback (most recent call last):
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/var/www/html/app/env/lib/python3.10/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/var/www/html/app/app.py", line 130, in extract
+    print("\n")  # This will print a line break.
+OSError: [Errno 5] Input/output error
+2023-06-15 09:38:04,576 - app - ERROR - Error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application., status: 500
+2023-06-15 10:42:08,900 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 10:42:10,479 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 10:42:16,646 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 10:47:42,917 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 12:41:04,356 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 12:57:56,096 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 15:36:27,958 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 16:39:03,322 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 16:39:03,375 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 20:39:53,628 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 20:59:16,810 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 20:59:16,824 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-15 23:21:34,129 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 00:20:13,098 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 00:20:13,100 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 00:20:13,580 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 00:20:31,044 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 00:20:35,894 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 00:26:21,450 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 00:26:40,883 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 00:26:43,918 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 00:26:46,790 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 01:46:00,329 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 02:24:16,304 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 04:24:31,889 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 06:32:46,481 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404
+2023-06-16 06:58:33,303 - app - ERROR - Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., status: 404

@@ -88,6 +88,14 @@ document.addEventListener('alpine:init', function() {
       Alpine.store('authenticationStatus').current = 'loggedIn';
     }
 	
+	
+	// Define the Alpine store
+	Alpine.store('questions', {
+	    data: [],
+	    isDataLoaded: false
+	});
+
+
     Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
 
     Alpine.store('showSuccessMessage', false); // initialize the errorMessage global state
@@ -116,6 +124,14 @@ document.addEventListener('alpine:init', function() {
       }
     });
 	
+	
+	
+	Alpine.store('yourBrand', {
+		brandName: 'your brand', // default value
+		setBrandName(value) {
+			this.brandName = value;
+		},
+	})
 	
 	Alpine.store('currentScreen', new Proxy({
 	  current: localStorage.getItem('currentScreen') || 'maps',
@@ -146,8 +162,6 @@ document.addEventListener('alpine:init', function() {
 	    return true;
 	  }
 	}));
-
-
 
 	let initialUserProfileData = window.localStorage.getItem('userProfile');
 	if (initialUserProfileData) {
@@ -181,11 +195,6 @@ document.addEventListener('alpine:init', function() {
 	    return firstNameInitial + ' ' + lastNameInitial;
 	  },
 	});
-
-
-
-
-
 
 
 	let initialInterviewData = window.localStorage.getItem('interviewData');
@@ -233,16 +242,12 @@ document.addEventListener('alpine:init', function() {
 });
 
 
-
 // SECTION 1, 2 and 3 - Configuration, Imports, Initialization
-
-
 // Handle the authentication with Supabase
 var SUPABASE_URL = 'https://wogivjshqopegucducyz.supabase.co'
 var SUPABASE_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvZ2l2anNocW9wZWd1Y2R1Y3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NzU4MzQsImV4cCI6MTk5NDA1MTgzNH0.zj-QBJknPolKZ6TZ_t3r7aPXbhVB1bf9mmoNBBif9OM'
 var supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-
 
 
 
@@ -265,9 +270,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 
 
-
-
-
 // Call this function when the page loads
 (async function() {
   const session = supabase.auth.session();
@@ -277,8 +279,63 @@ document.addEventListener('DOMContentLoaded', (event) => {
     await getUserData(user.id);
     // load the questions for the interview form
     await getInterviewQuestions();
+// Update question text with brand name from local storage
+    updateQuestionText();
   }
 })();
+
+
+function updateQuestionText() {
+  // Get the existing data
+  let interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
+
+  // Extract brand name from the interviewData
+  let brand = interviewData.brandName;
+
+  // If brandNameFromLocalStorage is not null, proceed
+  if (brand !== null) {
+	  
+	  
+      // Update the Alpine store
+      Alpine.store('yourBrand').brandName = brand;
+
+	
+    document.querySelector('#q2').textContent = 'What sets ' + brand + ' apart from competitors and alternatives?';
+	
+	document.querySelector('#q50').textContent = "What's the best way to talk about what " + brand + " provides - product or service?";
+
+	document.querySelector('#q7').textContent = "Why does  " + brand + " exist?";
+	
+	document.querySelector('#q5').textContent = "What misconception about  " + brand + " do you encounter?";
+	
+	document.querySelector('#q12').textContent = "When they hear about " + brand + ", what do you want them to think - what's your message??";
+
+	document.querySelector('#q19').textContent = " What problems can " + brand + " not quite solve?";
+
+	document.querySelector('#q30').textContent = "Who has a similar audience to " + brand + " but isn't really competitor?";
+
+	document.querySelector('#q40').textContent = "How and when do customers pay for " + brand ;
+
+	document.querySelector('#q43').textContent = "Which does " + brand + " help with *more* – increasing income or cutting costs?";
+
+
+
+
+	// these need solution type and/or customer type variables
+	//The problem your [solution] addresses – what kind of organization does that help the most
+	//Who usually approves the decision to buy your solution?
+	//28 What are the alternatives (as opposed to competitors) to your solution?
+	//39Can you describe a common decision-making process for your customers? How long does it take?
+
+
+
+	
+	
+
+  }
+}
+
+
 
 
 
@@ -307,14 +364,26 @@ const signUpSubmitted = async (event) => {
 
     event.preventDefault();
   
-    localStorage.clear();
-
-
+  
   Alpine.store('formStatus').disableSubmitButton();
   const fullName = event.target[0].value; // Get the full name from the form
   const [firstName, lastName] = fullName.split(' '); // Get the first and last name
   const email = event.target[1].value; // Get the email address from the form
   const password = event.target[2].value;
+  const inviteCode = event.target[3].value; // Get the invite code from the form
+
+  // Check if the provided invite code exists in the `signup_codes` table
+  const { data: signupCodeData, error: signupCodeError } = await supabase
+    .from('signup_codes')
+    .select('code')
+    .eq('code', inviteCode);
+
+  if (signupCodeError || !signupCodeData || signupCodeData.length === 0) {
+    // Show an error message if the invite code is incorrect
+    Alpine.store('formStatus').showErrorMessage('Invalid invite code.');
+    Alpine.store('formStatus').enableSubmitButton();
+    return;
+  }
 
   try {
     const response = await supabase.auth.signUp({ email, password });
@@ -355,6 +424,7 @@ const signUpSubmitted = async (event) => {
           window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
         }
 
+		await createInterview();
 
         await getInterviewQuestions();
 
@@ -396,7 +466,6 @@ const logInSubmitted = async (event) => {
 	
   event.preventDefault();
   
-  localStorage.clear();
   
   
   Alpine.store('formStatus').disableSubmitButton();
@@ -481,45 +550,38 @@ const logoutSubmitted = (event) => {
 
 // SECTION 9 - Component Logic
 
-//  9.1 - Miscellaneous component logic
-
-
-
-//  9.2 - Build Interview Form
+//  9.2 - Make interview questions available in Alpine store
 async function getInterviewQuestions() {
-	//console.log("getInterviewQuestions called")
-	try {
-		// Check if the data is already in local storage
-		const localStorageData = localStorage.getItem('interviewQuestions');
-		if (localStorageData) {
-			Alpine.store('questions', JSON.parse(localStorageData)); // Update the Alpine store with the interview questions from local storage
-		} else {
-			// If data is not in local storage, fetch it
-			const { data, error } = await supabase
-				.from('interview_questions')
-				.select('*');
-			if (error) {
-				throw error; // Throw the error to be caught by the catch block
-			}
-			localStorage.setItem('interviewQuestions', JSON.stringify(data)); // Store the interview questions in the local storage
-			Alpine.store('questions', data); // Update the Alpine store with the interview questions from the fetch request
-			
-			
-			let questionsStore = Alpine.store('questions');
 
-			// Access the first element
-			console.log(questionsStore[0]);
+    try {
+        // Check if the data is already in local storage
+        const localStorageData = localStorage.getItem('interviewQuestions');
+        if (localStorageData) {
+            Alpine.store('questions', JSON.parse(localStorageData)); // Update the Alpine store with the interview questions from local storage
+        } else {
+            // If data is not in local storage, fetch it
+            const { data, error } = await supabase
+                .from('interview_questions')
+                .select('*')
+                .order('sort_order');
 
-			// Check the length of the array
-			console.log(questionsStore.length);
-		}
-	} catch (err) {
-		console.error('Error fetching interview questions:', err);
-	}
-	
-	
-	
+            if (error) {
+                throw error; // Throw the error to be caught by the catch block
+            }
+
+            localStorage.setItem('interviewQuestions', JSON.stringify(data)); // Store the interview questions in the local storage
+            Alpine.store('questions', data); // Update the Alpine store with the interview questions from the fetch request
+        }
+
+        // Dispatch an event indicating the data has loaded
+        window.dispatchEvent(new CustomEvent('questionsLoaded'));
+        
+    } catch (err) {
+        console.error('Error fetching interview questions:', err);
+    }
+    
 }
+
 
 
 
@@ -551,7 +613,6 @@ async function createInterview() {
   // Pull the user profile from local storage
   let userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
   const userId = userProfile.user_id;
-  const foo = JSON.parse(window.localStorage.getItem('userProfile')).user_id
   
   // First, check if the user already has an interview
   const existingInterviewId = await getInterview(userId);
@@ -574,8 +635,9 @@ async function createInterview() {
   if (error) {
     console.error('Error creating interview:', error);
   } else {
-   // console.log('Interview created successfully:', data);
-    // If interview creation was successful, update the userProfile store with the interview name
+	  console.log('Interview created successfully:', data);
+	    // Save interviewData to local storage
+	    window.localStorage.setItem('interviewData', JSON.stringify(data));
 
   }
  }
@@ -599,13 +661,17 @@ async function createInterview() {
        return null;
      }
 
-     //console.log('Interview updated successfully:', data);
-
-	 window.localStorage.setItem('updatedInterviewName', newInterviewName);
-	 
      // Update the Alpine store with the new interview name
      Alpine.store('interviewData').interviewName = newInterviewName;
 	 
+	 // add updated brand name to local storage interviewData object
+	 const newBrandName = `${brandName}`;
+	 let interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
+	 interviewData.brandName = newBrandName;
+	 window.localStorage.setItem('interviewData', JSON.stringify(interviewData));
+ 	
+ 	// Update question text with brand name from local storage
+     updateQuestionText();
 	 
      // Add highlight class
      document.getElementById('interview-name').classList.add('highlight-welcome');
@@ -743,7 +809,7 @@ async function saveAnswer(interviewId, questionId, answer, userId) {
     if (error) {
       throw error;
     } else {
-      console.log('Answer saved successfully:', data);
+      //console.log('Answer saved successfully:', data);
     }
   } catch (error) {
     console.error('Error saving answer:', error);
@@ -795,17 +861,18 @@ const autoSave = debounce(
 
 
 
-async function getFollowup(questionId, answer, questionText) {
-	
-  try {
-    // Prepare the data to send in the body of the POST request
-    const postData = {
-      questionId: questionId,
-      answer: answer,
-      questionText: questionText,
-      
-    };
-	console.log("data prepared")
+  async function getFollowup(questionId, answer, questionText, questionCategory, questionLabel, questionHelp) {
+      try {
+          // Prepare the data to send in the body of the POST request
+          const postData = {
+              questionId: questionId,
+              answer: answer,
+              questionText: questionText,
+              questionCategory: questionCategory,
+              questionLabel: questionLabel,
+              questionHelp: questionHelp
+          };
+	//console.log("get followup data prepared")
 
 
     const response = await fetch(`/api/followup`, {
@@ -822,7 +889,7 @@ async function getFollowup(questionId, answer, questionText) {
 
     const followup_question = await response.json();
 
-    console.log('Followup question received: ', followup_question);
+    //console.log('Followup question received: ', followup_question);
 
 
 	// Display the follow-up question in the HTML element
@@ -859,15 +926,39 @@ async function getFollowup(questionId, answer, questionText) {
   }
 }
 
-async function saveFollowupAnswer(interviewId, questionId, followupAnswer, userId) {
+async function saveFollowupAnswer(interviewId, questionId, followupQuestion, followupAnswer, userId) {
   if (!interviewId) {
     throw new Error('Invalid interviewId');
   }
   try {
+    const { data: existingData, error: existingError } = await supabase
+      .from('interview_answers')
+      .select("followups")
+      .match({
+        interview_id: interviewId,
+        question_id: questionId,
+        user_id: userId,
+      });
+
+    if (existingError) {
+      throw existingError;
+    }
+
+    let updatedFollowups;
+    const existingFollowupIndex = existingData[0]?.followups?.findIndex(followup => followup.question === followupQuestion);
+
+    if (existingFollowupIndex !== -1 && existingFollowupIndex !== undefined) {
+      updatedFollowups = [...existingData[0].followups];
+      updatedFollowups[existingFollowupIndex].answer = followupAnswer;
+    } else {
+      const newFollowup = { question: followupQuestion, answer: followupAnswer };
+      updatedFollowups = existingData[0]?.followups ? [...existingData[0].followups, newFollowup] : [newFollowup];
+    }
+
     const { data, error } = await supabase
       .from('interview_answers')
       .update({ 
-        followup_answers: followupAnswer
+        followups: updatedFollowups
       })
       .match({
         interview_id: interviewId,
@@ -878,21 +969,57 @@ async function saveFollowupAnswer(interviewId, questionId, followupAnswer, userI
     if (error) {
       throw error;
     } else {
-      console.log('Followup answer saved successfully:', data);
+     // console.log('Followup answer saved successfully:', data);
+	  
+	
+	  
+      const snackbar = document.getElementById(`save-confirmation-followup-to-question-id-${questionId}`);
+	  console.log(snackbar);
+      if (!animationRunning) {
+        snackbar.classList.add('show');
+        animationRunning = true;
+
+		setTimeout(() => {
+		  animationRunning = false;
+		  snackbar.classList.remove('show');
+		}, 4000);  // Matches the total duration of the CSS animations
+
+      }
+	  
+	  
     }
   } catch (error) {
     console.error('Error saving followup answer:', error);
   }
 }
 
-
-const autoSaveFollowup = debounce(
-  async function (interviewId, questionId, followupAnswer, userId, textarea) {
+const autoSaveFollowupAnswer = debounce(
+  async function (interviewId, questionId, answer, userId, textarea) {
     try {
-      await saveFollowupAnswer(interviewId, questionId, followupAnswer, userId);
+      await saveAnswer(interviewId, questionId, answer, userId);
 
-      // The rest of your autoSave logic goes here,
-      // modifying as necessary for followup answers.
+      // Show the snackbar notification
+      const snackbar = document.getElementById(`save-confirmation-${questionId}`);
+      if (!animationRunning) {
+        snackbar.classList.add('show');
+        animationRunning = true;
+
+		setTimeout(() => {
+		  animationRunning = false;
+		  snackbar.classList.remove('show');
+		}, 4000);  // Matches the total duration of the CSS animations
+
+      }
+	  
+      // check if the user has entered at least 100 characters
+      if (answer.length >= 100) {
+          // get the feedback div for this question
+          const feedbackDiv = document.getElementById('answer-feedback-' + questionId);
+          if (feedbackDiv) {
+              // make the feedback div visible
+              feedbackDiv.style.visibility = "visible";
+          }
+      }
 
       // Change the background color of the textarea
       textarea.classList.add("autosaveIndicator");
@@ -905,20 +1032,93 @@ const autoSaveFollowup = debounce(
   }, 3000);
 
 
+async function followupExists(questionId) {
+  const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
+  const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
 
+  const userId = userProfile.user_id;
+  const interviewId = interviewData.interviewID;
+
+  try {
+   // console.log('Calling followupExists function for question ID:', questionId);
+
+    const { data: existingData, error: existingError } = await supabase
+      .from('interview_answers')
+      .select('followups')
+      .match({
+        interview_id: interviewId,
+        question_id: questionId,
+        user_id: userId,
+      });
+
+    if (existingError) {
+      throw existingError;
+    }
+
+    const existingFollowups = existingData[0]?.followups || [];
+
+    if (existingFollowups.length > 0) {
+      //console.log('Follow-ups found for question ID:', questionId);
+
+      const followUpContainer = document.getElementById('followup-to-question-id-' + questionId);
+
+      existingFollowups.forEach(followup => {
+        if (followup.question && followup.answer) {
+			//console.log('followup.question:', followup.question);
+			//console.log('followup.answer:', followup.answer);
+            //console.log('Updating follow-up elements for question ID:', questionId);
+
+          // Get the first (and in your case, only) p tag within the followUpContainer
+          const followUpParagraph = followUpContainer.querySelector('p');
+          //console.log('Paragraph element:', followUpParagraph);
+
+          // Get the first (and in your case, only) textarea within the followUpContainer
+          const followUpTextarea = followUpContainer.querySelector('textarea');
+          //console.log('Textarea element:', followUpTextarea);
+
+          followUpParagraph.textContent = followup.question;
+          followUpTextarea.value = followup.answer;
+          followUpTextarea.classList.add('show');
+
+          followUpContainer.classList.add('fade-in');
+
+          // After 2 seconds (which is the duration of our fade-in animation), add the highlight class
+          setTimeout(() => {
+            followUpParagraph.classList.add('highlight');
+
+            // Then, after another 2 seconds, remove the highlight class
+            setTimeout(() => {
+              followUpParagraph.classList.remove('highlight');
+            }, 2000);
+          }, 2000);
+        }
+      });
+
+      return true;
+    }
+
+    //console.log('No follow-ups found for question ID:', questionId);
+
+    return false;
+  } catch (error) {
+    console.error('Error checking follow-up:', error);
+    return false;
+  }
+}
 
 
 
 let followup_questionCalledFlags = {};  // At the start of the script
 
-// ...
 
 function handleTextareaInput(event) {
   // Retrieve userId and interviewId from local storage
   const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
   const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
+  
   const userId = userProfile.user_id;
-  const interviewId = interviewData.interviewID;
+  const interviewId = interviewData.interviewID
+  
   const textarea = event.target;
   const questionId = event.target.dataset.questionId;
   const inputValue = textarea.value;
@@ -933,32 +1133,31 @@ function handleTextareaInput(event) {
   }
   
   let interviewQuestions = JSON.parse(window.localStorage.getItem('interviewQuestions'));
-  let currentQuestionId = interviewQuestions.find(q => q.id == questionId);
-  let questionText = currentQuestionId.question_text;
-
-  console.log("Followup question flag before:", followup_questionCalledFlags[questionId]);
-
+  let currentQuestion = interviewQuestions.find(q => q.id == questionId);
+  let questionText = currentQuestion.question_text;
+  let questionCategory = currentQuestion.question_category; // adjust this based on your actual data structure
+  let questionLabel = currentQuestion.question_label; // adjust this based on your actual data structure
+  let questionHelp = currentQuestion.question_help; // adjust this based on your actual data structure
 
   if (inputValue.length >= 50 && !followup_questionCalledFlags[questionId] && inputValue[inputValue.length - 1] === ' ') {
-       setTimeout(() => {
-         getFollowup(questionId, inputValue, questionText);
+      followup_questionCalledFlags[questionId] = true;  // Set the flag to true before calling getFollowup
+      setTimeout(() => {
+          getFollowup(questionId, inputValue, questionText, questionCategory, questionLabel, questionHelp);
+      }, 7000);  // 7000 milliseconds = 7 seconds
+  }
 
-         followup_questionCalledFlags[questionId] = true;  // Set the flag to true after getFollowup has been called
-       }, 7000);  // 7000 milliseconds = 7 seconds
-     }
+}
 
-   console.log("Followup question flag after:", followup_questionCalledFlags[questionId]);
- }
 
 // 9.5 parse interview answers
-// Function that attaches the appropriate event handler based on the textarea's ID
+// Based on ID
 function attachEventHandlers(textareaId) {
   const textarea = document.getElementById(textareaId);
   if (!textarea) return;
 
   // Map of textarea IDs to event handlers
   const eventHandlers = {
-    "input-brand_name": handleTextareaBlur,  
+    "input-1": handleTextareaBlur,  
     //"competitor_sites": evaluateCompetitors, 
     // ... add as many handlers as you need
   };
@@ -972,7 +1171,7 @@ function attachEventHandlers(textareaId) {
 // update intereview with extracted inerview name
 function handleTextareaBlur(event) {
 
-  console.log('event.target:', event.target);
+  //console.log('event.target:', event.target);
   console.log('event.target.value:', event.target.value);
 
   const characterCount = event.target.value.length;
@@ -992,10 +1191,13 @@ function handleTextareaBlur(event) {
       extractBrandName(event.target.value)
         .then(brandName => {
           console.log('Brand name entered:', brandName);
+		  Alpine.store('yourBrand').setBrandName(brandName);
+		  
           return updateInterview(interviewId, brandName, fullName);
         })
         .then(() => {
-          console.log('Interview updated successfully!');
+          console.log('Interview name updated successfully!');
+		  
         })
         .catch((error) => {
           console.error('Error updating interview:', error);
@@ -1022,11 +1224,21 @@ async function extractBrandName(text) {
 
     const data = await response.json(); // Parse response as JSON
     console.log("Extracted brand name: ", data); // show extracted brand name
+
+
     return data.brandName; // Return the brand name from the response
+	
+	
+	
   } catch (error) {
     console.log("An error occurred:", error);
   }
 }
+
+
+
+
+
 
 function downloadAsMarkdown(content) {
   let filename = 'Interview_Review.md'; // Specify the filename
@@ -1045,10 +1257,12 @@ function downloadAsMarkdown(content) {
   document.body.removeChild(element);
 }
 
+
+
 function InterviewReviewView() {
     return {
         categories: [
-            {id: 'category_brand_story', label: 'Brand and Background'},
+            {id: 'category_brand_story', label: 'Brand and Story'},
             {id: 'category_customer_market', label: 'Market and Audience'},
             {id: 'category_buyer_problem', label: 'Buyer and Problem'},
             {id: 'category_competitor_positioning', label: 'Competition and Positioning'},
@@ -1294,11 +1508,7 @@ document.getElementById("ExportCSV").addEventListener("click", function(event){
 
   function expandTextarea(textarea) {
       // Reset textarea height if text was deleted
-      textarea.style.height = 'auto';
-
-      // Get and set the scroll height to the textarea height
-      // This will make the textarea wrap all the text it contains
-      textarea.style.height = `${textarea.scrollHeight}px`;
+    
   }
   
   //## MUTATION OBSERVER
@@ -1351,15 +1561,6 @@ document.getElementById("ExportCSV").addEventListener("click", function(event){
   //## /MUSTATION OBSERVER
 
 
-  // user edits and blurs (leaves) brand name textarea
-	// Get the textarea element using its ID
- 	const textarea = document.getElementById("input-brand_name");
-
-  	// Check if the textarea exists before attaching an event listener
-  	if (textarea) {
-    	// Add an event listener to the textarea
-    	textarea.addEventListener('blur', handleTextareaBlur);
-  	}
 
 
   //create interview clicked

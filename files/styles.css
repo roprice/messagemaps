@@ -1,8 +1,51 @@
+a.backlink.edit.text-small.text-secondary {
+    display: none;
+}
+
+.card.shadow-sm.inactive {
+    border-style: dashed;
+    box-shadow: none!important;
+    opacity: .7;
+}
+.welcome-bottom {position:relative;}
+.col-md-4.help {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+.welcome-message .col-md-4 {
+    max-width: 310px;
+    min-width: 250px;
+    padding: 40px`;
+}
+p.welcome-intro {
+    max-width: 400px;
+    margin-bottom: 30px;
+}
+
+
+.card.inactive .card-body {
+
+    opacity: .5;
+    background: #cccccc5e;
+}
+.welcome-message .next {margin-top:40px;}
+.welcome-message .card-body {
+    margin: auto;
+    padding: 35px;
+    min-height: 340px;
+}
+.welcome-message .card-title {
+    margin-bottom: 30px;
+}
 
 .interview-info-card.card.my-4.p-3.col-md-4 {
     margin-left: 20px;
+    max-width: 450px;
 }
-.signin-signup {min-height:600px;width:250px;text-align: center;margin: auto;}
+
+.signin-signup {
+	min-height:600px;width:250px;text-align: center;margin: auto;}
 
 .question-label-text {
     font-weight: 500;
@@ -64,6 +107,18 @@ width: 800px;
 }
 
 
+.close-button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    color: #000;
+}
+
+
 span.interview-analysis {
     font-weight: 800;
 }
@@ -73,7 +128,7 @@ span.interview-analysis {
     opacity: 1;
 }
 .template-inner {
-    opacity: .7;
+    opacity: .6;
 }
 
 #InterviewQuestions .template-inner {
@@ -88,13 +143,16 @@ span.material-symbols-outlined.medium.encouragement {
 
 
 #InterviewQuestions .answer-feedback {
-position: absolute;
-visibility:hidden;
-right: -370px;
-top: 40px;
-width:300px;
-height:300px;
-z-index:10;
+    position: absolute;
+    visibility: hidden;
+    right: -310px;
+    top: 40px;
+    padding: 30px;
+    height: auto;
+    width: fit-content;
+    min-width: 300px;
+    min-height: 150px;
+    z-index: 100;
 }
 
 #InterviewQuestions div#answer-feedback-1 {display:none;}
@@ -312,16 +370,19 @@ a.previous.text-secondary.text-small {
 
 
 h2.statement {
-    color: white;
+    color: #222;
     padding: 150px;
+    font-weight: 400;
+    font-size: 70px;
 }
+h2.statement p {margin-bottom:50px;}
 
 #InterviewNav  li.toplevel.completed a::after {
 	
 	    content: "\2713";
 	    font-size: 13px;
 	    margin-left: 5px;
-		color: #777;
+		
 	
 }
 
@@ -337,6 +398,7 @@ h2.statement {
 	    content: "\2713";
 	    font-size: 13px;
 	    margin-left: -5px;
+		color: #777;
 	
 }
 
@@ -418,6 +480,8 @@ a.disabled.navlink.linkdark {
   --bs-btn-disabled-border-color: #f7c326;
   --bs-gradient: none;
 }
+
+
 
 
 .btn {
@@ -589,6 +653,30 @@ a.disabled.navlink.linkdark {
   font-weight: 500;
 }
 
+
+.btn-primary {
+  border-color: rgba(255, 87, 87, 1);
+  display: inline-flex;
+  position: relative;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 30px;
+  border: none;
+  border-radius: 44px;
+  line-height: 44px;
+  line-height: 40px;
+  text-decoration: initial;
+  cursor: pointer;
+  vertical-align: middle;
+  background-color:#f7c326;
+  color: #222;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+
+
 .btn-primary:focus,
 .btn-primary:active,
 .btn-primary:hover {
@@ -639,20 +727,44 @@ button#InterviewMe {
     border-radius: 60px;
 }
 
+.interview-form-card.card.shadow.my-4.p-4.col-md-7 {
+    padding-right: 50px!important;
+}
 
+.clear-textarea {position: absolute; top: 5px; right: -30px; cursor: pointer;}
 
-.clear-textarea {position: absolute; top: 5px; right: 1px; cursor: pointer;}
-
-.textarea-container {position: relative;}
+.textarea-container {position: relative;width: 100%;}
 
 textarea {
-	width: 94%;
+	width: 100%;
 	border-radius: 6px;
 	padding: 8px 20px 8px 10px;
-	min-height: 70px;
 	overflow: hidden; 
 	transition: height 0.3s ease-out;
 	box-sizing: content-box; 
+}
+
+textarea:focus, 
+textarea:focus-within,
+textarea:focus-visible{
+
+	border-bottom-color rgb(118, 118, 118)
+	border-bottom-left-radius 6px
+	border-bottom-right-radius 6px
+	border-bottom-style solid
+	border-bottom-width 1px
+}
+
+.textarea-simple {
+    height: 24px;
+}
+
+.textarea-medium {
+    height: 72px;
+}
+
+.textarea-complex {
+    height: 144px;
 }
 
 .followup-question {
@@ -1035,10 +1147,11 @@ input, .form-control {
 
 @media print {
     /* Hide elements that are not needed in print view */
-	#Logged_Out_States,
+	#Logged_Out_States,	
 	#CollapsedSidebar, 
 	#ExpandedSidebar, 
 	header, 
+	a.backlink.edit.text-small.text-secondary,
 	.hide-for-print {
         display: none;
     }

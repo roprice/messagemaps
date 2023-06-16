@@ -19,11 +19,14 @@ from langchain.prompts.chat import (
 )
 import os
 import logging
-
+import json
+import re
 
 
 # Set OpenAI API key
 os.environ["OPENAI_API_KEY"] = "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"
+
+
 
 app = Flask(__name__)
 
@@ -63,24 +66,96 @@ app.logger.info('Flask app logging is set up.')
 
 
 
-# Section 3 - extract brand name
-# Init OpenAI for "/api/extract" endpoint
-openai_extractor = OpenAI(temperature=0.1, max_tokens=300)
 
-# Define the prompt template
-prompt_template_extractname = PromptTemplate(
-    input_variables=["text"],
-    template="""To kick off an interview, the interviewee has been asked 'What's the name of the brand I'm interviewing you about?' This is their response: '{text}'.  Now - please extract the brand name out of this response and tell me what it is. Don't say anything but the brand name. Verbose mode off."""  
-)
+
+
+openai_extractor = ChatOpenAI(model="gpt-3.5-turbo-0613", temperature=0.1)
+
+
+# Define function description
+function_descriptions = [
+    {
+        "name": "extract_brand_name",
+        "description": "Extracts the brand name from a given text",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "brand": {
+                    "type": "string",
+                    "description": "brand name",
+                }
+            },
+            "required": ["brand"],
+        },
+    }
+]
+
 
 @app.route("/api/extract", methods=['POST'])
-def predict():
+def extract():
     input_text = request.json.get("text")
-    extraction_prompt = prompt_template_extractname.format(text=input_text)  
-    print (f"Final Prompt: {extraction_prompt}")  
-    output = openai_extractor(extraction_prompt)
-    output = output.strip()
-    return jsonify({"brandName": output})
+    
+    
+
+    
+    # Define the system message
+    system_message = SystemMessagePromptTemplate.from_template("You extract brand names from text using the extract_brand_name function.")
+   
+    # Define the prompt template
+    prompt_template_extractname = PromptTemplate(
+       input_variables=["text"],
+       template=
+       """
+       Someone says '{text}'. What brand name can you extract from that statement? Verbose off. Just the brand name.      
+       """  
+    )
+   
+    extraction_prompt = prompt_template_extractname.format(text=input_text)
+
+    # Define the human message
+    human_message = HumanMessagePromptTemplate.from_template(extraction_prompt)
+    
+
+
+    # Combine all messages into a ChatPromptTemplate
+    messages = ChatPromptTemplate.from_messages([system_message, human_message])
+   
+    
+    
+
+    # Format the prompt
+    formatted_prompt = messages.format_prompt().to_messages()
+
+    # Print the formatted prompt
+    print("\n")  # This will print a line break.
+    print(f"Formatted prompt:{formatted_prompt}")
+    print("\n")  # This will print another line break.
+
+    # Generate the response using the model, including function descriptions and automatic function call
+    response = openai_extractor(
+        messages=formatted_prompt,
+        functions=function_descriptions,
+        function_call="auto"
+    )
+    print("\n")  # This will print a line break.
+    print(f"response: {response}")
+    print("\n")  # This will print a line break.
+
+    # Extract the brand name
+    # Parse the function call arguments as JSON and extract the brand name
+    arguments = json.loads(response.additional_kwargs['function_call']['arguments'])
+    brand_name = arguments["brand"]
+
+
+    # # A regular expression to match alphanumeric characters, spaces, and your specific special characters 
+    # regex = r"[^a-zA-Z0-9\-_!&%$#@ ]"
+    # Use re.sub to replace any characters not matched by the regex with an empty string
+    # sanitized_bran_name = re.sub(regex, '', brand_name)
+
+    return jsonify({"brandName": brand_name})
+
+
+
 
 
 
@@ -95,13 +170,15 @@ chat = ChatOpenAI(temperature=0.2)
 #prompt_template_followup = PromptTemplate(
  #   input_variables=["original_question", "answer"],
   #  template=)
-
+ 
 @app.route("/api/followup", methods=['POST'])
 def followup():
     question_id = request.json.get("questionId")
     original_question = request.json.get("question")
     answer = request.json.get("answer")
-
+    question_category = request.json.get("questionCategory")
+    question_label = request.json.get("questionLabel")
+    question_help = request.json.get("questionHelp")
     # Generate a new question using the prompt template
     #formatted_prompt = prompt_template_followup.format_prompt(original_question=original_question, answer=answer)
     
@@ -110,12 +187,22 @@ def followup():
     
     # Define the human message
     human_message = HumanMessage(content=f'''
-    The original question was: "{original_question}"
-    The response to that question was: "{answer}"
-    Based on this, please generate a follow-up question that starts with "Why" and asks about something specific from the response.
-    Never use the word "you" more than once in a question.
-    Single-clause questions only.
+    The webform's question category was: "{question_category}".
+    The webform's question label was: "{question_label}".
+    The webform's original question was: "{original_question}".
+    The response to that question was: "{answer}".
+    The webform' help text was: "{question_help}".
+    Based on this,  generate a follow-up question that starts with "Why" and references something specific from the response. 
+    Use the word "you" once and only once. 
+    Short, single-clause questions only. 
+    The follow-up question should not be in disagreement with webform elements.
+    the follow up question should not re-ask any question in the help text.
+    Avoid the passive voice and subordinate clauses.
+    
+   
     ''')
+    
+
 
     
     # Combine both messages
@@ -131,72 +218,9 @@ def followup():
 
 
 
-
-# Section 5 - provide  followup question 2
-
-#@app.route("/api/followup_answer", methods=['POST'])
-#def followup_answer():
-  #  question_id = request.json.get("questionId")
-  #  original_question = request.json.get("question")
-  #  answer = request.json.get("answer")
-  #  followup_question1 = request.json.get("followupQuestion1")
-  #  followup_answer1 = request.json.get("followupQuestion1")
-
-    # Define the system message
-   # system_message = SystemMessage(content='''Provide a single question, as in an iterative 5 Why interview''')
-    
-    # Define the human message
- #   human_message = HumanMessage(content=f'''
- #   The original question was: "{original_question}"
- #   The response to that question was: "{answer}"
- #   The follow-up question was: "{followup_question_1}"
- #   The response to that question was "{followup_answer_1}"
- #   Based on this, please generate a next follow-up question that starts with "Why" and asks about something specific from the response.
- #   Never use the word "you" more than once in a question.
-  #  Single-clause questions only.
-  #  ''')
-
-    # Combine both messages
-  #  messages = [system_message, human_message]
-
-    # Generate the response using the model
-   # response = chat(messages)
-    
-  #  next_followup_question = response.content
-
-  # return jsonify({"followupQuestion2": next_followup_question, "questionId": question_id})
-
-
-# Stratregy
-#Transcription and Note Review: The first step is to transcribe and review all notes taken during the interview. If the interviews were recorded, it's useful to transcribe them so that no information is lost or misunderstood.
-
-#Identification of Key Points: The next step involves identifying the key points that were brought up during the interviews. This could be significant challenges the company is facing, potential opportunities, key strengths and weaknesses, as well as other relevant topics.
-
-#Thematic Analysis: Organize the key points into common themes. For example, a theme could be internal communication, customer retention, or product development. This makes it easier to summarize and present the information later on.
-
-#Cross-Verification: Cross-verify the identified themes with other data sources, if available. This could be other interviews, data from the company, or even third-party research. This helps to validate the themes and ensure they're not based on one-off comments.
-
-#SWOT Analysis: One way to analyze the information is by conducting a SWOT analysis - identifying the company's Strengths, Weaknesses, Opportunities, and Threats based on the interview data. This can provide a quick snapshot of the current situation of the company.
-
-#Gap Analysis: Determine the gap between the current state of the company and where it wants to be. This gives insight into the areas that need focus.
-
-#Stakeholder Analysis: Understand the interests and influence of different stakeholders within the company. This will provide context for some of the responses and help identify potential roadblocks or allies when implementing the strategy.
-
-#Problem Statement Definition: Based on the analysis, define the primary problem(s) that need to be solved. This helps to focus the strategy on what matters most to the company.
-
-#Visualize Data: If possible, visualize the data in a way that makes it easier to understand the overall picture. This could be a diagram, a flowchart, a graph, or any other visual representation that makes the information more digestible.
-
-
-
-
-
-
-
-
-
 # Section 5 - run app
 # Run app in debug mode
-app.run(host="localhost", port=8000, debug=True)
+# app.run(host="localhost", port=8000, debug=True)
 # Run app in production mode
 #app.run(host="localhost", port=8000)
 
