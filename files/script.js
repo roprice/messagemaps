@@ -387,7 +387,7 @@ const signUpSubmitted = async (event) => {
 
   try {
     const response = await supabase.auth.signUp({ email, password });
-    console.log('Signup response:', response);
+    
 
     if (response.error) {
       Alpine.store('formStatus').showErrorMessage(response.error.message);
@@ -400,7 +400,7 @@ const signUpSubmitted = async (event) => {
 
       // Get the current user's ID
       const userId = response.user.id;
-
+	  console.log('Signup response:', response);
       // Create a new profile entry in the 'user_profiles' table
       const { data, error } = await supabase
         .from('user_profiles')
@@ -437,7 +437,7 @@ const signUpSubmitted = async (event) => {
       } else {
        
 		
-		// Store the interviewId in localStorage immediately after login
+		// Store the interview in localStorage immediately after login
         window.localStorage.setItem('interviewData', JSON.stringify(interview));
 		
 		Alpine.store('currentScreen').current = 'interviews';
@@ -708,7 +708,7 @@ async function deleteInterview(interviewId) {
 
 // get the users interview to review, edit, etc
 async function getInterview(userId) {
-  //console.log('User ID called in GetInterview(userId):', userId);
+  console.log('User ID called in GetInterview(userId):', userId);
   try {
 
     // Check if an interview exists for the user
@@ -768,7 +768,7 @@ async function getInterview(userId) {
     // Store the string in localStorage
     window.localStorage.setItem('interviewData', interviewDataString);
 
-    console.log('Interview data:', interview);
+   // console.log('Interview data:', interview);
 
     // Return the ID of the existing interview
     return interview.id;
@@ -791,6 +791,18 @@ function debounce(func, wait) {
 }
 
 async function saveAnswer(interviewId, questionId, answer, userId) {
+	
+	console.log("saveAnswer called with questionId:", questionId);
+
+	  // Pull the interviewId from local storage
+	  let interviewDataString = window.localStorage.getItem('interviewData');
+	  let interviewData = JSON.parse(interviewDataString);
+
+	  console.log("Fetched interview data from local storage:", interviewData);
+
+
+	
+	
   if (!interviewId) {
     throw new Error('Invalid interviewId');
   }
@@ -819,6 +831,7 @@ let animationRunning = false;  // global flag to track animation state
 
 const autoSave = debounce(
   async function (interviewId, questionId, answer, userId, textarea) {
+	  console.log(interviewId);  // Add this line
     try {
       await saveAnswer(interviewId, questionId, answer, userId);
 
@@ -1297,22 +1310,28 @@ function InterviewReviewView() {
 		    if (this.userId && this.interviewId) {
 		        const { data, error } = await supabase
 		            .from('interview_answers')
-		            .select('question_id, answer, interview_questions:question_id (question_text, question_category)') // Include question_category here
+    .select('question_id, answer, followups, interview_questions:question_id (question_text, question_category)')
+		            
 		            .eq('interview_id', this.interviewId)
 		            .eq('user_id', this.userId);
 		        if (error) {
 		            console.error('Error fetching answered questions:', error);
 		            return;
 		        }
+				
+				
+				//console.log('Fetched answered questions data:', data);
 		       // console.log('Fetched answered questions data:', data);  // Add this line
-		        this.answeredQuestions = data.reduce((acc, item) => {
-		            acc[item.question_id] = { 
-		                answer: item.answer ? item.answer : 'No answer yet', 
-		                question_text: item.interview_questions.question_text,
-		                question_category: item.interview_questions.question_category // Store question_category here
-		            };
-		            return acc;
-		        }, {});
+			   this.answeredQuestions = data.reduce((acc, item) => {
+			       acc[item.question_id] = { 
+			           answer: item.answer ? item.answer : 'No answer yet', 
+			           question_text: item.interview_questions.question_text,
+			           question_category: item.interview_questions.question_category, // Store question_category here
+			           followups: item.followups ? item.followups : [] // Add followups here
+			       };
+			       return acc;
+			   }, {});
+		       
 		       
 		    }
 		},
@@ -1474,11 +1493,6 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 	    event.preventDefault();  // Prevent the default link click action
 	    window.print();  // Call the browser print function
 	});
-
-
-
-  
-  
   
   
   // user signs up
@@ -1495,21 +1509,6 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
     logoutButton.onclick = logoutSubmitted.bind(logoutButton);
   });
 
-
-
-/*
-document.getElementById("ExportCSV").addEventListener("click", function(event){
-    event.preventDefault();  // Prevent the default link click action
-    downloadAsCSV();  // Call the function to download as CSV
-});
-*/
-
-
-
-  function expandTextarea(textarea) {
-      // Reset textarea height if text was deleted
-    
-  }
   
   //## MUTATION OBSERVER
   // Select the node that will be observed for mutations
@@ -1561,45 +1560,6 @@ document.getElementById("ExportCSV").addEventListener("click", function(event){
   //## /MUSTATION OBSERVER
 
 
-
-
-  //create interview clicked
-  const interviewButton = document.getElementById('InterviewMe');
-  interviewButton.addEventListener('click', async () => {
-    // Pull the user profile from local storage
-    const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-    console.log('userProfile when called by eventlistener for #InterviewMe:', userProfile);
-
-    // Extract the user's ID and full name from the profile
-    const userId = userProfile.user_id;
-    console.log('userID value when called by eventlistener for #InterviewMe:', userProfile.user_id);
-
-    // load CreateInterview
-    await createInterview();
-
-  });
-
-  // delete interview clicked
-  /*
-  const deleteButton = document.getElementById('DeleteInterview');
-  deleteButton.addEventListener('click', async () => {
-    // Pull the user profile from local storage
-    const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
-
-    // Extract the user's ID from the profile
-    const userId = userProfile.user_id;
-
-    // Fetch the most recent interview
-    const interviewId = await getInterview(userId);
-
-    // Delete the interview
-    if (interviewId) {
-      await deleteInterview(interviewId);
-    } else {
-      console.log('No interview found to delete.');
-    }
-  });
-  */
   
 });
 

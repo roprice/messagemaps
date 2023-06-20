@@ -56,7 +56,7 @@
             <a href="#" class="mx-auto mb-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
               <img class="mb-2" src="files/logo-80x80.png" alt="" width="80" height="80">
             </a>
-            <div class="brand-name fw-bold h3">MESSAGE <span class="">MAPS</span></div>
+            <div class="brand-name h3">MESSAGE <span class="brand-name-maps">MAPS</span></div>
           </div>
 
           <ul class="nav nav-pills my-2 mb-3 " id="SigninSignUp">
@@ -152,20 +152,15 @@
 		<div  class="col-md-8 m-0 p-0 vh-100 d-flex align-items-center justify-content-center" style="position:relative">
 
 
-			<div style="
-			border-left: 1px solid black;
-			background-repeat: no-repeat;
-			background-size: cover;
-			width: 100%;
-			height: 100%;
-            
-			"></div>
+			<div class="background-div-home"></div>
 
-			<h2 class="statement" style="position:absolute">
-				<p>Discover your strategy </p>
-				<p>Perfect your message</p>
-				<p><strong>Make it easy to sell</strong></p></h2>
-
+			<h2 class="statement" style="position:absolute"  x-data="{ show: false }" x-init="() => { show = true; console.log('Component initialized'); }" x-show="show" x-transition:enter="duration.1000ms">
+			    <p>Discover your strategy </p>
+			    <p>Perfect your message</p>
+			    <p><strong>Make selling simple</strong></p>
+			</h2>
+			
+			
 		</div>
 	  
 
@@ -370,7 +365,7 @@
 									<div class="card shadow-sm inactive" title="Complete your discovery interview and brand strategy to activate">
 										<div class="card-body">
 											<h6 class="card-title">Messages that Sell</h6>
-											<p>Transform your work into messages that sell, for your sales talking points, pitch decks, marketing copy and more</p>
+											<p>Transform your work into messages that sell, for your sales talking points, pitch decks, marketing copy and more. Unlock sales messages</p>
 											<button class="btn btn-primary mt-3" type="button" disabled
 												>Give me the messaging</button>
 										</div><!-- card-body -->
@@ -379,11 +374,7 @@
 							</div><!-- row-->
 							<div class="row welcome-bottom">
 								<div  class="col-md-7 next">
-									<p>Your next move is the <a href=# 
-										x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; setTimeout(() => document.getElementById('input-1').focus(), 900);"
-										>discovery interview</a> - ready?</p>
-										<button id="InterviewMe" class="btn btn-primary btn-lg mt-3 large-button" type="button" 
-											x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Yes, I will tell you everything!!</button>
+								
 								</div>
 								<div  class="col-md-4 help text-end">
 									<h4>Need help?</h4> 
@@ -605,8 +596,13 @@
 															x-bind:class="{ 'active': $parent.activeQuestion === question.question_label }"
 		
 															x-init="() => {
-																$el.setAttribute('id', 'question-' + question.question_label); 
-																fetchAnswerForThisQuestion(question.id);
+															    $el.setAttribute('id', 'question-' + question.question_label); 
+															    let intervalId = setInterval(() => {
+															        if(this.interviewId) {
+															            clearInterval(intervalId);
+															            fetchAnswerForThisQuestion(question.id);
+															        }
+															    }, 1000); // checks every 500ms
 															}" 
 															@click="activeQuestion = question.question_label" 
 															class="form-group"
@@ -675,32 +671,33 @@
 															<!-- /.help -->
 
 														<div style="position:relative;" class="followup-question container text-small" 
-														x-data="{ 
-															
-														    followupQuestion: '', 
-														    followupAnswer: '', 
-														    userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null, 
-															autoSaveFollowup: debounce(async function (interviewId, questionId, followupQuestionId, followupAnswer) {
-															  const followupQuestionElement = document.getElementById('p-followup-to-question-id-' + followupQuestionId);
-															  const followupQuestion = followupQuestionElement ? followupQuestionElement.textContent : '';
+														    x-data="{ 
+														        followupQuestion: '', 
+														        followupAnswer: '', 
+														        userId: null, 
+														        autoSaveFollowup: debounce(async function (interviewId, questionId, followupQuestionId, followupAnswer) {
+														            const followupQuestionElement = document.getElementById('p-followup-to-question-id-' + followupQuestionId);
+														            const followupQuestion = followupQuestionElement ? followupQuestionElement.textContent : '';
 
-
-															  try {
-															    await saveFollowupAnswer(interviewId, questionId, followupQuestion, followupAnswer, this.userId);
-															  } catch (error) {
-															    console.error('Error saving answer:', error);
-															  }
-
-															}, 3000),
-															
-															checkFollowupExists: async function(questionId) {
-													            await followupExists(questionId);
-													        }
-														}"
-														x-init="() => { 
-														        $el.setAttribute('id', 'followup-to-question-id-' + question.id); 
-														        checkFollowupExists(question.id);
-														    }">
+														            try {
+														                await saveFollowupAnswer(interviewId, questionId, followupQuestion, followupAnswer, this.userId);
+														            } catch (error) {
+														                console.error('Error saving answer:', error);
+														            }
+														        }, 3000),
+														        checkFollowupExists: async function(questionId) {
+														            await followupExists(questionId);
+														        }
+														    }"
+														   x-init="() => { 
+														       if (!window.localStorage.getItem('userProfile')) return;
+														       this.userId = JSON.parse(window.localStorage.getItem('userProfile')).user_id;
+														       $el.setAttribute('id', 'followup-to-question-id-' + question.id); 
+														       const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
+														       if (!interviewData || !interviewData.interviewID) return;
+														       checkFollowupExists(question.id);
+														   }">
+														   
 
 															<p x-init="() => { $el.setAttribute('id', 'p-followup-to-question-id-' + question.id); }" x-text="followupQuestion"></p>
 														
@@ -832,7 +829,7 @@
 										    <a title="Download a simple, low file-size markdown document"  @click="downloadInterview()" href="#interview-report-download-markdown">Download markdown</a> 
 											
 
-										    <!--><a title="Export as a CSV for Google Sheets, Excel, etc" id="ExportCSV" href="#interview-report-export-csv">Export CSV</a>-->
+										    <!--<a title="Export as a CSV for Google Sheets, Excel, etc" id="ExportCSV" href="#interview-report-export-csv">Export CSV</a>-->
 										</p>
 									</div><!-- hide for print -->
 								</div><!-- .interview-info-card.card-header -->
@@ -846,21 +843,33 @@
 				               <div class="question-category h6" x-text="category.label"></div>
             
 								<!-- Iterate over each question in this category -->
-							<template 
-								x-for="(question, qIndex) in (Array.isArray($store.questions) ? $store.questions.filter(question => question.question_category === category.id) : [])"
-								:key="question.id">
-							
-								    <!-- Print question label and text, and answer -->
+								<template x-for="(question, qIndex) in (Array.isArray($store.questions) ? $store.questions.filter(question => question.question_category === category.id) : [])" :key="question.id">
+
+
 								    <div class="question-label-text-answer">
-								        <!-- Print question label, colon, and question text in a single element -->
+								        <!-- Print question label and text, and answer -->
 								        <div class="question-label-text d-flex align-items-center">
-								            <span x-text="question.question_label.charAt(0).toUpperCase() + question.question_label.slice(1).replaceAll('_', ' ') + ': ' + question.question_text.charAt(0).toLowerCase() + question.question_text.slice(1)"></span>
-								        </div><!-- /.question-label-text -->
-     
-									   <p class="review question-answer" x-text="answeredQuestions[question.id] ? answeredQuestions[question.id].answer : 'No answer yet'"></p>
-								       
-								    </div><!-- /.question-label-text-answer -->
+								            <span x-text="question.question_label.charAt(0).toUpperCase() + question.question_label.slice(1).replaceAll('_', ' ') + ': ' + question.question_text.charAt(0).toLowerCase() + question.question_text.slice(1)"  style=""></span>
+								        </div>
+								        <p class="review question-answer" x-text="answeredQuestions[question.id] ? answeredQuestions[question.id].answer : 'No answer yet'"></p>
+
+
+
+            
+								        <template x-for="(followup, fIndex) in (answeredQuestions[question.id] && 
+										answeredQuestions[question.id].followups ? answeredQuestions[question.id].followups : [])" :key="`${question.id}-followup-${fIndex}`">
+								            <div>
+												<span class="followup-question" x-show="followup.question" x-text="followup.question" style="color:#777;"></span>
+												 <p class="review followup-answer" x-show="followup.answer" x-text="followup.answer"></p>
+								            </div>
+								        </template>       
+	
+									
+
+         
+								    </div>
 								</template>
+
 				           	</div><!-- /.interview-category -->
 				      	</template>
 					</div><!-- /.interview-review-container -->
