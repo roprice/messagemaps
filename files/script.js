@@ -74,7 +74,7 @@ document.addEventListener('alpine:init', function() {
       current: 'loggedOut',
       items: ['loggedIn', 'loggedOut'],
       updateAuthStatus: function () {
-        console.log('updateAuthStatus called');
+        //console.log('updateAuthStatus called');
         if (localStorage.getItem('supabase.auth.token')) {
           this.current = 'loggedIn';
 
@@ -138,11 +138,11 @@ document.addEventListener('alpine:init', function() {
 	  items: [
 	    ['account', 'your account'],
 	    ['settings', 'settings'],
-	    ['maps', 'message map'],
+	    ['maps', localStorage.getItem('interviewData') ? `${JSON.parse(localStorage.getItem('interviewData')).brandName} message map` : 'your message map'],
 	    ['interviews', 'discovery interview'],
-	    ['interview-review', 'discovery review'],
-	    ['strategies', 'strategic messaging'],
-	    ['strategy-review', 'strategy review'],
+	    ['interview-review', 'discovery interview report'],
+	    ['strategies', 'business strategy'],
+	    ['strategy-review', 'business strategy report'],
 	    ['assets', 'sales and marketing assets'],
 	    ['newMap', 'get a new map'],
 	  ],
@@ -255,7 +255,7 @@ var supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 document.addEventListener('DOMContentLoaded', (event) => {
 	supabase.auth.onAuthStateChange((event, session) => {
-	  console.log('Authentication state changed', event);
+	  //console.log('Authentication state changed', event);
 	  // console.log('Current Session', session);
 	  // Check if the user is logged in
 	  if (session) {
@@ -400,7 +400,7 @@ const signUpSubmitted = async (event) => {
 
       // Get the current user's ID
       const userId = response.user.id;
-	  console.log('Signup response:', response);
+	  //console.log('Signup response:', response);
       // Create a new profile entry in the 'user_profiles' table
       const { data, error } = await supabase
         .from('user_profiles')
@@ -430,7 +430,7 @@ const signUpSubmitted = async (event) => {
 
         const interviewId = await getInterview(userId);
         if (interview !== null && interview !== undefined) {
-          console.log('No interview found for user. Redirecting to onboarding...');
+          //console.log('No interview found for user. Redirecting to onboarding...');
           
 		  Alpine.store('currentScreen').current = 'maps';
   
@@ -594,7 +594,8 @@ function formatDateTime(dateString = new Date()) {
 	month: 'numeric',
 	day: 'numeric',
 	hour: 'numeric',
-	minute: 'numeric'
+	minute: 'numeric',
+		 timeZoneName: 'short'
 	};
 	// console.log("date 1: ", date);
 	return date.toLocaleString([], options);
@@ -792,46 +793,73 @@ function debounce(func, wait) {
 
 async function saveAnswer(interviewId, questionId, answer, userId) {
 	
-	console.log("saveAnswer called with questionId:", questionId);
+    //console.log("saveAnswer called with questionId:", questionId);
 
-	  // Pull the interviewId from local storage
-	  let interviewDataString = window.localStorage.getItem('interviewData');
-	  let interviewData = JSON.parse(interviewDataString);
+    // Pull the interviewId from local storage
+    let interviewDataString = window.localStorage.getItem('interviewData');
+    let interviewData = JSON.parse(interviewDataString);
 
-	  console.log("Fetched interview data from local storage:", interviewData);
-
-
+    //console.log("Fetched interview data from local storage:", interviewData);
 	
-	
-  if (!interviewId) {
-    throw new Error('Invalid interviewId');
-  }
-  try {
-    const { data, error } = await supabase
-      .from('interview_answers')
-      .upsert({
-        interview_id: interviewId,
-        question_id: questionId,
-        answer: answer,
-        user_id: userId,
-      },{
-        onConflict: ['interview_id', 'question_id', 'user_id']
-      });
-
-    if (error) {
-      throw error;
-    } else {
-      //console.log('Answer saved successfully:', data);
+	const currentDate = new Date();
+  
+    if (!interviewId) {
+      throw new Error('Invalid interviewId');
     }
-  } catch (error) {
-    console.error('Error saving answer:', error);
-  }
+    try {
+      const { data, error } = await supabase
+        .from('interview_answers')
+        .upsert({
+          interview_id: interviewId,
+          question_id: questionId,
+          answer: answer,
+          user_id: userId,
+		  date_updated: currentDate
+        },{
+          onConflict: ['interview_id', 'question_id', 'user_id']
+        });
+
+      // Here you should handle if the upsert operation ended with an error.
+      // For example:
+      if (error) {
+        console.error('Error: ', error);
+        return;
+      }
+
+	  
+
+      // Update interview's updated_at field
+      const update = await supabase
+        .from('interviews')
+        .update({
+          updated_at: currentDate
+        })
+        .eq('id', interviewId);
+
+      // Here you should handle if the update operation ended with an error.
+      // For example:
+      if (update.error) {
+        console.error('Error: ', update.error);
+      }
+	  
+	  // Update Alpine.js store
+	  let store = Alpine.store('interviewData');
+	  store.updatedDate = currentDate;
+	  console.log("Updated date:", Alpine.store('interviewData').updatedDate);
+	  
+
+    } catch (error) {
+      console.error('An unexpected error occurred:', error);
+    }
 }
+
+
+
 let animationRunning = false;  // global flag to track animation state
 
 const autoSave = debounce(
   async function (interviewId, questionId, answer, userId, textarea) {
-	  console.log(interviewId);  // Add this line
+	  //console.log(interviewId);  // Add this line
     try {
       await saveAnswer(interviewId, questionId, answer, userId);
 
@@ -987,7 +1015,8 @@ async function saveFollowupAnswer(interviewId, questionId, followupQuestion, fol
 	
 	  
       const snackbar = document.getElementById(`save-confirmation-followup-to-question-id-${questionId}`);
-	  console.log(snackbar);
+	  //console.log(snackbar);
+	  
       if (!animationRunning) {
         snackbar.classList.add('show');
         animationRunning = true;
@@ -1185,7 +1214,7 @@ function attachEventHandlers(textareaId) {
 function handleTextareaBlur(event) {
 
   //console.log('event.target:', event.target);
-  console.log('event.target.value:', event.target.value);
+  //console.log('event.target.value:', event.target.value);
 
   const characterCount = event.target.value.length;
 
@@ -1199,17 +1228,17 @@ function handleTextareaBlur(event) {
       const interviewId = interviewData.interviewID;
       const fullName = userProfile.full_name;
 
-      console.log("value pass to extractBrandName(): ", event.target.value)
+      //console.log("value pass to extractBrandName(): ", event.target.value)
 	  
       extractBrandName(event.target.value)
         .then(brandName => {
-          console.log('Brand name entered:', brandName);
+          //console.log('Brand name entered:', brandName);
 		  Alpine.store('yourBrand').setBrandName(brandName);
 		  
           return updateInterview(interviewId, brandName, fullName);
         })
         .then(() => {
-          console.log('Interview name updated successfully!');
+          //console.log('Interview name updated successfully!');
 		  
         })
         .catch((error) => {
@@ -1220,7 +1249,7 @@ function handleTextareaBlur(event) {
 }
 
 async function extractBrandName(text) {
-  console.log('extractBrandName called with:', text);
+  //console.log('extractBrandName called with:', text);
 
   try {
     const response = await fetch('/api/extract', {
@@ -1236,7 +1265,7 @@ async function extractBrandName(text) {
     }
 
     const data = await response.json(); // Parse response as JSON
-    console.log("Extracted brand name: ", data); // show extracted brand name
+    //console.log("Extracted brand name: ", data); // show extracted brand name
 
 
     return data.brandName; // Return the brand name from the response
@@ -1252,14 +1281,11 @@ async function extractBrandName(text) {
 
 
 
-
-function downloadAsMarkdown(content) {
-  let filename = 'Interview_Review.md'; // Specify the filename
-
+function downloadAsMarkdown(content, fileName) {
   // Create an invisible downloadable link
   let element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-  element.setAttribute('download', filename);
+  element.setAttribute('download', fileName);
   element.style.display = 'none';
   document.body.appendChild(element);
 
@@ -1269,6 +1295,42 @@ function downloadAsMarkdown(content) {
   // Remove the link from the document
   document.body.removeChild(element);
 }
+
+function saveToSupabase(content, fileName) {
+  const bucketName = 'public_interview_reports';
+  const userId = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null;
+  const interviewId = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
+
+  // Check if userId, interviewId, and fileName are valid
+  if (!userId || !interviewId || !fileName) {
+    console.error('Invalid userId, interviewId, or fileName');
+    return;
+  }
+
+  const filePath = `${userId}-${interviewId}-${fileName}`;
+  
+  
+  const cleanFilePath = filePath.replace(/\s/g, "-")
+
+  const file = new File([content], cleanFilePath, { type: 'text/markdown' });
+
+  // Use the upload() function provided by supabase.storage to upload the file
+  supabase.storage
+    .from(bucketName)
+    .upload(filePath, file)
+    .then((response) => {
+      // Handle the response
+      console.log('File uploaded successfully:', response);
+    })
+    .catch((error) => {
+      // Handle the error
+      console.error('Error uploading file:', error);
+    });
+}
+
+
+
+
 
 
 
@@ -1391,8 +1453,24 @@ function InterviewReviewView() {
 		},
 		downloadInterview: function() {
 		    this.generateMarkdownContent();
-		    downloadAsMarkdown(this.markdownContent);
+		    const interviewData = Alpine.store('interviewData');
+		    const interviewName = interviewData.interviewName;
+		    const currentDate = new Date().toISOString().split('T')[0];
+		    const fileName = `${interviewName}-${currentDate}.md`;
+		    downloadAsMarkdown(this.markdownContent, fileName);
 		},
+		saveInterview: function() {
+		  console.log('saveInterview');
+		  this.generateMarkdownContent();
+		  const interviewData = Alpine.store('interviewData');
+		  const interviewName = interviewData.interviewName;
+		  const currentDate = new Date().toISOString().split('T')[0];
+		  const fileName = `${interviewName}-${currentDate}.md`;
+		  const interviewId = Alpine.store('interviewId'); // Add this line to retrieve the interviewId
+		  saveToSupabase(this.markdownContent, fileName, interviewId);
+		},
+	   
+
 		async init() {
 		    await this.fetchQuestions();
 		    await this.generateMarkdownContent(); // Generate the Markdown content when the component is initialized
@@ -1566,7 +1644,10 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 // SECTION 11 - Helper Functions
-
+function expandTextarea(textarea) {
+    // Reset textarea height if text was deleted
+  
+}
 
 
 

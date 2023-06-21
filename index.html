@@ -154,7 +154,7 @@
 
 			<div class="background-div-home"></div>
 
-			<h2 class="statement" style="position:absolute"  x-data="{ show: false }" x-init="() => { show = true; console.log('Component initialized'); }" x-show="show" x-transition:enter="duration.1000ms">
+			<h2 class="statement" style="position:absolute"  x-data="{ show: false }" x-init="() => { show = true;  }" x-show="show" x-transition:enter="duration.1000ms">
 			    <p>Discover your strategy </p>
 			    <p>Perfect your message</p>
 			    <p><strong>Make selling simple</strong></p>
@@ -278,7 +278,7 @@
 					  <div class="rounded-circle profile" x-text="Alpine.store('userProfile').getInitials()"></div>
 				    </a>
 			        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-			          <li><a class="dropdown-item" href="#account" x-on:click.prevent="Alpine.store('currentScreen').current = 'accounts'; ">Account & Settings</a></li>
+			          <li><a class="dropdown-item" href="#account" x-on:click.prevent="Alpine.store('currentScreen').current = 'account'; ">Account & Settings</a></li>
 			          <!--<li><a class="dropdown-item" href="#settings">Settings</a></li>-->
 			          <li><a class="dropdown-item" href="mailto:rowan@messagemaps.io?subject='Help me please!'">Help</a></li>
 			          <li><hr class="dropdown-divider"></li>
@@ -299,7 +299,7 @@
 			  <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start me-2">
 
 			    <div class="custom-breadcrumb text-small text-secondary ms-4 ps-2">
-			      <span x-text="Alpine.store('currentScreen').showName()"></span>
+			      <span style="text-transform: lowercase;"f x-text="Alpine.store('currentScreen').showName()"></span>
 			    </div>
 
 			    <div id="userMenu" class="text-end ms-auto me-0">
@@ -311,7 +311,7 @@
 					  <div class="rounded-circle profile" x-text="Alpine.store('userProfile').getInitials()"></div>
 				    </a>
 			          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-  			         	<li><a class="dropdown-item" href="#account" x-on:click.prevent="Alpine.store('currentScreen').current = 'accounts'; ">Account & Settings</a></li>
+  			         	<li><a class="dropdown-item" href="#account" x-on:click.prevent="Alpine.store('currentScreen').current = 'account'; ">Account & Settings</a></li>
   			          	<!--<li><a class="dropdown-item" href="#settings">Settings</a></li>-->
 			            <li><a class="dropdown-item" href="mailto:rowan@messagemaps.io?subject='Help me please!'">Help</a></li>
 			            <li><hr class="dropdown-divider"></li>
@@ -345,9 +345,10 @@
 									<div class="card shadow-sm active">
 										<div class="card-body" >
 											<h6 class="card-title">Discovery Interview</h6>
-											<p>The in-depth investigation of your marketing, your buyers, their problems, your solution, and more. Every single interview is unique - yours will be too.</p>
+											<p>The in-depth investigation of your market, your buyers, their problems, your solution, and more. Every single interview is unique - yours will be too. </p>
 											<button class="btn btn-primary mt-3" type="button" 
-												x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Let's go!</button>
+												x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Let me dive deep!</button>
+												<div class="completion-time interview text-small text-secondaryy">Completion/review time: <strong>1 hour</strong></div>
 										</div><!-- card body-->
 									</div><!-- card-->
 								</div><!-- col-->
@@ -358,6 +359,7 @@
 											<p>Get the high-level overview of the problem you solve, your positioning, your brand's personality, and your core messages and value propositions</p>	
 											<button class="btn btn-primary mt-3" type="button" disabled
 												>Show me the strategy</button>
+												<div class="completion-time interview text-small text-secondary">Review time: <strong>5-15 minutes</strong></div>
 										</div><!-- card body-->
 									</div><!-- card-->
 								</div><!-- col-->
@@ -368,6 +370,7 @@
 											<p>Transform your work into messages that sell, for your sales talking points, pitch decks, marketing copy and more. Unlock sales messages</p>
 											<button class="btn btn-primary mt-3" type="button" disabled
 												>Give me the messaging</button>
+												<div class="completion-time interview text-small text-secondary">Review time: <strong>5-15 minutes</strong></div>
 										</div><!-- card-body -->
 									</div><!-- card -->
 								</div><!-- col-->
@@ -417,7 +420,7 @@
 									      },
       
 										  scrollToInterviewTabs: function () {
-									        document.getElementById('InterviewTabs').scrollIntoView({ behavior: 'smooth' });
+									        document.getElementById('InterviewView').scrollIntoView({ behavior: 'smooth' });
 									      },
       
 										  categories: [
@@ -520,7 +523,7 @@
 													<a class="text-secondary nav-sub-item-link"
 													    x-text="question.question_label.replaceAll('_', ' ')"
 													    :href="'#question-' + question.question_label"
-													    @click.prevent="console.log('question.id:', question.id); scrollToElementWithOffset('question-' + question.question_label, -127, question.id)"
+													    @click.prevent="scrollToElementWithOffset('question-' + question.question_label, -127, question.id)"
 													    :class="{ 'active': activeQuestion === question.question_label }"
 													></a>
 										
@@ -553,10 +556,11 @@
 															x-data="{
 			
 			
-			
+																
 																userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,  
 																
-																interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null,
+															
+																
 																txt: '',
 																hasInput: false,
 																hasFocus: false, 
@@ -579,6 +583,7 @@
 																            .eq('interview_id', this.interviewId)
 																            .eq('user_id', this.userId)
 																            .eq('question_id', questionId);
+																		
 																        if (error) {
 																            console.error('Error fetching answer for question:', error);
 																            return;
@@ -586,6 +591,7 @@
 																        // If there's an answer for this question, set it as the value of the textarea
 																        if (data[0]) {
 																            this.txt = data[0].answer;
+																			//console.log('this.txt: ',this.txt); 
 																        }
 																    }
 																}
@@ -596,13 +602,34 @@
 															x-bind:class="{ 'active': $parent.activeQuestion === question.question_label }"
 		
 															x-init="() => {
-															    $el.setAttribute('id', 'question-' + question.question_label); 
-															    let intervalId = setInterval(() => {
-															        if(this.interviewId) {
-															            clearInterval(intervalId);
-															            fetchAnswerForThisQuestion(question.id);
-															        }
-															    }, 1000); // checks every 500ms
+															  // Retrieve interviewData from local storage
+															  let storedData = JSON.parse(window.localStorage.getItem('interviewData'));
+															  let interviewId = null;
+
+															  // Check if storedData and interviewID exist
+															  if (storedData) {
+															    if (storedData.interviewID) {
+															      interviewId = storedData.interviewID;
+															    }
+															  }
+  
+															  // Set the interviewId in this context
+															  this.interviewId = interviewId;
+
+															  // Log the interviewId
+															  //console.log('Interview ID:', this.interviewId);
+
+															  // Set an id for this question
+															  $el.setAttribute('id', 'question-' + question.question_label); 
+
+															  // Set an interval to fetch answer for this question when interviewId is available
+															  let intervalId = setInterval(() => {
+															    //console.log('intervalId = setInterval(():', this.interviewId);
+															    if(this.interviewId) {
+															      clearInterval(intervalId);
+															      fetchAnswerForThisQuestion(question.id);
+															    }
+															  }, 1000); // checks every second
 															}" 
 															@click="activeQuestion = question.question_label" 
 															class="form-group"
@@ -674,7 +701,8 @@
 														    x-data="{ 
 														        followupQuestion: '', 
 														        followupAnswer: '', 
-														        userId: null, 
+														        userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,
+														        
 														        autoSaveFollowup: debounce(async function (interviewId, questionId, followupQuestionId, followupAnswer) {
 														            const followupQuestionElement = document.getElementById('p-followup-to-question-id-' + followupQuestionId);
 														            const followupQuestion = followupQuestionElement ? followupQuestionElement.textContent : '';
@@ -728,9 +756,19 @@
 					                        <!-- .row.previous-next-tabs -->
 					                        <div class="row  my-5 previous-next-tabs">
 												<div class=" col-md-12 text-end" id="PreviousNext">
-						                            <a @click.prevent="changeTab(-1)" class="previous btn-primary text-small" :disabled="activeTab === tabs[0]">&lt; previous section</a>
-						                            <a @click.prevent="changeTab(1)" class="next btn-primary text-small" :disabled="activeTab === tabs[tabs.length - 1]">next section &gt;</a>
+						                            <a 
+														@click.prevent="changeTab(-1)" 
+														class="previous btn-primary text-small" 
+														:class="{ 'disabled': activeTab === tabs[0] }"
+														:disabled="activeTab === tabs[0]">&lt; previous section</a>
+						                            
+													<a 
+														@click.prevent="changeTab(1)" 
+														class="next btn-primary text-small"
+														:class="{ 'disabled': activeTab === tabs[tabs.length - 1] }"
+														:disabled="activeTab === tabs[tabs.length - 1]">next section &gt;</a>
 					                          </div>
+		
 					                         
 					                        </div><!-- /.row.previous-next-tabs -->
 
@@ -753,13 +791,13 @@
 
 								<!-- .created -->
 								<div class="text-small text-secondary created">Created:
-									<span x-text="new Date($store.interviewData.updatedDate).toLocaleDateString()"></span>
+									<span x-text="new Date($store.interviewData.createdDate).toLocaleDateString()"></span>
 								</div>
 								<!-- /.created -->
 
 								<!-- .updated -->
 								<div class="text-small text-secondary updated">Updated:
-									<span x-text="formatDateTime($store.interviewData.createdDate)"></span>
+									<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
 								</div>
 								<!-- /.updated -->
 
@@ -814,7 +852,7 @@
 
 									<!-- .updated -->
 									<div class="text-small text-secondary updated">Last edited:
-										<span x-text="formatDateTime($store.interviewData.createdDate)"></span>
+										<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
 									</div>
 									<!-- /.updated -->
 					
@@ -823,10 +861,12 @@
 										 href="#discovery-interview-review" x-on:click.prevent="Alpine.store('currentScreen').current = 'interview-review'"
 										 >Approve - now give me strategy</button>
 										  <p class="text-small text-secondary"><input type=checkbox> Get consulting team feedback</p>
-										<p class="text-small text-secondary pt-1 pb-">Approve to save to your profile and generate your Brand Strategy</p>
+										<p class="text-small text-secondary pt-1 pb-">Approve to save a copy to your profile and generate your Brand Strategy. You can also come back to the interview to revise your answers.</p>
 										<p class="download-export-share text-small text-secondary pt-0">
 										    <a title="Print nicely formatted" id="PrintHTML" href="#interview-report-print">Print</a> 
 										    <a title="Download a simple, low file-size markdown document"  @click="downloadInterview()" href="#interview-report-download-markdown">Download markdown</a> 
+											
+											<a title="Save a copy of this report to your profile, access it later" id="SaveReport" href="#interview-report-save" @click="saveInterview()">Save a copy</a>
 											
 
 										    <!--<a title="Export as a CSV for Google Sheets, Excel, etc" id="ExportCSV" href="#interview-report-export-csv">Export CSV</a>-->
@@ -886,7 +926,7 @@
 	            </div><!-- /#MessagingView -->
 
 				<!-- /#AccountView -->
-	            <div id="AccountView" x-show="Alpine.store('currentScreen').current === 'accounts'">
+	            <div id="AccountView" x-show="Alpine.store('currentScreen').current === 'account'">
 
 	              <h4>Your Account</h4>
 

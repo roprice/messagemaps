@@ -40,6 +40,7 @@ h2.statement p {margin-bottom:50px;}
 
 
 
+
 @media screen and (min-width: 1980px) {
   h2.statement {
     padding: 180px;
@@ -312,11 +313,8 @@ a.navlink.linkdark.p-2.px-3.my-2.d-flex.align-items-center {
 
 a {color:#377EA4;}
 
-a.disabled {
-  pointer-events: none;
-  cursor: default;
-  color: #ccc;
-}
+
+
 
 button.btn.btn-primary {
   font-size: 12px;
@@ -1176,6 +1174,7 @@ html, body {
   align-items: center;
 }
 
+.completion-time {margin-top:12px;}
 
 
 a.linkdark, a.linkdark:hover {
@@ -1197,10 +1196,14 @@ input, .form-control {
 
 
 .disabled {
-  color: #ccc;
+  opacity: 0.7;
+  cursor: not-allowed;
+  pointer-events: none;
+  /* Add any other styles you want for disabled buttons */
 }
-
-
+.previous-next-tabs.disabled {
+  opacity: 0.5;
+}
 
 
 @media print {

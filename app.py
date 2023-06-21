@@ -165,7 +165,7 @@ def extract():
 
 
 # Section 4 - provide initial followup question
-chat = ChatOpenAI(temperature=0.2)
+chat = ChatOpenAI(temperature=0.1)
 
 #prompt_template_followup = PromptTemplate(
  #   input_variables=["original_question", "answer"],
@@ -190,15 +190,11 @@ def followup():
     The webform's question category was: "{question_category}".
     The webform's question label was: "{question_label}".
     The webform's original question was: "{original_question}".
-    The response to that question was: "{answer}".
+    The webform's original question response was: "{answer}".
     The webform' help text was: "{question_help}".
-    Based on this,  generate a follow-up question that starts with "Why" and references something specific from the response. 
+    Based on this,  generate a follow-up question that starts with "Why" and reference something specific from the webform's original question response. 
     Use the word "you" once and only once. 
     Short, single-clause questions only. 
-    The follow-up question should not be in disagreement with webform elements.
-    the follow up question should not re-ask any question in the help text.
-    Avoid the passive voice and subordinate clauses.
-    
    
     ''')
     
