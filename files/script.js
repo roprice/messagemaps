@@ -1578,6 +1578,17 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 	});
 
 
+
+  document.getElementById("ApproveInterview").addEventListener("click", function(event){
+    // call getStrategy() function
+    getStrategy();
+  });
+
+
+
+});
+
+
   // user signs up
   var signUpForm = document.querySelector('#signup');
   signUpForm.onsubmit = signUpSubmitted.bind(signUpForm);
