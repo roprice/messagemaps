@@ -1331,11 +1331,8 @@ function saveToSupabase(content, fileName) {
 
 function strategyState() {
   console.log("strategyState()function called")
-
   renderStrategy();
-
   updateUItoStrategy();
-
 }
 
 function renderStrategy() {
@@ -1370,28 +1367,21 @@ function renderStrategy() {
 }
 
 function editStrategy() {
-
  // when user clicks edit for a given item, let the div be editable
  // when user clicks done, user saves the edited text to Supabase
  // userSavesStrategy()
  // when user clicks cancel, revert the text to the original text
-
 }
 
 function userSavesStrategy() {
   console.log("saveStrategy() function called")
-
 }
-
 
 function updateUItoStrategy() {
   console.log("updateUItoStrategy() function called")
   // change currrent screen
-
   // change nav
-
   // change URL
-
 }
 
 
