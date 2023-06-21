@@ -1330,19 +1330,71 @@ function saveToSupabase(content, fileName) {
 
 
 function strategyState() {
+  console.log("strategyState()function called")
 
-  console.log(" strategyState() function called")
+  renderStrategy();
 
   updateUItoStrategy();
 
 }
 
-function updateUItoStrategy() {
+function renderStrategy() {
+  console.log("renderStrategy() function called")
 
-  console.log(" strategyState() function called")
+  // check Supabase to see if there's a brand for this user's interview
 
+   // if there is,
+   console.log("strategy exists")
+   // get it and put it in local storage
+   // put it into an Alpine store
+   // getStrategy()
+   // display it on the screen
+   // displayStrategy()
+
+  // if there isn't
+  console.log("strategy doesn't exist")
+    // get it and put it in local storage
+    // put it into an Alpine store
+    // getStrategy()
+    // display it on the screen
+    // displayStrategy()
+
+  // If there isn't call the Flask API to get a brand strategy using this user's interview
+  // generateStrategy(interviewID)
+  console.log("generateStrategy() function called")
+    // get it and put it in local storage
+    // put it into an Alpine store
+    // getStrategy()
+    // display it on the screen
+    // displayStrategy()
+}
+
+function editStrategy() {
+
+ // when user clicks edit for a given item, let the div be editable
+ // when user clicks done, user saves the edited text to Supabase
+ // userSavesStrategy()
+ // when user clicks cancel, revert the text to the original text
 
 }
+
+function userSavesStrategy() {
+  console.log("saveStrategy() function called")
+
+}
+
+
+function updateUItoStrategy() {
+  console.log("updateUItoStrategy() function called")
+  // change currrent screen
+
+  // change nav
+
+  // change URL
+
+}
+
+
 
 
 
