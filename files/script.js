@@ -1636,7 +1636,7 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
-});
+
 
 
   // user signs up
@@ -1703,7 +1703,7 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
   observer.observe(targetNode, config);
   //## /MUSTATION OBSERVER
 
-
+});
 
 
 // SECTION 11 - Helper Functions
