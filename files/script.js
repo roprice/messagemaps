@@ -814,7 +814,7 @@ async function saveAnswer(interviewId, questionId, answer, userId) {
           question_id: questionId,
           answer: answer,
           user_id: userId,
-		  date_updated: currentDate
+		  updated_at: currentDate
         },{
           onConflict: ['interview_id', 'question_id', 'user_id']
         });
@@ -1335,6 +1335,7 @@ function saveToSupabase(content, fileName) {
 
 
 function InterviewReviewView() {
+	console.log('InterviewReviewView just got called')
     return {
         categories: [
             {id: 'category_brand_story', label: 'Brand and Story'},

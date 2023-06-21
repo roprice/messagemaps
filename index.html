@@ -833,7 +833,9 @@
 				<div id="InterviewReviewView" x-data="InterviewReviewView()" x-init="init()"  x-show="Alpine.store('currentScreen').current === 'interview-review'" x-cloak x-transition:enter.duration.500ms> 
 					<div class="interview-review-container">
 						<div class="print-header text-small text-secondary" style="display: block;text-align:right">Conducted by MessageMaps.io</div>
-						<a class="backlink edit text-small text-secondary" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">< Edit your interview</a>
+						<a class="backlink edit text-small text-secondary" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">< Edit your interview</a> | 
+						<a class="backlink edit text-small text-secondary" href="#" onclick="location.reload();">Refresh your report</a>
+						
 				 	 	<div class="interview-intro row mt-2">		
 							<div class="interview-analysis text-small text-secondary col-md-6  mt-4">
 								<!--<div  class="interview-summary">Summary: <span class="interview-analysis summary"></span></div>-->
@@ -857,7 +859,7 @@
 									<!-- /.updated -->
 					
 									<div class="hide-for-print">
-										<button id="ReviewInterview" name="submit" type="submit" class="btn btn-primary my-2  w-150"
+										<button title="This functionality is disabled pending the Alpha release planned for June 28th" disabled="disabled"  id="ReviewInterview" name="submit" type="submit" class="disabled btn btn-primary my-2  w-150"
 										 href="#discovery-interview-review" x-on:click.prevent="Alpine.store('currentScreen').current = 'interview-review'"
 										 >Approve - now give me strategy</button>
 										  <p class="text-small text-secondary"><input type=checkbox> Get consulting team feedback</p>
