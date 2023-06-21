@@ -1329,12 +1329,20 @@ function saveToSupabase(content, fileName) {
 }
 
 
-function getStrategy() {
+function strategyState() {
 
-  console.log(" getStrategy() function called")
+  console.log(" strategyState() function called")
+
+  updateUItoStrategy();
 
 }
 
+function updateUItoStrategy() {
+
+  console.log(" strategyState() function called")
+
+
+}
 
 
 
@@ -1581,7 +1589,7 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
   document.getElementById("ApproveInterview").addEventListener("click", function(event){
     // call getStrategy() function
-    getStrategy();
+    strategyState();
   });
 
 
