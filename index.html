@@ -868,7 +868,7 @@
 												type="submit"
 												class="btn btn-primary my-2 w-150"
 												href="#brand-positioning-strategy"
-												x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'"
+												x-on:click.prevent="getStrategy();Alpine.store('currentScreen').current = 'strategies'"
 												x-bind:class="{ 'disabled': userProfile.user_id !== 'e42bd9c0-c905-4cd1-a186-97d602849934' }"
 												>
 												Approve - now give me strategy
