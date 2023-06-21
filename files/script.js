@@ -1655,9 +1655,6 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
-});
-
-
 
 // SECTION 11 - Helper Functions
 function expandTextarea(textarea) {
