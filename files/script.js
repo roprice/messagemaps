@@ -1341,24 +1341,21 @@ function renderStrategy() {
   // check Supabase to see if there's a brand for this user's interview
 
    // if there is,
-   console.log("strategy exists")
+   // console.log("strategy exists")
    // get it and put it in local storage
    // put it into an Alpine store
    // getStrategy()
    // display it on the screen
    // displayStrategy()
 
-  // if there isn't
-  console.log("strategy doesn't exist")
-    // get it and put it in local storage
-    // put it into an Alpine store
-    // getStrategy()
-    // display it on the screen
-    // displayStrategy()
 
-  // If there isn't call the Flask API to get a brand strategy using this user's interview
-  // generateStrategy(interviewID)
-  console.log("generateStrategy() function called")
+
+  // If there isn't
+  console.log("strategy exists on Supabse")
+    // call the Flask API to get a brand strategy using this user's interview
+    // generateStrategy(interviewID)
+    console.log("generateStrategy(interviewID) function called")
+    // get interview's answers from supabase
     // get it and put it in local storage
     // put it into an Alpine store
     // getStrategy()
