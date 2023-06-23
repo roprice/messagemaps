@@ -1329,41 +1329,87 @@ function saveToSupabase(content, fileName) {
 }
 
 
+// Section 9.7 Manage strategy
+
+// 1. invoke strategy page
 function strategyState() {
-  console.log("strategyState()function called")
-  renderStrategy();
-  updateUItoStrategy();
+  console.log("strategyState() function called");
+  updateStrategyUI();
+  console.log("instantiate userid and interviewid");
+  const interviewID = 1;
+  checkForStrategy();
 }
 
-function renderStrategy() {
-  console.log("renderStrategy() function called")
+// 2. update strategy page UI
+function updateStrategyUI() {
+  console.log("updateStrategyUI() function called");
+  console.log("change currrent screen, change nav item active state, change URL");
+}
 
-  // check Supabase to see if there's a brand for this user's interview
+// 3. update strategy page content
+// 3a. first check whether strategy exists
+function checkForStrategy() {
+  console.log("checkForStrategy(interviewID) function called");
+  console.log("check if strategy exists on Supabase for this interview");
+
 
    // if there is,
-   // console.log("strategy exists")
-   // get it and put it in local storage
-   // put it into an Alpine store
-   // getStrategy()
-   // display it on the screen
-   // displayStrategy()
+     // console.log("strategy exists")
+     // get strategy
+     // displayStrategy()
 
+   // If there isn't
+   console.log("no strategy found");
 
+   // therefore generate a new strategy
+   console.log("therefore generate a new strategy by calling generateStrategy(interviewID)");
+   generateStrategy();
 
-  // If there isn't
-  console.log("chbeck if strategy exists on Supabase")
-  console.log("no strategy found")
-    // call the Flask API to get a brand strategy using this user's interview
-    // generateStrategy(interviewID)
-    console.log("therefore, generateStrategy(interviewID) function called")
-    // get interview's answers from supabase
-    // get it and put it in local storage
-    // put it into an Alpine store
-    // getStrategy()
     // display it on the screen
-    // displayStrategy()
+    console.log("displayStrategy() function called");
+
 }
 
+// 4 generate strategy
+function generateStrategy() {
+  console.log("generateStrategy() function called");
+  console.log("therefore generate a new strategy by calling generateStrategy()");
+
+    console.log("generateStrategy(interviewID, interview_answers) function called");
+
+    console.log("Flask endpoint uses interview info to get generate strategy map from OpenAI API");
+
+    console.log("Flask returns strategy map as JSON to front end, along with InterviewID");
+
+    // save strategy to user account on Supabase
+    createStrategy();
+}
+
+// 5. get strategy
+function getStrategy() {
+  console.log("getStrategy() function called")
+  // with interviewID and userId, make call to database and get strategy
+  // then store it locally
+  console.log("put it in local storage as strategyMap");
+  console.log("put it into an Alpine store as strategyMap");
+  // then display it in HTML
+  displayStrategy();
+}
+
+
+
+// 6. display strategy
+function displayStrategy() {
+  console.log('displayStrategy() function called');
+
+  // brand strategy is displayed in strategy state content area
+
+  console.log('brand strategy is displayed in strategy state content area');
+
+}
+
+
+// 7. edit strategy
 function editStrategy() {
  // when user clicks edit for a given item, let the div be editable
  // when user clicks done, user saves the edited text to Supabase
@@ -1371,16 +1417,13 @@ function editStrategy() {
  // when user clicks cancel, revert the text to the original text
 }
 
+// 8. save/update strategy
 function userSavesStrategy() {
-  console.log("saveStrategy() function called")
+  console.log("saveStrategy(interviewID) function called")
+  console.log("edited strategy is saved to Supabase and related to interview")
 }
 
-function updateUItoStrategy() {
-  console.log("updateUItoStrategy() function called")
-  // change currrent screen
-  // change nav
-  // change URL
-}
+
 
 
 
