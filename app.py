@@ -188,8 +188,3 @@ def followup():
 # app.run(host="localhost", port=8000, debug=True)
 # Run app in production mode
 #app.run(host="localhost", port=8000)
-
-
-
-
-
