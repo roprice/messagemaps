@@ -2,7 +2,7 @@
 # Section 2 - logging
 # Section 3 - extract brand name
 # Section 4 - provide followup question
-# Section 5 - run app
+# Section 5 - generate strategy
 
 
 
@@ -21,11 +21,16 @@ import os
 import logging
 import json
 import re
+from supabase_py import create_client, Client
 
+
+# Instantiate your Supabase client
+url: str = 'https://wogivjshqopegucducyz.supabase.co'
+key: str = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvZ2l2anNocW9wZWd1Y2R1Y3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NzU4MzQsImV4cCI6MTk5NDA1MTgzNH0.zj-QBJknPolKZ6TZ_t3r7aPXbhVB1bf9mmoNBBif9OM'
+supabase: Client = create_client(url, key)
 
 # Set OpenAI API key
 os.environ["OPENAI_API_KEY"] = "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"
-
 
 
 app = Flask(__name__)
@@ -183,7 +188,54 @@ def followup():
 
 
 
-# Section 5 - run app
+@app.route("/api/generateStrategy", methods=['POST'])
+def generateStrategy():
+    interview_id = request.json.get("interviewId")
+
+    # Fetch interview from interviews table
+    interview_result = supabase.table('interviews').select('id, brand_name').eq('id', interview_id).execute()
+    interview = interview_result['data'][0]
+
+    # Fetch all questions from interview_questions table
+    questions_result = supabase.table('interview_questions').select('id, question_label, question_text').execute()
+
+    # Convert list of questions into a dictionary for easy access
+    questions = {question['id']: question for question in questions_result['data']}
+
+    # Fetch all answers for the given interview from interview_answers table
+    answers_result = supabase.table('interview_answers').select('id, interview_id, question_id, answer, followups').eq('interview_id', interview_id).execute()
+
+    # Iterate through each answer and pair it with its corresponding question
+    paired_data = []
+    for answer in answers_result['data']:
+        question_id = answer['question_id']
+        if question_id in questions:
+            question = questions[question_id]
+            paired_data.append(f"Question: {question['question_label']} - {question['question_text']}\nAnswer: {answer['answer']}\nFollowups: {answer['followups']}\n")
+
+    # Create the prompt string
+    prompt = f"For the brand '{interview['brand_name']}', using this interview:\n" + '\n'.join(paired_data) + "please generate a positioning statement for this brand."
+
+    print(prompt)
+    return jsonify({"status": "success"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#run app
 # Run app in debug mode
 # app.run(host="localhost", port=8000, debug=True)
 # Run app in production mode

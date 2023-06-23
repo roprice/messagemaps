@@ -1567,50 +1567,119 @@ function InterviewReviewView() {
 // 1. invoke strategy page
 function strategyState() {
   console.log("strategyState() function called");
-  updateStrategyUI();
 
-  console.log("interviewid");
+  // Assume interviewExists is a boolean indicating if an interview exists
+  const interviewExists = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID != null;
+
+  updateStrategyUI(interviewExists);
+
+
   const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
 
   checkForStrategy(interviewID);
 }
 
+
 // 2. update strategy page UI
-function updateStrategyUI() {
+function updateStrategyUI(interviewExists) {
   console.log("updateStrategyUI() function called");
   console.log("change current screen, change nav item active state, change URL");
-  //TODO: Add code to update the UI
+
+  // Update navigation state
+  updateNavigationState(interviewExists);
 }
 
-// 3. update strategy page content
-// 3a. first check whether strategy exists
-function checkForStrategy(interviewID) {
+// 2.1 Update navigation state
+function updateNavigationState(interviewCreated) {
+  // Get the navigation item
+  var strategyNavItem = document.querySelector('.strategy.child');
+  var strategyButton = document.querySelector('.strategy-button');
+
+  if (interviewCreated) {
+    // If an interview has been created, remove 'disabled' class
+    strategyNavItem.classList.remove('disabled');
+    strategyButton.disabled = false;
+  } else {
+    // If no interview has been created, add 'disabled' class
+    strategyNavItem.classList.add('disabled');
+    strategyButton.disabled = true;
+  }
+}
+
+
+
+
+// 3.  check whether strategy exists and act accordingly
+async function checkForStrategy(interviewID) {
   console.log("checkForStrategy(interviewID) function called");
+
   console.log("check if strategy exists on Supabase for this interview");
-  //TODO: Call your Supabase function to check if strategy exists for this interview
 
-  // if there is,
-     // console.log("strategy exists")
-     // get strategy
-     // displayStrategy()
+  // Supabase function to check if strategy exists for this interview
+  const { data, error } = await supabase
+    .from('brand_strategies')
+    .select('*')
+    .eq('interview_id', interviewID)
 
-   // If there isn't
-   console.log("no strategy found");
+  if (error) {
+    console.error("Error checking for strategy: ", error);
+    return;
+  }
 
-   // therefore generate a new strategy
-   console.log("therefore generate a new strategy by calling generateStrategy(interviewID)");
-   generateStrategy(interviewID,userID);
+  if (data && data.length > 0) {
+    console.log("strategy exists");
+    // Display existing strategy
+    displayStrategy(interviewID);
 
+  } else {
+    console.log("no strategy found");
+    // Generate a new strategy if none is found
+    console.log("therefore generate a new strategy by calling generateStrategy(interviewID)");
+    generateStrategy(interviewID,userID);
+  }
 }
+
 
 // 4 generate strategy
-function generateStrategy(interviewID,userID) {
+async function generateStrategy(interviewID, userID) {
   console.log("generateStrategy() function called");
 
-  // When a user wants to generate a strategy, the frontend sends a request to the Flask server with the relevant userId and interviewId.
-  //TODO: Call your Flask API to generate a new strategy
+  // Retrieve userID from local storage
+  const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.userID;
 
+  // Check if userID exists
+  if (!userID) {
+    console.error("No userID found in local storage.");
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/generateStrategy', {
+      method: 'POST', // or 'GET', depending on your API
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        interviewID: interviewID,
+        userID: userID
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // process the data as needed here
+    console.log(data);
+
+  } catch (error) {
+    console.error('There was a problem with the request:', error);
+  }
 }
+
+
 
 // if Generate strategy is successful
 
@@ -1620,6 +1689,9 @@ function getStrategy(interviewID,userID) {
   // with interviewID and userId, make call to database and get strategy
   // then store it locally
   //TODO: Call your Supabase function to get the strategy
+
+  //TODO: Store the strategy in local storage
+  //TODO: Store the strategy in an Alpine store
 
   console.log("put it in local storage as strategyMap");
   console.log("put it into an Alpine store as strategyMap");
