@@ -11,9 +11,9 @@
     right: 0;
 }
 .welcome-message .col-md-4 {
-    max-width: 310px;
-    min-width: 250px;
-    padding: 40px;
+  max-width: 350px;
+    min-width: 350px;
+    padding: 35px;
 }
 p.welcome-intro {
     max-width: 400px;

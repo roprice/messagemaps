@@ -1336,8 +1336,9 @@ function strategyState() {
   console.log("strategyState() function called");
   updateStrategyUI();
   console.log("instantiate userid and interviewid");
-  const interviewID = 1;
-  checkForStrategy();
+
+  const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
+  checkForStrategy(interviewID);
 }
 
 // 2. update strategy page UI
