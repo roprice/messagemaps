@@ -63,14 +63,7 @@ app.logger.info('Flask app logging is set up.')
 
 
 
-
-
-
-
-
-
 openai_extractor = ChatOpenAI(model="gpt-3.5-turbo-0613", temperature=0.1)
-
 
 # Define function description
 function_descriptions = [
@@ -90,38 +83,26 @@ function_descriptions = [
     }
 ]
 
-
 @app.route("/api/extract", methods=['POST'])
 def extract():
     input_text = request.json.get("text")
-    
-    
 
-    
     # Define the system message
     system_message = SystemMessagePromptTemplate.from_template("You extract brand names from text using the extract_brand_name function.")
-   
+
     # Define the prompt template
     prompt_template_extractname = PromptTemplate(
        input_variables=["text"],
        template=
        """
-       Someone says '{text}'. What brand name can you extract from that statement? Verbose off. Just the brand name.      
-       """  
+       Someone says '{text}'. What brand name can you extract from that statement? Verbose off. Just the brand name.
+       """
     )
-   
     extraction_prompt = prompt_template_extractname.format(text=input_text)
 
-    # Define the human message
     human_message = HumanMessagePromptTemplate.from_template(extraction_prompt)
-    
 
-
-    # Combine all messages into a ChatPromptTemplate
     messages = ChatPromptTemplate.from_messages([system_message, human_message])
-   
-    
-    
 
     # Format the prompt
     formatted_prompt = messages.format_prompt().to_messages()
@@ -141,23 +122,11 @@ def extract():
     print(f"response: {response}")
     print("\n")  # This will print a line break.
 
-    # Extract the brand name
-    # Parse the function call arguments as JSON and extract the brand name
+    # Parse the function call arguments from Langchain-JSON and extract the brand name
     arguments = json.loads(response.additional_kwargs['function_call']['arguments'])
     brand_name = arguments["brand"]
 
-
-    # # A regular expression to match alphanumeric characters, spaces, and your specific special characters 
-    # regex = r"[^a-zA-Z0-9\-_!&%$#@ ]"
-    # Use re.sub to replace any characters not matched by the regex with an empty string
-    # sanitized_bran_name = re.sub(regex, '', brand_name)
-
     return jsonify({"brandName": brand_name})
-
-
-
-
-
 
 
 
@@ -170,7 +139,7 @@ chat = ChatOpenAI(temperature=0.1)
 #prompt_template_followup = PromptTemplate(
  #   input_variables=["original_question", "answer"],
   #  template=)
- 
+
 @app.route("/api/followup", methods=['POST'])
 def followup():
     question_id = request.json.get("questionId")
@@ -181,10 +150,10 @@ def followup():
     question_help = request.json.get("questionHelp")
     # Generate a new question using the prompt template
     #formatted_prompt = prompt_template_followup.format_prompt(original_question=original_question, answer=answer)
-    
-    # Define the system message 
+
+    # Define the system message
     system_message = SystemMessage(content='''Provide a single question, as in an iterative 5 Why interview''')
-    
+
     # Define the human message
     human_message = HumanMessage(content=f'''
     The webform's question category was: "{question_category}".
@@ -192,21 +161,21 @@ def followup():
     The webform's original question was: "{original_question}".
     The webform's original question response was: "{answer}".
     The webform' help text was: "{question_help}".
-    Based on this,  generate a follow-up question that starts with "Why" and reference something specific from the webform's original question response. 
-    Use the word "you" once and only once. 
-    Short, single-clause questions only. 
-   
+    Based on this,  generate a follow-up question that starts with "Why" and reference something specific from the webform's original question response.
+    Use the word "you" once and only once.
+    Short, single-clause questions only.
+
     ''')
-    
 
 
-    
+
+
     # Combine both messages
     messages = [system_message, human_message]
 
     # Generate the response using the model
     response = chat(messages)
-    
+
     followup_question = response.content
 
     return jsonify({"followupQuestion": followup_question, "questionId": question_id})

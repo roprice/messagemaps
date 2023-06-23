@@ -13,7 +13,7 @@
 .welcome-message .col-md-4 {
     max-width: 310px;
     min-width: 250px;
-    padding: 40px`;
+    padding: 40px;
 }
 p.welcome-intro {
     max-width: 400px;
@@ -21,11 +21,12 @@ p.welcome-intro {
 }
 
 .background-div-home {
-border-left: 1px dotted #555;
+border-left: 1px dotted #e1e1e1;
 background-repeat: no-repeat;
 background-size: cover;
+background-color: #e1e1e163;
 width: 100%;
-height: 100%;.
+height: 100%;
 }
 
 
@@ -126,7 +127,7 @@ h2.statement p {margin-bottom:50px;}
     font-weight: 600;
 }
 p.review.question-answer {
-    
+
     margin-top: 12px;
 }
 
@@ -434,28 +435,28 @@ a.previous.text-secondary.text-small {
 
 
 #InterviewNav  li.toplevel.completed a::after {
-	
+
 	    content: "\2713";
 	    font-size: 13px;
 	    margin-left: 5px;
-		
-	
+
+
 }
 
 #InterviewNav  li.toplevel.completed li a::after {
-	
+
 	display:none;
-	
+
 }
 
 
 #InterviewNav .nav-sub-items li.completed::after {
-	
+
 	    content: "\2713";
 	    font-size: 13px;
 	    margin-left: -5px;
 		color: #777;
-	
+
 }
 
 
@@ -795,20 +796,20 @@ textarea {
 	width: 100%;
 	border-radius: 6px;
 	padding: 8px 20px 8px 10px;
-	overflow: hidden; 
+	overflow: hidden;
 	transition: height 0.3s ease-out;
-	box-sizing: content-box; 
+	box-sizing: content-box;
 }
 
-textarea:focus, 
+textarea:focus,
 textarea:focus-within,
 textarea:focus-visible{
 
-	border-bottom-color rgb(118, 118, 118)
-	border-bottom-left-radius 6px
-	border-bottom-right-radius 6px
-	border-bottom-style solid
-	border-bottom-width 1px
+	border-bottom-color: rgb(118, 118, 118);
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
 }
 
 .textarea-simple {
@@ -1087,7 +1088,7 @@ html, body {
    .sidebar-nav .disabled a.navlink.linkdark.p-2.px-3.my-2.d-flex.align-items-center {
       color: #ccc;
   }
-  
+
   /* Define the background color for the autosave indicator */
  .autosaveIndicator {
    background-color: rgb(193, 211, 193);
@@ -1137,8 +1138,8 @@ html, body {
  @keyframes hold {
    0%, 100% { opacity: 1; }
  }
-  
-  
+
+
 
   .dashboard li.dashboard,
   .maps li.maps,
@@ -1208,10 +1209,10 @@ input, .form-control {
 
 @media print {
     /* Hide elements that are not needed in print view */
-	#Logged_Out_States,	
-	#CollapsedSidebar, 
-	#ExpandedSidebar, 
-	header, 
+	#Logged_Out_States,
+	#CollapsedSidebar,
+	#ExpandedSidebar,
+	header,
 	a.backlink.edit.text-small.text-secondary,
 	.hide-for-print {
         display: none;
@@ -1225,7 +1226,7 @@ input, .form-control {
 	 #MainViews,
 	 #InterviewReviewView,
 	 #Main .interview-review-container,
-	 #Main .interview-meta, 
+	 #Main .interview-meta,
 	 #Main .interview-analysis,
 	 #Main .interview-category,
 	 #Main .card-header,
@@ -1236,29 +1237,29 @@ input, .form-control {
  	    border-radius: 0!important;
 		margin:0!important;
 	 }
-	 
+
 	 #Main .interview-review-container
-	 #Main .interview-meta, 
+	 #Main .interview-meta,
 	 #Main .interview-analysis,
 	 #Main .interview-category,
 	 #Main .card-header {
  	    width:100%;
 	 }
-	 
+
 	 #Main #InterviewReviewView {
 	     padding: 60px!important;
 	     margin: 0!important;
 	 }
-	 
+
 
 	 #Main #InterviewReviewView .interview-analysis,
 	 #Main #InterviewReviewView .interview-meta,
 	 #Main #InterviewReviewView .interview-category
 	 {
 		 margin-bottom:40px!important;
-	 	
+
 	 }
-	
+
     .interview-meta {
         order: 1;
     }
@@ -1272,11 +1273,11 @@ input, .form-control {
 	.question-label-text-answer {
 	    margin-bottom: 35px;
 	}
-	
+
 	.print-header {display:block;}
-	
-	
-	
+
+
+
 }
 @page {
     @bottom-center {
