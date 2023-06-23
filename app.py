@@ -22,6 +22,7 @@ import logging
 import json
 import re
 from supabase_py import create_client, Client
+import traceback
 
 
 # Instantiate your Supabase client
@@ -38,6 +39,14 @@ app = Flask(__name__)
 
 # Section 2 - logging
 ## START ERROR LOGGING SECTION
+
+
+@app.errorhandler(500)
+def server_error(e):
+    # Log the error and stacktrace.
+    print(f'Server error: {e}, stacktrace: {traceback.format_exc()}')
+    return 'An internal error occurred.', 500
+    
 
 # Create a file handler
 file_handler = logging.FileHandler('/var/www/html/app/flask.log')
@@ -190,10 +199,25 @@ def followup():
 
 @app.route("/api/generateStrategy", methods=['POST'])
 def generateStrategy():
-    interview_id = request.json.get("interviewId")
+    data = request.get_json()
+    interview_id = data.get('interviewID')  # ensure the key name here matches the one sent from the client
+    user_id = data.get('userID')
+    print("interview_id:", interview_id)
+    print("user_id:", user_id)
+    
+    if interview_id is not None:
+        interview_id = str(interview_id)
+        print("interview_id:", interview_id)
+        interview_result = supabase.table('interviews').select('id, brand_name').eq('id', interview_id).execute()
 
-    # Fetch interview from interviews table
-    interview_result = supabase.table('interviews').select('id, brand_name').eq('id', interview_id).execute()
+        print(f"Full interview_result: {interview_result}")
+        if interview_result['data']:
+            interview = interview_result['data'][0]
+        else:
+            print('No data found for this interview_id')
+            return jsonify({"status": "failure", "message": "No data found for this interview_id"})
+        
+    
     interview = interview_result['data'][0]
 
     # Fetch all questions from interview_questions table
@@ -237,6 +261,6 @@ def generateStrategy():
 
 #run app
 # Run app in debug mode
-# app.run(host="localhost", port=8000, debug=True)
+app.run(host="localhost", port=8000, debug=True)
 # Run app in production mode
 #app.run(host="localhost", port=8000)

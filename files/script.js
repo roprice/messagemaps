@@ -1566,17 +1566,20 @@ function InterviewReviewView() {
 
 // 1. invoke strategy page
 function strategyState() {
-  console.log("strategyState() function called");
+	console.log("strategyState() function called");
 
-  // Assume interviewExists is a boolean indicating if an interview exists
-  const interviewExists = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID != null;
+	// Assume interviewExists is a boolean indicating if an interview exists
+	const interviewExists = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID != null;
+	console.log("interviewID: ", interviewExists);
 
-  updateStrategyUI(interviewExists);
+	updateStrategyUI(interviewExists);
 
 
-  const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
+	const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
 
-  checkForStrategy(interviewID);
+	console.log("interviewID inside strategyState(): ",interviewID);
+
+	checkForStrategy(interviewID);
 }
 
 
@@ -1586,11 +1589,11 @@ function updateStrategyUI(interviewExists) {
   console.log("change current screen, change nav item active state, change URL");
 
   // Update navigation state
-  updateNavigationState(interviewExists);
+  updateNav(interviewExists);
 }
-
 // 2.1 Update navigation state
-function updateNavigationState(interviewCreated) {
+function updateNav(interviewCreated) {
+	 console.log("updateNavigationState() function called");
   // Get the navigation item
   var strategyNavItem = document.querySelector('.strategy.child');
   var strategyButton = document.querySelector('.strategy-button');
@@ -1612,6 +1615,7 @@ function updateNavigationState(interviewCreated) {
 // 3.  check whether strategy exists and act accordingly
 async function checkForStrategy(interviewID) {
   console.log("checkForStrategy(interviewID) function called");
+  console.log("interviewID inside checkForStrategy(): ",interviewID);
 
   console.log("check if strategy exists on Supabase for this interview");
 
@@ -1635,17 +1639,19 @@ async function checkForStrategy(interviewID) {
     console.log("no strategy found");
     // Generate a new strategy if none is found
     console.log("therefore generate a new strategy by calling generateStrategy(interviewID)");
-    generateStrategy(interviewID,userID);
+	
+    generateStrategy(interviewID);
   }
 }
 
 
 // 4 generate strategy
-async function generateStrategy(interviewID, userID) {
+async function generateStrategy(interviewID) {
   console.log("generateStrategy() function called");
+  console.log("interviewID inside generateStrategy(): ",interviewID);
 
   // Retrieve userID from local storage
-  const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.userID;
+  const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id;
 
   // Check if userID exists
   if (!userID) {
