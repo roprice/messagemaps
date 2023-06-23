@@ -1351,10 +1351,11 @@ function renderStrategy() {
 
 
   // If there isn't
-  console.log("strategy exists on Supabse")
+  console.log("chbeck if strategy exists on Supabase")
+  console.log("no strategy found")
     // call the Flask API to get a brand strategy using this user's interview
     // generateStrategy(interviewID)
-    console.log("generateStrategy(interviewID) function called")
+    console.log("therefore, generateStrategy(interviewID) function called")
     // get interview's answers from supabase
     // get it and put it in local storage
     // put it into an Alpine store
