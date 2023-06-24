@@ -77,7 +77,7 @@ app.logger.info('Flask app logging is set up.')
 
 
 
-openai_extractor = ChatOpenAI(model="gpt-3.5-turbo-0613", temperature=0.1)
+chat_35_functions_01 = ChatOpenAI(model="gpt-3.5-turbo-0613", temperature=0.1)
 
 # Define function description
 function_descriptions = [
@@ -127,7 +127,7 @@ def extract():
     print("\n")  # This will print another line break.
 
     # Generate the response using the model, including function descriptions and automatic function call
-    response = openai_extractor(
+    response = chat_35_functions_01(
         messages=formatted_prompt,
         functions=function_descriptions,
         function_call="auto"
@@ -148,7 +148,7 @@ def extract():
 
 
 # Section 4 - provide initial followup question
-chat = ChatOpenAI(temperature=0.1)
+chat_01 = ChatOpenAI(temperature=0.1)
 
 #prompt_template_followup = PromptTemplate(
  #   input_variables=["original_question", "answer"],
@@ -188,11 +188,39 @@ def followup():
     messages = [system_message, human_message]
 
     # Generate the response using the model
-    response = chat(messages)
+    response = chat_01(messages)
 
     followup_question = response.content
 
     return jsonify({"followupQuestion": followup_question, "questionId": question_id})
+
+
+
+
+
+
+chat_GPT35_04_16k_functions = ChatOpenAI(temperature=0.4, model_name="gpt-3.5-turbo-16k-0613", openai_api_key="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")
+chat_GPT40_06_functions = ChatOpenAI(temperature=0.6, model_name="gpt-4.0-0613", openai_api_key="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")
+
+def strategy_from_openai(interview_transcript):
+    # Your prompt template
+    positioning_prompt_template = ''' 
+        Your role is as a Gartner analyst in the B2B tech space who read this interview with a company CEO: {interview_transcript}. Without preamble, write down the company's positioning.
+    '''
+    
+    # Format the template with your interview transcript
+    formatted_prompt = positioning_prompt_template.format(interview_transcript=interview_transcript)
+    
+    # Create a system message to set the assistant's role
+    system_message = SystemMessage(content="You are a Gartner analyst in the B2B tech space.")
+    
+    # Create a user message with the interview transcript
+    user_message = HumanMessage(content=formatted_prompt)
+    
+    # Call the chat model with a list of messages
+    response = chat_GPT35_04_16k_functions([system_message, user_message])
+    
+    return response
 
 
 
@@ -238,10 +266,21 @@ def generateStrategy():
             paired_data.append(f"Question: {question['question_label']} - {question['question_text']}\nAnswer: {answer['answer']}\nFollowups: {answer['followups']}\n")
 
     # Create the prompt string
-    prompt = f"For the brand '{interview['brand_name']}', using this interview:\n" + '\n'.join(paired_data) + "please generate a positioning statement for this brand."
+    interview_transcript = f"For the brand '{interview['brand_name']}' discovery interv, these were the questions and answers:\n" + '\n'.join(paired_data) + ""
 
-    print(prompt)
-    return jsonify({"status": "success"})
+    
+    positioning_strategy = strategy_from_openai(interview_transcript)
+    print(positioning_strategy)
+    
+    positioning_strategy_content = positioning_strategy.content
+    print(positioning_strategy_content)
+ 
+    
+    
+    
+    return jsonify({
+        "positioning": positioning_strategy_content
+    })
 
 
 

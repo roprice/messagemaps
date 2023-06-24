@@ -783,7 +783,7 @@
 			            </div><!-- /.interview-form-card -->
 
 						<!-- /#interview-info-card -->
-						<div class="interview-info-card card my-4 p-3 col-md-4" style="height: fit-content;">
+						<div class="interview-info-card card my-4 p-3 col-md-4 right-column" style="height: fit-content;">
 
 							<!-- .interview-info-card.card-header -->
 							<div class="card-header" x-data="InterviewReviewView()">
@@ -830,109 +830,194 @@
 	            </div><!-- /#InterviewView -->
 
 			    <!-- /#InterviewReviewView -->
-				<div id="InterviewReviewView" x-data="InterviewReviewView()" x-init="init()"  x-show="Alpine.store('currentScreen').current === 'interview-review'" x-cloak x-transition:enter.duration.500ms>
-					<div class="interview-review-container">
-						<div class="print-header text-small text-secondary" style="display: block;text-align:right">Conducted by MessageMaps.io</div>
-						<a class="backlink edit text-small text-secondary" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">< Edit your interview</a> |
-						<a class="backlink edit text-small text-secondary" href="#" onclick="location.reload();">Refresh your report</a>
+				<div id="InterviewReviewView" x-data="InterviewReviewView()" x-init="init()"  x-show="Alpine.store('currentScreen').current === 'interview-review'" x-cloak x-transition:enter.duration.400ms>
+					
+				  <div class="row interview-review-inner">
+					  
+					  
+					
+						<div class="interviewreview-card card shadow my-4 p-4 col-md-7">
+					
+							<div class="interview-review-container">
+								<div class="print-header text-small text-secondary" style="display: block;text-align:right">Conducted by MessageMaps.io</div>
+								<a class="backlink edit text-small text-secondary" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">< Edit your interview</a> |
+								<a class="backlink edit text-small text-secondary" href="#" onclick="location.reload();">Refresh your report</a>
 
-				 	 	<div class="interview-intro row mt-2">
-							<div class="interview-analysis text-small text-secondary col-md-6  mt-4">
-								<!--<div  class="interview-summary">Summary: <span class="interview-analysis summary"></span></div>-->
-								<div  class="interview-questions-answered interview-analysis">Percentage of questions answered: <span class="percent-answered" x-text="percentAnswered() + '%'"></span></div>
-								<div  class="interview-deepest-engagement interview-analysis">Section with most engagement: <span class="deepest-engagement" x-text="mostEngagementCategory() || 'Loading...'"></span></div>
-								<div  class="interview-most-completed-section interview-analysis">Section with least engagement: <span class="least-engagement" x-text="leastEngagementCategory() || 'Loading...'"></span></div>
-								<div  class="interview-longest-answer interview-analysis">Question with longest answer: <span class="longest-answer"  x-text="longestAnswer()"></span></div>
-								<!--<div  class="interview-most-charged">Most emotionally charged answer: <span class="interview-analysis summary"></span></div>-->
+						 	 	<div class="interview-intro row mt-2">
+									<div class="interview-analysis text-small text-secondary col-md-6  mt-4">
+										<!--<div  class="interview-summary">Summary: <span class="interview-analysis summary"></span></div>-->
+										<div  class="interview-questions-answered interview-analysis">Percentage of questions answered: <span class="percent-answered" x-text="percentAnswered() + '%'"></span></div>
+										<div  class="interview-deepest-engagement interview-analysis">Section with most engagement: <span class="deepest-engagement" x-text="mostEngagementCategory() || 'Loading...'"></span></div>
+										<div  class="interview-most-completed-section interview-analysis">Section with least engagement: <span class="least-engagement" x-text="leastEngagementCategory() || 'Loading...'"></span></div>
+										<div  class="interview-longest-answer interview-analysis">Question with longest answer: <span class="longest-answer"  x-text="longestAnswer()"></span></div>
+										<!--<div  class="interview-most-charged">Most emotionally charged answer: <span class="interview-analysis summary"></span></div>-->
 
-							</div><!--  /.intervew-analysis -->
-
-							<div  class="interview-meta col-md-6">
-								<!-- .interview-info-card.card-header -->
-								<div class="card-header">
-									<h5 class="card-title" id="interview-name"><span class="user-firstname" x-text="$store.interviewData.interviewName" ></span></h5>
-
-									<!-- .updated -->
-									<div class="text-small text-secondary updated">Last edited:
-										<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
-									</div>
-									<!-- /.updated -->
-
-									<div class="hide-for-print">
-										<div x-data="{ userProfile: JSON.parse(localStorage.getItem('userProfile')) || {} }" x-init="console.log(userProfile)">
-											<button
-												title="This functionality is disabled pending the Alpha release planned for June 28th"
-												:disabled="userProfile.user_id !== 'e42bd9c0-c905-4cd1-a186-97d602849934'"
-												id="ApproveInterview"
-												name="submit"
-												type="submit"
-												class="btn btn-primary my-2 w-150"
-												href="#brand-positioning-strategy"
-												x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'"
-												x-bind:class="{ 'disabled': userProfile.user_id !== 'e42bd9c0-c905-4cd1-a186-97d602849934' }"
-												>
-												Approve - now give me strategy
-												</button>
-										  </div>
-
-										  <p class="text-small text-secondary"><input type=checkbox> Get consulting team feedback</p>
-										<p class="text-small text-secondary pt-1 pb-">Approve to save a copy to your profile and generate your Brand Strategy. You can also come back to the interview to revise your answers.</p>
-										<p class="download-export-share text-small text-secondary pt-0">
-										    <a title="Print nicely formatted" id="PrintHTML" href="#interview-report-print">Print</a>
-										    <a title="Download a simple, low file-size markdown document"  @click="downloadInterview()" href="#interview-report-download-markdown">Download markdown</a>
-
-											<a title="Save a copy of this report to your profile, access it later" id="SaveReport" href="#interview-report-save" @click="saveInterview()">Save a copy</a>
+									</div><!--  /.intervew-analysis -->
 
 
-										    <!--<a title="Export as a CSV for Google Sheets, Excel, etc" id="ExportCSV" href="#interview-report-export-csv">Export CSV</a>-->
-										</p>
-									</div><!-- hide for print -->
-								</div><!-- .interview-info-card.card-header -->
-							</div><!--  /.intervew-meta -->
-				 		</div><!--  /.intervew-intro.row -->
+						 		</div><!--  /.intervew-intro.row -->
 
-			       	 	<!-- Iterate over each category -->
-			       	 	<template x-for="(category, index) in categories" :key="index">
-			           		<div class="interview-category">
-				               <!-- Print category name -->
-				               <div class="question-category h6" x-text="category.label"></div>
+					       	 	<!-- Iterate over each category -->
+					       	 	<template x-for="(category, index) in categories" :key="index">
+					           		<div class="interview-category">
+						               <!-- Print category name -->
+						               <div class="question-category h6" x-text="category.label"></div>
 
-								<!-- Iterate over each question in this category -->
-								<template x-for="(question, qIndex) in (Array.isArray($store.questions) ? $store.questions.filter(question => question.question_category === category.id) : [])" :key="question.id">
+										<!-- Iterate over each question in this category -->
+										<template x-for="(question, qIndex) in (Array.isArray($store.questions) ? $store.questions.filter(question => question.question_category === category.id) : [])" :key="question.id">
 
 
-								    <div class="question-label-text-answer">
-								        <!-- Print question label and text, and answer -->
-								        <div class="question-label-text d-flex align-items-center">
-								            <span x-text="question.question_label.charAt(0).toUpperCase() + question.question_label.slice(1).replaceAll('_', ' ') + ': ' + question.question_text.charAt(0).toLowerCase() + question.question_text.slice(1)"></span>
-								        </div>
-								        <p class="review question-answer" x-text="answeredQuestions[question.id] ? answeredQuestions[question.id].answer : 'No answer yet'"></p>
+										    <div class="question-label-text-answer">
+										        <!-- Print question label and text, and answer -->
+										        <div class="question-label-text d-flex align-items-center">
+										            <span x-text="question.question_label.charAt(0).toUpperCase() + question.question_label.slice(1).replaceAll('_', ' ') + ': ' + question.question_text.charAt(0).toLowerCase() + question.question_text.slice(1)"></span>
+										        </div>
+										        <p class="review question-answer" x-text="answeredQuestions[question.id] ? answeredQuestions[question.id].answer : 'No answer yet'"></p>
 
 
 
 
-								        <template x-for="(followup, fIndex) in (answeredQuestions[question.id] &&
-										answeredQuestions[question.id].followups ? answeredQuestions[question.id].followups : [])" :key="`${question.id}-followup-${fIndex}`">
-								            <div>
-												<span class="followup-question" x-show="followup.question" x-text="followup.question" style="color:#777;"></span>
-												 <p class="review followup-answer" x-show="followup.answer" x-text="followup.answer"></p>
-								            </div>
-								        </template>
+										        <template x-for="(followup, fIndex) in (answeredQuestions[question.id] &&
+												answeredQuestions[question.id].followups ? answeredQuestions[question.id].followups : [])" :key="`${question.id}-followup-${fIndex}`">
+										            <div>
+														<span class="followup-question" x-show="followup.question" x-text="followup.question" style="color:#777;"></span>
+														 <p class="review followup-answer" x-show="followup.answer" x-text="followup.answer"></p>
+										            </div>
+										        </template>
+
+										    </div>
+										</template>
+
+						           	</div><!-- /.interview-category -->
+						      	</template>
+							</div><!-- /.interview-review-container -->
+					
+						</div><!-- interview-review-card -->
+					
+					
+					<div  class="strategy-meta-info-card card my-4 p-3 col-md-4 right-column">
+		
+						<!-- .strategy-meta-info-card.card-header -->
+						<div class="card-header">
+							<h5 class="card-title" id="interview-name"><span class="user-firstname" x-text="$store.interviewData.interviewName" ></span></h5>
+
+							<!-- .updated -->
+							<div class="text-small text-secondary updated">Last edited:
+								<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
+							</div>
+							<!-- /.updated -->
+
+							<div class="hide-for-print">
+								<div x-data="{ userProfile: JSON.parse(localStorage.getItem('userProfile')) || {} }" x-init="console.log(userProfile)">
+									<button
+										title="This functionality is disabled pending the Alpha release planned for June 28th"
+										:disabled="userProfile.user_id !== 'e42bd9c0-c905-4cd1-a186-97d602849934'"
+										id="ApproveInterview"
+										name="submit"
+										type="submit"
+										class="btn btn-primary my-2 w-150"
+										href="#brand-positioning-strategy"
+										x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'"
+										x-bind:class="{ 'disabled': userProfile.user_id !== 'e42bd9c0-c905-4cd1-a186-97d602849934' }"
+										>
+										Approve - now give me strategy
+										</button>
+								  </div>
+
+								  <p class="text-small text-secondary"><input type=checkbox> Get consulting team feedback</p>
+								<p class="text-small text-secondary pt-1 pb-">Approve to save a copy to your profile and generate your Brand Strategy. You can also come back to the interview to revise your answers.</p>
+								<p class="download-export-share text-small text-secondary pt-0">
+								    <a title="Print nicely formatted" id="PrintHTML" href="#interview-report-print">Print</a>
+								    <a title="Download a simple, low file-size markdown document"  @click="downloadInterview()" href="#interview-report-download-markdown">Download markdown</a>
+
+									<a title="Save a copy of this report to your profile, access it later" id="SaveReport" href="#interview-report-save" @click="saveInterview()">Save a copy</a>
 
 
-
-
-								    </div>
-								</template>
-
-				           	</div><!-- /.interview-category -->
-				      	</template>
-					</div><!-- /.interview-review-container -->
+								    <!--<a title="Export as a CSV for Google Sheets, Excel, etc" id="ExportCSV" href="#interview-report-export-csv">Export CSV</a>-->
+								</p>
+							</div><!-- hide for print -->
+						</div><!-- .strategy-info-card.card-header -->
+		
+					</div>
+					
+					
+					
+					
+					</div><!-- interviewreviewview-inner-->
 				</div><!-- /#InterviewReviewView -->
 
 				<!-- #StrategyView -->
-	            <div id="StrategyView" x-show="Alpine.store('currentScreen').current === 'strategies'">
-	              <h4>Strategy Map</h4>
+	            <div id="StrategyView" x-show="Alpine.store('currentScreen').current === 'strategies'" x-transition:enter.duration.700ms>
+	              <div class="row strategyview-inner">
+					  
+					<div class="strategy-content card shadow my-4 p-4 col-md-7">
+						
+	  				  <div id="positioning-statement" class="positioning brand-strategy wrapper">
+	  				  	<h5>Step 1: Positioning</h5> 
+	  					<p>before we generate your entire positioning strategy, let's get your take on it. Does this make sense to you? Please make any revisiions necessary.</p>
+	  					<div id="editable-positioning-statement" class="editable display positioning">
+						
+	  					</div>
+	  				  </div>
+	  				  <!--#positioning-statement -->
+						
+						
+						
+						
+						
+						
+						
+						
+						
+					</div>
+					<!-- /strategy-content -->
+					  
+					 
+					<div  class="strategy-meta-info-card card my-4 p-3 col-md-4 right-column">
+						<!-- .interview-info-card.card-header -->
+						<div class="card-header">
+							<h5 class="card-title" id="strategy-name"><span class="user-firstname" x-text="$store.interviewData.brandName" ></span>Brand Strategy</h5>
+
+							<!-- .updated -->
+							<div class="text-small text-secondary updated">Last edited:
+								<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
+							</div>
+							<!-- /.updated -->
+
+							<div class="hide-for-print">
+								<div x-data="{ userProfile: JSON.parse(localStorage.getItem('userProfile')) || {} }" x-init="console.log(userProfile)">
+									<button disabled=disabled
+										title="This functionality is disabled pending the Alpha release planned for June 28th"
+										:disabled="userProfile.user_id !== 'e42bd9c0-c905-4cd1-a186-97d602849934'"
+										id="ApproveStrategy"
+										name="submit"
+										type="submit"
+										class="btn btn-primary my-2 w-150 disabled"
+										href="#brand-positioning-strategy"
+										x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'"
+										
+										>
+										Approve brand strategy
+										</button>
+								  </div>
+
+								  <p class="text-small text-secondary"><input type=checkbox> Get consulting team feedback</p>
+								<p class="text-small text-secondary pt-1 pb-">Approve to save a copy to your profile and start generating sales and marketing assets. You can also come back to the brand strategy to revise your answers.</p>
+								<p class="download-export-share text-small text-secondary pt-0">
+								    <a title="Print nicely formatted" id="Strategy_PrintHTML" href="#interview-report-print">Print</a>
+								    <a title="Download a simple, low file-size markdown document"  @click="downloadInterview()" href="#interview-report-download-markdown">Download markdown</a>
+
+									<a title="Save a copy of this brand strategy to your profile, access it later" id="Strategy_SaveReport" href="#interview-report-save" @click="saveInterview()">Save a copy</a>
+
+
+								    <!--<a title="Export as a CSV for Google Sheets, Excel, etc" id="ExportCSV" href="#interview-report-export-csv">Export CSV</a>-->
+								</p>
+							</div><!-- hide for print -->
+						</div><!-- .interview-info-card.card-header -->
+					</div><!--  /.intervew-meta -->
+					  
+					  
+				  </div><!-- /strategy-inner --> 
 	            </div><!-- /#StrategyView -->
 
 				<!-- #MessagingView -->

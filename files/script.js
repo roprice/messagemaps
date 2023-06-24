@@ -141,7 +141,7 @@ document.addEventListener('alpine:init', function() {
 	    ['maps', localStorage.getItem('interviewData') ? `${JSON.parse(localStorage.getItem('interviewData')).brandName} message map` : 'your message map'],
 	    ['interviews', 'discovery interview'],
 	    ['interview-review', 'discovery interview report'],
-	    ['strategies', 'business strategy'],
+	    ['strategies', 'brand strategy'],
 	    ['strategy-review', 'business strategy report'],
 	    ['assets', 'sales and marketing assets'],
 	    ['newMap', 'get a new map'],
@@ -1564,13 +1564,27 @@ function InterviewReviewView() {
 
 // Section 9.7 Manage strategy
 
+
+
+function strategyGlobalUI {
+	
+	
+	
+	
+	
+}
+
+
+
+
+
 // 1. invoke strategy page
 function strategyState() {
 	console.log("strategyState() function called");
 
 	// Assume interviewExists is a boolean indicating if an interview exists
 	const interviewExists = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID != null;
-	console.log("interviewID: ", interviewExists);
+	console.log("And interviewID exists for this user - true or false? ", interviewExists);
 
 	updateStrategyUI(interviewExists);
 
@@ -1582,6 +1596,7 @@ function strategyState() {
 	checkForStrategy(interviewID);
 }
 
+function 
 
 // 2. update strategy page UI
 function updateStrategyUI(interviewExists) {

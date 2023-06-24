@@ -113,9 +113,11 @@ font-weight: 400;
     margin-bottom: 30px;
 }
 
-.interview-info-card.card.my-4.p-3.col-md-4 {
+
+.right-column {
     margin-left: 20px;
     max-width: 450px;
+	height: fit-content;
 }
 
 .signin-signup {
@@ -165,11 +167,7 @@ p.review.question-answer {
 }
 
 .interview-review-container {
-width: 800px;
-    border: 1px solid #ccc;
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
+
 	}
 
 .btn.disabled, .btn:disabled, fieldset:disabled .btn {
