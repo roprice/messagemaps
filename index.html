@@ -1075,10 +1075,27 @@
 									x-text="$store.interviewData.brandName" ></span> Positioning Strategy</div>
 									
 									<div class="brand-strategy-item control-buttons">
-										<button 
-										    id="confirm-positioning"
-											class="btn btn-primary control-btn strategy-button" type="button" 
-											x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">Confirm</button>
+									<button 
+									    id="confirm-positioning"
+									    class="btn btn-primary control-btn strategy-button"
+									    type="button"
+									    x-bind:class="{ 'confirmed-class': $store.positioningStrategy.confirmed }"
+									    x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; "
+									    x-text="$store.positioningStrategy.confirmed ? 'Confirmed!' : 'Confirm'">
+										<span x-show="$store.positioningStrategy.confirmed" class="material-symbols-outlined medium confirmed-status">lock</span>
+									    
+									</button>
+
+									
+									
+										<style>
+											button.confirmed-class span.confirmed-status {
+												display:inline-block;
+											}
+										
+										
+										</style>
+									
 									
 										<button 
 										    id="recreate-positioning"

@@ -1720,7 +1720,8 @@ async function checkForStrategyAssets(interviewID) {
   // If positioning exists, display it
   if (positioningData && positioningData.length > 0) {
     console.log("positioning exists");
-    displayPositioning(positioningData[0].positioning);
+    console.log("Positioning data: ", positioningData[0]);  // This should log the positioning strategy content
+    displayPositioning(positioningData[0].positioning_strategy);
   } else {
     // if there is none, generate and then display
     console.log("no positioning found");
@@ -1752,6 +1753,7 @@ async function checkForStrategyAssets(interviewID) {
     }
   }
 }
+
 
 
 
@@ -1837,6 +1839,11 @@ function displayPositioning(positioning_strategy) {
   // Find the element by its ID
   const positioningElement = document.getElementById('positioning-strategy');
 
+  if (!positioningElement) {
+    console.error("No element with id 'positioning-strategy' found");
+    return;
+  }
+  
   // Set the inner HTML of the element to the positioning string
   positioningElement.innerHTML = positioning_strategy;
 
@@ -1878,46 +1885,60 @@ async function positioningConfirmed(interviewID) {
   }
 }
 
-async function confirmPositioning(interviewID, userID) {
-  // Extract the text content from the positioning-strategy element
-  const positioningText = document.getElementById('positioning-strategy').innerText;
 
-  // First, let's check if a positioning strategy already exists
-  const { data: existingData, error: fetchError } = await supabase
+// Then here is your function
+async function confirmPositioning(interviewID, userID) {
+
+  // Get positioning strategy text
+  const positioningText = document.getElementById("positioning-strategy").innerText;
+
+  // Check if a positioning strategy exists for this interview
+  let { data: existingStrategy, error: existingStrategyError } = await supabase
     .from('positioning_strategies')
     .select('id')
     .eq('interview_id', interviewID);
 
-  if (fetchError) {
-    console.error("Error fetching the positioning: ", fetchError);
+  if (existingStrategyError) {
+    console.error("Error fetching existing positioning strategy: ", existingStrategyError);
     return;
   }
 
-  // If a positioning strategy doesn't exist, let's create it
-  if (!existingData || existingData.length === 0) {
-    const { data: insertData, error: insertError } = await supabase
+  if (existingStrategy && existingStrategy.length > 0) { // If strategy exists, update it
+    const { data, error } = await supabase
       .from('positioning_strategies')
-      .insert([{ interview_id: interviewID, user_id: userID, confirmed: false, positioning_strategy: positioningText }]);
+      .update({ confirmed: true, positioning_strategy: positioningText })
+      .eq('interview_id', interviewID);
 
-    if (insertError) {
-      console.error("Error creating the positioning: ", insertError);
+    if (error) {
+      console.error("Error confirming the positioning: ", error);
       return;
     }
-    console.log("Positioning has been successfully created.");
-  }
 
-  // Now we can confirm the positioning and update the positioning_strategy
-  const { data: updateData, error: updateError } = await supabase
-    .from('positioning_strategies')
-    .update({ confirmed: true, positioning_strategy: positioningText })
-    .eq('interview_id', interviewID);
+    console.log("Positioning has been successfully confirmed.");
+    // Update the Alpine.js store
+    Alpine.store('positioningStrategy').confirmed = true;
 
-  if (updateError) {
-    console.error("Error confirming the positioning: ", updateError);
-    return;
+  } else { // If no strategy exists, create a new one
+    const { data, error } = await supabase
+      .from('positioning_strategies')
+      .insert([
+        {
+          interview_id: interviewID,
+          user_id: userID, // You need to get this value from your current logged in user
+          confirmed: true,
+          positioning_strategy: positioningText
+        }
+      ]);
+
+    if (error) {
+      console.error("Error creating the positioning: ", error);
+      return;
+    }
+
+    console.log("Positioning has been successfully created and confirmed.");
+    // Update the Alpine.js store
+    Alpine.store('positioningStrategy').confirmed = true;
   }
-  
-  console.log("Positioning has been successfully confirmed.");
 }
 
 

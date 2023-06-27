@@ -444,65 +444,71 @@ def generatePositioning():
     
     
     
-    @app.route("/api/generateBrandStrategy", methods=['POST'])
-    def generateBrandStrategy():
-        data = request.get_json()
-        interview_id = data.get('interviewID')  # ensure the key name here matches the one sent from the client
-        user_id = data.get('userID')
+    
+    
+    
+    
+    
+    
+@app.route("/api/generateBrandStrategy", methods=['POST'])
+def generateBrandStrategy():
+    data = request.get_json()
+    interview_id = data.get('interviewID')  # ensure the key name here matches the one sent from the client
+    user_id = data.get('userID')
+    print("interview_id:", interview_id)
+    print("user_id:", user_id)
+
+    if interview_id is not None:
+        interview_id = str(interview_id)
         print("interview_id:", interview_id)
-        print("user_id:", user_id)
+        interview_result = supabase.table('interviews').select('id, brand_name').eq('id', interview_id).execute()
+
+        print(f"Full interview_result: {interview_result}")
+        if interview_result['data']:
+            interview = interview_result['data'][0]
+        else:
+            print('No data found for this interview_id')
+            return jsonify({"status": "failure", "message": "No data found for this interview_id"})
     
-        if interview_id is not None:
-            interview_id = str(interview_id)
-            print("interview_id:", interview_id)
-            interview_result = supabase.table('interviews').select('id, brand_name').eq('id', interview_id).execute()
 
-            print(f"Full interview_result: {interview_result}")
-            if interview_result['data']:
-                interview = interview_result['data'][0]
-            else:
-                print('No data found for this interview_id')
-                return jsonify({"status": "failure", "message": "No data found for this interview_id"})
-        
-    
-        interview = interview_result['data'][0]
+    interview = interview_result['data'][0]
 
-        # Fetch all questions from interview_questions table
-        questions_result = supabase.table('interview_questions').select('id, question_label, question_text').execute()
+    # Fetch all questions from interview_questions table
+    questions_result = supabase.table('interview_questions').select('id, question_label, question_text').execute()
 
-        # Convert list of questions into a dictionary for easy access
-        questions = {question['id']: question for question in questions_result['data']}
+    # Convert list of questions into a dictionary for easy access
+    questions = {question['id']: question for question in questions_result['data']}
 
-        # Fetch all answers for the given interview from interview_answers table
-        answers_result = supabase.table('interview_answers').select('id, interview_id, question_id, answer, followups').eq('interview_id', interview_id).execute()
+    # Fetch all answers for the given interview from interview_answers table
+    answers_result = supabase.table('interview_answers').select('id, interview_id, question_id, answer, followups').eq('interview_id', interview_id).execute()
 
-        # Iterate through each answer and pair it with its corresponding question
-        paired_data = []
-        for answer in answers_result['data']:
-            question_id = answer['question_id']
-            if question_id in questions:
-                question = questions[question_id]
-                paired_data.append(f"Question: {question['question_label']} - {question['question_text']}\nAnswer: {answer['answer']}\nFollowups: {answer['followups']}\n")
+    # Iterate through each answer and pair it with its corresponding question
+    paired_data = []
+    for answer in answers_result['data']:
+        question_id = answer['question_id']
+        if question_id in questions:
+            question = questions[question_id]
+            paired_data.append(f"Question: {question['question_label']} - {question['question_text']}\nAnswer: {answer['answer']}\nFollowups: {answer['followups']}\n")
 
-        # Create the prompt string
-        interview_transcript = f"For the brand '{interview['brand_name']}' discovery interv, these were the questions and answers:\n" + '\n'.join(paired_data) + ""
+    # Create the prompt string
+    interview_transcript = f"For the brand '{interview['brand_name']}' discovery interv, these were the questions and answers:\n" + '\n'.join(paired_data) + ""
 
-        # get positioning
-        brand_strategy = brand_strategy_from_openai(interview_transcript)
+    # get positioning
+    brand_strategy = brand_strategy_from_openai(interview_transcript)
 
 
 
-        #data_to_insert = {
-            #'interview_id':interview_id,
-            #'positioning_statement': positioning_strategy_content,
-            #'buyer_individual_profiles': buyer_individual_profiles,
-            # ...similarly, insert other fields...
-        #}
-        #supabase.table('brand_strategies').insert(data_to_insert).execute()
-    
-        return jsonify({
-            "brand strategy": brand_strategy
-        })
+    #data_to_insert = {
+        #'interview_id':interview_id,
+        #'positioning_statement': positioning_strategy_content,
+        #'buyer_individual_profiles': buyer_individual_profiles,
+        # ...similarly, insert other fields...
+    #}
+    #supabase.table('brand_strategies').insert(data_to_insert).execute()
+
+    return jsonify({
+        "brand strategy": brand_strategy
+    })
     
 
 
