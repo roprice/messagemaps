@@ -158,7 +158,11 @@
 			    <p>Discover your strategy </p>
 			    <p>Perfect your message</p>
 			    <p><strong>Make selling simple</strong></p>
+				<div class="public-positioning-strategy">
+					<p>Message Maps is a new answer to a familiar problem: how do you chase opportunities <em>fast enough</em> - and grow revenue?</p><p>Using AI-assisted discovery and analysis, Maps lets technology firms make rapid, cohesive decisions on positioning strategy, messaging, and marketing.</p><p>Our <em>"done-in-2-hours brand strategy"</em> dramatically outperforms traditional consulting firms or digital agencies, let alone AI writing & scraping tools. Instead of scraping the old you, your old website, your old sales calls, your old collateral - we help you discover a new message.</p><p>Instantly revise/personalize your brand strategy at any time as opportunities arise. Rapid-delivery strategy and messaging consulting available on demand. <a href="https://calendly.com/messagemaps/demo" target=blank>Book a demo</a></p>
+				</div><!--/public-positioning-strategy -->
 			</h2>
+			
 
 
 		</div>
@@ -170,51 +174,62 @@
 <!--  /#Logged_Out_States -->
 
 <!-- #Logged_In_States -->
-<div class="" id="Logged_In_States"  x-cloak x-show="Alpine.store('authenticationStatus').current === 'loggedIn'"  x-transition:enter.duration.1000ms>
+<div class="" id="Logged_In_States"  x-cloak x-show="Alpine.store('authenticationStatus').current === 'loggedIn'"  x-transition:enter.duration.1000ms
+
+
+ x-data="{ 
+        interviewSubmitted: JSON.parse(window.localStorage.getItem('interviewData'))?.submitted || false,
+        strategyApproved: JSON.parse(window.localStorage.getItem('brand_strategies'))?.approved || false
+    }">
 
 	<!-- #Body -->
 	<div id="Body" class="container-fluid px-0">
     <div class="row body-inner">
 
 		<!-- #CollapsedSidebar -->
-		<div id="CollapsedSidebar" class="py-0 pl-2 pe-0  border-end"
+		<div id="CollapsedSidebar" class="collapsed-sidebar border-end"
 		x-show="Alpine.store('sidebarStatus').current === 'collapsed'"
 		x-transition:enter.duration.100ms>
 			<!-- .sidenav-wrapper -->
-			<div class="sidenav-wrapper  py-0 px-2 sticky-element">
-			  <div class="position-relative m-0 sidebar-toggle-icon">
-			    <a href="#" class="text-secondary expandSidebar text-small navlink linkdark p-0 position-absolute top-0 end-0 border-small d-flex align-items-center" x-on:click.prevent="Alpine.store('sidebarStatus').current = 'expanded'">
-			      <span class="material-symbols-outlined p-0 small">arrow_circle_right</span>
-			    </a>
-			  </div>
-			  <div class="logo mb-3  ms-3 pt-4 middle ">
-			    <a href="#message-map" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
-			      <img class="mb-auto" src="files/logo-40x40.png" alt="" width="40" height="40">
-			    </a>
-			  </div>
-			  <ul class="nav sidebar-nav flex-column mb-auto pt-2 py-5 d-flex justify-content-center">
+			<div class="sidenav-wrapper sticky-element">
+				
+				<div class="position-relative m-0 sidebar-toggle-icon">
+					<a href="" class="text-secondary collapseSidebar text-small position-absolute top-0 end-0 border-small d-flex align-items-center"
+					 x-on:click.prevent="Alpine.store('sidebarStatus').toggle()">
+					<span class="material-symbols-outlined p-0 small ">arrow_circle_right</span>
+					</a>
+				</div>
+				<div class="logo middle">
+					<a href="#message-map" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+					<img class="mb-auto" src="files/logo-40x40.png" alt="" width="40" height="40">
+					</a>
+				</div>
+			  <ul class="nav sidebar-nav flex-column mb-auto  d-flex justify-content-center">
+				  <div class="nav-divider"></div>
 			    <li class="my-2 text-center maps"  title="Message Map - Help/Support">
-			      <a class="navlink linkdark p-2  2 my-2" href="#message-map" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+			      <a class="navlink linkdark" href="#message-map" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
 			        <span class="material-symbols-outlined medium">map</span>
 			      </a>
 			    </li>
 			    <li class="my-2 text-center interviews child"  title="Discovery Interview">
-			      <a class="navlink linkdark p-2  2 my-2" href="#discovery-interview" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
+			      <a class="navlink linkdark " href="#discovery-interview" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
 			        <span class="material-symbols-outlined medium">auto_detect_voice</span>
 			      </a>
 			    </li>
-			    <li class="my-2 text-center strategy child disabled"  title="Brand Strategy">
-			      <a class="navlink linkdark p-2  2 my-2 disabled" href="#strategic-messaging" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">
-			        <span class="material-symbols-outlined medium">explore</span>
-			      </a>
-			    </li>
+				<li class="my-2 strategy child" title="Brand Strategy"
+					:class="{ 'disabled': !interviewSubmitted }" >
+				  <a class=" navlink linkdark" href="#strategic-messaging" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; "
+				  	:class="{ 'disabled': !interviewSubmitted }" >
+				    <span class="material-symbols-outlined medium">settings_suggest</span></a>
+				</li>
 			    <li class="my-2 text-center assets child disabled"  title="Messages that Sell">
-			      <a class="navlink linkdark p-2  2 my-2 disabled" href="#sales-and-marketing-assets" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'">
-			        <span class="material-symbols-outlined medium">paid</span>
+			      <a class="disabled navlink linkdark  " href="#sales-and-marketing-assets" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'">
+			        <span class="material-symbols-outlined medium">insights</span>
 			      </a>
 			    </li>
-			    <li class="my-2 text-center newMap"  title="Get a new Message Map">
-			      <a class="disabled navlink linkdark p-2  2 my-2" href="#get-message-map" x-on:click.prevent="">
+				<div class="nav-divider"></div>
+			    <li class="my-2 text-center new-map"  title="Get a new Message Map">
+			      <a class="disabled navlink linkdark " href="#get-message-map" x-on:click.prevent="">
 			        <span class="material-symbols-outlined medium">add</span>&nbsp;
 			      </a>
 			    </li>
@@ -223,43 +238,51 @@
 		</div><!-- end of #CollapsedSidebar -->
 
 		<!-- ExpandedSidebar -->
-		<div id="ExpandedSidebar" class="py-0 pl-2 pe-0 border-end"
+		<div id="ExpandedSidebar" class="expanded-sidebar border-end"
 			x-show="Alpine.store('sidebarStatus').current === 'expanded'"
 			x-transition:enter.duration.150ms>
 			<!-- .sidenav-wrapper -->
-			<div class="sidenav-wrapper py-0 px-2 sticky-element">
+			<div class="sidenav-wrapper sticky-element">
 				<div class="position-relative m-0 sidebar-toggle-icon">
-					<a href="" class="text-secondary collapseSidebar text-small navlink linkdark position-absolute top-0 end-0 border-small d-flex align-items-center"
-					x-on:click.prevent="Alpine.store('sidebarStatus').current = 'collapsed'">
+					<a href="" class="text-secondary collapseSidebar text-small position-absolute top-0 end-0 border-small d-flex align-items-center"
+					 x-on:click.prevent="Alpine.store('sidebarStatus').toggle()">
 					<span class="material-symbols-outlined p-0 small ">arrow_circle_left</span>
 					</a>
 				</div>
-				<div class="logo mb-3 ms-3 pt-4 middle">
+				<div class="logo middle">
 					<a href="#message-map" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
 					<img class="mb-auto" src="files/logo-40x40.png" alt="" width="40" height="40">
 					</a>
 				</div>
 
 				<ul class="nav sidebar-nav nav-pills flex-column mb-auto pt-2 pb-2">
+					
+					<div class="nav-divider"></div>
+					
 				<li class="my-2 maps"  title="Message Map - Help/Support">
 				  <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#message-map" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'; ">
 				    <span class="material-symbols-outlined medium me-2">map</span>
-				    Message Map
+  <span x-html="Alpine.store('interviewData').brandName ? '<strong>' + Alpine.store('interviewData').brandName + '</strong> Message Map' : 'Your Message Map'">Your Message Map</span>
+				    
 				  </a>
 				</li>
 				<li class="my-2 interviews child"  title="Discovery Interview">
 				  <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#discovery-interview" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; ">
 				    <span class="material-symbols-outlined medium me-2">auto_detect_voice</span>Discovery Interview</a>
 				</li>
-				<li class="my-2 strategy child disabled" title="Brand Strategy">
-				  <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#strategic-messaging" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">
-				    <span class="material-symbols-outlined medium me-2">explore</span>Brand Strategy</a>
+				<li class="my-2 strategy child" title="Brand Strategy"
+					:class="{ 'disabled': !interviewSubmitted }" >
+				  <a class=" navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#strategic-messaging" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; "
+				  	:class="{ 'disabled': !interviewSubmitted }" >
+				    <span class="material-symbols-outlined medium me-2">settings_suggest</span>Brand Strategy</a>
 				</li>
 				<li class="my-2 assets child disabled" title="Messages that Sell">
 				  <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#sales-and-marketing-assets" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'; " >
-				    <span class="material-symbols-outlined medium me-2">paid</span>Messages that Sell</a>
+				    <span class="material-symbols-outlined medium me-2">insights</span>Messages that Sell</a>
 				</li>
-				<div class="dropdown-divider"></div>
+				
+				<div class="nav-divider"></div>
+				
 				<li class="my-2 newMap disabled"  title="Get a new Message Map">
 				  <a class="disabled navlink disabled linkdark p-2 px-3 my-2 d-flex align-items-center" href="#get-message-map" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'; ">
 				    <span class="material-symbols-outlined medium me-2">add_circle</span>Get a new map</a>
@@ -272,12 +295,11 @@
 			<div class="sidebar-dropdown mt-auto border-top border-light p-3 col-md-3 bg-white">
 			  <div id="userMenu" class=" text-end ms-auto me-0">
 			    <div class="d-flex align-items-center">
-			      <a class="user-settings mt-2 me-1 navlink linkdark " href="#"><span class="material-symbols-outlined medium me-2">tune</span></a>
+			      <a class="user-settings mt-2 me-1 linkdark" href="#"><span class="material-symbols-outlined medium me-2">tune</span></a>
 			      <div class="dropdown">
-					<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-					  <div class="rounded-circle profile" x-text="Alpine.store('userProfile').getInitials()"></div>
-				    </a>
-			        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+					<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" 
+					id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><div class="rounded-circle profile user-initials"></div></a>
+					<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 			          <li><a class="dropdown-item" href="#account" x-on:click.prevent="Alpine.store('currentScreen').current = 'account'; ">Account & Settings</a></li>
 			          <!--<li><a class="dropdown-item" href="#settings">Settings</a></li>-->
 			          <li><a class="dropdown-item" href="mailto:rowan@messagemaps.io?subject='Help me please!'">Help</a></li>
@@ -305,11 +327,11 @@
 			    <div id="userMenu" class="text-end ms-auto me-0">
 			      <div class="d-flex align-items-center">
 			        <span class="user-welcome mt-1 me-2 pb-1 small title-case highlight-welcome">Welcome <span class="user-firstname" x-text="$store.userProfile.firstName"></span></span>
-			        <a class="user-settings mt-2 me-1 navlink linkdark" href="#"><span class="material-symbols-outlined medium me-2">tune</span></a>
+			        <a class="user-settings mt-2 me-1  linkdark" href="#"><span class="material-symbols-outlined medium me-2">tune</span></a>
 			        <div class="dropdown">
-					<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-					  <div class="rounded-circle profile" x-text="Alpine.store('userProfile').getInitials()"></div>
-				    </a>
+						<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" 
+						id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><div class="rounded-circle profile user-initials"></div></a>
+
 			          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
   			         	<li><a class="dropdown-item" href="#account" x-on:click.prevent="Alpine.store('currentScreen').current = 'account'; ">Account & Settings</a></li>
   			          	<!--<li><a class="dropdown-item" href="#settings">Settings</a></li>-->
@@ -326,23 +348,39 @@
 
 
 	        <!-- #MainViews - main section with views of various states-->
-	        <div id="MainViews" class="view-wrapper  my-5 mx-5">
+	        <div id="MainViews" class="view-wrapper  my-5">
 
 				<!-- #MapView -->
-				<div id="MapView" x-show="Alpine.store('currentScreen').current === 'maps'">
+				<div id="MapView" x-show="Alpine.store('currentScreen').current === 'maps'" x-transition:enter.duration.600ms>
 
-					<!-- onboard-welcome -->
-					<div  class="onboard-welcome mt-5 p-4 bg-white border shadow rounded-2 col-md-12 mb-4 ">
+					<!-- onboard-welcome-status -->
+					<div class="mapview-inner onboard-welcome-status bg-white border shadow rounded-2 row my-4">
 
 						<!-- .welcome-message-->
-						<div class="welcome-message container-fluid py-5">
-							<h5 class="display  mb-4 text-end">Welcome<span class="user-firstname" x-text="' ' + $store.userProfile.firstName"></span>!</h5>
+						<div class="welcome-message container-fluid py-1 pb-5"
+							>
+							<h5 class="display  mb-4">Welcome to
+  <span x-html="Alpine.store('interviewData').brandName ? 'your &#34;' + Alpine.store('interviewData').brandName + ' Message Map&#34;' : 'Your Message Map'">Your Message Map</span>!</h5>
 
-							<p class="welcome-intro x">Your message map will make selling easy. There are three steps to creating it:</p>
-<!-- create three cards to display in a row, one for each list item-->
-							<div class="row">
-								<div class="col-md-4">
-									<div class="card shadow-sm active">
+							
+							<p class="welcome-intro x">Our goal is that your map will <span>make selling simple</span> and help you increase revenue.<br><br>Your message map has three parts:</p>
+							
+							
+							<div  class="col-md-4 help text-end">
+								<h6>Need help?</h6>
+								<p>
+								Dm me on <a href="https://join.slack.com/t/messagemaps/shared_invite/zt-1xk6jv680-jq7N5a5msC_EmilY3gFWiQ">Slack</a> or email at <a href="mailto:rowan@messagemaps.io">rowan@messagemaps.io</a>
+							 	</p>
+							</div>
+						
+							
+
+							<div class="row welcome-cards-nav">
+								
+								<div class="col-md-4 welcome-interview-card">
+								  <!-- show this if interviewData.submitted=false-->
+								  
+								  <div class="card shadow-sm unfinished discovery card" title="Complete your discovery interview to activate" x-show="!interviewSubmitted">
 										<div class="card-body" >
 											<h6 class="card-title">Discovery Interview</h6>
 											<p>An in-depth investigation of your market, your buyers, their problems, your solution, and more. Every interview is unique.</p>
@@ -350,20 +388,63 @@
 												x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Let me dive deep!</button>
 												<div class="completion-time interview text-small text-secondaryy">Completion/review time: <strong>1 hour</strong></div>
 										</div><!-- card body-->
-									</div><!-- card-->
-								</div><!-- col-->
-								<div class="col-md-4">
-									<div class="card shadow-sm inactive strategy card" title="Complete your discovery interview to activate">
-										<div class="card-body" >
-											<h6 class="card-title">Brand Strategy</h6>
-											<p>Refine your positioning, understand your buyers, your brand personality, and your core messages and value propositions</p>
-											<button class="btn btn-primary mt-3 strategy-button" type="button" disabled
-												>Show me the strategy</button>
-												<div class="completion-time interview text-small text-secondary">Review time: <strong>5-15 minutes</strong></div>
-										</div><!-- card body-->
-									</div><!-- card-->
-								</div><!-- col-->
-								<div class="col-md-4">
+									</div><!-- inactivecard-->
+									
+  								  <!-- show this if interviewData.submitted=true-->
+  								  <div class="card shadow-sm finished discovery card" title="Congratulations on completing discovery. Feel free to review or revise" x-show="interviewSubmitted">
+  								    <div class="card-body" >
+										 
+									<h6 class="card-title">Discovery Interview
+										<span 
+										class="material-symbols-outlined medium me-2 check-circle">check_circle</span></h6>
+									<p>An in-depth investigation of your market, your buyers, their problems, your solution, and more. Every interview is unique.</p>
+  								      
+									 <div class="button row"> 
+									  
+									  <div class="col-md-6">
+									  	<button class="btn btn-primary mt-3 strategy-button" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interview-review'; ">Review</button>
+									  </div>
+									  
+									  <div class="col-md-6">
+									    <button class="btn btn-secondary mt-3 strategy-button" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; ">Revise</button>
+									  </div>
+								  </div><!--/button row-->
+								  
+  								      <div class="completion-time interview text-small text-secondary">You're done - <strong>nice work!!</strong></div>
+  								    </div><!-- card body-->
+  								  </div><!-- finished discovery card-->
+									
+									
+									
+								</div><!-- /welcome-interview-card-->
+								
+								<div class="col-md-4 welcome-strategy-card">
+								  <!-- show this if interviewData.submitted=false-->
+								  
+								  <div class="card shadow-sm inactive strategy card" title="Complete your discovery interview to activate" x-show="!interviewSubmitted">
+								    <div class="card-body" >
+								      <h6 class="card-title">Brand Strategy</h6>
+								      <p>Refine your positioning, understand your buyers, your brand personality, and your core messages and value propositions</p>
+								      <button class="btn btn-primary mt-3 strategy-button" type="button" disabled>Show me the strategy</button>
+								      <div class="completion-time interview text-small text-secondary">Review time: <strong>5-15 minutes</strong></div>
+								    </div><!-- card body-->
+								  </div><!-- inactive strategy card-->
+
+								  <!-- show this if interviewData.submitted=true-->
+								  <div class="card shadow-sm active strategy card" title="Finish and approve your brand strategy" x-show="interviewSubmitted">
+								    <div class="card-body" >
+								      <h6 class="card-title">Brand Strategy</h6>
+								      <p>Refine your positioning, understand your buyers, your brand personality, and your core messages and value propositions</p>
+								      <button class="btn btn-primary mt-3 strategy-button" type="button">Show me the strategy</button>
+								      <div class="completion-time interview text-small text-secondary">Review time: <strong>5-15 minutes</strong></div>
+								    </div><!-- card body-->
+								  </div><!-- active strategy card-->
+								  
+								</div>
+
+								
+								
+								<div class="col-md-4 assets">
 									<div class="card shadow-sm inactive" title="Complete your discovery interview and brand strategy to activate">
 										<div class="card-body">
 											<h6 class="card-title">Messages that Sell</h6>
@@ -373,31 +454,25 @@
 												<div class="completion-time interview text-small text-secondary">Review time: <strong>5-15 minutes</strong></div>
 										</div><!-- card-body -->
 									</div><!-- card -->
-								</div><!-- col-->
-							</div><!-- row-->
-							<div class="row welcome-bottom">
-								<div  class="col-md-7 next">
-
-								</div>
-								<div  class="col-md-4 help text-end">
-									<h4>Need help?</h4>
-									<p>
-									Dm me on <a href="https://join.slack.com/t/messagemaps/shared_invite/zt-1xk6jv680-jq7N5a5msC_EmilY3gFWiQ">Slack</a> or email at <a href="mailto:rowan@messagemaps.io">rowan@messagemaps.io</a>
-									</p>
-								</div>
-							</div>
+								</div><!-- /assets -->
+								
+								
+								
+							</div><!-- /welcome-cards-nav row-->
+							
+			
 
 
 						</div><!-- /.welcome-message -->
-					</div><!-- /.onboard-welcome -->
+					</div><!-- /.onboard-welcome-status -->
 				</div><!-- /#MapView -->
 
 				<!-- #InterviewView -->
-			 	<div id="InterviewView" x-show="Alpine.store('currentScreen').current === 'interviews' && window.localStorage.getItem('userProfile')" x-transition:enter.duration.800ms="" style="display: none;">
+			 	<div id="InterviewView" x-show="Alpine.store('currentScreen').current === 'interviews' && window.localStorage.getItem('userProfile')" x-transition:enter.duration.600ms="" style="display: none;">
 					<!-- .interview-form-info -->
 					<div class="row interview-form-info">
 						<!-- .interview-form-card -->
-						<div  class="interview-form-card card shadow my-4 p-4 col-md-7">
+						<div  class="interview-form-card card shadow my-4 left-column">
 							<!-- .the-interview-card -->
 							<div class="card-body the-interview-card">
 								<!-- #Interview -->
@@ -783,20 +858,20 @@
 			            </div><!-- /.interview-form-card -->
 
 						<!-- /#interview-info-card -->
-						<div class="interview-info-card card my-4 p-3 col-md-4 right-column" style="height: fit-content;">
+						<div class="interview-info-card card my-4  right-column" style="height: fit-content;">
 
 							<!-- .interview-info-card.card-header -->
 							<div class="card-header" x-data="InterviewReviewView()">
-								<h5 class="card-title" id="interview-name"><span class="user-firstname" x-text="$store.interviewData.interviewName" ></span></h5>
+								<h5 class="card-title" id="interview-name"><span  x-text="$store.interviewData.interviewName" ></span></h5>
 
 								<!-- .created -->
-								<div class="text-small text-secondary created">Created:
+								<div class="text-small text-secondary created">Created by <strong x-text="$store.userProfile.full_name"></strong> on 
 									<span x-text="new Date($store.interviewData.createdDate).toLocaleDateString()"></span>
 								</div>
 								<!-- /.created -->
 
 								<!-- .updated -->
-								<div class="text-small text-secondary updated">Updated:
+								<div class="text-small text-secondary updated">Last updated 
 									<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
 								</div>
 								<!-- /.updated -->
@@ -815,7 +890,7 @@
 								            Alpine.store('currentScreen').current = 'interview-review';
 								        "
 								    >
-								        Get the Interview Report
+								        Let me review
 								    </button>
 								</div>
 
@@ -836,15 +911,16 @@
 					  
 					  
 					
-						<div class="interviewreview-card card shadow my-4 p-4 col-md-7">
+						<div class="interviewreview-card card shadow my-4 left-column">
 					
 							<div class="interview-review-container">
-								<div class="print-header text-small text-secondary" style="display: block;text-align:right">Conducted by MessageMaps.io</div>
-								<a class="backlink edit text-small text-secondary" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">< Edit your interview</a> |
+								<!--<div class="print-header text-small text-secondary" style="display: block;text-align:right">Conducted by MessageMaps.io</div>-->
+								<a class="backlink edit text-small text-secondary" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">< Revise your interview</a> |
 								<a class="backlink edit text-small text-secondary" href="#" onclick="location.reload();">Refresh your report</a>
 
 						 	 	<div class="interview-intro row mt-2">
-									<div class="interview-analysis text-small text-secondary col-md-6  mt-4">
+									<div class="interview-analysis text-small text-secondary  mt-4">
+										<h4>Quick Analysis</h4>
 										<!--<div  class="interview-summary">Summary: <span class="interview-analysis summary"></span></div>-->
 										<div  class="interview-questions-answered interview-analysis">Percentage of questions answered: <span class="percent-answered" x-text="percentAnswered() + '%'"></span></div>
 										<div  class="interview-deepest-engagement interview-analysis">Section with most engagement: <span class="deepest-engagement" x-text="mostEngagementCategory() || 'Loading...'"></span></div>
@@ -856,7 +932,7 @@
 
 
 						 		</div><!--  /.intervew-intro.row -->
-
+								<h4>Transcript</h4>
 					       	 	<!-- Iterate over each category -->
 					       	 	<template x-for="(category, index) in categories" :key="index">
 					           		<div class="interview-category">
@@ -895,11 +971,11 @@
 						</div><!-- interview-review-card -->
 					
 					
-					<div  class="strategy-meta-info-card card my-4 p-3 col-md-4 right-column">
+					<div  class="strategy-meta-info-card card my-4  right-column">
 		
 						<!-- .strategy-meta-info-card.card-header -->
-						<div class="card-header">
-							<h5 class="card-title" id="interview-name"><span class="user-firstname" x-text="$store.interviewData.interviewName" ></span></h5>
+						<div class="card-header" x-data="{ brandName: Alpine.store('yourBrand').brandName }">
+							<h5 class="card-title" id="interview-name"><span class="user-firstname" x-text="$store.interviewData.interviewName+': Review'" ></span></h5>
 
 							<!-- .updated -->
 							<div class="text-small text-secondary updated">Last edited:
@@ -912,7 +988,7 @@
 									<button
 										title="This functionality is disabled pending the Alpha release planned for June 28th"
 										:disabled="userProfile.user_id !== 'e42bd9c0-c905-4cd1-a186-97d602849934'"
-										id="ApproveInterview"
+										id="SubmitInterview"
 										name="submit"
 										type="submit"
 										class="btn btn-primary my-2 w-150"
@@ -920,12 +996,12 @@
 										x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'"
 										x-bind:class="{ 'disabled': userProfile.user_id !== 'e42bd9c0-c905-4cd1-a186-97d602849934' }"
 										>
-										Approve - now give me strategy
+										Submit - now give me strategy
 										</button>
 								  </div>
 
 								  <p class="text-small text-secondary"><input type=checkbox> Get consulting team feedback</p>
-								<p class="text-small text-secondary pt-1 pb-">Approve to save a copy to your profile and generate your Brand Strategy. You can also come back to the interview to revise your answers.</p>
+								<p class="text-small text-secondary pt-1 pb-">Submit your interview to save a copy to your profile and get your <strong>Brand Strategy</strong>. You can come back anytime to revise your interview.</p>
 								<p class="download-export-share text-small text-secondary pt-0">
 								    <a title="Print nicely formatted" id="PrintHTML" href="#interview-report-print">Print</a>
 								    <a title="Download a simple, low file-size markdown document"  @click="downloadInterview()" href="#interview-report-download-markdown">Download markdown</a>
@@ -946,78 +1022,168 @@
 					</div><!-- interviewreviewview-inner-->
 				</div><!-- /#InterviewReviewView -->
 
+
+
+
 				<!-- #StrategyView -->
 	            <div id="StrategyView" x-show="Alpine.store('currentScreen').current === 'strategies'" x-transition:enter.duration.700ms>
-	              <div class="row strategyview-inner">
+					<div class="row strategyview-inner">
 					  
-					<div class="strategy-content card shadow my-4 p-4 col-md-7">
-						
-	  				  <div id="positioning-statement" class="positioning brand-strategy wrapper">
-	  				  	<h5>Step 1: Positioning</h5> 
-	  					<p>before we generate your entire positioning strategy, let's get your take on it. Does this make sense to you? Please make any revisiions necessary.</p>
-	  					<div id="editable-positioning-statement" class="editable display positioning">
-						
-	  					</div>
-	  				  </div>
-	  				  <!--#positioning-statement -->
-						
-						
-						
-						
-						
-						
-						
-						
-						
-					</div>
-					<!-- /strategy-content -->
+					
+				
+					
+						<div class="strategy-content card shadow my-4 left-column">
+
+							<div id="positioning-strategy-section" class="brand-strategy-item positioning wrapper ">
+		
+								<h6 class="brand-strategy-item title">Step 1: Confirm your positioning strategy</h6> 
+								<p class="brand-strategy-item explainer">
+								  Let's ensure the positioning looks right first and the move on to the rest of the brand strategy.
+								  <a class="brand-strategy-item positioning guidelines" href="#" id="show-guidelines">Show/hide guidelines</a>
+								</p>
+								<div id="positioning-guidelines" style="display:none">
+									<p><b>Guidelines</b> The positioning statement doesn't need to be thorough, but it needs to make  sense  and speak to anyone purchasing your firm's product or services; it should specifically mention them and at least reference their problem.</p>
+									<p> It should have your most important value proposition (improved quality of life, improved revenue, more efficiency, etc). Other good qualities: concise, problem-solution oriented, clear and non-promotional language, making convincing comparisons with competitors (without naming any), and underscoring the business impact.</p>
+									<p>
+										If it's close, revise and confirm. If it's way off, you might need to go back to the discovery interview and spend more time writing, the generate a new positioning statement.
+									</p>
+									</div>
+								
+
+								<script>
+								  // JavaScript code
+								  const showGuidelinesLink = document.getElementById('show-guidelines');
+								  const guidelinesParagraph = document.getElementById('positioning-guidelines');
+
+								  showGuidelinesLink.addEventListener('click', function(event) {
+								    event.preventDefault(); // Prevent the link from navigating
+
+								    if (guidelinesParagraph.style.display === 'none') {
+								      guidelinesParagraph.style.display = 'block';
+								      showGuidelinesLink.textContent = 'Hide guidelines';
+								    } else {
+								      guidelinesParagraph.style.display = 'none';
+								      showGuidelinesLink.textContent = 'Show guidelines';
+								    }
+								  });
+								</script>
+								
+		
+								<div class="brand-strategy-item meta-info"> 
+	
+									<div class="brand-strategy-item form-label "><span class="brand-strategy brand-name" 
+									x-text="$store.interviewData.brandName" ></span> Positioning Strategy</div>
+									
+									<div class="brand-strategy-item control-buttons">
+										<button 
+										    id="confirm-positioning"
+											class="btn btn-primary control-btn strategy-button" type="button" 
+											x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">Confirm</button>
+									
+										<button 
+										    id="recreate-positioning"
+											class="btn btn-secondary control-btn strategy-button" type="button" 
+											x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">Recreate</button>
+									</div><!--/recreate -->
+								</div><!--/button row-->
+								
+
+								<div id="positioning-strategy" class="textarea llm-results brand-strategy positioning editable" contenteditable="true" style="min-height:40px" >
+
+
+
+
+
+
+									
+								</div>
+								<p id="positioning-help" class="brand-strategy-item positioning feedback help text-secondary text-small">You'll be able to revise this later.</p>
+
+								
+							</div><!--/positioning-strategy -->
+
+
+							<h6 class="brand-strategy-item title">Brand Strategy</h6> 
+							<div id="brand-strategy" class="textarea llm-results brand-strategy  editable" contenteditable="true" style="min-height:800px" >
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							</div><!--/brand-strategy -->
+
+
+
+
+
+
+
+						</div>
+						<!-- /strategy-content -->
 					  
 					 
-					<div  class="strategy-meta-info-card card my-4 p-3 col-md-4 right-column">
-						<!-- .interview-info-card.card-header -->
-						<div class="card-header">
-							<h5 class="card-title" id="strategy-name"><span class="user-firstname" x-text="$store.interviewData.brandName" ></span>Brand Strategy</h5>
+						<div  class="strategy-meta-info-card card my-4  right-column">
+							<!-- .interview-info-card.card-header -->
+							<div class="card-header">
+								<h5 class="card-title" id="strategy-name"><span class="brand-strategy brand-name" 
+									x-text="$store.interviewData.brandName" ></span> Brand Strategy</h5>
 
-							<!-- .updated -->
-							<div class="text-small text-secondary updated">Last edited:
-								<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
-							</div>
-							<!-- /.updated -->
+								<!-- .updated -->
+								<div class="text-small text-secondary updated">Last edited:
+									<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
+								</div>
+								<!-- /.updated -->
 
-							<div class="hide-for-print">
-								<div x-data="{ userProfile: JSON.parse(localStorage.getItem('userProfile')) || {} }" x-init="console.log(userProfile)">
-									<button disabled=disabled
-										title="This functionality is disabled pending the Alpha release planned for June 28th"
-										:disabled="userProfile.user_id !== 'e42bd9c0-c905-4cd1-a186-97d602849934'"
-										id="ApproveStrategy"
-										name="submit"
-										type="submit"
-										class="btn btn-primary my-2 w-150 disabled"
-										href="#brand-positioning-strategy"
-										x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'"
+								<div class="hide-for-print">
+									
+									<div x-data="{ userProfile: JSON.parse(localStorage.getItem('userProfile')) || {} }" x-init="console.log(userProfile)">
+										<button disabled=disabled
+											title="This functionality is disabled pending the Alpha release planned for June 28th"
+											:disabled="userProfile.user_id !== 'e42bd9c0-c905-4cd1-a186-97d602849934'"
+											id="ApproveStrategy"
+											name="submit"
+											type="submit"
+											class="btn btn-primary my-2 w-150 disabled"
+											href="#brand-positioning-strategy"
+											x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'"
 										
-										>
-										Approve brand strategy
-										</button>
-								  </div>
+											>
+											Approve brand strategy
+										</button> 
+									</div>
 
-								  <p class="text-small text-secondary"><input type=checkbox> Get consulting team feedback</p>
-								<p class="text-small text-secondary pt-1 pb-">Approve to save a copy to your profile and start generating sales and marketing assets. You can also come back to the brand strategy to revise your answers.</p>
-								<p class="download-export-share text-small text-secondary pt-0">
-								    <a title="Print nicely formatted" id="Strategy_PrintHTML" href="#interview-report-print">Print</a>
-								    <a title="Download a simple, low file-size markdown document"  @click="downloadInterview()" href="#interview-report-download-markdown">Download markdown</a>
+									<p class="text-small text-secondary"><input type=checkbox> Get consulting team feedback</p>
+									<p class="text-small text-secondary pt-1 pb-">
+										Approve to save a copy to your profile and start generating sales and marketing assets. 
+										You can also come back to the brand strategy to revise your answers.</p>
+									<p class="download-export-share text-small text-secondary pt-0">
+									    <a title="Print nicely formatted" id="Strategy_PrintHTML" href="#interview-report-print">Print</a>
+										
+									    <a title="Download a simple, low file-size markdown document"  
+											@click="downloadInterview()" href="#interview-report-download-markdown">Download markdown</a>
 
-									<a title="Save a copy of this brand strategy to your profile, access it later" id="Strategy_SaveReport" href="#interview-report-save" @click="saveInterview()">Save a copy</a>
+										<a title="Save a copy of this brand strategy to your profile, access it later" 
+											id="Strategy_SaveReport" href="#interview-report-save" @click="saveInterview()">Save a copy</a>
 
-
-								    <!--<a title="Export as a CSV for Google Sheets, Excel, etc" id="ExportCSV" href="#interview-report-export-csv">Export CSV</a>-->
-								</p>
-							</div><!-- hide for print -->
-						</div><!-- .interview-info-card.card-header -->
-					</div><!--  /.intervew-meta -->
+									</p>
+								</div><!-- hide for print -->
+							</div><!-- .interview-info-card.card-header -->
+						</div><!--  /.intervew-meta -->
 					  
 					  
-				  </div><!-- /strategy-inner --> 
+					</div><!-- /strategy-inner --> 
 	            </div><!-- /#StrategyView -->
 
 				<!-- #MessagingView -->
@@ -1030,15 +1196,7 @@
 
 	              <h4>Your Account</h4>
 
-	              <form id="profileForm">
-	                <label for="gegfirstName">First Name:</label>
-	                <input type="text" id="getfirstName" name="firstName" required>
-
-	                <label for="getlastName">Last Name:</label>
-	                <input type="text" id="getlastName" name="lastName" optional>
-
-	                <button type="submit">Update Profile</button>
-	              </form>
+				  <p>No settings are available yet.  </p>   <p>Any special requests? Please let me know with a DM on <a href="https://join.slack.com/t/messagemaps/shared_invite/zt-1xk6jv680-jq7N5a5msC_EmilY3gFWiQ">Slack</a> or by email at <a href="mailto:rowan@messagemaps.io">rowan@messagemaps.io</a></p>
 
 	            </div><!-- /#AccountView -->
 

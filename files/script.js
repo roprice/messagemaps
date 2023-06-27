@@ -138,8 +138,9 @@ document.addEventListener('alpine:init', function() {
 	  items: [
 	    ['account', 'your account'],
 	    ['settings', 'settings'],
-	    ['maps', localStorage.getItem('interviewData') ? `${JSON.parse(localStorage.getItem('interviewData')).brandName} message map` : 'your message map'],
-	    ['interviews', 'discovery interview'],
+	   // ['maps', localStorage.getItem('interviewData') ? `${JSON.parse(localStorage.getItem('interviewData')).brandName} message map` : 'your message map'],
+	    ['maps', 'message maps home'],
+		['interviews', 'discovery interview'],
 	    ['interview-review', 'discovery interview report'],
 	    ['strategies', 'brand strategy'],
 	    ['strategy-review', 'business strategy report'],
@@ -189,11 +190,6 @@ document.addEventListener('alpine:init', function() {
 	      return true;
 	    },
 	  }),
-	  getInitials: function () {
-	    let firstNameInitial = this.data.first_name ? this.data.first_name[0].toUpperCase() : '';
-	    let lastNameInitial = this.data.last_name ? this.data.last_name[0].toUpperCase() : '';
-	    return firstNameInitial + ' ' + lastNameInitial;
-	  },
 	});
 
 
@@ -206,16 +202,24 @@ document.addEventListener('alpine:init', function() {
 	    updatedDate: null,
 	    interviewName: null,
 	    interviewId: null,
+		brand_name: null,
+		submitted: null,
 	  };
 	}
+
+
+
+	// Define your stores up front
+	Alpine.store('positioningStrategy', { confirmed: false })
+	
 
 	Alpine.store('interviewData', new Proxy(initialInterviewData, {
 	  set: function(target, property, value) {
 	    // Set the value on the original object
 	    target[property] = value;
 	    // Save to localStorage whenever any property is updated
-	    window.localStorage.setItem('interviewData', JSON.stringify(target));
-	    // Indicate successful setting
+	    // window.localStorage.setItem('interviewData', JSON.stringify(target));
+	    
 	    return true;
 	  }
 	}));
@@ -232,13 +236,14 @@ document.addEventListener('alpine:init', function() {
   });
 
   Alpine.store('sidebarStatus', {
-    current: localStorage.getItem('sidebarStatus') || 'collapsed',
+    current: ['collapsed', 'expanded'].includes(localStorage.getItem('sidebarStatus')) ? localStorage.getItem('sidebarStatus') : 'expanded',
     items: ['collapsed', 'expanded'],
     toggle() {
       this.current = this.current === 'collapsed' ? 'expanded' : 'collapsed';
       localStorage.setItem('sidebarStatus', this.current);
     }
   });
+
 });
 
 
@@ -270,19 +275,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 
 
-// Call this function when the page loads
-(async function() {
-  const session = supabase.auth.session();
-  const user = session ? session.user : null;
-  if (user) {
-    // if the user is already authenticated, load their data
-    await getUserData(user.id);
-    // load the questions for the interview form
-    await getInterviewQuestions();
-// Update question text with brand name from local storage
-    updateQuestionText();
-  }
-})();
+
 
 
 function updateQuestionText() {
@@ -490,15 +483,35 @@ const logInSubmitted = async (event) => {
       .select('*')
       .eq('user_id', userId)
 
+	  //console.log('data:',data);
+
 	  if (data && data.length > 0) {
-	    const userProfile = data[0];
-	    window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
+		  
+		const userProfile = data[0];
+		window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
+
+		// Update the initials in DOM
+		let profileElement = document.querySelector('.user-initials');
+		//console.log('profileElement ',profileElement)
+		
+		// Update the initials in DOM
+		let profileElements = document.querySelectorAll('.user-initials');
+		let firstI = userProfile.first_name ? userProfile.first_name[0].toUpperCase() : '';
+		let lastI = userProfile.last_name ? userProfile.last_name[0].toUpperCase() : '';
+		let initials = firstI + ' ' + lastI;
+
+		profileElements.forEach(profileElement => {
+		  profileElement.textContent = initials;
+		});
+
+		
+		
 	  }
 
         await getInterviewQuestions();
 
       	const interviewId = await getInterview(userId);
-		console.log(interviewId);
+		//console.log(interviewId);
 
 	  	// this is where we figure out where to send the user on logi
       	if (interview === null || !interview.hasOwnProperty('interviewID')) {
@@ -537,7 +550,10 @@ const logoutSubmitted = (event) => {
     .signOut()
     .then((_response) => {
       console.log('logout successful')
-      localStorage.clear();
+         localStorage.removeItem('userProfile');
+         localStorage.removeItem('interviewData');
+         localStorage.removeItem('supabase.auth.token');
+         localStorage.removeItem('ckid');
       Alpine.store('authenticationStatus').updateAuthStatus();
     })
     .catch((err) => {
@@ -618,7 +634,7 @@ async function createInterview() {
   // First, check if the user already has an interview
   const existingInterviewId = await getInterview(userId);
   if (existingInterviewId !== null) {
-    console.log('User already has an interview. No new interview created.');
+    //console.log('User already has an interview. No new interview created.');
     return null;
   }
 
@@ -636,7 +652,7 @@ async function createInterview() {
   if (error) {
     console.error('Error creating interview:', error);
   } else {
-	  console.log('Interview created successfully:', data);
+	  //console.log('Interview created successfully:', data);
 	    // Save interviewData to local storage
 	    window.localStorage.setItem('interviewData', JSON.stringify(data));
 
@@ -648,7 +664,7 @@ async function createInterview() {
 
  async function updateInterview(interviewId, brandName, fullName) {
    try {
-     const newInterviewName = `${brandName} discovery interview, ${fullName}`;
+     const newInterviewName = `${brandName} Discovery Interview`;
      const { data, error } = await supabase
        .from('interviews')
        .update({
@@ -709,7 +725,7 @@ async function deleteInterview(interviewId) {
 
 // get the users interview to review, edit, etc
 async function getInterview(userId) {
-  console.log('User ID called in GetInterview(userId):', userId);
+  //console.log('User ID called in GetInterview(userId):', userId);
   try {
 
     // Check if an interview exists for the user
@@ -738,7 +754,7 @@ async function getInterview(userId) {
     // If an interview does exist, proceed with fetching it
     const { data: interview, error } = await supabase
       .from('interviews')
-      .select('id, created_at, updated_at, interview_name')
+      .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .single();
@@ -754,13 +770,17 @@ async function getInterview(userId) {
     Alpine.store('interviewData').createdDate = interview.created_at;
     Alpine.store('interviewData').updatedDate = interview.updated_at;
     Alpine.store('interviewData').interviewID = interview.id;
+	Alpine.store('interviewData').brandName = interview.brand_name;
+	Alpine.store('interviewData').submitted = interview.submitted;
 
     // Create a new JavaScript object
     const interviewData = {
       interviewName: interview.interview_name,
       createdDate: interview.created_at,
       updatedDate: interview.updated_at,
-      interviewID: interview.id
+      interviewID: interview.id,
+	  brandName: interview.brand_name,
+      submitted: interview.submitted,
     };
 
     // Convert the object to a JSON string
@@ -1268,6 +1288,25 @@ async function extractBrandName(text) {
     //console.log("Extracted brand name: ", data); // show extracted brand name
 
 
+    const brandName = data.brandName;
+	
+	Alpine.store('interviewData').brandName = brandName;
+	Alpine.store('yourBrand').brandName = brandName;
+
+     // Retrieve interviewData from local storage
+     const interviewData = JSON.parse(localStorage.getItem('interviewData')) || {};
+	 console.log('interviewData: ',interviewData);
+     // Update interviewData with the brand name
+     interviewData.brandName = brandName;
+     // Store the updated interviewData in local storage
+     localStorage.setItem('interviewData', JSON.stringify(interviewData));
+
+
+     console.log('Updated interviewData before return:', interviewData); // Log the updated interviewData object
+	 
+	 
+
+
     return data.brandName; // Return the brand name from the response
 
 
@@ -1333,7 +1372,7 @@ function saveToSupabase(content, fileName) {
 
 // section 9.6 interview review
 function InterviewReviewView() {
-	console.log('InterviewReviewView just got called')
+	//console.log('InterviewReviewView just got called')
     return {
         categories: [
             {id: 'category_brand_story', label: 'Brand and Story'},
@@ -1564,16 +1603,65 @@ function InterviewReviewView() {
 
 // Section 9.7 Manage strategy
 
+async function interviewSubmitted(interviewID) {
+  //console.log("Checking if interview has been submitted...");
+  //console.log("interviewID inside interviewSubmitted(): ", interviewID);
 
+  if(interviewID) {
+    const { data, error } = await supabase
+      .from('interviews')
+      .select('submitted')
+      .eq('id', interviewID);
 
-function strategyGlobalUI {
-	
-	
-	
-	
-	
+    if (error) {
+      console.error("Error fetching submitted status: ", error);
+      return;
+    }
+
+    if(data && data.length > 0) {
+	  console.log("interview submitted - true");
+      // interview submitted = true
+		
+      return data[0].submitted;
+	  
+    } else {
+      console.log("interview submitted - false");
+      return false;
+    }
+  } else {
+    console.log("No interview ID provided.");
+    return false;
+  }
 }
 
+
+
+// mark interview as submitted
+
+async function submitInterview() {
+	
+    // Your interview ID
+    const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
+  
+    if(!interviewID) {
+      console.error("No interview ID found.");
+      return;
+    }
+
+    // Upsert on Supabase
+    const { data, error } = await supabase
+      .from('interviews')
+      .update({ submitted: true })
+      .eq('id', interviewID);
+
+    if (error) {
+      console.error("Error submitting the interview: ", error);
+      return;
+    }
+  
+    console.log("Interview has been successfully submitted.");
+	
+}
 
 
 
@@ -1590,13 +1678,11 @@ function strategyState() {
 
 
 	const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
-
 	console.log("interviewID inside strategyState(): ",interviewID);
 
-	checkForStrategy(interviewID);
+	checkForStrategyAssets(interviewID);
 }
 
-function 
 
 // 2. update strategy page UI
 function updateStrategyUI(interviewExists) {
@@ -1625,45 +1711,83 @@ function updateNav(interviewCreated) {
 }
 
 
+async function checkForStrategyAssets(interviewID) {
+  console.log("checkForStrategyAssets(interviewID) function called");
+
+  // Check for positioning
+  const positioningData = await checkForPositioning(interviewID);
+  
+  // If positioning exists, display it
+  if (positioningData && positioningData.length > 0) {
+    console.log("positioning exists");
+    displayPositioning(positioningData[0].positioning);
+  } else {
+    // if there is none, generate and then display
+    console.log("no positioning found");
+    const newPositioning = await generatePositioning(interviewID);
+    
+    // If newPositioning is null or undefined, we return immediately
+    if (!newPositioning) {
+      return;
+    }
+    
+    displayPositioning(newPositioning);
+  }
+
+  // Check for brand strategy
+  const brandStrategyData = await checkForBrandStrategy(interviewID);
+  
+  // If a brand strategy exists, display it
+  if (brandStrategyData && brandStrategyData.length > 0) {
+    console.log("brand strategy exists");
+    displayStrategy(brandStrategyData[0].brand_strategy);
+  } else {
+    // if there isn't one, generate and then display
+    console.log("no brand strategy found");
+    const newBrandStrategy = await generateBrandStrategy(interviewID);
+    
+    // display new brand strategy if it's not null or undefined
+    if (newBrandStrategy) {
+      displayStrategy(newBrandStrategy);
+    }
+  }
+}
 
 
-// 3.  check whether strategy exists and act accordingly
-async function checkForStrategy(interviewID) {
-  console.log("checkForStrategy(interviewID) function called");
-  console.log("interviewID inside checkForStrategy(): ",interviewID);
 
-  console.log("check if strategy exists on Supabase for this interview");
+
+
+// 3.  check whether positioning exists and act accordingly
+async function checkForPositioning(interviewID) {
+  console.log("checkForPositioning(interviewID) function called");
+
+  console.log("check if Positioning exists on Supabase for this interview");
 
   // Supabase function to check if strategy exists for this interview
   const { data, error } = await supabase
-    .from('brand_strategies')
+    .from('positioning_strategies')
     .select('*')
     .eq('interview_id', interviewID)
 
   if (error) {
     console.error("Error checking for strategy: ", error);
-    return;
+    return null;
   }
 
   if (data && data.length > 0) {
-    console.log("strategy exists");
-    // Display existing strategy
-    displayStrategy(interviewID);
-
+    console.log("positioning exists");
+    return data; // return the data if positioning exists
   } else {
-    console.log("no strategy found");
-    // Generate a new strategy if none is found
-    console.log("therefore generate a new strategy by calling generateStrategy(interviewID)");
-	
-    generateStrategy(interviewID);
+    console.log("no positioning found");
+    return null; // return null if no positioning found
   }
 }
 
 
-// 4 generate strategy
-async function generateStrategy(interviewID) {
-  console.log("generateStrategy() function called");
-  console.log("interviewID inside generateStrategy(): ",interviewID);
+// 3.1.0 generate positioning
+async function generatePositioning(interviewID) {
+  console.log("generatePositioning() function called");
+
 
   // Retrieve userID from local storage
   const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id;
@@ -1675,7 +1799,7 @@ async function generateStrategy(interviewID) {
   }
 
   try {
-    const response = await fetch('/api/generateStrategy', {
+    const response = await fetch('/api/generatePositioning', {
       method: 'POST', // or 'GET', depending on your API
       headers: {
         'Content-Type': 'application/json',
@@ -1695,41 +1819,201 @@ async function generateStrategy(interviewID) {
     // process the data as needed here
     console.log(data);
 
+    // display the strategy
+    // displayPositioning(data.positioning);
+	
+    // Return the positioning data for use in other parts of your code
+    return data.positioning;
+
   } catch (error) {
     console.error('There was a problem with the request:', error);
   }
 }
 
+// 3.2. display positioning
+function displayPositioning(positioning_strategy) {
+  console.log('displayPositioning() function called');
 
+  // Find the element by its ID
+  const positioningElement = document.getElementById('positioning-strategy');
 
-// if Generate strategy is successful
+  // Set the inner HTML of the element to the positioning string
+  positioningElement.innerHTML = positioning_strategy;
 
-// 5. get strategy
-function getStrategy(interviewID,userID) {
-  console.log("getStrategy() function called")
-  // with interviewID and userId, make call to database and get strategy
-  // then store it locally
-  //TODO: Call your Supabase function to get the strategy
-
-  //TODO: Store the strategy in local storage
-  //TODO: Store the strategy in an Alpine store
-
-  console.log("put it in local storage as strategyMap");
-  console.log("put it into an Alpine store as strategyMap");
-  // then display it in HTML
-  displayStrategy(interviewID);
+  console.log('displayPositioning is displayed in strategy state content area');
 }
 
-// 6. display strategy
-function displayStrategy(interviewID) {
+
+
+
+// check if positioning is confirmed
+async function positioningConfirmed(interviewID) {
+  //console.log("Checking if positioning has been confirmed...");
+  //console.log("interviewID inside positioningConfirmed(): ", interviewID);
+
+  if(interviewID) {
+    const { data, error } = await supabase
+      .from('positioning_strategies')
+      .select('confirmed')
+      .eq('id', interviewID);
+
+    if (error) {
+      console.error("Error fetching confirmed status: ", error);
+      return;
+    }
+
+    if(data && data.length > 0) {
+      console.log("Positioning confirmed - true");
+      // Positioning confirmed = true
+
+      return data[0].confirmed;
+      
+    } else {
+      console.log("Positioning confirmed - false");
+      return false;
+    }
+  } else {
+    console.log("No interview ID provided.");
+    return false;
+  }
+}
+
+async function confirmPositioning(interviewID, userID) {
+  // Extract the text content from the positioning-strategy element
+  const positioningText = document.getElementById('positioning-strategy').innerText;
+
+  // First, let's check if a positioning strategy already exists
+  const { data: existingData, error: fetchError } = await supabase
+    .from('positioning_strategies')
+    .select('id')
+    .eq('interview_id', interviewID);
+
+  if (fetchError) {
+    console.error("Error fetching the positioning: ", fetchError);
+    return;
+  }
+
+  // If a positioning strategy doesn't exist, let's create it
+  if (!existingData || existingData.length === 0) {
+    const { data: insertData, error: insertError } = await supabase
+      .from('positioning_strategies')
+      .insert([{ interview_id: interviewID, user_id: userID, confirmed: false, positioning_strategy: positioningText }]);
+
+    if (insertError) {
+      console.error("Error creating the positioning: ", insertError);
+      return;
+    }
+    console.log("Positioning has been successfully created.");
+  }
+
+  // Now we can confirm the positioning and update the positioning_strategy
+  const { data: updateData, error: updateError } = await supabase
+    .from('positioning_strategies')
+    .update({ confirmed: true, positioning_strategy: positioningText })
+    .eq('interview_id', interviewID);
+
+  if (updateError) {
+    console.error("Error confirming the positioning: ", updateError);
+    return;
+  }
+  
+  console.log("Positioning has been successfully confirmed.");
+}
+
+
+
+
+
+
+
+// 5.  check whether brand strategy exists and act accordingly
+async function checkForBrandStrategy(interviewID) {
+  console.log("checkForBrandStrategy(interviewID) function called");
+
+  console.log("check if brand strategy exists on Supabase for this interview");
+
+  // Supabase function to check if strategy exists for this interview
+  const { data, error } = await supabase
+    .from('brand_strategies')
+    .select('*')
+    .eq('interview_id', interviewID)
+
+  if (error) {
+    console.error("Error checking for strategy: ", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    console.log("brand strategy exists on supabase");
+    return data; // return the data if brand strategy exists
+  } else {
+    console.log("no brand strategy found");
+    return null; // return null if no brand strategy found
+  }
+}
+
+
+// 5.1 generate strategy
+async function generateBrandStrategy(interviewID) {
+  console.log("generateBrandStrategy() function called");
+
+
+  // Retrieve userID from local storage
+  const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id;
+
+  // Check if userID exists
+  if (!userID) {
+    console.error("No userID found in local storage.");
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/generateBrandStrategy', {
+      method: 'POST', // or 'GET', depending on your API
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        interviewID: interviewID,
+        userID: userID
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // process the data as needed here
+    console.log(data);
+
+    // display the strategy
+    //displayStrategy(data.brand_strategy);
+	
+	return data;
+	
+
+  } catch (error) {
+    console.error('There was a problem with the request:', error);
+  }
+}
+
+// 5.2. display strategy
+function displayStrategy(positioning) {
   console.log('displayStrategy() function called');
-  // brand strategy is displayed in strategy state content area
-  //TODO: Add code to display the strategy
+
+  // Find the element by its ID
+  const positioningElement = document.getElementById('brand-strategy');
+
+  // Set the inner HTML of the element to the positioning string
+  positioningElement.innerHTML = positioning;
 
   console.log('brand strategy is displayed in strategy state content area');
 }
 
-// 7. edit strategy
+
+// 5.3. edit strategy
 function editStrategy(interviewID) {
  // when user clicks edit for a given item, let the div be editable
  // when user clicks done, user saves the edited text to Supabase
@@ -1738,7 +2022,7 @@ function editStrategy(interviewID) {
  //TODO: Add code to handle editing and saving of the strategy
 }
 
-// 8. save/update strategy
+// 5.4. save/update strategy
 function userSavesStrategy(interviewID) {
   console.log("saveStrategy(interviewID) function called")
   console.log("edited strategy is saved to Supabase and related to interview")
@@ -1756,6 +2040,45 @@ function userSavesStrategy(interviewID) {
 document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
+
+
+	// Call this function when the page loads
+	(async function() {
+	  const session = supabase.auth.session();
+	  const user = session ? session.user : null;
+	  if (user) {
+	    // if the user is already authenticated, load their data
+	    await getUserData(user.id);
+	    // load the questions for the interview form
+	    await getInterviewQuestions();
+	// Update question text with brand name from local storage
+	    updateQuestionText();
+	
+	
+	
+	    // Get userProfile from localStorage
+	    let userProfile = window.localStorage.getItem('userProfile');
+	    userProfile = JSON.parse(userProfile); // parse string back into an object
+
+	    // Update the initials in DOM
+	    let profileElements = document.querySelectorAll('.user-initials');
+	    let firstI = userProfile.first_name ? userProfile.first_name[0].toUpperCase() : '';
+	    let lastI = userProfile.last_name ? userProfile.last_name[0].toUpperCase() : '';
+	    let initials = firstI + ' ' + lastI;
+
+	    profileElements.forEach(profileElement => {
+	      profileElement.textContent = initials;
+	    });
+	
+	
+	
+	
+	
+	  }
+	})();
+
+
+
 	document.getElementById("PrintHTML").addEventListener("click", function(event){
 	    event.preventDefault();  // Prevent the default link click action
 	    window.print();  // Call the browser print function
@@ -1763,10 +2086,34 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
-  document.getElementById("ApproveInterview").addEventListener("click", function(event){
+  document.getElementById("SubmitInterview").addEventListener("click", function(event){
+   
+	submitInterview();
+    
+	
     // call getStrategy() function
     strategyState();
   });
+
+
+
+  document.getElementById("confirm-positioning").addEventListener("click", async function(event){
+    // get the interviewID from the local storage
+    const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
+    const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null;
+	
+
+    // if interviewID doesn't exist, don't proceed
+    if(!interviewID) {
+      console.error("No interview ID found.");
+      return;
+    }
+
+    // call the confirmPositioning function
+    await confirmPositioning(interviewID, userID);
+
+  });
+
 
 
 
