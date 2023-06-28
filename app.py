@@ -224,22 +224,7 @@ chat_GPT40_01_functions = ChatOpenAI(temperature=0.1, model_name="gpt-4-0613", o
 
 
 
-# Additional function to generate buyer profiles
-def buyer_profiles_from_openai(interview_transcript):
-    buyer_profiles_prompt_template = ''' 
-        Based on the interview with the company CEO: {interview_transcript}, identify and describe potential individual buyers.
-    '''
-    formatted_prompt = buyer_profiles_prompt_template.format(interview_transcript=interview_transcript)
-    system_message = SystemMessage(content="You are a market analyst.")
-    user_message = HumanMessage(content=formatted_prompt)
-    response = chat_GPT35_04_16k_functions([system_message, user_message])
-    
-    # Extract and return the list of profiles from the AI response
-    # You would need to adjust this depending on how your model returns structured data
-    profiles = response.content.split('\n')
-    return json.dumps(profiles)  # Convert list to JSON string for storing in the database
-    
-    
+
 
 
 
@@ -281,7 +266,22 @@ def best_positioning(positioning_statement_options, interview_transcript):
 def positioning_strategy_from_openai(interview_transcript):
 
     positioning_prompt_templates = [
-        "You are a Gartner analyst in the B2B tech space. Please review your interview with a company CEO: {interview_transcript}. Using clear, concise, and direct language, write down the company's positioning strategy. 3-5 short sentences. Don't use buzzwords that are exagerated, vague, annoying or overly used. Speak as a neutral 3rd-party; don't use these words: our, we, us.  Be straightfoward: don't say: despite, however, in spite of, etc.  Don't use superlatives such as only, best, most, or entirely.",
+        '''You are a Gartner analyst in the B2B tech space. Please review your interview with a company CEO: {interview_transcript}. Using clear, concise, and direct language, write down the company's positioning strategy. 3-5 short sentences. Don't use buzzwords that are exagerated, vague, annoying or overly used. Speak as a neutral 3rd-party; don't use these words: our, we, us.  Be straightfoward: don't say: despite, however, in spite of, etc.  Don't use superlatives such as only, best, most, or entirely. 
+        
+        
+        Before you respond, ask yourself: How could you edit it to make it leaner - not removing any semantic meaning at all, let alone any detail. But what words can you remove and make that happen?
+
+        for example:
+
+        `Acme is a company that operates in the B2B tech space, offering a product that facilitates rapid decision making for its clients`
+
+        becomes
+
+        `Acme facilitates rapid decision making for B2B tech firms`
+        
+        Think through everything step-by-step and make the writing lean.
+        
+        ''',
         
         "As a seasoned B2B tech analyst at Gartner, you've just finished your interview with a tech CEO. Here's what they shared: {interview_transcript}. In 3-5 sentences, articulate the company's position in the marketplace using simple, shortswords. Contextualize its positioning with how the market is changing.  Don't use buzzwords that are known for exageration, vagueness, being annoying or being overly-used. Speak as a neutral 3rd-party; don't use these words: our, we, us.  Maintain a straightfoward narrative: don't say: despite, however, in spite of, etc.  Don't use superlatives such as only, best, most, or entirely.",
         
@@ -394,61 +394,23 @@ def generatePositioning():
     
     
     
-    
-    def brand_strategy_from_openai(interview_transcript):
+# Additional function to generate buyer profiles
+def buyer_profiles_from_openai(interview_transcript):
+    buyer_profiles_prompt_template = ''' 
+        Based on the interview with the company CEO: {interview_transcript}, identify and describe potential individual buyers.
+    '''
+    formatted_prompt = buyer_profiles_prompt_template.format(interview_transcript=interview_transcript)
+    system_message = SystemMessage(content="You are a market analyst.")
+    user_message = HumanMessage(content=formatted_prompt)
+    response = chat_GPT35_04_16k_functions([system_message, user_message])
 
-        positioning_prompt_templates = [
-            "You are a Gartner analyst in the B2B tech space. Please review your interview with a company CEO: {interview_transcript}. Using clear, concise, and direct language, write down the company's positioning strategy. 3-5 short sentences. Don't use buzzwords that are exagerated, vague, annoying or overly used. Speak as a neutral 3rd-party; don't use these words: our, we, us.  Be straightfoward: don't say: despite, however, in spite of, etc.  Don't use superlatives such as only, best, most, or entirely.",
-        
-            "As a seasoned B2B tech analyst at Gartner, you've just finished your interview with a tech CEO. Here's what they shared: {interview_transcript}. In 3-5 sentences, articulate the company's position in the marketplace using simple, shortswords. Contextualize its positioning with how the market is changing.  Don't use buzzwords that are known for exageration, vagueness, being annoying or being overly-used. Speak as a neutral 3rd-party; don't use these words: our, we, us.  Maintain a straightfoward narrative: don't say: despite, however, in spite of, etc.  Don't use superlatives such as only, best, most, or entirely.",
-        
-            "Following your recent interview with a B2B tech CEO: {interview_transcript}, how would you neutrally describe the company's position in the market using simple words and including the customer problem the company solves?  Don't use buzzwords that are known for exageration, vagueness, being annoying or being overly-used . Speak as a neutral 3rd-party; don't use these words: our, we, us.  Maintain a straightfoward narrative: don't say: despite, however, in spite of, etc. Be brief.  Don't use superlatives such as only, best, most, or entirely.",
-        
-            "After reading an interview with a company CEO: {interview_transcript}, state the company's positioning. Be problem-solution oriented, clearly articulate a unique value proposition, use clear and non-promotional language, define or allude the target audience, make comparisons with competitors without naming any. Don't use buzzwords that are known for exageration, vagueness, being annoying or being overly-used. Speak as a neutral 3rd-party; don't use these words: our, we, us. Be straightfoward : don't say: despite, however, in spite of, etc. Max 5 sentences.  Don't use superlatives such as only, best, most, or entirely.",
-        
-            "Read this discovery interview with a company CEO: {interview_transcript}. Please state the company's positioning by being concise, problem-solution oriented, clearly articulating a unique value proposition, using clear and non-promotional language, defining or alluding to the target audience, making comparisons with competitors (without naming any). Don't use buzzwords that are known for exageration, vagueness, being annoying or being overly-used. Speak as a neutral 3rd-party analyst; don't use these words: our, we, us.  Don't meander: don't say: despite, however, in spite of, etc. Don't use superlatives such as only, best, most, or entirely."
-        ]
+    # Extract and return the list of profiles from the AI response
+    # You would need to adjust this depending on how your model returns structured data
+    profiles = response.content.split('\n')
+    return json.dumps(profiles)  # Convert list to JSON string for storing in the database
 
-        # Loop over the templates and generate responses
-        responses = []
-        for template in positioning_prompt_templates:
-            # Format the template with your interview transcript
-            formatted_prompt = template.format(interview_transcript=interview_transcript)
-        
-            # Create a system message to set the assistant's role
-            system_message = SystemMessage(content="You are a Gartner analyst in the B2B tech space.")
-        
-            # Create a user message with the interview transcript
-            user_message = HumanMessage(content=formatted_prompt)
-        
-            # Call the chat model with a list of messages
-            response = chat_GPT40_09_functions([system_message, user_message])
-        
-            # Add the response to our list
-            responses.append(response.content)
-    
-        best_positioning_response = best_positioning(responses, interview_transcript)
-        best_positioning_index = int(best_positioning_response) - 1  # Assuming 1-based index in the response
-        best_positioning_statement = responses[best_positioning_index]
-    
-        print("\n")  # This will print a line break.
-        print(f"position statement options: {responses}")
-        print("\n")  # This will print a line break.
-        print(f"best option: {best_positioning_statement}")
-        print("\n")  # This will print a line break.
-    
-        return best_positioning_statement
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
     
 @app.route("/api/generateBrandStrategy", methods=['POST'])
 def generateBrandStrategy():
@@ -498,13 +460,13 @@ def generateBrandStrategy():
 
 
 
-    #data_to_insert = {
-        #'interview_id':interview_id,
-        #'positioning_statement': positioning_strategy_content,
-        #'buyer_individual_profiles': buyer_individual_profiles,
-        # ...similarly, insert other fields...
-    #}
-    #supabase.table('brand_strategies').insert(data_to_insert).execute()
+    data_to_insert = {
+        'interview_id':interview_id,
+        'user_id':user_id,
+        'buyer_individual_profiles': buyer_individual_profiles,
+         
+    }
+    supabase.table('brand_strategies').insert(data_to_insert).execute()
 
     return jsonify({
         "brand strategy": brand_strategy

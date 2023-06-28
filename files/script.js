@@ -551,6 +551,7 @@ const logoutSubmitted = (event) => {
     .then((_response) => {
       console.log('logout successful')
          localStorage.removeItem('userProfile');
+		 localStorage.removeItem('positioningData');
          localStorage.removeItem('interviewData');
          localStorage.removeItem('supabase.auth.token');
          localStorage.removeItem('ckid');
@@ -1779,6 +1780,7 @@ async function checkForPositioning(interviewID) {
   if (data && data.length > 0) {
     console.log("positioning exists");
     return data; // return the data if positioning exists
+	
   } else {
     console.log("no positioning found");
     return null; // return null if no positioning found
@@ -1821,8 +1823,8 @@ async function generatePositioning(interviewID) {
     // process the data as needed here
     console.log(data);
 
-    // display the strategy
-    // displayPositioning(data.positioning);
+	window.localStorage.setItem('positioningData', JSON.stringify(data.positioning));
+    
 	
     // Return the positioning data for use in other parts of your code
     return data.positioning;
@@ -1831,6 +1833,76 @@ async function generatePositioning(interviewID) {
     console.error('There was a problem with the request:', error);
   }
 }
+// 3.1.0 generate positioning
+async function regenerateDisplayPositioning() {
+  console.log("regenerateDisplayPositioning() function called");
+
+  showPositioningModal();
+
+  const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
+  const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id;
+
+  // Check if userID exists
+  if (!userID) {
+    console.error("No userID found in local storage.");
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/generatePositioning', {
+      method: 'POST', // or 'GET', depending on your API
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        interviewID: interviewID,
+        userID: userID
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // process the data as needed here
+    console.log(data);
+	
+	const positioningData = {
+	  id: null, // use actual value if available
+	  user_id: userID,
+	  interview_id: interviewID,
+	  positioning_strategy: null, // use actual value if available
+	  private_positioning: null, // use actual value if available
+	  public_positioning: null, // use actual value if available
+	  positioning_chart_logic: null, // use actual value if available
+	  positioning_chart_image: null, // use actual value if available
+	  created_at: new Date().toISOString(),
+	  updated_at: new Date().toISOString(),
+	  confirmed: false, // use actual value if available
+	  positioning: data.positioning
+	};
+
+	// Store the positioningData object in local storage
+	window.localStorage.setItem('positioningData', JSON.stringify(positioningData));
+	
+	
+
+    // display the strategy
+    displayPositioning(data.positioning);
+	
+	hidePositioningModal();
+	
+    // Return the positioning data for use in other parts of your code
+    //return data.positioning;
+
+  	} catch (error) {
+    console.error('There was a problem with the request:', error);
+  }
+}
+
+
 
 // 3.2. display positioning
 function displayPositioning(positioning_strategy) {
@@ -1848,7 +1920,32 @@ function displayPositioning(positioning_strategy) {
   positioningElement.innerHTML = positioning_strategy;
 
   console.log('displayPositioning is displayed in strategy state content area');
+ 
 }
+
+
+
+// 3.2. display positioning
+function displayPositioningOnReload() {
+
+  const positioning_strategy = JSON.parse(window.localStorage.getItem('positioningData'));
+  
+
+  if (!positioning_strategy) {
+    console.error("No positioning data found in local storage.");
+    return;
+  }
+
+  const positioningElement = document.getElementById('positioning-strategy');
+
+  if (!positioningElement) {
+    console.error("No element with id 'positioning-strategy' found");
+    return;
+  }
+  positioningElement.innerHTML = positioning_strategy;
+}
+window.onload = displayPositioningOnReload;
+
 
 
 
@@ -2063,6 +2160,24 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
+	// JavaScript code
+	const showGuidelinesLink = document.getElementById('show-guidelines');
+	const guidelinesParagraph = document.getElementById('positioningGuidelines');
+
+	showGuidelinesLink.addEventListener('click', function(event) {
+	  event.preventDefault(); // Prevent the link from navigating
+
+	  if (guidelinesParagraph.classList.contains('show')) {
+	    guidelinesParagraph.classList.remove('show');
+	    showGuidelinesLink.textContent = 'Show guidelines';
+	  } else {
+	    guidelinesParagraph.classList.add('show');
+	    showGuidelinesLink.textContent = 'Hide guidelines';
+	  }
+	});
+
+
+
 	// Call this function when the page loads
 	(async function() {
 	  const session = supabase.auth.session();
@@ -2100,6 +2215,12 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
+	document.getElementById('recreate-positioning').addEventListener('click', function() {
+	  regenerateDisplayPositioning();
+	});
+
+
+
 	document.getElementById("PrintHTML").addEventListener("click", function(event){
 	    event.preventDefault();  // Prevent the default link click action
 	    window.print();  // Call the browser print function
@@ -2118,7 +2239,19 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
-  document.getElementById("confirm-positioning").addEventListener("click", async function(event){
+  document.getElementById("welcomeShowStrategy").addEventListener("click", function(event){
+
+   
+    // call getStrategy() function
+    strategyState();
+  });
+
+
+
+
+
+
+  document.getElementById("confirmPositioning").addEventListener("click", async function(event){
     // get the interviewID from the local storage
     const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
     const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null;
@@ -2263,4 +2396,42 @@ function toHtml(markdownText) {
 
 
 
+// Show modal function
+function showPositioningModal() {
+  const modal = document.getElementById('generatePositioningModal');
+  modal.style.display = 'block';
+
+  var timeLeft = 92;  // 1 minute 32 seconds is equal to 92 seconds
+  var timer = setInterval(positioningCountdown, 1000); // call countdown function every second
+
+  function positioningCountdown() {
+    if (timeLeft <= 0) {
+      clearTimeout(timer);
+      // Time's up. Handle as needed.
+      document.getElementById('positioningCountdowntimer').innerHTML = " 0 minutes, 0 seconds! 🧐 Whoops! Should be any second now..  ";
+    } else {
+      var minutes = Math.floor(timeLeft / 60);
+      var seconds = timeLeft % 60;
+      document.getElementById('positioningCountdowntimer').innerHTML = minutes + " minutes, " + seconds + " seconds";
+      timeLeft--;
+    }
+  }
+}
+// Hide modal function
+function hidePositioningModal() {
+  const modal = document.getElementById('generatePositioningModal');
+  modal.style.display = 'none';
+}
+
+
+// Show modal function
+function showBrandStrategyModal() {
+  const modal = document.getElementById('generateBrandStrategyModal');
+  modal.style.display = 'block';
+}
+// Hide modal function
+function hideBrandStrategyModal() {
+  const modal = document.getElementById('generateBrandStrategyModal');
+  modal.style.display = 'none';
+}
 

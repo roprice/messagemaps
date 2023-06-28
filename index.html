@@ -419,8 +419,9 @@
 								</div><!-- /welcome-interview-card-->
 								
 								<div class="col-md-4 welcome-strategy-card">
-								  <!-- show this if interviewData.submitted=false-->
-								  
+								 
+								  <!-- DISABLED 
+									  show this if interviewData.submitted=false--> 
 								  <div class="card shadow-sm inactive strategy card" title="Complete your discovery interview to activate" x-show="!interviewSubmitted">
 								    <div class="card-body" >
 								      <h6 class="card-title">Brand Strategy</h6>
@@ -430,12 +431,14 @@
 								    </div><!-- card body-->
 								  </div><!-- inactive strategy card-->
 
-								  <!-- show this if interviewData.submitted=true-->
+								  <!-- ACTIVE 
+									  show this if interviewData.submitted=true-->
 								  <div class="card shadow-sm active strategy card" title="Finish and approve your brand strategy" x-show="interviewSubmitted">
 								    <div class="card-body" >
 								      <h6 class="card-title">Brand Strategy</h6>
 								      <p>Refine your positioning, understand your buyers, your brand personality, and your core messages and value propositions</p>
-								      <button class="btn btn-primary mt-3 strategy-button" type="button">Show me the strategy</button>
+								      <button id="welcomeShowStrategy" class="btn btn-primary mt-3 strategy-button" type="button"
+									   x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">Show me the strategy</button>
 								      <div class="completion-time interview text-small text-secondary">Review time: <strong>5-15 minutes</strong></div>
 								    </div><!-- card body-->
 								  </div><!-- active strategy card-->
@@ -831,17 +834,20 @@
 					                        <!-- .row.previous-next-tabs -->
 					                        <div class="row  my-5 previous-next-tabs">
 												<div class=" col-md-12 text-end" id="PreviousNext">
-						                            <a
+						                            <button
 														@click.prevent="changeTab(-1)"
-														class="previous btn-primary text-small"
+														class="previous btn-primary text-small control-btn btn control-btn strategy-button"
 														:class="{ 'disabled': activeTab === tabs[0] }"
-														:disabled="activeTab === tabs[0]">&lt; previous section</a>
+														:disabled="activeTab === tabs[0]">&lt; previous</button>
 
-													<a
+
+									
+
+													<button
 														@click.prevent="changeTab(1)"
-														class="next btn-primary text-small"
+														class="next btn-primary text-small control-btn btn control-btn strategy-button"
 														:class="{ 'disabled': activeTab === tabs[tabs.length - 1] }"
-														:disabled="activeTab === tabs[tabs.length - 1]">next section &gt;</a>
+														:disabled="activeTab === tabs[tabs.length - 1]">next &gt;</button>
 					                          </div>
 
 
@@ -1034,40 +1040,23 @@
 					
 						<div class="strategy-content card shadow my-4 left-column">
 
-							<div id="positioning-strategy-section" class="brand-strategy-item positioning wrapper ">
+							<div id="positioning-strategy-section" class="brand-strategy-item positioning wrapper " >
 		
-								<h6 class="brand-strategy-item title">Step 1: Confirm your positioning strategy</h6> 
+								<h6 class="brand-strategy-item title">Step 1: Confirm the Positioning Strategy</h6> 
 								<p class="brand-strategy-item explainer">
-								  Let's ensure the positioning looks right first and the move on to the rest of the brand strategy.
-								  <a class="brand-strategy-item positioning guidelines" href="#" id="show-guidelines">Show/hide guidelines</a>
+								  Let's get the positioning strategy right first - then move on to the rest of the brand strategy.
+								  <a class="brand-strategy-item positioning guidelines text-secondary text-small" href="#" id="show-guidelines">Toggle guidelines</a>
 								</p>
-								<div id="positioning-guidelines" style="display:none">
-									<p><b>Guidelines</b> The positioning statement doesn't need to be thorough, but it needs to make  sense  and speak to anyone purchasing your firm's product or services; it should specifically mention them and at least reference their problem.</p>
-									<p> It should have your most important value proposition (improved quality of life, improved revenue, more efficiency, etc). Other good qualities: concise, problem-solution oriented, clear and non-promotional language, making convincing comparisons with competitors (without naming any), and underscoring the business impact.</p>
+								<div id="positioningGuidelines" >
+									<p><b>Guidelines</b> The positioning strategy doesn't need to work as marketing copy, it's for you and your team to be clear on direction.
+									<p>However, it should  sense  and speak to your buyer if they took the time to read it.</p>
+									<p>It must mention your customer(s) and at least allude to their specific problem you solve. It should also have your most important value proposition (improved revenue, more efficiency, etc).</p>
+									<p> Other good qualities: concise, problem-solution oriented, clear and non-promotional language, making convincing comparisons with competitors (without naming any.</p>
 									<p>
 										If it's close, revise and confirm. If it's way off, you might need to go back to the discovery interview and spend more time writing, the generate a new positioning statement.
 									</p>
 									</div>
-								
-
-								<script>
-								  // JavaScript code
-								  const showGuidelinesLink = document.getElementById('show-guidelines');
-								  const guidelinesParagraph = document.getElementById('positioning-guidelines');
-
-								  showGuidelinesLink.addEventListener('click', function(event) {
-								    event.preventDefault(); // Prevent the link from navigating
-
-								    if (guidelinesParagraph.style.display === 'none') {
-								      guidelinesParagraph.style.display = 'block';
-								      showGuidelinesLink.textContent = 'Hide guidelines';
-								    } else {
-								      guidelinesParagraph.style.display = 'none';
-								      showGuidelinesLink.textContent = 'Show guidelines';
-								    }
-								  });
-								</script>
-								
+			
 		
 								<div class="brand-strategy-item meta-info"> 
 	
@@ -1076,7 +1065,7 @@
 									
 									<div class="brand-strategy-item control-buttons">
 									<button 
-									    id="confirm-positioning"
+									    id="confirmPositioning"
 									    class="btn btn-primary control-btn strategy-button"
 									    type="button"
 									    x-bind:class="{ 'confirmed-class': $store.positioningStrategy.confirmed }"
@@ -1085,70 +1074,77 @@
 										<span x-show="$store.positioningStrategy.confirmed" class="material-symbols-outlined medium confirmed-status">lock</span>
 									    
 									</button>
-
-									
-									
-										<style>
-											button.confirmed-class span.confirmed-status {
-												display:inline-block;
-											}
-										
-										
-										</style>
-									
-									
-										<button 
+									<button 
 										    id="recreate-positioning"
 											class="btn btn-secondary control-btn strategy-button" type="button" 
 											x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">Recreate</button>
 									</div><!--/recreate -->
 								</div><!--/button row-->
 								
-
-								<div id="positioning-strategy" class="textarea llm-results brand-strategy positioning editable" contenteditable="true" style="min-height:40px" >
-
-
-
-
-
-
+								<div class="positioning-strategy-wrapper"  style="position:relative;">
 									
-								</div>
+									<div id="generatePositioningModal" class="modal" style="display:none">
+									  <div id="spinner" class="spinner thinking"></div>
+									  <div class="message-positioning modal-message">
+										  <ul class="modal-fun-facts" style="text-align:left;">
+											<h6>Fun facts</h6>
+											<li>A management consulting firm might need 3 months to deliver a positioning strategy..</li>
+											<li>A digital agency, 3 weeks - even with ChatGPT..</li>
+											<li>But you need now is <strong>1 minute and 32 seconds</strong> (on average)</li>
+											<li>Timer started: <strong id="positioningCountdowntimer"></strong>.</li>
+										  </ul>
+									  </div><!-- /message-positioning modal-message -->
+									</div>
+									<div id="positioning-strategy"
+										class="textarea llm-results brand-strategy positioning editable" 
+										contenteditable="true" style="min-height:350px;">		
+									
+									
+									
+																
+									</div><!-- /positioning-strategy -->
+								</div><!-- /positioning-strategy-wrappe -->
 								<p id="positioning-help" class="brand-strategy-item positioning feedback help text-secondary text-small">You'll be able to revise this later.</p>
 
 								
-							</div><!--/positioning-strategy -->
-
-
-							<h6 class="brand-strategy-item title">Brand Strategy</h6> 
-							<div id="brand-strategy" class="textarea llm-results brand-strategy  editable" contenteditable="true" style="min-height:800px" >
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							</div><!--/brand-strategy -->
+							</div><!--/positioning-strategy-section -->
 
 
 
+							<div id="brand-strategy-section" style="position:relative;min-height:500px">
+								
+								<div id="generateBrandStrategyModal" class="modal" style="display:none">
+									<div id="spinner" class="spinner thinking"></div>
+									<div class="message-brand-strategy modal-message">
+											Fun fact: it takes on average 2 minutes, 13 seconds to analyze your 
+											positioning, evaluate it against your discovery interview, and author a brand strategy.
+									</div>
+								</div>
+
+
+
+								
+								
+									<h6 class="brand-strategy-item title">Step 2: Complete the Brand Strategy</h6> 
+									
+									<p class="brand-strategy-item explainer">
+									  Below you'll find the following elements of your brand strategy: <!--<template></template>-->.<br><br>
+									  
+									  Edit and revise here, then use them to transform each pieces of your sales and marketing.
+									</p>
+									
+									<!-- alpine template loop -->	
+										<div id="brand-strategy" class="textarea llm-results brand-strategy  editable" contenteditable="true" style="min-height:200px" >
+										</div><!--/brand-strategy -->
+									
+									<!-- /alpine template loop -->
 
 
 
 
-						</div>
-						<!-- /strategy-content -->
+							</div><!--/brand-strategy-section-->
+						
+						</div><!-- /strategy-content /right-column-->
 					  
 					 
 						<div  class="strategy-meta-info-card card my-4  right-column">
@@ -1225,6 +1221,8 @@
  	</div><!-- /#Body -->
 
 </div><!-- /.Logged_In_States -->
+
+
 
 </body>
 </html>
