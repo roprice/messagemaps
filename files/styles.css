@@ -998,12 +998,25 @@ button#InterviewMe {
 	    margin: auto;
    
 }
+
+
+.public-positioning-strategy ul.home-bullets li {
+    margin-left: 0px;
+	font-size:16px;
+	font-weight:bold;
+	margin-bottom:10px;
+    list-style: none;
+    position: relative; /* required to position the pseudo-element correctly */
+}
+
+
+
 .modal-fun-facts li {
     margin-left: 20px;
     list-style: none;
     position: relative; /* required to position the pseudo-element correctly */
 }
-
+.public-positioning-strategy ul.home-bullets li::before,
 .modal-fun-facts li::before {
     content: "-";
     position: absolute;

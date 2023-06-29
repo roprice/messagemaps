@@ -211,7 +211,7 @@ document.addEventListener('alpine:init', function() {
 
 	// Define your stores up front
 	Alpine.store('positioningStrategy', { confirmed: false })
-	
+
 
 	Alpine.store('interviewData', new Proxy(initialInterviewData, {
 	  set: function(target, property, value) {
@@ -219,7 +219,7 @@ document.addEventListener('alpine:init', function() {
 	    target[property] = value;
 	    // Save to localStorage whenever any property is updated
 	    // window.localStorage.setItem('interviewData', JSON.stringify(target));
-	    
+
 	    return true;
 	  }
 	}));
@@ -486,14 +486,14 @@ const logInSubmitted = async (event) => {
 	  //console.log('data:',data);
 
 	  if (data && data.length > 0) {
-		  
+
 		const userProfile = data[0];
 		window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
 
 		// Update the initials in DOM
 		let profileElement = document.querySelector('.user-initials');
 		//console.log('profileElement ',profileElement)
-		
+
 		// Update the initials in DOM
 		let profileElements = document.querySelectorAll('.user-initials');
 		let firstI = userProfile.first_name ? userProfile.first_name[0].toUpperCase() : '';
@@ -504,8 +504,8 @@ const logInSubmitted = async (event) => {
 		  profileElement.textContent = initials;
 		});
 
-		
-		
+
+
 	  }
 
         await getInterviewQuestions();
@@ -1290,7 +1290,7 @@ async function extractBrandName(text) {
 
 
     const brandName = data.brandName;
-	
+
 	Alpine.store('interviewData').brandName = brandName;
 	Alpine.store('yourBrand').brandName = brandName;
 
@@ -1304,8 +1304,8 @@ async function extractBrandName(text) {
 
 
      console.log('Updated interviewData before return:', interviewData); // Log the updated interviewData object
-	 
-	 
+
+
 
 
     return data.brandName; // Return the brand name from the response
@@ -1622,9 +1622,9 @@ async function interviewSubmitted(interviewID) {
     if(data && data.length > 0) {
 	  console.log("interview submitted - true");
       // interview submitted = true
-		
+
       return data[0].submitted;
-	  
+
     } else {
       console.log("interview submitted - false");
       return false;
@@ -1640,10 +1640,10 @@ async function interviewSubmitted(interviewID) {
 // mark interview as submitted
 
 async function submitInterview() {
-	
+
     // Your interview ID
     const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
-  
+
     if(!interviewID) {
       console.error("No interview ID found.");
       return;
@@ -1659,9 +1659,9 @@ async function submitInterview() {
       console.error("Error submitting the interview: ", error);
       return;
     }
-  
+
     console.log("Interview has been successfully submitted.");
-	
+
 }
 
 
@@ -1717,7 +1717,7 @@ async function checkForStrategyAssets(interviewID) {
 
   // Check for positioning
   const positioningData = await checkForPositioning(interviewID);
-  
+
   // If positioning exists, display it
   if (positioningData && positioningData.length > 0) {
     console.log("positioning exists");
@@ -1727,18 +1727,18 @@ async function checkForStrategyAssets(interviewID) {
     // if there is none, generate and then display
     console.log("no positioning found");
     const newPositioning = await generatePositioning(interviewID);
-    
+
     // If newPositioning is null or undefined, we return immediately
     if (!newPositioning) {
       return;
     }
-    
+
     displayPositioning(newPositioning);
   }
 
   // Check for brand strategy
   const brandStrategyData = await checkForBrandStrategy(interviewID);
-  
+
   // If a brand strategy exists, display it
   if (brandStrategyData && brandStrategyData.length > 0) {
     console.log("brand strategy exists");
@@ -1747,13 +1747,29 @@ async function checkForStrategyAssets(interviewID) {
     // if there isn't one, generate and then display
     console.log("no brand strategy found");
     const newBrandStrategy = await generateBrandStrategy(interviewID);
-    
+
     // display new brand strategy if it's not null or undefined
     if (newBrandStrategy) {
       displayStrategy(newBrandStrategy);
     }
   }
 }
+window.onload = async function() {
+  const currentScreen = JSON.parse(window.localStorage.getItem('currentScreen'));
+  const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
+
+  if (currentScreen === 'strategies' && interviewID) {
+    const positioningData = await checkForPositioning(interviewID);
+    if (positioningData && positioningData.length > 0 && positioningData[0].confirmed) {
+      console.log("Positioning strategy confirmed: ", positioningData[0]);
+      generateStrategy();
+    } else {
+      await checkForStrategyAssets(interviewID);
+    }
+  }
+};
+
+
 
 
 
@@ -1780,7 +1796,7 @@ async function checkForPositioning(interviewID) {
   if (data && data.length > 0) {
     console.log("positioning exists");
     return data; // return the data if positioning exists
-	
+
   } else {
     console.log("no positioning found");
     return null; // return null if no positioning found
@@ -1824,8 +1840,8 @@ async function generatePositioning(interviewID) {
     console.log(data);
 
 	window.localStorage.setItem('positioningData', JSON.stringify(data.positioning));
-    
-	
+
+
     // Return the positioning data for use in other parts of your code
     return data.positioning;
 
@@ -1833,7 +1849,7 @@ async function generatePositioning(interviewID) {
     console.error('There was a problem with the request:', error);
   }
 }
-// 3.1.0 generate positioning
+// 3.1.0 regenerate positioning
 async function regenerateDisplayPositioning() {
   console.log("regenerateDisplayPositioning() function called");
 
@@ -1868,7 +1884,7 @@ async function regenerateDisplayPositioning() {
 
     // process the data as needed here
     console.log(data);
-	
+
 	const positioningData = {
 	  id: null, // use actual value if available
 	  user_id: userID,
@@ -1886,14 +1902,19 @@ async function regenerateDisplayPositioning() {
 
 	// Store the positioningData object in local storage
 	window.localStorage.setItem('positioningData', JSON.stringify(positioningData));
-	
-	
+
+
 
     // display the strategy
     displayPositioning(data.positioning);
-	
+
+
+	document.getElementById("positioning-strategy").style.minHeight = "auto";
+
+
+
 	hidePositioningModal();
-	
+
     // Return the positioning data for use in other parts of your code
     //return data.positioning;
 
@@ -1915,12 +1936,17 @@ function displayPositioning(positioning_strategy) {
     console.error("No element with id 'positioning-strategy' found");
     return;
   }
-  
+
+  document.getElementById("positioning-strategy").style.minHeight = "auto";
+
+
   // Set the inner HTML of the element to the positioning string
   positioningElement.innerHTML = positioning_strategy;
+ document.getElementById("positioning-strategy").style.minHeight = "auto";
+
 
   console.log('displayPositioning is displayed in strategy state content area');
- 
+
 }
 
 
@@ -1928,8 +1954,11 @@ function displayPositioning(positioning_strategy) {
 // 3.2. display positioning
 function displayPositioningOnReload() {
 
-  const positioning_strategy = JSON.parse(window.localStorage.getItem('positioningData'));
-  
+	const positioning_data = JSON.parse(window.localStorage.getItem('positioningData'));
+	const positioning_strategy = positioning_data.positioning_strategy;
+
+
+
 
   if (!positioning_strategy) {
     console.error("No positioning data found in local storage.");
@@ -1943,6 +1972,7 @@ function displayPositioningOnReload() {
     return;
   }
   positioningElement.innerHTML = positioning_strategy;
+  document.getElementById("positioning-strategy").style.minHeight = "auto";
 }
 window.onload = displayPositioningOnReload;
 
@@ -1952,8 +1982,7 @@ window.onload = displayPositioningOnReload;
 
 // check if positioning is confirmed
 async function positioningConfirmed(interviewID) {
-  //console.log("Checking if positioning has been confirmed...");
-  //console.log("interviewID inside positioningConfirmed(): ", interviewID);
+
 
   if(interviewID) {
     const { data, error } = await supabase
@@ -1971,7 +2000,7 @@ async function positioningConfirmed(interviewID) {
       // Positioning confirmed = true
 
       return data[0].confirmed;
-      
+
     } else {
       console.log("Positioning confirmed - false");
       return false;
@@ -1985,7 +2014,6 @@ async function positioningConfirmed(interviewID) {
 
 // Then here is your function
 async function confirmPositioning(interviewID, userID) {
-
   // Get positioning strategy text
   const positioningText = document.getElementById("positioning-strategy").innerText;
 
@@ -1999,6 +2027,8 @@ async function confirmPositioning(interviewID, userID) {
     console.error("Error fetching existing positioning strategy: ", existingStrategyError);
     return;
   }
+
+  let positioningData = JSON.parse(window.localStorage.getItem('positioningData'));
 
   if (existingStrategy && existingStrategy.length > 0) { // If strategy exists, update it
     const { data, error } = await supabase
@@ -2014,6 +2044,11 @@ async function confirmPositioning(interviewID, userID) {
     console.log("Positioning has been successfully confirmed.");
     // Update the Alpine.js store
     Alpine.store('positioningStrategy').confirmed = true;
+
+    // Update the positioningData object
+    positioningData.confirmed = true;
+    positioningData.positioning_strategy = positioningText;
+    positioningData.updated_at = new Date().toISOString();
 
   } else { // If no strategy exists, create a new one
     const { data, error } = await supabase
@@ -2035,7 +2070,16 @@ async function confirmPositioning(interviewID, userID) {
     console.log("Positioning has been successfully created and confirmed.");
     // Update the Alpine.js store
     Alpine.store('positioningStrategy').confirmed = true;
+
+    // Update the positioningData object
+    positioningData.confirmed = true;
+    positioningData.positioning_strategy = positioningText;
+    positioningData.created_at = new Date().toISOString();
+    positioningData.updated_at = new Date().toISOString();
   }
+
+  // Store the updated object
+  window.localStorage.setItem('positioningData', JSON.stringify(positioningData));
 }
 
 
@@ -2074,7 +2118,7 @@ async function checkForBrandStrategy(interviewID) {
 // 5.1 generate strategy
 async function generateBrandStrategy(interviewID) {
   console.log("generateBrandStrategy() function called");
-
+  showBrandStrategyModal();
 
   // Retrieve userID from local storage
   const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id;
@@ -2108,14 +2152,73 @@ async function generateBrandStrategy(interviewID) {
 
     // display the strategy
     //displayStrategy(data.brand_strategy);
-	
+
 	return data;
-	
+  hideBrandStrategyModal();
 
   } catch (error) {
     console.error('There was a problem with the request:', error);
   }
 }
+
+// 5.1 regenerate strategy
+
+async function regenerateBrandStrategy() {
+  console.log("regenerateBrandStrategy() function called");
+
+  showBrandStrategyModal();
+
+  const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
+  const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id;
+
+  // Check if userID exists
+  if (!userID) {
+    console.error("No userID found in local storage.");
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/generateBrandStrategy', {
+      method: 'POST', // or 'GET', depending on your API
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        interviewID: interviewID,
+        userID: userID
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // process the data as needed here
+    console.log(data);
+
+
+    // display the strategy
+    // displayStrategy(analyses)
+
+
+	document.getElementById("brand-strategy").style.minHeight = "auto";
+
+
+
+	hideBrandStrategyModal();
+
+    // Return the positioning data for use in other parts of your code
+    //return data.positioning;
+
+  	} catch (error) {
+    console.error('There was a problem with the request:', error);
+  }
+}
+
+
+
 
 // 5.2. display strategy
 function displayStrategy(positioning) {
@@ -2189,9 +2292,9 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 	    await getInterviewQuestions();
 	// Update question text with brand name from local storage
 	    updateQuestionText();
-	
-	
-	
+
+
+
 	    // Get userProfile from localStorage
 	    let userProfile = window.localStorage.getItem('userProfile');
 	    userProfile = JSON.parse(userProfile); // parse string back into an object
@@ -2205,11 +2308,11 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 	    profileElements.forEach(profileElement => {
 	      profileElement.textContent = initials;
 	    });
-	
-	
-	
-	
-	
+
+
+
+
+
 	  }
 	})();
 
@@ -2221,6 +2324,17 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
+	document.getElementById('recreateBrandAnalysis').addEventListener('click', function() {
+
+
+	    // get the interviewID from the local storage
+	    const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
+	    const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null;
+
+	  	regenerateBrandStrategy(interviewID);
+	});
+
+
 	document.getElementById("PrintHTML").addEventListener("click", function(event){
 	    event.preventDefault();  // Prevent the default link click action
 	    window.print();  // Call the browser print function
@@ -2229,10 +2343,10 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
   document.getElementById("SubmitInterview").addEventListener("click", function(event){
-   
+
 	submitInterview();
-    
-	
+
+
     // call getStrategy() function
     strategyState();
   });
@@ -2241,7 +2355,7 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
   document.getElementById("welcomeShowStrategy").addEventListener("click", function(event){
 
-   
+
     // call getStrategy() function
     strategyState();
   });
@@ -2255,7 +2369,7 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
     // get the interviewID from the local storage
     const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
     const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null;
-	
+
 
     // if interviewID doesn't exist, don't proceed
     if(!interviewID) {
@@ -2401,7 +2515,7 @@ function showPositioningModal() {
   const modal = document.getElementById('generatePositioningModal');
   modal.style.display = 'block';
 
-  var timeLeft = 92;  // 1 minute 32 seconds is equal to 92 seconds
+  var timeLeft = 92;  // seconds
   var timer = setInterval(positioningCountdown, 1000); // call countdown function every second
 
   function positioningCountdown() {
@@ -2428,6 +2542,24 @@ function hidePositioningModal() {
 function showBrandStrategyModal() {
   const modal = document.getElementById('generateBrandStrategyModal');
   modal.style.display = 'block';
+
+  var timeLeft = 129;  //  seconds
+  var timer = setInterval(brandCountdown, 1000); // call countdown function every second
+
+  function brandCountdown() {
+    if (timeLeft <= 0) {
+      clearTimeout(timer);
+      // Time's up. Handle as needed.
+      document.getElementById('brandCountdowntimer').innerHTML = " 0 minutes, 0 seconds! 🧐 Whoops! Should be any second now..  ";
+    } else {
+      var minutes = Math.floor(timeLeft / 60);
+      var seconds = timeLeft % 60;
+      document.getElementById('brandCountdowntimer').innerHTML = minutes + " minutes, " + seconds + " seconds";
+      timeLeft--;
+    }
+  }
+
+
 }
 // Hide modal function
 function hideBrandStrategyModal() {
