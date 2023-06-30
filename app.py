@@ -28,11 +28,10 @@ import traceback
 # Instantiate your Supabase client
 url: str = 'https://wogivjshqopegucducyz.supabase.co'
 key: str = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvZ2l2anNocW9wZWd1Y2R1Y3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NzU4MzQsImV4cCI6MTk5NDA1MTgzNH0.zj-QBJknPolKZ6TZ_t3r7aPXbhVB1bf9mmoNBBif9OM'
-supabase: Client = create_client(url, key)
+supabase = create_client(url, key)
 
 # Set OpenAI API key
-os.environ["OPENAI_API_KEY"] = "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"
-
+api_key = os.environ.get("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
@@ -195,9 +194,9 @@ def followup():
     return jsonify({"followupQuestion": followup_question, "questionId": question_id})
 
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
-openaikey="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"
+openaikey = os.getenv("OPENAI_API_KEY")
 
 chat_GPT35_10_16k_functions = ChatOpenAI(temperature=1.0, model_name="gpt-3.5-turbo-16k-0613", openai_api_key=openaikey)
 chat_GPT35_07_16k_functions = ChatOpenAI(temperature=0.7, model_name="gpt-3.5-turbo-16k-0613", openai_api_key=openaikey)

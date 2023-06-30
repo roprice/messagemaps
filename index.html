@@ -1122,7 +1122,7 @@
 
 							</div><!--/positioning-strategy-section -->
 
-							<div id="brand-analysis-section" style="position:relative;min-height:500px">
+							<div id="brand-analysis-section" style="position:relative;min-height:500px;opacity:.5">
 
 								<h6 class="brand-strategy-item title">Step 2: Confirm Remaining Brand Analysis</h6>
 
@@ -1136,8 +1136,9 @@
 								<div class="brand-strategy-item form-label "><span class="brand-strategy brand-name"
 									x-text="$store.interviewData.brandName" ></span> Brand Analysis</div>
 
-								<div disabled=disabled class="brand-strategy-item control-buttons">
+								<div class="brand-strategy-item control-buttons">
 									<button
+										disabled=disabled
 										id="confirmBrandAnalysis"
 										class="btn btn-primary control-btn strategy-button"
 										type="button"
@@ -1160,7 +1161,7 @@
 								<div id="brand-strategy-wrapper" style="position:relative">
 								<!-- alpine template loop -->
 									<div id="brand-strategy" class="textarea llm-results brand-strategy  editable"
-										contenteditable="true" style="min-height:200px" >
+										contenteditable="true" style="min-height:300px" >
 									</div><!--/brand-strategy -->
 
 								<!-- /alpine template loop -->
@@ -1190,11 +1191,11 @@
 
 
 
-							<div id="completion-section">
+							<div id="completion-section" style="position:relative;opacity:.5">
 								<h6 class="brand-strategy-item title">Step 3: Complete and Confirm Brand Strategy</h6>
 								<p>Confirm both that your positioning strategy and other aspects of your brand strategy is accurate. This is important as it will be used to help you quickly intelligent sales and marketing assets.
 									<br><br>
-								<button
+								<button disabled=disabled
 									id="recreateBrandAnalysis"
 									class="btn btn-primary btn strategy-button" type="button"
 									x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">Approve brand strategy
