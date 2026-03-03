@@ -69,24 +69,28 @@
 // Alpine.js state management
 document.addEventListener('alpine:init', function() {
   console.log('Alpine.js has been initialized');
+    const hasSupabaseToken = !!localStorage.getItem('supabase.auth.token');
     Alpine.store('authenticationStatus', {
 
-      current: 'loggedOut',
+      current: hasSupabaseToken ? 'loggedIn' : 'loggedIn',
       items: ['loggedIn', 'loggedOut'],
+      mode: hasSupabaseToken ? 'account' : 'guest',
       updateAuthStatus: function () {
-        //console.log('updateAuthStatus called');
+        // Free mode default: everyone can use the app, accounts are optional.
         if (localStorage.getItem('supabase.auth.token')) {
           this.current = 'loggedIn';
-
+          this.mode = 'account';
         } else {
-          this.current = 'loggedOut';
+          this.current = 'loggedIn';
+          this.mode = 'guest';
+          if (!localStorage.getItem('currentScreen')) {
+            localStorage.setItem('currentScreen', 'interviews');
+          }
         }
       },
     });
 
-    if (localStorage.getItem('supabase.auth.token')) {
-      Alpine.store('authenticationStatus').current = 'loggedIn';
-    }
+    Alpine.store('authenticationStatus').updateAuthStatus();
 
 
 	// Define the Alpine store
@@ -134,7 +138,7 @@ document.addEventListener('alpine:init', function() {
 	})
 
 	Alpine.store('currentScreen', new Proxy({
-	  current: localStorage.getItem('currentScreen') || 'maps',
+	  current: localStorage.getItem('currentScreen') || 'interviews',
 	  items: [
 	    ['account', 'your account'],
 	    ['settings', 'settings'],
@@ -265,10 +269,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	  // Check if the user is logged in
 	  if (session) {
 	    Alpine.store('authenticationStatus').current = 'loggedIn';
+	    Alpine.store('authenticationStatus').mode = 'account';
 	    // The token is automatically stored by Supabase client, no need to manually store it
 	  } else {
-	    Alpine.store('authenticationStatus').current = 'loggedOut';
-	    // Token is automatically removed by Supabase client when the session ends, no need to manually remove it
+	    Alpine.store('authenticationStatus').startGuestMode();
 	  }
 	});
 });
@@ -824,8 +828,11 @@ async function saveAnswer(interviewId, questionId, answer, userId) {
 
 	const currentDate = new Date();
 
-    if (!interviewId) {
-      throw new Error('Invalid interviewId');
+    if (!interviewId || !userId) {
+      const guestAnswers = JSON.parse(window.localStorage.getItem('guestAnswers') || '{}');
+      guestAnswers[questionId] = answer;
+      window.localStorage.setItem('guestAnswers', JSON.stringify(guestAnswers));
+      return;
     }
     try {
       const { data, error } = await supabase
@@ -989,8 +996,8 @@ const autoSave = debounce(
 }
 
 async function saveFollowupAnswer(interviewId, questionId, followupQuestion, followupAnswer, userId) {
-  if (!interviewId) {
-    throw new Error('Invalid interviewId');
+  if (!interviewId || !userId) {
+    return;
   }
   try {
     const { data: existingData, error: existingError } = await supabase
@@ -1098,6 +1105,10 @@ const autoSaveFollowupAnswer = debounce(
 async function followupExists(questionId) {
   const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
   const interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
+
+  if (!userProfile || !interviewData) {
+    return [];
+  }
 
   const userId = userProfile.user_id;
   const interviewId = interviewData.interviewID;
@@ -2285,13 +2296,13 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 	(async function() {
 	  const session = supabase.auth.session();
 	  const user = session ? session.user : null;
+
+	  // Everyone can start the interview immediately.
+	  await getInterviewQuestions();
+	  updateQuestionText();
+
 	  if (user) {
-	    // if the user is already authenticated, load their data
 	    await getUserData(user.id);
-	    // load the questions for the interview form
-	    await getInterviewQuestions();
-	// Update question text with brand name from local storage
-	    updateQuestionText();
 
 
 
@@ -2387,6 +2398,22 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
+
+  var goToLoginButtons = document.querySelectorAll('.go-to-login');
+  goToLoginButtons.forEach(function (button) {
+    button.addEventListener('click', function (event) {
+      event.preventDefault();
+      Alpine.store('authenticationStatus').showAuthPage('signin');
+    });
+  });
+
+  var continueGuestButtons = document.querySelectorAll('.continue-as-guest');
+  continueGuestButtons.forEach(function (button) {
+    button.addEventListener('click', function (event) {
+      event.preventDefault();
+      Alpine.store('authenticationStatus').startGuestMode();
+    });
+  });
 
   // user signs up
   var signUpForm = document.querySelector('#signup');

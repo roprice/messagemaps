@@ -50,7 +50,7 @@
 
       <div class="col col-md-4  my-5">
 
-        <main class="signin-signup forms m-auto"  x-data="{ formToShow: 'signup' }" x-init="formToShow = 'signup'">
+        <main class="signin-signup forms m-auto"  x-data="{ formToShow: 'signup' }" x-init="formToShow = window.localStorage.getItem('preferredAuthForm') || 'signup'; window.localStorage.removeItem('preferredAuthForm')">
 
           <div class="logo my-3 mb-4 middle text-center">
             <a href="#" class="mx-auto mb-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
@@ -146,6 +146,11 @@
           </form>
 
         </div><!-- /signin-form -->
+
+        <div class="text-center mt-2">
+          <p class="text-small text-secondary mb-2">Accounts are optional. Sign in only if you want to save your work.</p>
+          <a href="#" class="text-decoration-none continue-as-guest">Continue without an account</a>
+        </div>
       </main>
       </div>
 
@@ -483,9 +488,13 @@
 				</div><!-- /#MapView -->
 
 				<!-- #InterviewView -->
-			 	<div id="InterviewView" x-show="Alpine.store('currentScreen').current === 'interviews' && window.localStorage.getItem('userProfile')" x-transition:enter.duration.600ms="" style="display: none;">
+			 	<div id="InterviewView" x-show="Alpine.store('currentScreen').current === 'interviews'" x-transition:enter.duration.600ms="" style="display: none;">
 					<!-- .interview-form-info -->
 					<div class="row interview-form-info">
+						<div class="alert alert-info mb-0 mt-4 mx-2" x-show="!window.localStorage.getItem('userProfile')">
+							<strong>Guest mode:</strong> you're using Message Maps for free.
+							<a href="#" class="go-to-login">Sign in</a> or <a href="#" x-on:click.prevent="Alpine.store('authenticationStatus').showAuthPage('signup')">create an account</a> to save your work.
+						</div>
 						<!-- .interview-form-card -->
 						<div  class="interview-form-card card shadow my-4 left-column">
 							<!-- .the-interview-card -->
