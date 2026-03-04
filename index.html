@@ -8,7 +8,8 @@
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
 	<!-- Google Material Icons -->
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,8 +18,12 @@
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+		integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+		integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+		crossorigin="anonymous"></script>
 
 
 
@@ -33,477 +38,601 @@
 
 	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1"></script>
 
-	<script src="files/script.js" ></script>
+	<script src="files/script.js"></script>
 
-	<style>[x-cloak] { display: none !important; }</style>
+	<style>
+		[x-cloak] {
+			display: none !important;
+		}
+	</style>
 
 
 </head>
 
 <body id="light" x-data x-bind:class="bodyClasses()">
 
-<!-- Logged Out States -->
-<div id="Logged_Out_States" x-cloak  x-show="Alpine.store('authenticationStatus').current === 'loggedOut'" x-transition:enter.duration.500ms>
-  <!-- authentication and welcome -->
-  <div  class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'login'" x-transition>
-    <div class="row no-gutters h-100 align-items-center login-inner">
+	<!-- Logged Out States -->
+	<div id="Logged_Out_States" x-cloak x-show="Alpine.store('authenticationStatus').current === 'loggedOut'"
+		x-transition:enter.duration.500ms>
+		<!-- authentication and welcome -->
+		<div class="container-fluid m-0 p-0 vw-100 vh-100" x-show="Alpine.store('currentPage').current === 'login'"
+			x-transition>
+			<div class="row no-gutters h-100 align-items-center login-inner">
 
-      <div class="col col-md-4  my-5">
+				<div class="col col-md-4  my-5">
 
-        <main class="signin-signup forms m-auto"  x-data="{ formToShow: 'signup' }" x-init="formToShow = window.localStorage.getItem('preferredAuthForm') || 'signup'; window.localStorage.removeItem('preferredAuthForm')">
+					<main class="signin-signup forms m-auto" x-data="{ formToShow: 'signup' }"
+						x-init="formToShow = window.localStorage.getItem('preferredAuthForm') || 'signup'; window.localStorage.removeItem('preferredAuthForm')">
 
-          <div class="logo my-3 mb-4 middle text-center">
-            <a href="#" class="mx-auto mb-2 d-block  text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
-              <img class="mb-2" src="files/logo-80x80.png" alt="" width="80" height="80">
-            </a>
-            <div class="brand-name h3">MESSAGE <span class="brand-name-maps">MAPS</span></div>
-          </div>
+						<div class="logo my-3 mb-4 middle text-center">
+							<a href="#" class="mx-auto mb-2 d-block  text-dark text-decoration-none"
+								x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+								<img class="mb-2" src="files/logo-80x80.png" alt="" width="80" height="80">
+							</a>
+							<div class="brand-name h3">MESSAGE <span class="brand-name-maps">MAPS</span></div>
+						</div>
 
-          <ul class="nav nav-pills my-2 mb-3 " id="SigninSignUp">
-            <li class="nav-item signin-pill">
-              <a href="#" class="nav-link text-small active" x-on:click.prevent="formToShow = 'signup'" :class="{ 'active': formToShow === 'signup' }">Sign up</a>
-            </li>
-            <li class="nav-item signup-pill">
-              <a href="#" class="nav-link text-small" x-on:click.prevent="formToShow = 'signin'" :class="{ 'active': formToShow === 'signin' }">Sign in</a>
-            </li>
-          </ul>
+						<ul class="nav nav-pills my-2 mb-3 " id="SigninSignUp">
+							<li class="nav-item signin-pill">
+								<a href="#" class="nav-link text-small active"
+									x-on:click.prevent="formToShow = 'signup'"
+									:class="{ 'active': formToShow === 'signup' }">Sign up</a>
+							</li>
+							<li class="nav-item signup-pill">
+								<a href="#" class="nav-link text-small" x-on:click.prevent="formToShow = 'signin'"
+									:class="{ 'active': formToShow === 'signin' }">Sign in</a>
+							</li>
+						</ul>
 
-          <!-- signup-form -->
-          <div class="signup-form section"
-            x-show="formToShow === 'signup'"
-            x-transition:enter.delay.100ms
-            x-transition:enter.duration.100ms>
+						<!-- signup-form -->
+						<div class="signup-form section" x-show="formToShow === 'signup'" x-transition:enter.delay.100ms
+							x-transition:enter.duration.100ms>
 
-            <form  id="signup" action="#" method="POST"  style="text-align:left;">
+							<form id="signup" action="#" method="POST" style="text-align:left;">
 
-              <div class="mb-3">
-                <label for="fullName" class="form-label">Name</label>
-                <input autocomplete="given-name" placeholder="enter your name.." type="text" class="form-control text-small" id="fullName" name="fullName" minlength="0">
-              </div>
+								<div class="mb-3">
+									<label for="fullName" class="form-label">Name</label>
+									<input autocomplete="given-name" placeholder="enter your name.." type="text"
+										class="form-control text-small" id="fullName" name="fullName" minlength="0">
+								</div>
 
-              <div class="mb-3">
-                <label for="signup-email" class="form-label">Email address</label>
-                <input autocomplete="email" placeholder="email.." type="email" class="form-control text-small" id="signup-email" name="email" aria-describedby="emailHelp" required>
-              </div>
-              <div class="mb-3">
-                <label for="signup-password" class="form-label">Password</label>
-                <input  autocomplete="new-password" placeholder="password.." type="password" class="form-control text-small" id="signup-password" name="password" minlength="8" required>
-              </div>
-              <div class="mb-3">
-                <label for="invite-code" class="form-label">Invite code</label>
-                <input placeholder="invite code.." type="text" class="form-control text-small" id="invite-code" name="invite-code" >
-              </div>
-              <div class="mt-2">
-                <p  class="text-secondary text-small">Message Maps is in pre-alpha and requires an invite - <a href="mailto:rowan@messagemaps.io&Subject=Invite!">forgot yours?</a></p>
-              </div>
-              <div class="mt-2">
-                <button type="submit" :disabled="Alpine.store('formStatus').submitButtonDisabled">Submit</button>
-              </div>
+								<div class="mb-3">
+									<label for="signup-email" class="form-label">Email address</label>
+									<input autocomplete="email" placeholder="email.." type="email"
+										class="form-control text-small" id="signup-email" name="email"
+										aria-describedby="emailHelp" required>
+								</div>
+								<div class="mb-3">
+									<label for="signup-password" class="form-label">Password</label>
+									<input autocomplete="new-password" placeholder="password.." type="password"
+										class="form-control text-small" id="signup-password" name="password"
+										minlength="8" required>
+								</div>
+								<div class="mb-3">
+									<label for="invite-code" class="form-label">Invite code</label>
+									<input placeholder="invite code.." type="text" class="form-control text-small"
+										id="invite-code" name="invite-code">
+								</div>
+								<div class="mt-2">
+									<p class="text-secondary text-small">Message Maps is in pre-alpha and requires an
+										invite - <a href="mailto:rowan@messagemaps.io&Subject=Invite!">forgot yours?</a>
+									</p>
+								</div>
+								<div class="mt-2">
+									<button type="submit"
+										:disabled="Alpine.store('formStatus').submitButtonDisabled">Submit</button>
+								</div>
 
-              <div x-cloak>
-                <div class="alert alert-danger rounded-3 mt-2 p-2 align-items-center" style="text-align:center;" x-show="Alpine.store('formStatus').errorMessage">
-                  <div class="d-flex"><span class='material-symbols-outlined me-1'>error</span><span x-text="Alpine.store('formStatus').errorMessage"></span></div>
-                </div>
+								<div x-cloak>
+									<div class="alert alert-danger rounded-3 mt-2 p-2 align-items-center"
+										style="text-align:center;" x-show="Alpine.store('formStatus').errorMessage">
+										<div class="d-flex"><span
+												class='material-symbols-outlined me-1'>error</span><span
+												x-text="Alpine.store('formStatus').errorMessage"></span></div>
+									</div>
 
-                <div x-cloak x-show="Alpine.store('formStatus').successMessage" class="alert alert-success  rounded-3 mt-2 p-2 align-items-center" x-transition:enter.duration.50ms>
-                  <div class="d-flex"><span class='material-symbols-outlined me-1'>check_circle</span><span x-text="Alpine.store('formStatus').successMessage"></span></div>
-                </div>
-              </div>
-            </form>
-          </div><!-- /signup-form -->
+									<div x-cloak x-show="Alpine.store('formStatus').successMessage"
+										class="alert alert-success  rounded-3 mt-2 p-2 align-items-center"
+										x-transition:enter.duration.50ms>
+										<div class="d-flex"><span
+												class='material-symbols-outlined me-1'>check_circle</span><span
+												x-text="Alpine.store('formStatus').successMessage"></span></div>
+									</div>
+								</div>
+							</form>
+						</div><!-- /signup-form -->
 
-        <!-- signin-form -->
-        <div  class="signin-form section"
-        x-show="formToShow === 'signin'"
-        x-transition:enter.delay.100ms
-        x-transition:enter.duration.100ms>
+						<!-- signin-form -->
+						<div class="signin-form section" x-show="formToShow === 'signin'" x-transition:enter.delay.100ms
+							x-transition:enter.duration.100ms>
 
-          <form id="signin" action="#" method="POST" style="text-align:left;">
+							<form id="signin" action="#" method="POST" style="text-align:left;">
 
-            <div class="mb-3">
-              <label for="login-email" class="form-label">Email address</label>
-              <input autocomplete="username" type="email"  placeholder="Enter email.." class="form-control text-secondary text-small" id="login-email" name="email" aria-describedby="emailHelp" required>
-            </div>
-            <div class="mb-1">
-              <label for="login-password" class="form-label">Password</label>
-              <input autocomplete="current-password" type="password"  placeholder="Enter password.." class="form-control text-secondary text-small" id="login-password" name="password" required>
-            </div>
-            <div class="mt-1">
-              <p  class="text-secondary text-small">Forgot password? <a href="#" class="text-decoration-none">Reset it here</a> or get a <a href="#" class="text-decoration-none">magic link</a></p>
-            </div>
-            <div class="mt-2">
-              <button type="submit" :disabled="Alpine.store('formStatus').submitButtonDisabled">Login</button>
-            </div>
+								<div class="mb-3">
+									<label for="login-email" class="form-label">Email address</label>
+									<input autocomplete="username" type="email" placeholder="Enter email.."
+										class="form-control text-secondary text-small" id="login-email" name="email"
+										aria-describedby="emailHelp" required>
+								</div>
+								<div class="mb-1">
+									<label for="login-password" class="form-label">Password</label>
+									<input autocomplete="current-password" type="password"
+										placeholder="Enter password.." class="form-control text-secondary text-small"
+										id="login-password" name="password" required>
+								</div>
+								<div class="mt-1">
+									<p class="text-secondary text-small">Forgot password? <a href="#"
+											class="text-decoration-none">Reset it here</a> or get a <a href="#"
+											class="text-decoration-none">magic link</a></p>
+								</div>
+								<div class="mt-2">
+									<button type="submit"
+										:disabled="Alpine.store('formStatus').submitButtonDisabled">Login</button>
+								</div>
 
-            <div x-cloak>
-              <div class="alert alert-danger rounded-3 mt-2 p-2 align-items-center " style="text-align:center;" x-show="Alpine.store('formStatus').errorMessage">
-                <div class="d-flex text-small"><span class='material-symbols-outlined me-1'>error</span><span x-text="Alpine.store('formStatus').errorMessage"></span></div>
-              </div>
-              <div x-cloak x-show="Alpine.store('formStatus').successMessage" class="alert alert-success  rounded-3 mt-2 p-2 align-items-center" x-transition:enter.duration.50ms>
-                <div class="d-flex text-small"><span class='material-symbols-outlined me-1'>done</span><span x-text="Alpine.store('formStatus').successMessage"></span></div>
-              </div>
-            </div>
-          </form>
+								<div x-cloak>
+									<div class="alert alert-danger rounded-3 mt-2 p-2 align-items-center "
+										style="text-align:center;" x-show="Alpine.store('formStatus').errorMessage">
+										<div class="d-flex text-small"><span
+												class='material-symbols-outlined me-1'>error</span><span
+												x-text="Alpine.store('formStatus').errorMessage"></span></div>
+									</div>
+									<div x-cloak x-show="Alpine.store('formStatus').successMessage"
+										class="alert alert-success  rounded-3 mt-2 p-2 align-items-center"
+										x-transition:enter.duration.50ms>
+										<div class="d-flex text-small"><span
+												class='material-symbols-outlined me-1'>done</span><span
+												x-text="Alpine.store('formStatus').successMessage"></span></div>
+									</div>
+								</div>
+							</form>
 
-        </div><!-- /signin-form -->
+						</div><!-- /signin-form -->
 
-        <div class="text-center mt-2">
-          <p class="text-small text-secondary mb-2">Accounts are optional. Sign in only if you want to save your work.</p>
-          <a href="#" class="text-decoration-none continue-as-guest">Continue without an account</a>
-        </div>
-      </main>
-      </div>
+						<div class="text-center mt-2">
+							<p class="text-small text-secondary mb-2">Accounts are optional. Sign in only if you want to
+								save your work.</p>
+							<a href="#" class="text-decoration-none continue-as-guest">Continue without an account</a>
+						</div>
+					</main>
+				</div>
 
-		<div  class="col-md-8 m-0 p-0 vh-100 d-flex align-items-center justify-content-center" style="position:relative">
-
-
-			<div class="background-div-home"></div>
-
-			<h2 class="statement" style="position:absolute"  x-data="{ show: false }" x-init="() => { show = true;  }" x-show="show" x-transition:enter="duration.1000ms">
-			    <p>Discover the right strategy</p>
-			    <p>Get the message perfect</p>
-			    <p><b>Make selling simple</b></p>
-				<div class="public-positioning-strategy">
-					<p>Message Maps lets technology firms make cohesive decisions on positioning strategy, sales messaging, and marketing - with unprecedented speed, affordability, and precision</p>
-					<p>Our <em>"done-in-2-hours brand strategy"</em> analysis dramatically outperforms similar services from consulting firms and digital agencies - let alone AI writing & scraping tools.</p>
-
-					<ul class="home-bullets">
-						<li>Instantly revise/personalize your sales and marketing, as opportunities arise</li>
-
-						<li>Use AI-enhanced discovery and strategic analysis to think and act strategically</li>
-
-						<li>Get rapid-delivery strategy and messaging consulting available as needed</li>
-					</ul>
-
-
-				  <p>	<a href="https://calendly.com/messagemaps/demo" target=blank>Book a demo</a></p>
-				</div><!--/public-positioning-strategy -->
-			</h2>
-
-
-
-		</div>
-
-
-  </div>
-  </div><!-- /CurrentPage.login -->
-</div>
-<!--  /#Logged_Out_States -->
-
-<!-- #Logged_In_States -->
-<div class="" id="Logged_In_States"  x-cloak x-show="Alpine.store('authenticationStatus').current === 'loggedIn'"  x-transition:enter.duration.1000ms
+				<div class="col-md-8 m-0 p-0 vh-100 d-flex align-items-center justify-content-center"
+					style="position:relative">
 
 
- x-data="{
+					<div class="background-div-home"></div>
+
+					<h2 class="statement" style="position:absolute" x-data="{ show: false }"
+						x-init="() => { show = true;  }" x-show="show" x-transition:enter="duration.1000ms">
+						<p>Discover the right strategy</p>
+						<p>Get the message perfect</p>
+						<p><b>Make selling simple</b></p>
+						<div class="public-positioning-strategy">
+							<p>Message Maps lets technology firms make cohesive decisions on positioning strategy, sales
+								messaging, and marketing - with unprecedented speed, affordability, and precision</p>
+							<p>Our <em>"done-in-2-hours brand strategy"</em> analysis dramatically outperforms similar
+								services from consulting firms and digital agencies - let alone AI writing & scraping
+								tools.</p>
+
+							<ul class="home-bullets">
+								<li>Instantly revise/personalize your sales and marketing, as opportunities arise</li>
+
+								<li>Use AI-enhanced discovery and strategic analysis to think and act strategically</li>
+
+								<li>Get rapid-delivery strategy and messaging consulting available as needed</li>
+							</ul>
+
+
+							<p> <a href="https://calendly.com/messagemaps/demo" target=blank>Book a demo</a></p>
+						</div><!--/public-positioning-strategy -->
+					</h2>
+
+
+
+				</div>
+
+
+			</div>
+		</div><!-- /CurrentPage.login -->
+	</div>
+	<!--  /#Logged_Out_States -->
+
+	<!-- #Logged_In_States -->
+	<div class="" id="Logged_In_States" x-cloak x-show="Alpine.store('authenticationStatus').current === 'loggedIn'"
+		x-transition:enter.duration.1000ms x-data="{
         interviewSubmitted: JSON.parse(window.localStorage.getItem('interviewData'))?.submitted || false,
         strategyApproved: JSON.parse(window.localStorage.getItem('brand_strategies'))?.approved || false
     }">
 
-	<!-- #Body -->
-	<div id="Body" class="container-fluid px-0">
-    <div class="row body-inner">
+		<!-- #Body -->
+		<div id="Body" class="container-fluid px-0">
+			<div class="row body-inner">
 
-		<!-- #CollapsedSidebar -->
-		<div id="CollapsedSidebar" class="collapsed-sidebar border-end"
-		x-show="Alpine.store('sidebarStatus').current === 'collapsed'"
-		x-transition:enter.duration.100ms>
-			<!-- .sidenav-wrapper -->
-			<div class="sidenav-wrapper sticky-element">
+				<!-- #CollapsedSidebar -->
+				<div id="CollapsedSidebar" class="collapsed-sidebar border-end"
+					x-show="Alpine.store('sidebarStatus').current === 'collapsed'" x-transition:enter.duration.100ms>
+					<!-- .sidenav-wrapper -->
+					<div class="sidenav-wrapper sticky-element">
 
-				<div class="position-relative m-0 sidebar-toggle-icon">
-					<a href="" class="text-secondary collapseSidebar text-small position-absolute top-0 end-0 border-small d-flex align-items-center"
-					 x-on:click.prevent="Alpine.store('sidebarStatus').toggle()">
-					<span class="material-symbols-outlined p-0 small ">arrow_circle_right</span>
-					</a>
-				</div>
-				<div class="logo middle">
-					<a href="#message-map" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
-					<img class="mb-auto" src="files/logo-40x40.png" alt="" width="40" height="40">
-					</a>
-				</div>
-			  <ul class="nav sidebar-nav flex-column mb-auto  d-flex justify-content-center">
-				  <div class="nav-divider"></div>
-			    <li class="my-2 text-center maps"  title="Message Map - Help/Support">
-			      <a class="navlink linkdark" href="#message-map" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
-			        <span class="material-symbols-outlined medium">map</span>
-			      </a>
-			    </li>
-			    <li class="my-2 text-center interviews child"  title="Discovery Interview">
-			      <a class="navlink linkdark " href="#discovery-interview" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
-			        <span class="material-symbols-outlined medium">auto_detect_voice</span>
-			      </a>
-			    </li>
-				<li class="my-2 strategy child" title="Brand Strategy"
-					:class="{ 'disabled': !interviewSubmitted }" >
-				  <a class=" navlink linkdark" href="#strategic-messaging" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; "
-				  	:class="{ 'disabled': !interviewSubmitted }" >
-				    <span class="material-symbols-outlined medium">settings_suggest</span></a>
-				</li>
-			    <li class="my-2 text-center assets child disabled"  title="Messages that Sell">
-			      <a class="disabled navlink linkdark  " href="#sales-and-marketing-assets" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'">
-			        <span class="material-symbols-outlined medium">insights</span>
-			      </a>
-			    </li>
-				<div class="nav-divider"></div>
-			    <li class="my-2 text-center new-map"  title="Get a new Message Map">
-			      <a class="disabled navlink linkdark " href="#get-message-map" x-on:click.prevent="">
-			        <span class="material-symbols-outlined medium">add</span>&nbsp;
-			      </a>
-			    </li>
-			  </ul>
-			</div>
-		</div><!-- end of #CollapsedSidebar -->
+						<div class="position-relative m-0 sidebar-toggle-icon">
+							<a href=""
+								class="text-secondary collapseSidebar text-small position-absolute top-0 end-0 border-small d-flex align-items-center"
+								x-on:click.prevent="Alpine.store('sidebarStatus').toggle()">
+								<span class="material-symbols-outlined p-0 small ">arrow_circle_right</span>
+							</a>
+						</div>
+						<div class="logo middle">
+							<a href="#message-map" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none"
+								x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+								<img class="mb-auto" src="files/logo-40x40.png" alt="" width="40" height="40">
+							</a>
+						</div>
+						<ul class="nav sidebar-nav flex-column mb-auto  d-flex justify-content-center">
+							<div class="nav-divider"></div>
+							<li class="my-2 text-center maps" title="Message Map - Help/Support">
+								<a class="navlink linkdark" href="#message-map"
+									x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+									<span class="material-symbols-outlined medium">map</span>
+								</a>
+							</li>
+							<li class="my-2 text-center interviews child" title="Discovery Interview">
+								<a class="navlink linkdark " href="#discovery-interview"
+									x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
+									<span class="material-symbols-outlined medium">auto_detect_voice</span>
+								</a>
+							</li>
+							<li class="my-2 strategy child" title="Brand Strategy"
+								:class="{ 'disabled': !interviewSubmitted }">
+								<a class=" navlink linkdark" href="#strategic-messaging"
+									x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; "
+									:class="{ 'disabled': !interviewSubmitted }">
+									<span class="material-symbols-outlined medium">settings_suggest</span></a>
+							</li>
+							<li class="my-2 text-center assets child disabled" title="Messages that Sell">
+								<a class="disabled navlink linkdark  " href="#sales-and-marketing-assets"
+									x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'">
+									<span class="material-symbols-outlined medium">insights</span>
+								</a>
+							</li>
+							<div class="nav-divider"></div>
+							<li class="my-2 text-center new-map" title="Get a new Message Map">
+								<a class="disabled navlink linkdark " href="#get-message-map" x-on:click.prevent="">
+									<span class="material-symbols-outlined medium">add</span>&nbsp;
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div><!-- end of #CollapsedSidebar -->
 
-		<!-- ExpandedSidebar -->
-		<div id="ExpandedSidebar" class="expanded-sidebar border-end"
-			x-show="Alpine.store('sidebarStatus').current === 'expanded'"
-			x-transition:enter.duration.150ms>
-			<!-- .sidenav-wrapper -->
-			<div class="sidenav-wrapper sticky-element">
-				<div class="position-relative m-0 sidebar-toggle-icon">
-					<a href="" class="text-secondary collapseSidebar text-small position-absolute top-0 end-0 border-small d-flex align-items-center"
-					 x-on:click.prevent="Alpine.store('sidebarStatus').toggle()">
-					<span class="material-symbols-outlined p-0 small ">arrow_circle_left</span>
-					</a>
-				</div>
-				<div class="logo middle">
-					<a href="#message-map" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
-					<img class="mb-auto" src="files/logo-40x40.png" alt="" width="40" height="40">
-					</a>
-				</div>
+				<!-- ExpandedSidebar -->
+				<div id="ExpandedSidebar" class="expanded-sidebar border-end"
+					x-show="Alpine.store('sidebarStatus').current === 'expanded'" x-transition:enter.duration.150ms>
+					<!-- .sidenav-wrapper -->
+					<div class="sidenav-wrapper sticky-element">
+						<div class="position-relative m-0 sidebar-toggle-icon">
+							<a href=""
+								class="text-secondary collapseSidebar text-small position-absolute top-0 end-0 border-small d-flex align-items-center"
+								x-on:click.prevent="Alpine.store('sidebarStatus').toggle()">
+								<span class="material-symbols-outlined p-0 small ">arrow_circle_left</span>
+							</a>
+						</div>
+						<div class="logo middle">
+							<a href="#message-map" class="mx-auto d-block mb-lg-0 text-dark text-decoration-none"
+								x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'">
+								<img class="mb-auto" src="files/logo-40x40.png" alt="" width="40" height="40">
+							</a>
+						</div>
 
-				<ul class="nav sidebar-nav nav-pills flex-column mb-auto pt-2 pb-2">
+						<ul class="nav sidebar-nav nav-pills flex-column mb-auto pt-2 pb-2">
 
-					<div class="nav-divider"></div>
+							<div class="nav-divider"></div>
 
-				<li class="my-2 maps"  title="Message Map - Help/Support">
-				  <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#message-map" x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'; ">
-				    <span class="material-symbols-outlined medium me-2">map</span>
-  <span x-html="Alpine.store('interviewData').brandName ? '<strong>' + Alpine.store('interviewData').brandName + '</strong> Message Map' : 'Your Message Map'">Your Message Map</span>
+							<li class="my-2 maps" title="Message Map - Help/Support">
+								<a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#message-map"
+									x-on:click.prevent="Alpine.store('currentScreen').current = 'maps'; ">
+									<span class="material-symbols-outlined medium me-2">map</span>
+									<span
+										x-html="Alpine.store('interviewData').brandName ? '<strong>' + Alpine.store('interviewData').brandName + '</strong> Message Map' : 'Your Message Map'">Your
+										Message Map</span>
 
-				  </a>
-				</li>
-				<li class="my-2 interviews child"  title="Discovery Interview">
-				  <a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#discovery-interview" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; ">
-				    <span class="material-symbols-outlined medium me-2">auto_detect_voice</span>Discovery Interview</a>
-				</li>
-				<li class="my-2 strategy child" title="Brand Strategy"
-					:class="{ 'disabled': !interviewSubmitted }" >
-				  <a class=" navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#strategic-messaging" x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; "
-				  	:class="{ 'disabled': !interviewSubmitted }" >
-				    <span class="material-symbols-outlined medium me-2">settings_suggest</span>Brand Strategy</a>
-				</li>
-				<li class="my-2 assets child disabled" title="Messages that Sell">
-				  <a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center" href="#sales-and-marketing-assets" x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'; " >
-				    <span class="material-symbols-outlined medium me-2">insights</span>Messages that Sell</a>
-				</li>
+								</a>
+							</li>
+							<li class="my-2 interviews child" title="Discovery Interview">
+								<a class="navlink linkdark p-2 px-3 my-2 d-flex align-items-center"
+									href="#discovery-interview"
+									x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; ">
+									<span
+										class="material-symbols-outlined medium me-2">auto_detect_voice</span>Discovery
+									Interview</a>
+							</li>
+							<li class="my-2 strategy child" title="Brand Strategy"
+								:class="{ 'disabled': !interviewSubmitted }">
+								<a class=" navlink linkdark p-2 px-3 my-2 d-flex align-items-center"
+									href="#strategic-messaging"
+									x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; "
+									:class="{ 'disabled': !interviewSubmitted }">
+									<span class="material-symbols-outlined medium me-2">settings_suggest</span>Brand
+									Strategy</a>
+							</li>
+							<li class="my-2 assets child disabled" title="Messages that Sell">
+								<a class="disabled navlink linkdark p-2 px-3 my-2 d-flex align-items-center"
+									href="#sales-and-marketing-assets"
+									x-on:click.prevent="Alpine.store('currentScreen').current = 'assets'; ">
+									<span class="material-symbols-outlined medium me-2">insights</span>Messages that
+									Sell</a>
+							</li>
 
-				<div class="nav-divider"></div>
+							<div class="nav-divider"></div>
 
-				<li class="my-2 newMap disabled"  title="Get a new Message Map">
-				  <a class="disabled navlink disabled linkdark p-2 px-3 my-2 d-flex align-items-center" href="#get-message-map" x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'; ">
-				    <span class="material-symbols-outlined medium me-2">add_circle</span>Get a new map</a>
-				</li>
-				</ul>
-			</div>
-			<!-- .sidenav-wrapper -->
+							<li class="my-2 newMap disabled" title="Get a new Message Map">
+								<a class="disabled navlink disabled linkdark p-2 px-3 my-2 d-flex align-items-center"
+									href="#get-message-map"
+									x-on:click.prevent="Alpine.store('currentScreen').current = 'newMap'; ">
+									<span class="material-symbols-outlined medium me-2">add_circle</span>Get a new
+									map</a>
+							</li>
+						</ul>
+					</div>
+					<!-- .sidenav-wrapper -->
 
-			<!-- .sidebar-dropdown -->
-			<div class="sidebar-dropdown mt-auto border-top border-light p-3 col-md-3 bg-white">
-			  <div id="userMenu" class=" text-end ms-auto me-0">
-			    <div class="d-flex align-items-center">
-			      <a class="user-settings mt-2 me-1 linkdark" href="#"><span class="material-symbols-outlined medium me-2">tune</span></a>
-			      <div class="dropdown">
-					<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
-					id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><div class="rounded-circle profile user-initials"></div></a>
-					<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-			          <li><a class="dropdown-item" href="#account" x-on:click.prevent="Alpine.store('currentScreen').current = 'account'; ">Account & Settings</a></li>
-			          <!--<li><a class="dropdown-item" href="#settings">Settings</a></li>-->
-			          <li><a class="dropdown-item" href="mailto:rowan@messagemaps.io?subject='Help me please!'">Help</a></li>
-			          <li><hr class="dropdown-divider"></li>
-			          <li><a class="dropdown-item logout-button" href="#">Logout</a></li>
-			        </ul>
-			      </div>
-			    </div>
-			  </div><!-- /#userMenu -->
-			</div><!-- /.sidebar-dropdown -->
-		</div><!-- /#ExpandedSidebar -->
+					<!-- .sidebar-dropdown -->
+					<div class="sidebar-dropdown mt-auto border-top border-light p-3 col-md-3 bg-white">
+						<div id="userMenu" class=" text-end ms-auto me-0">
+							<div class="d-flex align-items-center">
+								<a class="user-settings mt-2 me-1 linkdark" href="#"><span
+										class="material-symbols-outlined medium me-2">tune</span></a>
+								<div class="dropdown">
+									<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
+										id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+										<div class="rounded-circle profile user-initials"></div>
+									</a>
+									<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+										<li><a class="dropdown-item" href="#account"
+												x-on:click.prevent="Alpine.store('currentScreen').current = 'account'; ">Account
+												& Settings</a></li>
+										<!--<li><a class="dropdown-item" href="#settings">Settings</a></li>-->
+										<li><a class="dropdown-item"
+												href="mailto:rowan@messagemaps.io?subject='Help me please!'">Help</a>
+										</li>
+										<li>
+											<hr class="dropdown-divider">
+										</li>
+										<li><a class="dropdown-item logout-button" href="#">Logout</a></li>
+									</ul>
+								</div>
+							</div>
+						</div><!-- /#userMenu -->
+					</div><!-- /.sidebar-dropdown -->
+				</div><!-- /#ExpandedSidebar -->
 
-		<div id="Main" class="p-0 bg-light"
-		:class="{
+				<div id="Main" class="p-0 bg-light" :class="{
 		'main-expanded': Alpine.store('sidebarStatus').current === 'expanded',
 		'main-collapsed': Alpine.store('sidebarStatus').current === 'collapsed'
 		}">
-			<header class="p-3 border-bottom bg-white shadow-sm sticky-element">
-			  <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start me-2">
+					<header class="p-3 border-bottom bg-white shadow-sm sticky-element">
+						<div
+							class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start me-2">
 
-			    <div class="custom-breadcrumb text-small text-secondary ms-4 ps-2">
-			      <span style="text-transform: lowercase;"f x-text="Alpine.store('currentScreen').showName()"></span>
-			    </div>
-
-			    <div id="userMenu" class="text-end ms-auto me-0">
-			      <div class="d-flex align-items-center">
-			        <span class="user-welcome mt-1 me-2 pb-1 small title-case highlight-welcome">Welcome <span class="user-firstname" x-text="$store.userProfile.firstName"></span></span>
-			        <a class="user-settings mt-2 me-1  linkdark" href="#"><span class="material-symbols-outlined medium me-2">tune</span></a>
-			        <div class="dropdown">
-						<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
-						id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><div class="rounded-circle profile user-initials"></div></a>
-
-			          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-  			         	<li><a class="dropdown-item" href="#account" x-on:click.prevent="Alpine.store('currentScreen').current = 'account'; ">Account & Settings</a></li>
-  			          	<!--<li><a class="dropdown-item" href="#settings">Settings</a></li>-->
-			            <li><a class="dropdown-item" href="mailto:rowan@messagemaps.io?subject='Help me please!'">Help</a></li>
-			            <li><hr class="dropdown-divider"></li>
-			            <li><a class="dropdown-item logout-button" href="#">Logout</a></li>
-			          </ul>
-			        </div><!-- /.dropdown-->
-			      </div>
-			    </div><!-- /#userMenu -->
-			  </div>
-		  	</header>
-
-
-
-	        <!-- #MainViews - main section with views of various states-->
-	        <div id="MainViews" class="view-wrapper  my-5">
-
-				<!-- #MapView -->
-				<div id="MapView" x-show="Alpine.store('currentScreen').current === 'maps'" x-transition:enter.duration.600ms>
-
-					<!-- onboard-welcome-status -->
-					<div class="mapview-inner onboard-welcome-status bg-white border shadow rounded-2 row my-4">
-
-						<!-- .welcome-message-->
-						<div class="welcome-message container-fluid py-1 pb-5"
-							>
-							<h5 class="display  mb-4">Welcome to
-  <span x-html="Alpine.store('interviewData').brandName ? 'your &#34;' + Alpine.store('interviewData').brandName + ' Message Map&#34;' : 'Your Message Map'">Your Message Map</span>!</h5>
-
-
-							<p class="welcome-intro x">Our goal is that your map will <span>make selling simple</span> and help you increase revenue.<br><br>Your message map has three parts:</p>
-
-
-							<div  class="col-md-4 help text-end">
-								<h6>Need help?</h6>
-								<p>
-								Dm me on <a href="https://join.slack.com/t/messagemaps/shared_invite/zt-1xk6jv680-jq7N5a5msC_EmilY3gFWiQ">Slack</a> or email at <a href="mailto:rowan@messagemaps.io">rowan@messagemaps.io</a>
-							 	</p>
+							<div class="custom-breadcrumb text-small text-secondary ms-4 ps-2">
+								<span style="text-transform: lowercase;" f
+									x-text="Alpine.store('currentScreen').showName()"></span>
 							</div>
 
+							<div id="userMenu" class="text-end ms-auto me-0">
+								<div class="d-flex align-items-center">
+									<span class="user-welcome mt-1 me-2 pb-1 small title-case highlight-welcome">Welcome
+										<span class="user-firstname"
+											x-text="$store.userProfile.firstName"></span></span>
+									<a class="user-settings mt-2 me-1  linkdark" href="#"><span
+											class="material-symbols-outlined medium me-2">tune</span></a>
+									<div class="dropdown">
+										<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
+											id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+											<div class="rounded-circle profile user-initials"></div>
+										</a>
 
-
-							<div class="row welcome-cards-nav">
-
-								<div class="col-md-4 welcome-interview-card">
-								  <!-- show this if interviewData.submitted=false-->
-
-								  <div class="card shadow-sm unfinished discovery card" title="Complete your discovery interview to activate" x-show="!interviewSubmitted">
-										<div class="card-body" >
-											<h6 class="card-title">Discovery Interview</h6>
-											<p>An in-depth investigation of your market, your buyers, their problems, your solution, and more. Every interview is unique.</p>
-											<button class="btn btn-primary mt-3" type="button"
-												x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Let me dive deep!</button>
-												<div class="completion-time interview text-small text-secondaryy">Completion/review time: <strong>1 hour</strong></div>
-										</div><!-- card body-->
-									</div><!-- inactivecard-->
-
-  								  <!-- show this if interviewData.submitted=true-->
-  								  <div class="card shadow-sm finished discovery card" title="Congratulations on completing discovery. Feel free to review or revise" x-show="interviewSubmitted">
-  								    <div class="card-body" >
-
-									<h6 class="card-title">Discovery Interview
-										<span
-										class="material-symbols-outlined medium me-2 check-circle">check_circle</span></h6>
-									<p>An in-depth investigation of your market, your buyers, their problems, your solution, and more. Every interview is unique.</p>
-
-									 <div class="button row">
-
-									  <div class="col-md-6">
-									  	<button class="btn btn-primary mt-3 strategy-button" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interview-review'; ">Review</button>
-									  </div>
-
-									  <div class="col-md-6">
-									    <button class="btn btn-secondary mt-3 strategy-button" type="button" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; ">Revise</button>
-									  </div>
-								  </div><!--/button row-->
-
-  								      <div class="completion-time interview text-small text-secondary">You're done - <strong>nice work!!</strong></div>
-  								    </div><!-- card body-->
-  								  </div><!-- finished discovery card-->
-
-
-
-								</div><!-- /welcome-interview-card-->
-
-								<div class="col-md-4 welcome-strategy-card">
-
-								  <!-- DISABLED
-									  show this if interviewData.submitted=false-->
-								  <div class="card shadow-sm inactive strategy card" title="Complete your discovery interview to activate" x-show="!interviewSubmitted">
-								    <div class="card-body" >
-								      <h6 class="card-title">Brand Strategy</h6>
-								      <p>Refine your positioning, understand your buyers, your brand personality, and your core messages and value propositions</p>
-								      <button class="btn btn-primary mt-3 strategy-button" type="button" disabled>Show me the strategy</button>
-								      <div class="completion-time interview text-small text-secondary">Review time: <strong>5-15 minutes</strong></div>
-								    </div><!-- card body-->
-								  </div><!-- inactive strategy card-->
-
-								  <!-- ACTIVE
-									  show this if interviewData.submitted=true-->
-								  <div class="card shadow-sm active strategy card" title="Finish and approve your brand strategy" x-show="interviewSubmitted">
-								    <div class="card-body" >
-								      <h6 class="card-title">Brand Strategy</h6>
-								      <p>Refine your positioning, understand your buyers, your brand personality, and your core messages and value propositions</p>
-								      <button id="welcomeShowStrategy" class="btn btn-primary mt-3 strategy-button" type="button"
-									   x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">Show me the strategy</button>
-								      <div class="completion-time interview text-small text-secondary">Review time: <strong>5-15 minutes</strong></div>
-								    </div><!-- card body-->
-								  </div><!-- active strategy card-->
-
+										<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+											<li><a class="dropdown-item" href="#account"
+													x-on:click.prevent="Alpine.store('currentScreen').current = 'account'; ">Account
+													& Settings</a></li>
+											<!--<li><a class="dropdown-item" href="#settings">Settings</a></li>-->
+											<li><a class="dropdown-item"
+													href="mailto:rowan@messagemaps.io?subject='Help me please!'">Help</a>
+											</li>
+											<li>
+												<hr class="dropdown-divider">
+											</li>
+											<li><a class="dropdown-item logout-button" href="#">Logout</a></li>
+										</ul>
+									</div><!-- /.dropdown-->
 								</div>
-
-
-
-								<div class="col-md-4 assets">
-									<div class="card shadow-sm inactive" title="Complete your discovery interview and brand strategy to activate">
-										<div class="card-body">
-											<h6 class="card-title">Messages that Sell</h6>
-											<p>Transform discovery and strategy work into messages that sell - sales talking points, pitch decks, marketing copy and more. </p>
-											<button class="btn btn-primary mt-3" type="button" disabled
-												>Give me the messaging</button>
-												<div class="completion-time interview text-small text-secondary">Review time: <strong>5-15 minutes</strong></div>
-										</div><!-- card-body -->
-									</div><!-- card -->
-								</div><!-- /assets -->
-
-
-
-							</div><!-- /welcome-cards-nav row-->
-
-
-
-
-						</div><!-- /.welcome-message -->
-					</div><!-- /.onboard-welcome-status -->
-				</div><!-- /#MapView -->
-
-				<!-- #InterviewView -->
-			 	<div id="InterviewView" x-show="Alpine.store('currentScreen').current === 'interviews'" x-transition:enter.duration.600ms="" style="display: none;">
-					<!-- .interview-form-info -->
-					<div class="row interview-form-info">
-						<div class="alert alert-info mb-0 mt-4 mx-2" x-show="!window.localStorage.getItem('userProfile')">
-							<strong>Guest mode:</strong> you're using Message Maps for free.
-							<a href="#" class="go-to-login">Sign in</a> or <a href="#" x-on:click.prevent="Alpine.store('authenticationStatus').showAuthPage('signup')">create an account</a> to save your work.
+							</div><!-- /#userMenu -->
 						</div>
-						<!-- .interview-form-card -->
-						<div  class="interview-form-card card shadow my-4 left-column">
-							<!-- .the-interview-card -->
-							<div class="card-body the-interview-card">
-								<!-- #Interview -->
-								<div id="Interview" class="card-text"  style="display:block">
-									<!-- .x-data-for-form -->
-									<div class="row x-data-for-form"
-									    x-data="
+					</header>
+
+
+
+					<!-- #MainViews - main section with views of various states-->
+					<div id="MainViews" class="view-wrapper  my-5">
+
+						<!-- #MapView -->
+						<div id="MapView" x-show="Alpine.store('currentScreen').current === 'maps'"
+							x-transition:enter.duration.600ms>
+
+							<!-- onboard-welcome-status -->
+							<div class="mapview-inner onboard-welcome-status bg-white border shadow rounded-2 row my-4">
+
+								<!-- .welcome-message-->
+								<div class="welcome-message container-fluid py-1 pb-5">
+									<h5 class="display  mb-4">Welcome to
+										<span
+											x-html="Alpine.store('interviewData').brandName ? 'your &#34;' + Alpine.store('interviewData').brandName + ' Message Map&#34;' : 'Your Message Map'">Your
+											Message Map</span>!
+									</h5>
+
+
+									<p class="welcome-intro x">Our goal is that your map will <span>make selling
+											simple</span> and help you increase revenue.<br><br>Your message map has
+										three parts:</p>
+
+
+									<div class="col-md-4 help text-end">
+										<h6>Need help?</h6>
+										<p>
+											Dm me on <a
+												href="https://join.slack.com/t/messagemaps/shared_invite/zt-1xk6jv680-jq7N5a5msC_EmilY3gFWiQ">Slack</a>
+											or email at <a href="mailto:rowan@messagemaps.io">rowan@messagemaps.io</a>
+										</p>
+									</div>
+
+
+
+									<div class="row welcome-cards-nav">
+
+										<div class="col-md-4 welcome-interview-card">
+											<!-- show this if interviewData.submitted=false-->
+
+											<div class="card shadow-sm unfinished discovery card"
+												title="Complete your discovery interview to activate"
+												x-show="!interviewSubmitted">
+												<div class="card-body">
+													<h6 class="card-title">Discovery Interview</h6>
+													<p>An in-depth investigation of your market, your buyers, their
+														problems, your solution, and more. Every interview is unique.
+													</p>
+													<button class="btn btn-primary mt-3" type="button"
+														x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">Let
+														me dive deep!</button>
+													<div class="completion-time interview text-small text-secondaryy">
+														Completion/review time: <strong>1 hour</strong></div>
+												</div><!-- card body-->
+											</div><!-- inactivecard-->
+
+											<!-- show this if interviewData.submitted=true-->
+											<div class="card shadow-sm finished discovery card"
+												title="Congratulations on completing discovery. Feel free to review or revise"
+												x-show="interviewSubmitted">
+												<div class="card-body">
+
+													<h6 class="card-title">Discovery Interview
+														<span
+															class="material-symbols-outlined medium me-2 check-circle">check_circle</span>
+													</h6>
+													<p>An in-depth investigation of your market, your buyers, their
+														problems, your solution, and more. Every interview is unique.
+													</p>
+
+													<div class="button row">
+
+														<div class="col-md-6">
+															<button class="btn btn-primary mt-3 strategy-button"
+																type="button"
+																x-on:click.prevent="Alpine.store('currentScreen').current = 'interview-review'; ">Review</button>
+														</div>
+
+														<div class="col-md-6">
+															<button class="btn btn-secondary mt-3 strategy-button"
+																type="button"
+																x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'; ">Revise</button>
+														</div>
+													</div><!--/button row-->
+
+													<div class="completion-time interview text-small text-secondary">
+														You're done - <strong>nice work!!</strong></div>
+												</div><!-- card body-->
+											</div><!-- finished discovery card-->
+
+
+
+										</div><!-- /welcome-interview-card-->
+
+										<div class="col-md-4 welcome-strategy-card">
+
+											<!-- DISABLED
+									  show this if interviewData.submitted=false-->
+											<div class="card shadow-sm inactive strategy card"
+												title="Complete your discovery interview to activate"
+												x-show="!interviewSubmitted">
+												<div class="card-body">
+													<h6 class="card-title">Brand Strategy</h6>
+													<p>Refine your positioning, understand your buyers, your brand
+														personality, and your core messages and value propositions</p>
+													<button class="btn btn-primary mt-3 strategy-button" type="button"
+														disabled>Show me the strategy</button>
+													<div class="completion-time interview text-small text-secondary">
+														Review time: <strong>5-15 minutes</strong></div>
+												</div><!-- card body-->
+											</div><!-- inactive strategy card-->
+
+											<!-- ACTIVE
+									  show this if interviewData.submitted=true-->
+											<div class="card shadow-sm active strategy card"
+												title="Finish and approve your brand strategy"
+												x-show="interviewSubmitted">
+												<div class="card-body">
+													<h6 class="card-title">Brand Strategy</h6>
+													<p>Refine your positioning, understand your buyers, your brand
+														personality, and your core messages and value propositions</p>
+													<button id="welcomeShowStrategy"
+														class="btn btn-primary mt-3 strategy-button" type="button"
+														x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">Show
+														me the strategy</button>
+													<div class="completion-time interview text-small text-secondary">
+														Review time: <strong>5-15 minutes</strong></div>
+												</div><!-- card body-->
+											</div><!-- active strategy card-->
+
+										</div>
+
+
+
+										<div class="col-md-4 assets">
+											<div class="card shadow-sm inactive"
+												title="Complete your discovery interview and brand strategy to activate">
+												<div class="card-body">
+													<h6 class="card-title">Messages that Sell</h6>
+													<p>Transform discovery and strategy work into messages that sell -
+														sales talking points, pitch decks, marketing copy and more. </p>
+													<button class="btn btn-primary mt-3" type="button" disabled>Give me
+														the messaging</button>
+													<div class="completion-time interview text-small text-secondary">
+														Review time: <strong>5-15 minutes</strong></div>
+												</div><!-- card-body -->
+											</div><!-- card -->
+										</div><!-- /assets -->
+
+
+
+									</div><!-- /welcome-cards-nav row-->
+
+
+
+
+								</div><!-- /.welcome-message -->
+							</div><!-- /.onboard-welcome-status -->
+						</div><!-- /#MapView -->
+
+						<!-- #InterviewView -->
+						<div id="InterviewView" x-show="Alpine.store('currentScreen').current === 'interviews'"
+							x-transition:enter.duration.600ms="" style="display: none;">
+							<!-- .interview-form-info -->
+							<div class="row interview-form-info">
+								<div class="alert alert-info mb-0 mt-4 mx-2"
+									x-show="!window.localStorage.getItem('userProfile')">
+									<strong>Guest mode:</strong> you're using Message Maps for free.
+									<a href="#" class="go-to-login">Sign in</a> or <a href="#"
+										x-on:click.prevent="Alpine.store('authenticationStatus').showAuthPage('signup')">create
+										an account</a> to save your work.
+								</div>
+								<!-- .interview-form-card -->
+								<div class="interview-form-card card shadow my-4 left-column">
+									<!-- .the-interview-card -->
+									<div class="card-body the-interview-card">
+										<!-- #Interview -->
+										<div id="Interview" class="card-text" style="display:block">
+											<!-- .x-data-for-form -->
+											<div class="row x-data-for-form" x-data="
 									    {
 									      activeTab: 'Brand Positioning',
 
@@ -587,72 +716,66 @@
 										  },
 
 
-									    }"
-								       x-init="window.addEventListener('questionsLoaded', () => { fetchAnsweredQuestions(); fetchQuestions(); });"
+									    }" x-init="window.addEventListener('questionsLoaded', () => { fetchAnsweredQuestions(); fetchQuestions(); });">
+
+												<!-- #InterviewNav -->
+												<ul id="InterviewNav"
+													class="nav nav-pills mb-5 sticky-sub-element col-md-2"
+													id="TheInterview">
+													<template x-for="(category, index) in categories" :key="index">
+
+
+														<li class="nav-item toplevel"
+															:class="{'active': activeTab === category.label, 'completed': isCategoryCompleted(category.id)}"
+															@click.prevent="activeTab = category.label">
 
 
 
+															<a href="#" class="nav-link text-small"
+																x-text="category.label">
+																<span
+																	class="material-symbols-outlined tiny">check_circle</span>
+															</a>
 
-									>
+															<ul class="nav-sub-items" title="">
+																<template
+																	x-for="(question, index) in (Array.isArray($store.questions) ? $store.questions.filter(question => question.question_category === category.id) : [])"
+																	:key="question.id">
+																	<li class="nav-sub-item"
+																		:class="{ 'completed': answeredQuestions[question.id] && answeredQuestions[question.id].trim() !== '' }"
+																		:id="'question-' + question.id">
+																		<a class="text-secondary nav-sub-item-link"
+																			x-text="question.question_label.replaceAll('_', ' ')"
+																			:href="'#question-' + question.question_label"
+																			@click.prevent="scrollToElementWithOffset('question-' + question.question_label, -127, question.id)"
+																			:class="{ 'active': activeQuestion === question.question_label }"></a>
 
-										<!-- #InterviewNav -->
-										<ul id="InterviewNav" class="nav nav-pills mb-5 sticky-sub-element col-md-2" id="TheInterview">
-										  <template x-for="(category, index) in categories" :key="index">
+																	</li>
+																</template>
+															</ul><!-- /.nav-sub-items -->
 
+														</li>
+													</template>
+												</ul>
+												<!-- /#InterviewNav -->
 
-											<li class="nav-item toplevel"
-											    :class="{'active': activeTab === category.label, 'completed': isCategoryCompleted(category.id)}"
-											    @click.prevent="activeTab = category.label">
+												<!-- /#InterviewForm -->
+												<form id="InterviewQuestions" class="col-md-10">
 
+													<!-- Template for each unique question category -->
+													<template x-for="(category, index) in (categories)"
+														:key="category.id">
 
-
-										      <a href="#" class="nav-link text-small" x-text="category.label">
-										        <span class="material-symbols-outlined tiny">check_circle</span>
-										      </a>
-
-										      <ul class="nav-sub-items" title="">
-										        <template
-												 x-for="(question, index) in (Array.isArray($store.questions) ? $store.questions.filter(question => question.question_category === category.id) : [])"
-												    :key="question.id"
-										        >
-										          <li class="nav-sub-item"
-										              :class="{ 'completed': answeredQuestions[question.id] && answeredQuestions[question.id].trim() !== '' }"
-										              :id="'question-' + question.id"
-										          >
-													<a class="text-secondary nav-sub-item-link"
-													    x-text="question.question_label.replaceAll('_', ' ')"
-													    :href="'#question-' + question.question_label"
-													    @click.prevent="scrollToElementWithOffset('question-' + question.question_label, -127, question.id)"
-													    :class="{ 'active': activeQuestion === question.question_label }"
-													></a>
-
-										          </li>
-										        </template>
-										      </ul><!-- /.nav-sub-items -->
-
-										    </li>
-										  </template>
-										</ul>
-										<!-- /#InterviewNav -->
-
-										<!-- /#InterviewForm -->
-										<form id="InterviewQuestions" class="col-md-10">
-
-										    <!-- Template for each unique question category -->
-										    <template
-										        x-for="(category, index) in (categories)" :key="category.id">
-
-										    	<!-- The category fieldset -->
-										       <div :id="category.label" class="category-fieldset"
-										           x-show="activeTab === category.label">
+														<!-- The category fieldset -->
+														<div :id="category.label" class="category-fieldset"
+															x-show="activeTab === category.label">
 
 
-													<template
-    x-for="(question, qIndex) in (Array.isArray($store.questions) ? $store.questions.filter(question => question.question_category === category.id) : [])" :key="question.id">
+															<template
+																x-for="(question, qIndex) in (Array.isArray($store.questions) ? $store.questions.filter(question => question.question_category === category.id) : [])"
+																:key="question.id">
 
-														<div class="template-inner"
-
-															x-data="{
+																<div class="template-inner" x-data="{
 
 
 
@@ -696,11 +819,9 @@
 																}
 
 
-															}"
-													        x-bind:class="{ 'active': activeQuestion === question.question_label }"
-															x-bind:class="{ 'active': $parent.activeQuestion === question.question_label }"
-
-															x-init="() => {
+															}" x-bind:class="{ 'active': activeQuestion === question.question_label }"
+																	x-bind:class="{ 'active': $parent.activeQuestion === question.question_label }"
+																	x-init="() => {
 															  // Retrieve interviewData from local storage
 															  let storedData = JSON.parse(window.localStorage.getItem('interviewData'));
 															  let interviewId = null;
@@ -729,75 +850,73 @@
 															      fetchAnswerForThisQuestion(question.id);
 															    }
 															  }, 1000); // checks every second
-															}"
-															@click="activeQuestion = question.question_label"
-															class="form-group"
-															><!-- /.template-inner -->
+															}" @click="activeQuestion = question.question_label" class="form-group"><!-- /.template-inner -->
 
 
 
-															<label class="question-label text-secondary"
-																x-text="question.question_label.replaceAll('_', ' ')"
-																x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
+																	<label class="question-label text-secondary"
+																		x-text="question.question_label.replaceAll('_', ' ')"
+																		x-init="() => $el.setAttribute('for', 'input-' + question.question_label)"></label>
 
-															<div class="question-text"
-															x-text="question.question_text"
-															x-init="$el.setAttribute('id', 'q' + question.id);"></div>
+																	<div class="question-text"
+																		x-text="question.question_text"
+																		x-init="$el.setAttribute('id', 'q' + question.id);">
+																	</div>
 
-															<div class="textarea-container">
-																<div class="snackbar"
-																	x-init="
+																	<div class="textarea-container">
+																		<div class="snackbar" x-init="
 																	$el.setAttribute('id', 'save-confirmation-' + question.id);
-																	$el.setAttribute('save-confirmation-id', question.id); "
-																>Autosaved</div><!-- #snackbar -->
+																	$el.setAttribute('save-confirmation-id', question.id); ">Autosaved</div><!-- #snackbar -->
 
-																<textarea
-																	x-ref="textarea"
-																	x-model="txt"
-																	@input="hasInput = txt.length > 10"
-																    @focus="hasFocus = true; $el.style.height = `${$el.scrollHeight}px`;"
-																     @blur="hasFocus = false; autoSave(interviewId, question.id, txt, userId, $refs.textarea)"
-																	x-on:input.space="handleTextareaInput(event);"
-
-																	x-init="
+																		<textarea x-ref="textarea" x-model="txt"
+																			@input="hasInput = txt.length > 10"
+																			@focus="hasFocus = true; $el.style.height = `${$el.scrollHeight}px`;"
+																			@blur="hasFocus = false; autoSave(interviewId, question.id, txt, userId, $refs.textarea)"
+																			x-on:input.space="handleTextareaInput(event);"
+																			x-init="
 																		$el.setAttribute('id', 'input-' + question.id);
 																		$el.setAttribute('data-question-id', question.id);
-																		setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0);"
-																	x-text="txt"
-																    :class="{
+																		setTimeout(() => attachEventHandlers($el.getAttribute('id')), 0);" x-text="txt" :class="{
 																		'textarea-simple': question.question_complexity === 'simple',
 																		'textarea-medium': question.question_complexity === 'medium',
 																		'textarea-complex': question.question_complexity === 'complex'
-																	}"
-																>
+																	}">
 
 																</textarea>
 
-																<div class="clear-textarea"
-																	x-show="txt.length > 0"
-																	@click="txt = ''; $refs.textarea.focus()"
-																	x-transition:enter.delay.250ms x-transition:enter.duration.250ms>
-																    <span class="material-symbols-outlined medium">close</span>
-																</div>
+																		<div class="clear-textarea"
+																			x-show="txt.length > 0"
+																			@click="txt = ''; $refs.textarea.focus()"
+																			x-transition:enter.delay.250ms
+																			x-transition:enter.duration.250ms>
+																			<span
+																				class="material-symbols-outlined medium">close</span>
+																		</div>
 
-															</div><!-- .textarea-container -->
+																	</div><!-- .textarea-container -->
 
-														<div class="answer-feedback card fade-out"
-														    x-data="{ isVisible: true }"
-														    x-init="setTimeout(() => isVisible = false, 10000); $el.setAttribute('id', 'answer-feedback-' + question.id);"
-														    x-bind:class="{ 'opacity-1': !isVisible }"
-														    x-show="isVisible"
-														>
-														    <span class="material-symbols-outlined medium encouragement">check</span>
-														    <p x-init="$el.setAttribute('id', 'answer-verbal-feedback-' + question.id);">Well done!!</p>
-														</div>
+																	<div class="answer-feedback card fade-out"
+																		x-data="{ isVisible: true }"
+																		x-init="setTimeout(() => isVisible = false, 10000); $el.setAttribute('id', 'answer-feedback-' + question.id);"
+																		x-bind:class="{ 'opacity-1': !isVisible }"
+																		x-show="isVisible">
+																		<span
+																			class="material-symbols-outlined medium encouragement">check</span>
+																		<p
+																			x-init="$el.setAttribute('id', 'answer-verbal-feedback-' + question.id);">
+																			Well done!!</p>
+																	</div>
 
 
-														<div class="help text-small text-secondary" x-show="hasFocus" x-transition:enter.delay.500ms x-transition:enter.duration.2000ms x-text="question.question_help"></div>
-															<!-- /.help -->
+																	<div class="help text-small text-secondary"
+																		x-show="hasFocus" x-transition:enter.delay.500ms
+																		x-transition:enter.duration.2000ms
+																		x-text="question.question_help"></div>
+																	<!-- /.help -->
 
-														<div style="position:relative;" class="followup-question container text-small"
-														    x-data="{
+																	<div style="position:relative;"
+																		class="followup-question container text-small"
+																		x-data="{
 														        followupQuestion: '',
 														        followupAnswer: '',
 														        userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,
@@ -815,8 +934,7 @@
 														        checkFollowupExists: async function(questionId) {
 														            await followupExists(questionId);
 														        }
-														    }"
-														   x-init="() => {
+														    }" x-init="() => {
 														       if (!window.localStorage.getItem('userProfile')) return;
 														       this.userId = JSON.parse(window.localStorage.getItem('userProfile')).user_id;
 														       $el.setAttribute('id', 'followup-to-question-id-' + question.id);
@@ -826,484 +944,537 @@
 														   }">
 
 
-															<p x-init="() => { $el.setAttribute('id', 'p-followup-to-question-id-' + question.id); }" x-text="followupQuestion"></p>
+																		<p x-init="() => { $el.setAttribute('id', 'p-followup-to-question-id-' + question.id); }"
+																			x-text="followupQuestion"></p>
 
-																<div style="top: -5px; right: -30px;" class="snackbar followup"
-																	x-init="
+																		<div style="top: -5px; right: -30px;"
+																			class="snackbar followup" x-init="
 																	$el.setAttribute('id', 'save-confirmation-followup-to-question-id-' + question.id);
-																	$el.setAttribute('save-confirmation-id', question.id); "
-																	>Autosaved</div><!-- #snackbar -->
+																	$el.setAttribute('save-confirmation-id', question.id); ">Autosaved</div><!-- #snackbar -->
 
-															<textarea class="textarea-medium"
-															    x-init="() => { $el.setAttribute('id', 'textarea-followup-to-question-id-' + question.id); }"
-															    x-show="followupQuestion.length > 0"
-															    x-model="followupAnswer"
-																@blur="autoSaveFollowup(interviewId, question.id, question.id, followupAnswer)"
-
-															>
+																		<textarea class="textarea-medium"
+																			x-init="() => { $el.setAttribute('id', 'textarea-followup-to-question-id-' + question.id); }"
+																			x-show="followupQuestion.length > 0"
+																			x-model="followupAnswer"
+																			@blur="autoSaveFollowup(interviewId, question.id, question.id, followupAnswer)">
 															</textarea>
-														</div><!-- /.followup-question -->
+																	</div><!-- /.followup-question -->
 
 
 
-													</div><!--/.template-inner-->
+																</div><!--/.template-inner-->
 
-										            </template>
-												</div>
-											</template>
+															</template>
+														</div>
+													</template>
 
-					                        <!-- .row.previous-next-tabs -->
-					                        <div class="row  my-5 previous-next-tabs">
-												<div class=" col-md-12 text-end" id="PreviousNext">
-						                            <button
-														@click.prevent="changeTab(-1)"
-														class="previous btn-primary text-small control-btn btn control-btn strategy-button"
-														:class="{ 'disabled': activeTab === tabs[0] }"
-														:disabled="activeTab === tabs[0]">&lt; previous</button>
-
+													<!-- .row.previous-next-tabs -->
+													<div class="row  my-5 previous-next-tabs">
+														<div class=" col-md-12 text-end" id="PreviousNext">
+															<button @click.prevent="changeTab(-1)"
+																class="previous btn-primary text-small control-btn btn control-btn strategy-button"
+																:class="{ 'disabled': activeTab === tabs[0] }"
+																:disabled="activeTab === tabs[0]">&lt; previous</button>
 
 
 
-													<button
-														@click.prevent="changeTab(1)"
-														class="next btn-primary text-small control-btn btn control-btn strategy-button"
-														:class="{ 'disabled': activeTab === tabs[tabs.length - 1] }"
-														:disabled="activeTab === tabs[tabs.length - 1]">next &gt;</button>
-					                          </div>
+
+															<button @click.prevent="changeTab(1)"
+																class="next btn-primary text-small control-btn btn control-btn strategy-button"
+																:class="{ 'disabled': activeTab === tabs[tabs.length - 1] }"
+																:disabled="activeTab === tabs[tabs.length - 1]">next
+																&gt;</button>
+														</div>
 
 
-					                        </div><!-- /.row.previous-next-tabs -->
+													</div><!-- /.row.previous-next-tabs -->
 
-										</form><!-- /#InterviewForm -->
+												</form><!-- /#InterviewForm -->
 
-							   		</div><!-- /x-data-for-form -->
+											</div><!-- /x-data-for-form -->
 
-								</div><!-- /#Interview -->
+										</div><!-- /#Interview -->
 
-							</div><!-- /.the-interview-card -->
+									</div><!-- /.the-interview-card -->
 
-			            </div><!-- /.interview-form-card -->
+								</div><!-- /.interview-form-card -->
 
-						<!-- /#interview-info-card -->
-						<div class="interview-info-card card my-4  right-column" style="height: fit-content;">
+								<!-- /#interview-info-card -->
+								<div class="interview-info-card card my-4  right-column" style="height: fit-content;">
 
-							<!-- .interview-info-card.card-header -->
-							<div class="card-header" x-data="InterviewReviewView()">
-								<h5 class="card-title" id="interview-name"><span  x-text="$store.interviewData.interviewName" ></span></h5>
+									<!-- .interview-info-card.card-header -->
+									<div class="card-header" x-data="InterviewReviewView()">
+										<h5 class="card-title" id="interview-name"><span class="user-firstname"
+												x-text="$store.interviewData.interviewName ? $store.interviewData.interviewName + ': Review' : 'Guest Interview: Review'"></span>
+										</h5>
 
-								<!-- .created -->
-								<div class="text-small text-secondary created">Created by <strong x-text="$store.userProfile.full_name"></strong> on
-									<span x-text="new Date($store.interviewData.createdDate).toLocaleDateString()"></span>
-								</div>
-								<!-- /.created -->
+										<div class="text-small text-secondary updated">Last edited:
+											<span
+												x-text="$store.interviewData.updatedDate ? formatDateTime($store.interviewData.updatedDate) : 'Not saved (Guest Mode)'"></span>
+										</div>
 
-								<!-- .updated -->
-								<div class="text-small text-secondary updated">Last updated
-									<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
-								</div>
-								<!-- /.updated -->
+										<!-- .updated -->
+										<div class="text-small text-secondary updated">Last updated
+											<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
+										</div>
+										<!-- /.updated -->
 
-								<div x-data="InterviewReviewView()" x-init="init">
-								    <button
-								        title="View a summary analysis of your interview, download/export it, and generate a strategy map"
-								        id="ReviewInterview"
-								        name="submit"
-								        type="submit"
-								        class="btn btn-primary my-2  w-150"
-								        x-on:click.prevent="
+										<div x-data="InterviewReviewView()" x-init="init">
+											<button
+												title="View a summary analysis of your interview, download/export it, and generate a strategy map"
+												id="ReviewInterview" name="submit" type="submit"
+												class="btn btn-primary my-2  w-150" x-on:click.prevent="
 								            init();
 								            mostEngagementCategory();
 								            leastEngagementCategory();
 								            Alpine.store('currentScreen').current = 'interview-review';
-								        "
-								    >
-								        Let me review
-								    </button>
-								</div>
-
-
-							</div>
-							<!-- .interview-info-card.card-header -->
-
-						</div><!-- /#interview-info-card -->
-
-					</div><!-- /.interview-form-info -->
-
-	            </div><!-- /#InterviewView -->
-
-			    <!-- /#InterviewReviewView -->
-				<div id="InterviewReviewView" x-data="InterviewReviewView()" x-init="init()"  x-show="Alpine.store('currentScreen').current === 'interview-review'" x-cloak x-transition:enter.duration.400ms>
-
-				  <div class="row interview-review-inner">
-
-
-
-						<div class="interviewreview-card card shadow my-4 left-column">
-
-							<div class="interview-review-container">
-								<!--<div class="print-header text-small text-secondary" style="display: block;text-align:right">Conducted by MessageMaps.io</div>-->
-								<a class="backlink edit text-small text-secondary" href="#" x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">< Revise your interview</a> |
-								<a class="backlink edit text-small text-secondary" href="#" onclick="location.reload();">Refresh your report</a>
-
-						 	 	<div class="interview-intro row mt-2">
-									<div class="interview-analysis text-small text-secondary  mt-4">
-										<h4>Quick Analysis</h4>
-										<!--<div  class="interview-summary">Summary: <span class="interview-analysis summary"></span></div>-->
-										<div  class="interview-questions-answered interview-analysis">Percentage of questions answered: <span class="percent-answered" x-text="percentAnswered() + '%'"></span></div>
-										<div  class="interview-deepest-engagement interview-analysis">Section with most engagement: <span class="deepest-engagement" x-text="mostEngagementCategory() || 'Loading...'"></span></div>
-										<div  class="interview-most-completed-section interview-analysis">Section with least engagement: <span class="least-engagement" x-text="leastEngagementCategory() || 'Loading...'"></span></div>
-										<div  class="interview-longest-answer interview-analysis">Question with longest answer: <span class="longest-answer"  x-text="longestAnswer()"></span></div>
-										<!--<div  class="interview-most-charged">Most emotionally charged answer: <span class="interview-analysis summary"></span></div>-->
-
-									</div><!--  /.intervew-analysis -->
-
-
-						 		</div><!--  /.intervew-intro.row -->
-								<h4>Transcript</h4>
-					       	 	<!-- Iterate over each category -->
-					       	 	<template x-for="(category, index) in categories" :key="index">
-					           		<div class="interview-category">
-						               <!-- Print category name -->
-						               <div class="question-category h6" x-text="category.label"></div>
-
-										<!-- Iterate over each question in this category -->
-										<template x-for="(question, qIndex) in (Array.isArray($store.questions) ? $store.questions.filter(question => question.question_category === category.id) : [])" :key="question.id">
-
-
-										    <div class="question-label-text-answer">
-										        <!-- Print question label and text, and answer -->
-										        <div class="question-label-text d-flex align-items-center">
-										            <span x-text="question.question_label.charAt(0).toUpperCase() + question.question_label.slice(1).replaceAll('_', ' ') + ': ' + question.question_text.charAt(0).toLowerCase() + question.question_text.slice(1)"></span>
-										        </div>
-										        <p class="review question-answer" x-text="answeredQuestions[question.id] ? answeredQuestions[question.id].answer : 'No answer yet'"></p>
-
-
-
-
-										        <template x-for="(followup, fIndex) in (answeredQuestions[question.id] &&
-												answeredQuestions[question.id].followups ? answeredQuestions[question.id].followups : [])" :key="`${question.id}-followup-${fIndex}`">
-										            <div>
-														<span class="followup-question" x-show="followup.question" x-text="followup.question" style="color:#777;"></span>
-														 <p class="review followup-answer" x-show="followup.answer" x-text="followup.answer"></p>
-										            </div>
-										        </template>
-
-										    </div>
-										</template>
-
-						           	</div><!-- /.interview-category -->
-						      	</template>
-							</div><!-- /.interview-review-container -->
-
-						</div><!-- interview-review-card -->
-
-
-					<div  class="strategy-meta-info-card card my-4  right-column">
-
-						<!-- .strategy-meta-info-card.card-header -->
-						<div class="card-header" x-data="{ brandName: Alpine.store('yourBrand').brandName }">
-							<h5 class="card-title" id="interview-name"><span class="user-firstname" x-text="$store.interviewData.interviewName+': Review'" ></span></h5>
-
-							<!-- .updated -->
-							<div class="text-small text-secondary updated">Last edited:
-								<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
-							</div>
-							<!-- /.updated -->
-
-							<div class="hide-for-print">
-								<div x-data="{ userProfile: JSON.parse(localStorage.getItem('userProfile')) || {} }" x-init="console.log(userProfile)">
-									<button
-										title="This functionality is disabled pending the Alpha release planned for June 28th"
-
-										id="SubmitInterview"
-										name="submit"
-										type="submit"
-										class="btn btn-primary my-2 w-150"
-										href="#brand-positioning-strategy"
-										x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'"
-
-										>
-										Submit - now give me strategy
-										</button>
-								  </div>
-
-								  <p class="text-small text-secondary"><input type=checkbox> Get consulting team feedback</p>
-								<p class="text-small text-secondary pt-1 pb-">Submit your interview to save a copy to your profile and get your <strong>Brand Strategy</strong>. You can come back anytime to revise your interview.</p>
-								<p class="download-export-share text-small text-secondary pt-0">
-								    <a title="Print nicely formatted" id="PrintHTML" href="#interview-report-print">Print</a>
-								    <a title="Download a simple, low file-size markdown document"  @click="downloadInterview()" href="#interview-report-download-markdown">Download markdown</a>
-
-									<a title="Save a copy of this report to your profile, access it later" id="SaveReport" href="#interview-report-save" @click="saveInterview()">Save a copy</a>
-
-
-								    <!--<a title="Export as a CSV for Google Sheets, Excel, etc" id="ExportCSV" href="#interview-report-export-csv">Export CSV</a>-->
-								</p>
-							</div><!-- hide for print -->
-						</div><!-- .strategy-info-card.card-header -->
-
-					</div>
-
-
-
-
-					</div><!-- interviewreviewview-inner-->
-				</div><!-- /#InterviewReviewView -->
-
-
-
-
-				<!-- #StrategyView -->
-	            <div id="StrategyView" x-show="Alpine.store('currentScreen').current === 'strategies'" x-transition:enter.duration.700ms>
-					<div class="row strategyview-inner">
-
-
-
-
-			<div class="strategy-content card shadow my-4 left-column">
-
-							<div id="positioning-strategy-section" class="brand-strategy-item positioning wrapper " >
-
-								<h6 class="brand-strategy-item title">Step 1: Confirm the Positioning Strategy</h6>
-								<p class="brand-strategy-item explainer">
-								  Let's get the positioning strategy right first - then move on to the rest of the brand strategy.
-								  <a class="brand-strategy-item positioning guidelines text-secondary text-small" href="#" id="show-guidelines">Toggle guidelines</a>
-								</p>
-								<div id="positioningGuidelines" >
-									<p><b>Guidelines</b> The positioning strategy doesn't need to work as marketing copy, it's for you and your team to be clear on direction.
-									<p>However, it should  sense  and speak to your buyer if they took the time to read it.</p>
-									<p>It must mention your customer(s) and at least allude to their specific problem you solve. It should also have your most important value proposition (improved revenue, more efficiency, etc).</p>
-									<p> Other good qualities: concise, problem-solution oriented, clear and non-promotional language, making convincing comparisons with competitors (without naming any.</p>
-									<p>
-										If it's close, revise and confirm. If it's way off, you might need to go back to the discovery interview and spend more time writing, the generate a new positioning statement.
-									</p>
-									</div>
-
-
-								<div class="brand-strategy-item meta-info">
-
-									<div class="brand-strategy-item form-label "><span class="brand-strategy brand-name"
-									x-text="$store.interviewData.brandName" ></span> Positioning Strategy</div>
-
-									<div class="brand-strategy-item control-buttons">
-									<button
-									    id="confirmPositioning"
-									    class="btn btn-primary control-btn strategy-button"
-									    type="button"
-									    x-bind:class="{ 'confirmed-class': $store.positioningStrategy.confirmed }"
-
-									    x-text="$store.positioningStrategy.confirmed ? 'Confirmed!' : 'Confirm'">
-										<span x-show="$store.positioningStrategy.confirmed" class="material-symbols-outlined medium confirmed-status">lock</span>
-
-									</button>
-									<button
-										    id="recreate-positioning"
-											class="btn btn-secondary control-btn strategy-button" type="button"
-											x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">Recreate
-									</button>
-
-									</div><!--/button row-->
-								</div><!-- /brand-strategy-item meta-info -->
-
-								<div class="positioning-strategy-wrapper"  style="position:relative;">
-
-									<div id="generatePositioningModal" class="modal" style="display:none">
-									  <div id="spinner" class="spinner thinking"></div>
-									  <div class="message-positioning modal-message">
-										  <ul class="modal-fun-facts" style="text-align:left;">
-
-
-											<li>This takes <strong>1 minute and 30 seconds</strong> (on average) <span class="brand-strategy brand-name" x-text="$store.interviewData.brandName" >.</li>
-											<li>Timer started: <strong id="positioningCountdowntimer"></strong>.</li>
-										  </ul>
-									  </div><!-- /message-positioning modal-message -->
-									</div>
-									<div id="positioning-strategy"
-										class="textarea llm-results brand-strategy positioning editable"
-										contenteditable="true" style="min-height:350px;">
-
-
-
-
-									</div><!-- /positioning-strategy -->
-								</div><!-- /positioning-strategy-wrappe -->
-								<p id="positioning-help" class="brand-strategy-item positioning feedback help text-secondary text-small">You'll be able to revise this later.</p>
-
-
-							</div><!--/positioning-strategy-section -->
-
-							<div id="brand-analysis-section" style="position:relative;min-height:500px;opacity:.5">
-
-								<h6 class="brand-strategy-item title">Step 2: Confirm Remaining Brand Analysis</h6>
-
-								<p class="brand-strategy-item explainer">
-									Below we've analyzed additional parts of your brand - review for accuracy and contribute nuance and insight.
-								</p>
-
-
-								<div class="brand-strategy-item meta-info">
-
-								<div class="brand-strategy-item form-label "><span class="brand-strategy brand-name"
-									x-text="$store.interviewData.brandName" ></span> Brand Analysis</div>
-
-								<div class="brand-strategy-item control-buttons">
-									<button
-										disabled=disabled
-										id="confirmBrandAnalysis"
-										class="btn btn-primary control-btn strategy-button"
-										type="button"
-										x-bind:class="{ 'confirmed-class': $store.positioningStrategy.confirmed }"
-
-										x-text="$store.positioningStrategy.confirmed ? 'Confirmed!' : 'Confirm'">
-										<span x-show="$store.positioningStrategy.confirmed" class="material-symbols-outlined medium confirmed-status">lock</span>
-
-									</button>
-									<button disabled=disabled
-										id="recreateBrandAnalysis"
-										class="btn btn-secondary control-btn strategy-button" type="button"
-										x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">Recreate
-									</button>
-
-								</div><!--/button row-->
-								</div><!-- /brand-strategy-item meta-info -->
-
-
-								<div id="brand-strategy-wrapper" style="position:relative">
-								<!-- alpine template loop -->
-									<div id="brand-strategy" class="textarea llm-results brand-strategy  editable"
-										contenteditable="true" style="min-height:300px" >
-									</div><!--/brand-strategy -->
-
-								<!-- /alpine template loop -->
-
-									<div id="generateBrandStrategyModal" class="modal" style="display:none">
-										<div id="spinner" class="spinner thinking"></div>
-										<div class="message-brand-strategy modal-message">
-											<ul class="modal-fun-facts" style="text-align:left;">
-
-
-
-												<li>This should be done in about <strong>2 minutes </strong></li>
-												<li>Timer started: <strong id="brandCountdowntimer"></strong>.</li>
-											</ul>
-
-
+								        ">
+												Let me review
+											</button>
 										</div>
+
+
 									</div>
+									<!-- .interview-info-card.card-header -->
+
+								</div><!-- /#interview-info-card -->
+
+							</div><!-- /.interview-form-info -->
+
+						</div><!-- /#InterviewView -->
+
+						<!-- /#InterviewReviewView -->
+						<div id="InterviewReviewView" x-data="InterviewReviewView()" x-init="init()"
+							x-show="Alpine.store('currentScreen').current === 'interview-review'" x-cloak
+							x-transition:enter.duration.400ms>
+
+							<div class="row interview-review-inner">
+
+
+
+								<div class="interviewreview-card card shadow my-4 left-column">
+
+									<div class="interview-review-container">
+										<!--<div class="print-header text-small text-secondary" style="display: block;text-align:right">Conducted by MessageMaps.io</div>-->
+										<a class="backlink edit text-small text-secondary" href="#"
+											x-on:click.prevent="Alpine.store('currentScreen').current = 'interviews'">
+											< Revise your interview</a> |
+												<a class="backlink edit text-small text-secondary" href="#"
+													onclick="location.reload();">Refresh your report</a>
+
+												<div class="interview-intro row mt-2">
+													<div class="interview-analysis text-small text-secondary  mt-4">
+														<h4>Quick Analysis</h4>
+														<!--<div  class="interview-summary">Summary: <span class="interview-analysis summary"></span></div>-->
+														<div class="interview-questions-answered interview-analysis">
+															Percentage of questions answered: <span
+																class="percent-answered"
+																x-text="percentAnswered() + '%'"></span></div>
+														<div class="interview-deepest-engagement interview-analysis">
+															Section with most engagement: <span
+																class="deepest-engagement"
+																x-text="mostEngagementCategory() || 'Loading...'"></span>
+														</div>
+														<div
+															class="interview-most-completed-section interview-analysis">
+															Section with least engagement: <span
+																class="least-engagement"
+																x-text="leastEngagementCategory() || 'Loading...'"></span>
+														</div>
+														<div class="interview-longest-answer interview-analysis">
+															Question with longest answer: <span class="longest-answer"
+																x-text="longestAnswer()"></span></div>
+														<!--<div  class="interview-most-charged">Most emotionally charged answer: <span class="interview-analysis summary"></span></div>-->
+
+													</div><!--  /.intervew-analysis -->
+
+
+												</div><!--  /.intervew-intro.row -->
+												<h4>Transcript</h4>
+												<!-- Iterate over each category -->
+												<template x-for="(category, index) in categories" :key="index">
+													<div class="interview-category">
+														<!-- Print category name -->
+														<div class="question-category h6" x-text="category.label"></div>
+
+														<!-- Iterate over each question in this category -->
+														<template
+															x-for="(question, qIndex) in (Array.isArray($store.questions) ? $store.questions.filter(question => question.question_category === category.id) : [])"
+															:key="question.id">
+
+
+															<div class="question-label-text-answer">
+																<!-- Print question label and text, and answer -->
+																<div
+																	class="question-label-text d-flex align-items-center">
+																	<span
+																		x-text="question.question_label.charAt(0).toUpperCase() + question.question_label.slice(1).replaceAll('_', ' ') + ': ' + question.question_text.charAt(0).toLowerCase() + question.question_text.slice(1)"></span>
+																</div>
+																<p class="review question-answer"
+																	x-text="answeredQuestions[question.id] ? answeredQuestions[question.id].answer : 'No answer yet'">
+																</p>
+
+
+
+
+																<template x-for="(followup, fIndex) in (answeredQuestions[question.id] &&
+												answeredQuestions[question.id].followups ? answeredQuestions[question.id].followups : [])"
+																	:key="`${question.id}-followup-${fIndex}`">
+																	<div>
+																		<span class="followup-question"
+																			x-show="followup.question"
+																			x-text="followup.question"
+																			style="color:#777;"></span>
+																		<p class="review followup-answer"
+																			x-show="followup.answer"
+																			x-text="followup.answer"></p>
+																	</div>
+																</template>
+
+															</div>
+														</template>
+
+													</div><!-- /.interview-category -->
+												</template>
+									</div><!-- /.interview-review-container -->
+
+								</div><!-- interview-review-card -->
+
+
+								<div class="strategy-meta-info-card card my-4  right-column">
+
+									<!-- .strategy-meta-info-card.card-header -->
+									<div class="card-header"
+										x-data="{ brandName: Alpine.store('yourBrand').brandName }">
+										<h5 class="card-title" id="interview-name"><span class="user-firstname"
+												x-text="$store.interviewData.interviewName+': Review'"></span></h5>
+
+										<!-- .updated -->
+										<div class="text-small text-secondary updated">Last edited:
+											<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
+										</div>
+										<!-- /.updated -->
+
+										<div class="hide-for-print">
+											<div x-data="{ userProfile: JSON.parse(localStorage.getItem('userProfile')) || {} }"
+												x-init="console.log(userProfile)">
+												<button
+													title="This functionality is disabled pending the Alpha release planned for June 28th"
+													id="SubmitInterview" name="submit" type="submit"
+													class="btn btn-primary my-2 w-150"
+													href="#brand-positioning-strategy"
+													x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'">
+													Submit - now give me strategy
+												</button>
+											</div>
+
+											<p class="text-small text-secondary"><input type=checkbox> Get consulting
+												team feedback</p>
+											<p class="text-small text-secondary pt-1 pb-">Submit your interview to save
+												a copy to your profile and get your <strong>Brand Strategy</strong>. You
+												can come back anytime to revise your interview.</p>
+											<p class="download-export-share text-small text-secondary pt-0">
+												<a title="Print nicely formatted" id="PrintHTML"
+													href="#interview-report-print">Print</a>
+												<a title="Download a simple, low file-size markdown document"
+													@click="downloadInterview()"
+													href="#interview-report-download-markdown">Download markdown</a>
+
+												<a title="Save a copy of this report to your profile, access it later"
+													id="SaveReport" href="#interview-report-save"
+													@click="saveInterview()">Save a copy</a>
+
+
+												<!--<a title="Export as a CSV for Google Sheets, Excel, etc" id="ExportCSV" href="#interview-report-export-csv">Export CSV</a>-->
+											</p>
+										</div><!-- hide for print -->
+									</div><!-- .strategy-info-card.card-header -->
+
 								</div>
 
 
 
 
-							</div><!--/brand-analysis-section-->
+							</div><!-- interviewreviewview-inner-->
+						</div><!-- /#InterviewReviewView -->
+
+
+
+
+						<!-- #StrategyView -->
+						<div id="StrategyView" x-show="Alpine.store('currentScreen').current === 'strategies'"
+							x-transition:enter.duration.700ms>
+							<div class="row strategyview-inner">
+
+
+
+
+								<div class="strategy-content card shadow my-4 left-column">
+
+									<div id="positioning-strategy-section"
+										class="brand-strategy-item positioning wrapper ">
+
+										<h6 class="brand-strategy-item title">Step 1: Confirm the Positioning Strategy
+										</h6>
+										<p class="brand-strategy-item explainer">
+											Let's get the positioning strategy right first - then move on to the rest of
+											the brand strategy.
+											<a class="brand-strategy-item positioning guidelines text-secondary text-small"
+												href="#" id="show-guidelines">Toggle guidelines</a>
+										</p>
+										<div id="positioningGuidelines">
+											<p><b>Guidelines</b> The positioning strategy doesn't need to work as
+												marketing copy, it's for you and your team to be clear on direction.
+											<p>However, it should sense and speak to your buyer if they took the time to
+												read it.</p>
+											<p>It must mention your customer(s) and at least allude to their specific
+												problem you solve. It should also have your most important value
+												proposition (improved revenue, more efficiency, etc).</p>
+											<p> Other good qualities: concise, problem-solution oriented, clear and
+												non-promotional language, making convincing comparisons with competitors
+												(without naming any.</p>
+											<p>
+												If it's close, revise and confirm. If it's way off, you might need to go
+												back to the discovery interview and spend more time writing, the
+												generate a new positioning statement.
+											</p>
+										</div>
+
+
+										<div class="brand-strategy-item meta-info">
+
+											<div class="brand-strategy-item form-label "><span
+													class="brand-strategy brand-name"
+													x-text="$store.interviewData.brandName"></span> Positioning Strategy
+											</div>
+
+											<div class="brand-strategy-item control-buttons">
+												<button id="confirmPositioning"
+													class="btn btn-primary control-btn strategy-button" type="button"
+													x-bind:class="{ 'confirmed-class': $store.positioningStrategy.confirmed }"
+													x-text="$store.positioningStrategy.confirmed ? 'Confirmed!' : 'Confirm'">
+													<span x-show="$store.positioningStrategy.confirmed"
+														class="material-symbols-outlined medium confirmed-status">lock</span>
+
+												</button>
+												<button id="recreate-positioning"
+													class="btn btn-secondary control-btn strategy-button" type="button"
+													x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">Recreate
+												</button>
+
+											</div><!--/button row-->
+										</div><!-- /brand-strategy-item meta-info -->
+
+										<div class="positioning-strategy-wrapper" style="position:relative;">
+
+											<div id="generatePositioningModal" class="modal" style="display:none">
+												<div id="spinner" class="spinner thinking"></div>
+												<div class="message-positioning modal-message">
+													<ul class="modal-fun-facts" style="text-align:left;">
+
+
+														<li>This takes <strong>1 minute and 30 seconds</strong> (on
+															average) <span class="brand-strategy brand-name"
+																x-text="$store.interviewData.brandName">.</li>
+														<li>Timer started: <strong
+																id="positioningCountdowntimer"></strong>.</li>
+													</ul>
+												</div><!-- /message-positioning modal-message -->
+											</div>
+											<div id="positioning-strategy"
+												class="textarea llm-results brand-strategy positioning editable"
+												contenteditable="true" style="min-height:350px;">
+
+
+
+
+											</div><!-- /positioning-strategy -->
+										</div><!-- /positioning-strategy-wrappe -->
+										<p id="positioning-help"
+											class="brand-strategy-item positioning feedback help text-secondary text-small">
+											You'll be able to revise this later.</p>
+
+
+									</div><!--/positioning-strategy-section -->
+
+									<div id="brand-analysis-section"
+										style="position:relative;min-height:500px;opacity:.5">
+
+										<h6 class="brand-strategy-item title">Step 2: Confirm Remaining Brand Analysis
+										</h6>
+
+										<p class="brand-strategy-item explainer">
+											Below we've analyzed additional parts of your brand - review for accuracy
+											and contribute nuance and insight.
+										</p>
+
+
+										<div class="brand-strategy-item meta-info">
+
+											<div class="brand-strategy-item form-label "><span
+													class="brand-strategy brand-name"
+													x-text="$store.interviewData.brandName"></span> Brand Analysis</div>
+
+											<div class="brand-strategy-item control-buttons">
+												<button disabled=disabled id="confirmBrandAnalysis"
+													class="btn btn-primary control-btn strategy-button" type="button"
+													x-bind:class="{ 'confirmed-class': $store.positioningStrategy.confirmed }"
+													x-text="$store.positioningStrategy.confirmed ? 'Confirmed!' : 'Confirm'">
+													<span x-show="$store.positioningStrategy.confirmed"
+														class="material-symbols-outlined medium confirmed-status">lock</span>
+
+												</button>
+												<button disabled=disabled id="recreateBrandAnalysis"
+													class="btn btn-secondary control-btn strategy-button" type="button"
+													x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">Recreate
+												</button>
+
+											</div><!--/button row-->
+										</div><!-- /brand-strategy-item meta-info -->
+
+
+										<div id="brand-strategy-wrapper" style="position:relative">
+											<!-- alpine template loop -->
+											<div id="brand-strategy"
+												class="textarea llm-results brand-strategy  editable"
+												contenteditable="true" style="min-height:300px">
+											</div><!--/brand-strategy -->
+
+											<!-- /alpine template loop -->
+
+											<div id="generateBrandStrategyModal" class="modal" style="display:none">
+												<div id="spinner" class="spinner thinking"></div>
+												<div class="message-brand-strategy modal-message">
+													<ul class="modal-fun-facts" style="text-align:left;">
+
+
+
+														<li>This should be done in about <strong>2 minutes </strong>
+														</li>
+														<li>Timer started: <strong id="brandCountdowntimer"></strong>.
+														</li>
+													</ul>
+
+
+												</div>
+											</div>
+										</div>
+
+
+
+
+									</div><!--/brand-analysis-section-->
 
 
 
 
 
-							<div id="completion-section" style="position:relative;opacity:.5">
-								<h6 class="brand-strategy-item title">Step 3: Complete and Confirm Brand Strategy</h6>
-								<p>Confirm both that your positioning strategy and other aspects of your brand strategy is accurate. This is important as it will be used to help you quickly intelligent sales and marketing assets.
-									<br><br>
-								<button disabled=disabled
-									id="recreateBrandAnalysis"
-									class="btn btn-primary btn strategy-button" type="button"
-									x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">Approve brand strategy
-								</button>
-								<p class="text-small text-secondary"><input type=checkbox> Get consulting team feedback</p>
+									<div id="completion-section" style="position:relative;opacity:.5">
+										<h6 class="brand-strategy-item title">Step 3: Complete and Confirm Brand
+											Strategy</h6>
+										<p>Confirm both that your positioning strategy and other aspects of your brand
+											strategy is accurate. This is important as it will be used to help you
+											quickly intelligent sales and marketing assets.
+											<br><br>
+											<button disabled=disabled id="recreateBrandAnalysis"
+												class="btn btn-primary btn strategy-button" type="button"
+												x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'; ">Approve
+												brand strategy
+											</button>
+										<p class="text-small text-secondary"><input type=checkbox> Get consulting team
+											feedback</p>
 
 
+									</div>
+
+
+
+								</div><!-- /strategy-content /left-column-->
+
+
+								<div class="strategy-meta-info-card card my-4  right-column">
+									<!-- .interview-info-card.card-header -->
+									<div class="card-header">
+										<h5 class="card-title" id="strategy-name"><span
+												class="brand-strategy brand-name"
+												x-text="$store.interviewData.brandName"></span> Brand Strategy</h5>
+
+										<!-- .updated -->
+										<div class="text-small text-secondary updated">Last edited:
+											<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
+										</div>
+										<!-- /.updated -->
+
+										<div class="hide-for-print">
+
+											<div x-data="{ userProfile: JSON.parse(localStorage.getItem('userProfile')) || {} }"
+												x-init="console.log(userProfile)">
+												<button title="Show me my strategy" id="SubmitInterview" name="submit"
+													type="submit" class="btn btn-primary my-2 w-150"
+													href="#brand-positioning-strategy">Show me my strategy </button>
+											</div>
+
+											<p class="text-small text-secondary"><input type=checkbox> Get consulting
+												team feedback</p>
+											<p class="text-small text-secondary pt-1 pb-">
+												Approve to save a copy to your profile and start generating sales and
+												marketing assets.
+												You can also come back to the brand strategy to revise your answers.</p>
+											<p class="download-export-share text-small text-secondary pt-0">
+												<a title="Print nicely formatted" id="Strategy_PrintHTML"
+													href="#interview-report-print">Print</a>
+
+												<a title="Download a simple, low file-size markdown document"
+													@click="downloadInterview()"
+													href="#interview-report-download-markdown">Download markdown</a>
+
+												<a title="Save a copy of this brand strategy to your profile, access it later"
+													id="Strategy_SaveReport" href="#interview-report-save"
+													@click="saveInterview()">Save a copy</a>
+
+											</p>
+										</div><!-- hide for print -->
+									</div><!-- .interview-info-card.card-header -->
+								</div><!--  /.intervew-meta -->
+
+
+							</div><!-- /strategy-inner -->
+						</div><!-- /#StrategyView -->
+
+						<!-- #MessagingView -->
+						<div id="MessagingView" x-show="Alpine.store('currentScreen').current === 'assets'">
+							<h4>Brand Assets for Sales and Marketing</h4>
+						</div><!-- /#MessagingView -->
+
+						<!-- /#AccountView -->
+						<div id="AccountView" x-show="Alpine.store('currentScreen').current === 'account'">
+
+							<h4>Your Account</h4>
+
+							<div class="card p-3" style="max-width: 420px;">
+								<p class="mb-2"><strong>Choose model</strong></p>
+								<select id="llm-model-select" class="form-select">
+									<option value="minimax-m2.5">Minimax M-2.5</option>
+									<option value="kimi-k2.5">Kimi-K2.5</option>
+									<option value="qwen-3-235b-instruct">Qwen-3-235binstruct</option>
+									<option value="llama-3.3-70b">LlaMa 3.3 70B</option>
+								</select>
+								<p class="text-small text-secondary mt-2 mb-0">Default: Kimi-K2.5</p>
 							</div>
 
+						</div><!-- /#AccountView -->
 
+					</div><!-- #MainViews - main section with views of various states -->
 
-						</div><!-- /strategy-content /left-column-->
+				</div><!-- /#Main -->
 
+			</div><!-- /.body-inner -->
+		</div><!-- /#Body -->
 
-						<div  class="strategy-meta-info-card card my-4  right-column">
-							<!-- .interview-info-card.card-header -->
-							<div class="card-header">
-								<h5 class="card-title" id="strategy-name"><span class="brand-strategy brand-name"
-									x-text="$store.interviewData.brandName" ></span> Brand Strategy</h5>
-
-								<!-- .updated -->
-								<div class="text-small text-secondary updated">Last edited:
-									<span x-text="formatDateTime($store.interviewData.updatedDate)"></span>
-								</div>
-								<!-- /.updated -->
-
-								<div class="hide-for-print">
-
-									<div x-data="{ userProfile: JSON.parse(localStorage.getItem('userProfile')) || {} }" x-init="console.log(userProfile)">
-										<button disabled=disabled
-											title="This functionality is disabled pending the Alpha release planned for June 28th"
-											:disabled="userProfile.user_id !== 'e42bd9c0-c905-4cd1-a186-97d602849934'"
-											id="ApproveStrategy"
-											name="submit"
-											type="submit"
-											class="btn btn-primary my-2 w-150 disabled"
-											href="#brand-positioning-strategy"
-											x-on:click.prevent="Alpine.store('currentScreen').current = 'strategies'"
-
-											>
-											Approve brand strategy
-										</button>
-									</div>
-
-									<p class="text-small text-secondary"><input type=checkbox> Get consulting team feedback</p>
-									<p class="text-small text-secondary pt-1 pb-">
-										Approve to save a copy to your profile and start generating sales and marketing assets.
-										You can also come back to the brand strategy to revise your answers.</p>
-									<p class="download-export-share text-small text-secondary pt-0">
-									    <a title="Print nicely formatted" id="Strategy_PrintHTML" href="#interview-report-print">Print</a>
-
-									    <a title="Download a simple, low file-size markdown document"
-											@click="downloadInterview()" href="#interview-report-download-markdown">Download markdown</a>
-
-										<a title="Save a copy of this brand strategy to your profile, access it later"
-											id="Strategy_SaveReport" href="#interview-report-save" @click="saveInterview()">Save a copy</a>
-
-									</p>
-								</div><!-- hide for print -->
-							</div><!-- .interview-info-card.card-header -->
-						</div><!--  /.intervew-meta -->
-
-
-					</div><!-- /strategy-inner -->
-	            </div><!-- /#StrategyView -->
-
-				<!-- #MessagingView -->
-	            <div id="MessagingView" x-show="Alpine.store('currentScreen').current === 'assets'">
-	              <h4>Brand Assets for Sales and Marketing</h4>
-	            </div><!-- /#MessagingView -->
-
-				<!-- /#AccountView -->
-	            <div id="AccountView" x-show="Alpine.store('currentScreen').current === 'account'">
-
-	              <h4>Your Account</h4>
-
-				  <div class="card p-3" style="max-width: 420px;">
-						<p class="mb-2"><strong>Choose model</strong></p>
-						<select id="llm-model-select" class="form-select">
-							<option value="minimax-m2.5">Minimax M-2.5</option>
-							<option value="kimi-k2.5">Kimi-K2.5</option>
-							<option value="qwen-3-235b-instruct">Qwen-3-235binstruct</option>
-							<option value="llama-3.3-70b">LlaMa 3.3 70B</option>
-						</select>
-						<p class="text-small text-secondary mt-2 mb-0">Default: Kimi-K2.5</p>
-					  </div>
-
-	            </div><!-- /#AccountView -->
-
-	        </div><!-- #MainViews - main section with views of various states -->
-
-      	</div><!-- /#Main -->
-
-    </div><!-- /.body-inner -->
- 	</div><!-- /#Body -->
-
-</div><!-- /.Logged_In_States -->
+	</div><!-- /.Logged_In_States -->
 
 
 
 </body>
+
 </html>

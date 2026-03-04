@@ -67,166 +67,166 @@
 
 
 // Alpine.js state management
-document.addEventListener('alpine:init', function() {
+document.addEventListener('alpine:init', function () {
   console.log('Alpine.js has been initialized');
-    const hasSupabaseToken = !!localStorage.getItem('supabase.auth.token');
-    Alpine.store('authenticationStatus', {
+  const hasSupabaseToken = !!localStorage.getItem('supabase.auth.token');
+  Alpine.store('authenticationStatus', {
 
-      current: hasSupabaseToken ? 'loggedIn' : 'loggedIn',
-      items: ['loggedIn', 'loggedOut'],
-      mode: hasSupabaseToken ? 'account' : 'guest',
-      updateAuthStatus: function () {
-        // Free mode default: everyone can use the app, accounts are optional.
-        if (localStorage.getItem('supabase.auth.token')) {
-          this.current = 'loggedIn';
-          this.mode = 'account';
-        } else {
-          this.current = 'loggedIn';
-          this.mode = 'guest';
-          if (!localStorage.getItem('currentScreen')) {
-            localStorage.setItem('currentScreen', 'interviews');
-          }
+    current: hasSupabaseToken ? 'loggedIn' : 'loggedIn',
+    items: ['loggedIn', 'loggedOut'],
+    mode: hasSupabaseToken ? 'account' : 'guest',
+    updateAuthStatus: function () {
+      // Free mode default: everyone can use the app, accounts are optional.
+      if (localStorage.getItem('supabase.auth.token')) {
+        this.current = 'loggedIn';
+        this.mode = 'account';
+      } else {
+        this.current = 'loggedIn';
+        this.mode = 'guest';
+        if (!localStorage.getItem('currentScreen')) {
+          localStorage.setItem('currentScreen', 'interviews');
         }
-      },
-    });
-
-    Alpine.store('authenticationStatus').updateAuthStatus();
-
-
-	// Define the Alpine store
-	Alpine.store('questions', {
-	    data: [],
-	    isDataLoaded: false
-	});
-
-
-    Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
-
-    Alpine.store('showSuccessMessage', false); // initialize the errorMessage global state
-
-    Alpine.store('formStatus', {
-      submitButtonDisabled: false,
-      successMessage: '',
-      errorMessage: '',
-      disableSubmitButton() {
-        this.submitButtonDisabled = true;
-      },
-      enableSubmitButton() {
-        this.submitButtonDisabled = false;
-      },
-      showSuccessMessage(message) {
-        this.successMessage = message;
-        setTimeout(() => {
-          this.successMessage = '';
-        }, 2000);
-      },
-      showErrorMessage(message) {
-        this.errorMessage = message;
-        setTimeout(() => {
-          this.errorMessage = '';
-        }, 2000);
       }
-    });
+    },
+  });
+
+  Alpine.store('authenticationStatus').updateAuthStatus();
+
+
+  // Define the Alpine store
+  Alpine.store('questions', {
+    data: [],
+    isDataLoaded: false
+  });
+
+
+  Alpine.store('errorMessage', { message: '' }); // initialize the errorMessage global state
+
+  Alpine.store('showSuccessMessage', false); // initialize the errorMessage global state
+
+  Alpine.store('formStatus', {
+    submitButtonDisabled: false,
+    successMessage: '',
+    errorMessage: '',
+    disableSubmitButton() {
+      this.submitButtonDisabled = true;
+    },
+    enableSubmitButton() {
+      this.submitButtonDisabled = false;
+    },
+    showSuccessMessage(message) {
+      this.successMessage = message;
+      setTimeout(() => {
+        this.successMessage = '';
+      }, 2000);
+    },
+    showErrorMessage(message) {
+      this.errorMessage = message;
+      setTimeout(() => {
+        this.errorMessage = '';
+      }, 2000);
+    }
+  });
 
 
 
-	Alpine.store('yourBrand', {
-		brandName: 'your brand', // default value
-		setBrandName(value) {
-			this.brandName = value;
-		},
-	})
+  Alpine.store('yourBrand', {
+    brandName: 'your brand', // default value
+    setBrandName(value) {
+      this.brandName = value;
+    },
+  })
 
-	Alpine.store('currentScreen', new Proxy({
-	  current: localStorage.getItem('currentScreen') || 'interviews',
-	  items: [
-	    ['account', 'your account'],
-	    ['settings', 'settings'],
-	   // ['maps', localStorage.getItem('interviewData') ? `${JSON.parse(localStorage.getItem('interviewData')).brandName} message map` : 'your message map'],
-	    ['maps', 'message maps home'],
-		['interviews', 'discovery interview'],
-	    ['interview-review', 'discovery interview report'],
-	    ['strategies', 'brand strategy'],
-	    ['strategy-review', 'business strategy report'],
-	    ['assets', 'sales and marketing assets'],
-	    ['newMap', 'get a new map'],
-	  ],
-	  showName: function () {
-	    let item = this.items.find(item => item[0] === this.current);
-	    return item ? item[1] : this.current; // if not found, return the slug itself
-	  }
-	}, {
-	  set: function(target, property, value) {
-	    if (property === 'current') {
-	      // Whenever 'current' property is set, also save it to local storage
-	      localStorage.setItem('currentScreen', value);
-	    }
-	    // Set the value on the original object
-	    target[property] = value;
-	    // Indicate successful setting
-	    return true;
-	  }
-	}));
+  Alpine.store('currentScreen', new Proxy({
+    current: localStorage.getItem('currentScreen') || 'interviews',
+    items: [
+      ['account', 'your account'],
+      ['settings', 'settings'],
+      // ['maps', localStorage.getItem('interviewData') ? `${JSON.parse(localStorage.getItem('interviewData')).brandName} message map` : 'your message map'],
+      ['maps', 'message maps home'],
+      ['interviews', 'discovery interview'],
+      ['interview-review', 'discovery interview report'],
+      ['strategies', 'brand strategy'],
+      ['strategy-review', 'business strategy report'],
+      ['assets', 'sales and marketing assets'],
+      ['newMap', 'get a new map'],
+    ],
+    showName: function () {
+      let item = this.items.find(item => item[0] === this.current);
+      return item ? item[1] : this.current; // if not found, return the slug itself
+    }
+  }, {
+    set: function (target, property, value) {
+      if (property === 'current') {
+        // Whenever 'current' property is set, also save it to local storage
+        localStorage.setItem('currentScreen', value);
+      }
+      // Set the value on the original object
+      target[property] = value;
+      // Indicate successful setting
+      return true;
+    }
+  }));
 
-	let initialUserProfileData = window.localStorage.getItem('userProfile');
-	if (initialUserProfileData) {
-	  initialUserProfileData = JSON.parse(initialUserProfileData);
-	} else {
-	  initialUserProfileData = {
-	    user_id: null,
-	    first_name: null,
-	    last_name: null,
-	    full_name: null,
-	    company: null,
-	    role: null,
-	    account_tier: null,
-	  };
-	}
+  let initialUserProfileData = window.localStorage.getItem('userProfile');
+  if (initialUserProfileData) {
+    initialUserProfileData = JSON.parse(initialUserProfileData);
+  } else {
+    initialUserProfileData = {
+      user_id: null,
+      first_name: null,
+      last_name: null,
+      full_name: null,
+      company: null,
+      role: null,
+      account_tier: null,
+    };
+  }
 
-	Alpine.store('userProfile', {
-	  data: new Proxy(initialUserProfileData, {
-	    set: function(target, property, value) {
-	      // Set the value on the original object
-	      target[property] = value;
-	      // Save to localStorage whenever any property is updated
-	      window.localStorage.setItem('userProfile', JSON.stringify(target));
-	      // Indicate successful setting
-	      return true;
-	    },
-	  }),
-	});
-
-
-	let initialInterviewData = window.localStorage.getItem('interviewData');
-	if (initialInterviewData) {
-	  initialInterviewData = JSON.parse(initialInterviewData);
-	} else {
-	  initialInterviewData = {
-	    createdDate: null,
-	    updatedDate: null,
-	    interviewName: null,
-	    interviewId: null,
-		brand_name: null,
-		submitted: null,
-	  };
-	}
+  Alpine.store('userProfile', {
+    data: new Proxy(initialUserProfileData, {
+      set: function (target, property, value) {
+        // Set the value on the original object
+        target[property] = value;
+        // Save to localStorage whenever any property is updated
+        window.localStorage.setItem('userProfile', JSON.stringify(target));
+        // Indicate successful setting
+        return true;
+      },
+    }),
+  });
 
 
+  let initialInterviewData = window.localStorage.getItem('interviewData');
+  if (initialInterviewData) {
+    initialInterviewData = JSON.parse(initialInterviewData);
+  } else {
+    initialInterviewData = {
+      createdDate: null,
+      updatedDate: null,
+      interviewName: null,
+      interviewId: null,
+      brand_name: null,
+      submitted: null,
+    };
+  }
 
-	// Define your stores up front
-	Alpine.store('positioningStrategy', { confirmed: false })
 
 
-	Alpine.store('interviewData', new Proxy(initialInterviewData, {
-	  set: function(target, property, value) {
-	    // Set the value on the original object
-	    target[property] = value;
-	    // Save to localStorage whenever any property is updated
-	    // window.localStorage.setItem('interviewData', JSON.stringify(target));
+  // Define your stores up front
+  Alpine.store('positioningStrategy', { confirmed: false })
 
-	    return true;
-	  }
-	}));
+
+  Alpine.store('interviewData', new Proxy(initialInterviewData, {
+    set: function (target, property, value) {
+      // Set the value on the original object
+      target[property] = value;
+      // Save to localStorage whenever any property is updated
+      // window.localStorage.setItem('interviewData', JSON.stringify(target));
+
+      return true;
+    }
+  }));
 
   Alpine.store('currentPage', {
     current: 'login',
@@ -236,7 +236,7 @@ document.addEventListener('alpine:init', function() {
 
   Alpine.store('lightDarkMode', {
     current: 'light',
-    items: ['light','dark']
+    items: ['light', 'dark']
   });
 
   Alpine.store('sidebarStatus', {
@@ -269,7 +269,7 @@ function initializeModelSelector() {
   const select = document.getElementById('llm-model-select');
   if (!select) return;
   select.value = getSelectedModel();
-  select.addEventListener('change', function() {
+  select.addEventListener('change', function () {
     localStorage.setItem(LLM_MODEL_STORAGE_KEY, this.value);
   });
 }
@@ -279,18 +279,18 @@ function initializeModelSelector() {
 // listen for authentication state changes
 
 document.addEventListener('DOMContentLoaded', (event) => {
-	supabase.auth.onAuthStateChange((event, session) => {
-	  //console.log('Authentication state changed', event);
-	  // console.log('Current Session', session);
-	  // Check if the user is logged in
-	  if (session) {
-	    Alpine.store('authenticationStatus').current = 'loggedIn';
-	    Alpine.store('authenticationStatus').mode = 'account';
-	    // The token is automatically stored by Supabase client, no need to manually store it
-	  } else {
-	    Alpine.store('authenticationStatus').startGuestMode();
-	  }
-	});
+  supabase.auth.onAuthStateChange((event, session) => {
+    //console.log('Authentication state changed', event);
+    // console.log('Current Session', session);
+    // Check if the user is logged in
+    if (session) {
+      Alpine.store('authenticationStatus').current = 'loggedIn';
+      Alpine.store('authenticationStatus').mode = 'account';
+      // The token is automatically stored by Supabase client, no need to manually store it
+    } else {
+      Alpine.store('authenticationStatus').startGuestMode();
+    }
+  });
 });
 
 
@@ -309,36 +309,36 @@ function updateQuestionText() {
   if (brand !== null) {
 
 
-      // Update the Alpine store
-      Alpine.store('yourBrand').brandName = brand;
+    // Update the Alpine store
+    Alpine.store('yourBrand').brandName = brand;
 
 
     document.querySelector('#q2').textContent = 'What sets ' + brand + ' apart from competitors and alternatives?';
 
-	document.querySelector('#q50').textContent = "What's the best way to talk about what " + brand + " provides - product or service?";
+    document.querySelector('#q50').textContent = "What's the best way to talk about what " + brand + " provides - product or service?";
 
-	document.querySelector('#q7').textContent = "Why does  " + brand + " exist?";
+    document.querySelector('#q7').textContent = "Why does  " + brand + " exist?";
 
-	document.querySelector('#q5').textContent = "What misconception about  " + brand + " do you encounter?";
+    document.querySelector('#q5').textContent = "What misconception about  " + brand + " do you encounter?";
 
-	document.querySelector('#q12').textContent = "When they hear about " + brand + ", what do you want them to think - what's your message??";
+    document.querySelector('#q12').textContent = "When they hear about " + brand + ", what do you want them to think - what's your message??";
 
-	document.querySelector('#q19').textContent = " What problems can " + brand + " not quite solve?";
+    document.querySelector('#q19').textContent = " What problems can " + brand + " not quite solve?";
 
-	document.querySelector('#q30').textContent = "Who has a similar audience to " + brand + " but isn't really competitor?";
+    document.querySelector('#q30').textContent = "Who has a similar audience to " + brand + " but isn't really competitor?";
 
-	document.querySelector('#q40').textContent = "How and when do customers pay for " + brand ;
+    document.querySelector('#q40').textContent = "How and when do customers pay for " + brand;
 
-	document.querySelector('#q43').textContent = "Which does " + brand + " help with *more* – increasing income or cutting costs?";
-
-
+    document.querySelector('#q43').textContent = "Which does " + brand + " help with *more* – increasing income or cutting costs?";
 
 
-	// these need solution type and/or customer type variables
-	//The problem your [solution] addresses – what kind of organization does that help the most
-	//Who usually approves the decision to buy your solution?
-	//28 What are the alternatives (as opposed to competitors) to your solution?
-	//39Can you describe a common decision-making process for your customers? How long does it take?
+
+
+    // these need solution type and/or customer type variables
+    //The problem your [solution] addresses – what kind of organization does that help the most
+    //Who usually approves the decision to buy your solution?
+    //28 What are the alternatives (as opposed to competitors) to your solution?
+    //39Can you describe a common decision-making process for your customers? How long does it take?
 
 
 
@@ -375,7 +375,7 @@ async function getUserData(userId) {
 
 const signUpSubmitted = async (event) => {
 
-    event.preventDefault();
+  event.preventDefault();
 
 
   Alpine.store('formStatus').disableSubmitButton();
@@ -413,7 +413,7 @@ const signUpSubmitted = async (event) => {
 
       // Get the current user's ID
       const userId = response.user.id;
-	  //console.log('Signup response:', response);
+      //console.log('Signup response:', response);
       // Create a new profile entry in the 'user_profiles' table
       const { data, error } = await supabase
         .from('user_profiles')
@@ -437,7 +437,7 @@ const signUpSubmitted = async (event) => {
           window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
         }
 
-		await createInterview();
+        await createInterview();
 
         await getInterviewQuestions();
 
@@ -445,17 +445,17 @@ const signUpSubmitted = async (event) => {
         if (interview !== null && interview !== undefined) {
           //console.log('No interview found for user. Redirecting to onboarding...');
 
-		  Alpine.store('currentScreen').current = 'maps';
+          Alpine.store('currentScreen').current = 'maps';
 
-      } else {
+        } else {
 
 
-		// Store the interview in localStorage immediately after login
-        window.localStorage.setItem('interviewData', JSON.stringify(interview));
+          // Store the interview in localStorage immediately after login
+          window.localStorage.setItem('interviewData', JSON.stringify(interview));
 
-		Alpine.store('currentScreen').current = 'interviews';
+          Alpine.store('currentScreen').current = 'interviews';
 
-	  }
+        }
       }
     }
 
@@ -499,54 +499,54 @@ const logInSubmitted = async (event) => {
 
       const userId = response.user.id;
       const { data, error } = await supabase
-      .from('user_profiles')
-      .select('*')
-      .eq('user_id', userId)
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', userId)
 
-	  //console.log('data:',data);
+      //console.log('data:',data);
 
-	  if (data && data.length > 0) {
+      if (data && data.length > 0) {
 
-		const userProfile = data[0];
-		window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
+        const userProfile = data[0];
+        window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
 
-		// Update the initials in DOM
-		let profileElement = document.querySelector('.user-initials');
-		//console.log('profileElement ',profileElement)
+        // Update the initials in DOM
+        let profileElement = document.querySelector('.user-initials');
+        //console.log('profileElement ',profileElement)
 
-		// Update the initials in DOM
-		let profileElements = document.querySelectorAll('.user-initials');
-		let firstI = userProfile.first_name ? userProfile.first_name[0].toUpperCase() : '';
-		let lastI = userProfile.last_name ? userProfile.last_name[0].toUpperCase() : '';
-		let initials = firstI + ' ' + lastI;
+        // Update the initials in DOM
+        let profileElements = document.querySelectorAll('.user-initials');
+        let firstI = userProfile.first_name ? userProfile.first_name[0].toUpperCase() : '';
+        let lastI = userProfile.last_name ? userProfile.last_name[0].toUpperCase() : '';
+        let initials = firstI + ' ' + lastI;
 
-		profileElements.forEach(profileElement => {
-		  profileElement.textContent = initials;
-		});
-
-
-
-	  }
-
-        await getInterviewQuestions();
-
-      	const interviewId = await getInterview(userId);
-		//console.log(interviewId);
-
-	  	// this is where we figure out where to send the user on logi
-      	if (interview === null || !interview.hasOwnProperty('interviewID')) {
-
-        	Alpine.store('currentScreen').current = 'maps';
-
-    	} else {
+        profileElements.forEach(profileElement => {
+          profileElement.textContent = initials;
+        });
 
 
-			// Store the interviewId in localStorage immediately after login
-        	window.localStorage.setItem('interviewData', JSON.stringify(interview));
 
-			Alpine.store('currentScreen').current = 'interviews';
+      }
 
-    }
+      await getInterviewQuestions();
+
+      const interviewId = await getInterview(userId);
+      //console.log(interviewId);
+
+      // this is where we figure out where to send the user on logi
+      if (interview === null || !interview.hasOwnProperty('interviewID')) {
+
+        Alpine.store('currentScreen').current = 'maps';
+
+      } else {
+
+
+        // Store the interviewId in localStorage immediately after login
+        window.localStorage.setItem('interviewData', JSON.stringify(interview));
+
+        Alpine.store('currentScreen').current = 'interviews';
+
+      }
 
     }
   } catch (err) {
@@ -570,11 +570,11 @@ const logoutSubmitted = (event) => {
     .signOut()
     .then((_response) => {
       console.log('logout successful')
-         localStorage.removeItem('userProfile');
-		 localStorage.removeItem('positioningData');
-         localStorage.removeItem('interviewData');
-         localStorage.removeItem('supabase.auth.token');
-         localStorage.removeItem('ckid');
+      localStorage.removeItem('userProfile');
+      localStorage.removeItem('positioningData');
+      localStorage.removeItem('interviewData');
+      localStorage.removeItem('supabase.auth.token');
+      localStorage.removeItem('ckid');
       Alpine.store('authenticationStatus').updateAuthStatus();
     })
     .catch((err) => {
@@ -590,32 +590,32 @@ const logoutSubmitted = (event) => {
 //  9.2 - Make interview questions available in Alpine store
 async function getInterviewQuestions() {
 
-    try {
-        // Check if the data is already in local storage
-        const localStorageData = localStorage.getItem('interviewQuestions');
-        if (localStorageData) {
-            Alpine.store('questions', JSON.parse(localStorageData)); // Update the Alpine store with the interview questions from local storage
-        } else {
-            // If data is not in local storage, fetch it
-            const { data, error } = await supabase
-                .from('interview_questions')
-                .select('*')
-                .order('sort_order');
+  try {
+    // Check if the data is already in local storage
+    const localStorageData = localStorage.getItem('interviewQuestions');
+    if (localStorageData) {
+      Alpine.store('questions', JSON.parse(localStorageData)); // Update the Alpine store with the interview questions from local storage
+    } else {
+      // If data is not in local storage, fetch it
+      const { data, error } = await supabase
+        .from('interview_questions')
+        .select('*')
+        .order('sort_order');
 
-            if (error) {
-                throw error; // Throw the error to be caught by the catch block
-            }
+      if (error) {
+        throw error; // Throw the error to be caught by the catch block
+      }
 
-            localStorage.setItem('interviewQuestions', JSON.stringify(data)); // Store the interview questions in the local storage
-            Alpine.store('questions', data); // Update the Alpine store with the interview questions from the fetch request
-        }
-
-        // Dispatch an event indicating the data has loaded
-        window.dispatchEvent(new CustomEvent('questionsLoaded'));
-
-    } catch (err) {
-        console.error('Error fetching interview questions:', err);
+      localStorage.setItem('interviewQuestions', JSON.stringify(data)); // Store the interview questions in the local storage
+      Alpine.store('questions', data); // Update the Alpine store with the interview questions from the fetch request
     }
+
+    // Dispatch an event indicating the data has loaded
+    window.dispatchEvent(new CustomEvent('questionsLoaded'));
+
+  } catch (err) {
+    console.error('Error fetching interview questions:', err);
+  }
 
 }
 
@@ -624,18 +624,18 @@ async function getInterviewQuestions() {
 
 function formatDateTime(dateString = new Date()) {
 
-	const date = new Date(dateString);
+  const date = new Date(dateString);
 
-	const options = {
-	year: 'numeric',
-	month: 'numeric',
-	day: 'numeric',
-	hour: 'numeric',
-	minute: 'numeric',
-		 timeZoneName: 'short'
-	};
-	// console.log("date 1: ", date);
-	return date.toLocaleString([], options);
+  const options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    timeZoneName: 'short'
+  };
+  // console.log("date 1: ", date);
+  return date.toLocaleString([], options);
 
 }
 
@@ -664,69 +664,69 @@ async function createInterview() {
   const interviewName = `${fullName} interview`;
 
   const { data, error } = await supabase
-  .from('interviews')
-  .insert({
-    user_id: userId,
-    interview_name: interviewName // This is the name of the interview
-  });
+    .from('interviews')
+    .insert({
+      user_id: userId,
+      interview_name: interviewName // This is the name of the interview
+    });
 
   if (error) {
     console.error('Error creating interview:', error);
   } else {
-	  //console.log('Interview created successfully:', data);
-	    // Save interviewData to local storage
-	    window.localStorage.setItem('interviewData', JSON.stringify(data));
+    //console.log('Interview created successfully:', data);
+    // Save interviewData to local storage
+    window.localStorage.setItem('interviewData', JSON.stringify(data));
 
   }
- }
+}
 
 
 // edit an interview (by adding brand name)
 
- async function updateInterview(interviewId, brandName, fullName) {
-   try {
-     const newInterviewName = `${brandName} Discovery Interview`;
-     const { data, error } = await supabase
-       .from('interviews')
-       .update({
-         brand_name: brandName,
-         interview_name: newInterviewName
-       })
-       .eq('id', interviewId);
+async function updateInterview(interviewId, brandName, fullName) {
+  try {
+    const newInterviewName = `${brandName} Discovery Interview`;
+    const { data, error } = await supabase
+      .from('interviews')
+      .update({
+        brand_name: brandName,
+        interview_name: newInterviewName
+      })
+      .eq('id', interviewId);
 
-     if (error) {
-       console.error('Error updating interview:', error.message);
-       return null;
-     }
+    if (error) {
+      console.error('Error updating interview:', error.message);
+      return null;
+    }
 
-     // Update the Alpine store with the new interview name
-     Alpine.store('interviewData').interviewName = newInterviewName;
+    // Update the Alpine store with the new interview name
+    Alpine.store('interviewData').interviewName = newInterviewName;
 
-	 // add updated brand name to local storage interviewData object
-	 const newBrandName = `${brandName}`;
-	 let interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
-	 interviewData.brandName = newBrandName;
-	 window.localStorage.setItem('interviewData', JSON.stringify(interviewData));
+    // add updated brand name to local storage interviewData object
+    const newBrandName = `${brandName}`;
+    let interviewData = JSON.parse(window.localStorage.getItem('interviewData'));
+    interviewData.brandName = newBrandName;
+    window.localStorage.setItem('interviewData', JSON.stringify(interviewData));
 
- 	// Update question text with brand name from local storage
-     updateQuestionText();
+    // Update question text with brand name from local storage
+    updateQuestionText();
 
-     // Add highlight class
-     document.getElementById('interview-name').classList.add('highlight-welcome');
+    // Add highlight class
+    document.getElementById('interview-name').classList.add('highlight-welcome');
 
-     // Remove highlight class after a timeout
-     setTimeout(() => {
-       document.getElementById('interview-name').classList.remove('highlight-welcome');
-     }, 2000); // Adjust this value as needed
+    // Remove highlight class after a timeout
+    setTimeout(() => {
+      document.getElementById('interview-name').classList.remove('highlight-welcome');
+    }, 2000); // Adjust this value as needed
 
 
-     return data; // Return the updated interview data if needed
+    return data; // Return the updated interview data if needed
 
-   } catch (err) {
-     console.error('Exception thrown during interview update:', err.message);
-     return null;
-   }
- }
+  } catch (err) {
+    console.error('Exception thrown during interview update:', err.message);
+    return null;
+  }
+}
 
 
 
@@ -791,8 +791,8 @@ async function getInterview(userId) {
     Alpine.store('interviewData').createdDate = interview.created_at;
     Alpine.store('interviewData').updatedDate = interview.updated_at;
     Alpine.store('interviewData').interviewID = interview.id;
-	Alpine.store('interviewData').brandName = interview.brand_name;
-	Alpine.store('interviewData').submitted = interview.submitted;
+    Alpine.store('interviewData').brandName = interview.brand_name;
+    Alpine.store('interviewData').submitted = interview.submitted;
 
     // Create a new JavaScript object
     const interviewData = {
@@ -800,7 +800,7 @@ async function getInterview(userId) {
       createdDate: interview.created_at,
       updatedDate: interview.updated_at,
       interviewID: interview.id,
-	  brandName: interview.brand_name,
+      brandName: interview.brand_name,
       submitted: interview.submitted,
     };
 
@@ -810,7 +810,7 @@ async function getInterview(userId) {
     // Store the string in localStorage
     window.localStorage.setItem('interviewData', interviewDataString);
 
-   // console.log('Interview data:', interview);
+    // console.log('Interview data:', interview);
 
     // Return the ID of the existing interview
     return interview.id;
@@ -834,67 +834,67 @@ function debounce(func, wait) {
 
 async function saveAnswer(interviewId, questionId, answer, userId) {
 
-    //console.log("saveAnswer called with questionId:", questionId);
+  //console.log("saveAnswer called with questionId:", questionId);
 
-    // Pull the interviewId from local storage
-    let interviewDataString = window.localStorage.getItem('interviewData');
-    let interviewData = JSON.parse(interviewDataString);
+  // Pull the interviewId from local storage
+  let interviewDataString = window.localStorage.getItem('interviewData');
+  let interviewData = JSON.parse(interviewDataString);
 
-    //console.log("Fetched interview data from local storage:", interviewData);
+  //console.log("Fetched interview data from local storage:", interviewData);
 
-	const currentDate = new Date();
+  const currentDate = new Date();
 
-    if (!interviewId || !userId) {
-      const guestAnswers = JSON.parse(window.localStorage.getItem('guestAnswers') || '{}');
-      guestAnswers[questionId] = answer;
-      window.localStorage.setItem('guestAnswers', JSON.stringify(guestAnswers));
+  if (!interviewId || !userId) {
+    const guestAnswers = JSON.parse(window.localStorage.getItem('guestAnswers') || '{}');
+    guestAnswers[questionId] = answer;
+    window.localStorage.setItem('guestAnswers', JSON.stringify(guestAnswers));
+    return;
+  }
+  try {
+    const { data, error } = await supabase
+      .from('interview_answers')
+      .upsert({
+        interview_id: interviewId,
+        question_id: questionId,
+        answer: answer,
+        user_id: userId,
+        updated_at: currentDate
+      }, {
+        onConflict: ['interview_id', 'question_id', 'user_id']
+      });
+
+    // Here you should handle if the upsert operation ended with an error.
+    // For example:
+    if (error) {
+      console.error('Error: ', error);
       return;
     }
-    try {
-      const { data, error } = await supabase
-        .from('interview_answers')
-        .upsert({
-          interview_id: interviewId,
-          question_id: questionId,
-          answer: answer,
-          user_id: userId,
-		  updated_at: currentDate
-        },{
-          onConflict: ['interview_id', 'question_id', 'user_id']
-        });
-
-      // Here you should handle if the upsert operation ended with an error.
-      // For example:
-      if (error) {
-        console.error('Error: ', error);
-        return;
-      }
 
 
 
-      // Update interview's updated_at field
-      const update = await supabase
-        .from('interviews')
-        .update({
-          updated_at: currentDate
-        })
-        .eq('id', interviewId);
+    // Update interview's updated_at field
+    const update = await supabase
+      .from('interviews')
+      .update({
+        updated_at: currentDate
+      })
+      .eq('id', interviewId);
 
-      // Here you should handle if the update operation ended with an error.
-      // For example:
-      if (update.error) {
-        console.error('Error: ', update.error);
-      }
-
-	  // Update Alpine.js store
-	  let store = Alpine.store('interviewData');
-	  store.updatedDate = currentDate;
-	  console.log("Updated date:", Alpine.store('interviewData').updatedDate);
-
-
-    } catch (error) {
-      console.error('An unexpected error occurred:', error);
+    // Here you should handle if the update operation ended with an error.
+    // For example:
+    if (update.error) {
+      console.error('Error: ', update.error);
     }
+
+    // Update Alpine.js store
+    let store = Alpine.store('interviewData');
+    store.updatedDate = currentDate;
+    console.log("Updated date:", Alpine.store('interviewData').updatedDate);
+
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error);
+  }
 }
 
 
@@ -903,7 +903,7 @@ let animationRunning = false;  // global flag to track animation state
 
 const autoSave = debounce(
   async function (interviewId, questionId, answer, userId, textarea) {
-	  //console.log(interviewId);  // Add this line
+    //console.log(interviewId);  // Add this line
     try {
       await saveAnswer(interviewId, questionId, answer, userId);
 
@@ -913,22 +913,22 @@ const autoSave = debounce(
         snackbar.classList.add('show');
         animationRunning = true;
 
-		setTimeout(() => {
-		  animationRunning = false;
-		  snackbar.classList.remove('show');
-		}, 4000);  // Matches the total duration of the CSS animations
+        setTimeout(() => {
+          animationRunning = false;
+          snackbar.classList.remove('show');
+        }, 4000);  // Matches the total duration of the CSS animations
 
       }
 
 
       // check if the user has entered at least 100 characters
       if (answer.length >= 100) {
-          // get the feedback div for this question
-          const feedbackDiv = document.getElementById('answer-feedback-' + questionId);
-          if (feedbackDiv) {
-              // make the feedback div visible
-              feedbackDiv.style.visibility = "visible";
-          }
+        // get the feedback div for this question
+        const feedbackDiv = document.getElementById('answer-feedback-' + questionId);
+        if (feedbackDiv) {
+          // make the feedback div visible
+          feedbackDiv.style.visibility = "visible";
+        }
       }
 
       // Change the background color of the textarea
@@ -946,18 +946,18 @@ const autoSave = debounce(
 
 
 
-  async function getFollowup(questionId, answer, questionText, questionCategory, questionLabel, questionHelp) {
-      try {
-          // Prepare the data to send in the body of the POST request
-          const postData = {
-              questionId: questionId,
-              answer: answer,
-              questionText: questionText,
-              questionCategory: questionCategory,
-              questionLabel: questionLabel,
-              questionHelp: questionHelp
-          };
-	//console.log("get followup data prepared")
+async function getFollowup(questionId, answer, questionText, questionCategory, questionLabel, questionHelp) {
+  try {
+    // Prepare the data to send in the body of the POST request
+    const postData = {
+      questionId: questionId,
+      answer: answer,
+      questionText: questionText,
+      questionCategory: questionCategory,
+      questionLabel: questionLabel,
+      questionHelp: questionHelp
+    };
+    //console.log("get followup data prepared")
 
 
     const response = await fetch(`/api/followup`, {
@@ -977,32 +977,32 @@ const autoSave = debounce(
     //console.log('Followup question received: ', followup_question);
 
 
-	// Display the follow-up question in the HTML element
-	const followUpContainer = document.getElementById('followup-to-question-id-' + followup_question.questionId);
+    // Display the follow-up question in the HTML element
+    const followUpContainer = document.getElementById('followup-to-question-id-' + followup_question.questionId);
 
-	// Get the first (and in your case, only) p tag within the followUpContainer
-	const followUpParagraph = followUpContainer.querySelector('p');
+    // Get the first (and in your case, only) p tag within the followUpContainer
+    const followUpParagraph = followUpContainer.querySelector('p');
 
-	// Now, instead of directly setting the textContent of the followUpContainer,
-	// you're setting the textContent of the nested p tag.
-	followUpParagraph.textContent = followup_question.followupQuestion;
+    // Now, instead of directly setting the textContent of the followUpContainer,
+    // you're setting the textContent of the nested p tag.
+    followUpParagraph.textContent = followup_question.followupQuestion;
 
 
-	// Get the first (and in your case, only) p tag within the followUpContainer
-	const followUpTextarea = followUpContainer.querySelector('textarea');
-	followUpTextarea.classList.add('show');
+    // Get the first (and in your case, only) p tag within the followUpContainer
+    const followUpTextarea = followUpContainer.querySelector('textarea');
+    followUpTextarea.classList.add('show');
 
-	followUpContainer.classList.add('fade-in');
+    followUpContainer.classList.add('fade-in');
 
-	// After 2 seconds (which is the duration of our fade-in animation), add the highlight class
-	setTimeout(() => {
-	  followUpParagraph.classList.add('highlight');
+    // After 2 seconds (which is the duration of our fade-in animation), add the highlight class
+    setTimeout(() => {
+      followUpParagraph.classList.add('highlight');
 
-	  // Then, after another 2 seconds, remove the highlight class
-	  setTimeout(() => {
-	    followUpParagraph.classList.remove('highlight');
-	  }, 2000);
-	}, 2000);
+      // Then, after another 2 seconds, remove the highlight class
+      setTimeout(() => {
+        followUpParagraph.classList.remove('highlight');
+      }, 2000);
+    }, 2000);
 
 
     return followup_question;
@@ -1054,21 +1054,21 @@ async function saveFollowupAnswer(interviewId, questionId, followupQuestion, fol
     if (error) {
       throw error;
     } else {
-     // console.log('Followup answer saved successfully:', data);
+      // console.log('Followup answer saved successfully:', data);
 
 
 
       const snackbar = document.getElementById(`save-confirmation-followup-to-question-id-${questionId}`);
-	  //console.log(snackbar);
+      //console.log(snackbar);
 
       if (!animationRunning) {
         snackbar.classList.add('show');
         animationRunning = true;
 
-		setTimeout(() => {
-		  animationRunning = false;
-		  snackbar.classList.remove('show');
-		}, 4000);  // Matches the total duration of the CSS animations
+        setTimeout(() => {
+          animationRunning = false;
+          snackbar.classList.remove('show');
+        }, 4000);  // Matches the total duration of the CSS animations
 
       }
 
@@ -1090,21 +1090,21 @@ const autoSaveFollowupAnswer = debounce(
         snackbar.classList.add('show');
         animationRunning = true;
 
-		setTimeout(() => {
-		  animationRunning = false;
-		  snackbar.classList.remove('show');
-		}, 4000);  // Matches the total duration of the CSS animations
+        setTimeout(() => {
+          animationRunning = false;
+          snackbar.classList.remove('show');
+        }, 4000);  // Matches the total duration of the CSS animations
 
       }
 
       // check if the user has entered at least 100 characters
       if (answer.length >= 100) {
-          // get the feedback div for this question
-          const feedbackDiv = document.getElementById('answer-feedback-' + questionId);
-          if (feedbackDiv) {
-              // make the feedback div visible
-              feedbackDiv.style.visibility = "visible";
-          }
+        // get the feedback div for this question
+        const feedbackDiv = document.getElementById('answer-feedback-' + questionId);
+        if (feedbackDiv) {
+          // make the feedback div visible
+          feedbackDiv.style.visibility = "visible";
+        }
       }
 
       // Change the background color of the textarea
@@ -1130,7 +1130,7 @@ async function followupExists(questionId) {
   const interviewId = interviewData.interviewID;
 
   try {
-   // console.log('Calling followupExists function for question ID:', questionId);
+    // console.log('Calling followupExists function for question ID:', questionId);
 
     const { data: existingData, error: existingError } = await supabase
       .from('interview_answers')
@@ -1154,9 +1154,9 @@ async function followupExists(questionId) {
 
       existingFollowups.forEach(followup => {
         if (followup.question && followup.answer) {
-			//console.log('followup.question:', followup.question);
-			//console.log('followup.answer:', followup.answer);
-            //console.log('Updating follow-up elements for question ID:', questionId);
+          //console.log('followup.question:', followup.question);
+          //console.log('followup.answer:', followup.answer);
+          //console.log('Updating follow-up elements for question ID:', questionId);
 
           // Get the first (and in your case, only) p tag within the followUpContainer
           const followUpParagraph = followUpContainer.querySelector('p');
@@ -1230,10 +1230,10 @@ function handleTextareaInput(event) {
   let questionHelp = currentQuestion.question_help; // adjust this based on your actual data structure
 
   if (inputValue.length >= 50 && !followup_questionCalledFlags[questionId] && inputValue[inputValue.length - 1] === ' ') {
-      followup_questionCalledFlags[questionId] = true;  // Set the flag to true before calling getFollowup
-      setTimeout(() => {
-          getFollowup(questionId, inputValue, questionText, questionCategory, questionLabel, questionHelp);
-      }, 7000);  // 7000 milliseconds = 7 seconds
+    followup_questionCalledFlags[questionId] = true;  // Set the flag to true before calling getFollowup
+    setTimeout(() => {
+      getFollowup(questionId, inputValue, questionText, questionCategory, questionLabel, questionHelp);
+    }, 7000);  // 7000 milliseconds = 7 seconds
   }
 
 }
@@ -1281,7 +1281,7 @@ function handleTextareaBlur(event) {
       extractBrandName(event.target.value)
         .then(brandName => {
           //console.log('Brand name entered:', brandName);
-		  Alpine.store('yourBrand').setBrandName(brandName);
+          Alpine.store('yourBrand').setBrandName(brandName);
 
           return updateInterview(interviewId, brandName, fullName);
         })
@@ -1318,19 +1318,19 @@ async function extractBrandName(text) {
 
     const brandName = data.brandName;
 
-	Alpine.store('interviewData').brandName = brandName;
-	Alpine.store('yourBrand').brandName = brandName;
+    Alpine.store('interviewData').brandName = brandName;
+    Alpine.store('yourBrand').brandName = brandName;
 
-     // Retrieve interviewData from local storage
-     const interviewData = JSON.parse(localStorage.getItem('interviewData')) || {};
-	 console.log('interviewData: ',interviewData);
-     // Update interviewData with the brand name
-     interviewData.brandName = brandName;
-     // Store the updated interviewData in local storage
-     localStorage.setItem('interviewData', JSON.stringify(interviewData));
+    // Retrieve interviewData from local storage
+    const interviewData = JSON.parse(localStorage.getItem('interviewData')) || {};
+    console.log('interviewData: ', interviewData);
+    // Update interviewData with the brand name
+    interviewData.brandName = brandName;
+    // Store the updated interviewData in local storage
+    localStorage.setItem('interviewData', JSON.stringify(interviewData));
 
 
-     console.log('Updated interviewData before return:', interviewData); // Log the updated interviewData object
+    console.log('Updated interviewData before return:', interviewData); // Log the updated interviewData object
 
 
 
@@ -1400,229 +1400,241 @@ function saveToSupabase(content, fileName) {
 
 // section 9.6 interview review
 function InterviewReviewView() {
-	//console.log('InterviewReviewView just got called')
-    return {
-        categories: [
-            {id: 'category_brand_story', label: 'Brand and Story'},
-            {id: 'category_customer_market', label: 'Market and Audience'},
-            {id: 'category_buyer_problem', label: 'Buyer and Problem'},
-            {id: 'category_competitor_positioning', label: 'Competition and Positioning'},
-            {id: 'solution_uvp', label: 'Solution and UVP'},
-            {id: 'sales_pricing', label: 'Sales and Pricing'}
-        ],
-		userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,
-        interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null,
-        answeredQuestions: {},
-        questions: {}, // Store the question objects here
-        fetchQuestions: async function () {
+  //console.log('InterviewReviewView just got called')
+  return {
+    categories: [
+      { id: 'category_brand_story', label: 'Brand and Story' },
+      { id: 'category_customer_market', label: 'Market and Audience' },
+      { id: 'category_buyer_problem', label: 'Buyer and Problem' },
+      { id: 'category_competitor_positioning', label: 'Competition and Positioning' },
+      { id: 'solution_uvp', label: 'Solution and UVP' },
+      { id: 'sales_pricing', label: 'Sales and Pricing' }
+    ],
+    userId: JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null,
+    interviewId: JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null,
+    answeredQuestions: {},
+    questions: {}, // Store the question objects here
+    fetchQuestions: async function () {
 
-            if (this.userId) {
-                const { data, error } = await supabase
-                    .from('interview_questions')
-					.select('*');
-                if (error) {
-                    console.error('Error fetching questions:', error);
-                    return {};
-                }
+      if (this.userId) {
+        const { data, error } = await supabase
+          .from('interview_questions')
+          .select('*');
+        if (error) {
+          console.error('Error fetching questions:', error);
+          return {};
+        }
 
-		        this.questions = data.reduce((acc, item) => {
-		            acc[item.id] = item;
-		            return acc;
-		        }, {});
+        this.questions = data.reduce((acc, item) => {
+          acc[item.id] = item;
+          return acc;
+        }, {});
 
-            }
-            return {};
-        },
-		fetchAnsweredQuestions: async function () {
-		    //console.log("Fetching answered questions...");
-		    if (this.userId && this.interviewId) {
-		        const { data, error } = await supabase
-		            .from('interview_answers')
-    .select('question_id, answer, followups, interview_questions:question_id (question_text, question_category)')
+      }
+      return {};
+    },
+    fetchAnsweredQuestions: async function () {
+      if (this.userId && this.interviewId) {
+        const { data, error } = await supabase
+          .from('interview_answers')
+          .select('question_id, answer, followups, interview_questions:question_id (question_text, question_category)')
+          .eq('interview_id', this.interviewId)
+          .eq('user_id', this.userId);
+        if (error) {
+          console.error('Error fetching answered questions:', error);
+          return;
+        }
 
-		            .eq('interview_id', this.interviewId)
-		            .eq('user_id', this.userId);
-		        if (error) {
-		            console.error('Error fetching answered questions:', error);
-		            return;
-		        }
+        this.answeredQuestions = data.reduce((acc, item) => {
+          acc[item.question_id] = {
+            answer: item.answer ? item.answer : 'No answer yet',
+            question_text: item.interview_questions.question_text,
+            question_category: item.interview_questions.question_category,
+            followups: item.followups ? item.followups : []
+          };
+          return acc;
+        }, {});
+      } else {
+        // Guest mode fallback
+        const guestAnswers = JSON.parse(window.localStorage.getItem('guestAnswers') || '{}');
 
+        // Ensure question list is loaded to map text and categories
+        if (Object.keys(this.questions).length === 0) {
+          await this.fetchQuestions();
+        }
 
-				//console.log('Fetched answered questions data:', data);
-		       // console.log('Fetched answered questions data:', data);  // Add this line
-			   this.answeredQuestions = data.reduce((acc, item) => {
-			       acc[item.question_id] = {
-			           answer: item.answer ? item.answer : 'No answer yet',
-			           question_text: item.interview_questions.question_text,
-			           question_category: item.interview_questions.question_category, // Store question_category here
-			           followups: item.followups ? item.followups : [] // Add followups here
-			       };
-			       return acc;
-			   }, {});
+        this.answeredQuestions = Object.keys(this.questions).reduce((acc, questionId) => {
+          const q = this.questions[questionId];
+          acc[questionId] = {
+            answer: guestAnswers[questionId] || 'No answer yet',
+            question_text: q.question_text,
+            question_category: q.question_category,
+            followups: []
+          };
+          return acc;
+        }, {});
+      }
+    },
+    fetchCategories: async function () {
+      // Fetch your categories here
+      const categoriesArray = await fetchYourCategories(); // This should be replaced with your actual fetch call
 
-
-		    }
-		},
-		fetchCategories: async function () {
-		    // Fetch your categories here
-		    const categoriesArray = await fetchYourCategories(); // This should be replaced with your actual fetch call
-
-		    // Convert your array of objects to an object
-		    this.categories = categoriesArray.reduce((acc, category) => {
-		        acc[category.id] = category.label;
-		        return acc;
-		    }, {});
-		},
-		// A function to generate the markdown content
-		generateMarkdownContent: function() {
-		    let markdownContent = "";
-
-
-		    // Retrieve interviewData from the Alpine store
-		    let interviewData = Alpine.store('interviewData');
-
-		    // Retrieve userProfile from the Alpine store
-		    let userProfile = Alpine.store('userProfile');
-
-		    // Add the interview name to the top of the markdown content
-		    if (interviewData.interviewName) {
-		        markdownContent += `## ${interviewData.interviewName}\n\n`;
-				markdownContent += `Updated: **${interviewData.updatedDate}**\n\n`;
-				markdownContent += `Interviewee: **${userProfile.data.full_name}**\n\n`;
-
-		    }
-
-		    // Iterate over each category
-		    for (let category of this.categories) {
-
-		        // Filter the answeredQuestions for the current category
-		        let categoryQuestions = Object.values(this.answeredQuestions).filter(question => question.question_category === category.id);
-
-		        if (categoryQuestions.length > 0) {
-		            // Add the category label to the markdown content
-		            markdownContent += `### ${category.label}\n`;
-
-		            // Iterate over each question in this category
-		            for (let question of categoryQuestions) {
-
-		                // Add the question label, colon, and question text in a single element
-		                let questionText = question.question_text.charAt(0).toUpperCase() + question.question_text.slice(1);
-		                markdownContent += `**${questionText}**\n`;
-
-		                // Add the question answer
-		                let questionAnswer = question.answer ? question.answer : 'No answer yet';
-		                markdownContent += `${questionAnswer}\n\n`;
-		            }
-		        }
-		    }
-		    this.markdownContent = markdownContent;
-		},
-		downloadInterview: function() {
-		    this.generateMarkdownContent();
-		    const interviewData = Alpine.store('interviewData');
-		    const interviewName = interviewData.interviewName;
-		    const currentDate = new Date().toISOString().split('T')[0];
-		    const fileName = `${interviewName}-${currentDate}.md`;
-		    downloadAsMarkdown(this.markdownContent, fileName);
-		},
-		saveInterview: function() {
-		  console.log('saveInterview');
-		  this.generateMarkdownContent();
-		  const interviewData = Alpine.store('interviewData');
-		  const interviewName = interviewData.interviewName;
-		  const currentDate = new Date().toISOString().split('T')[0];
-		  const fileName = `${interviewName}-${currentDate}.md`;
-		  const interviewId = Alpine.store('interviewId'); // Add this line to retrieve the interviewId
-		  saveToSupabase(this.markdownContent, fileName, interviewId);
-		},
+      // Convert your array of objects to an object
+      this.categories = categoriesArray.reduce((acc, category) => {
+        acc[category.id] = category.label;
+        return acc;
+      }, {});
+    },
+    // A function to generate the markdown content
+    generateMarkdownContent: function () {
+      let markdownContent = "";
 
 
-		async init() {
-		    await this.fetchQuestions();
-		    await this.generateMarkdownContent(); // Generate the Markdown content when the component is initialized
-		},
+      // Retrieve interviewData from the Alpine store
+      let interviewData = Alpine.store('interviewData');
 
-	    percentAnswered: function() {
-			let totalQuestions = 45;
-	        let answeredQuestions = Object.keys(this.answeredQuestions).length;
-	        return Math.round((answeredQuestions / totalQuestions) * 100);
-	    },
-		mostAnsweredCategory: function() {
-		    let categoryCounts = this.categories.map(category => ({
-		        category: category.label,
-		        count: Object.values(this.answeredQuestions).filter(a => a.question_category === category.id).length
-		    }));
-		    let maxCategory = categoryCounts.reduce((a, b) => a.count > b.count ? a : b);
-		    return maxCategory.category;
-		},
-		longestAnswer: function() {
-		    if(Object.keys(this.answeredQuestions).length === 0){
-		        return '';
-		    }
+      // Retrieve userProfile from the Alpine store
+      let userProfile = Alpine.store('userProfile');
 
-		    let maxAnswerQuestionId = Object.keys(this.answeredQuestions).reduce((a, b) => this.answeredQuestions[a].answer.length > this.answeredQuestions[b].answer.length ? a : b);
-		    return this.answeredQuestions[maxAnswerQuestionId].question_text;
-		},
-		mostEngagementCategory: async function() {
-		    // Ensure we have the answered questions data
-		    await this.fetchAnsweredQuestions();
+      // Add the interview name to the top of the markdown content
+      if (interviewData.interviewName) {
+        markdownContent += `## ${interviewData.interviewName}\n\n`;
+        markdownContent += `Updated: **${interviewData.updatedDate}**\n\n`;
+        markdownContent += `Interviewee: **${userProfile.data.full_name}**\n\n`;
 
-		    // Create an array to store engagement scores per category
-		    let engagementScores = this.categories.map(category => ({
-		        category: category.label,
-		        score: 0
-		    }));
+      }
 
-		    // For each answered question
-		    for (let question_id in this.answeredQuestions) {
-		        // Get the question category
-		        let question_category = this.answeredQuestions[question_id].question_category;
+      // Iterate over each category
+      for (let category of this.categories) {
 
-		        // Find the corresponding category in the engagementScores array
-		        let category = engagementScores.find(cat => cat.category === this.categories.find(c => c.id === question_category).label);
+        // Filter the answeredQuestions for the current category
+        let categoryQuestions = Object.values(this.answeredQuestions).filter(question => question.question_category === category.id);
 
-		        // Add the length of the answer to the score of the corresponding category
-		        if (category) {
-		            category.score += this.answeredQuestions[question_id].answer.length;
-		        }
-		    }
+        if (categoryQuestions.length > 0) {
+          // Add the category label to the markdown content
+          markdownContent += `### ${category.label}\n`;
 
-		    // Find the category with the highest engagement score
-		    let mostEngagedCategory = engagementScores.reduce((a, b) => a.score > b.score ? a : b);
+          // Iterate over each question in this category
+          for (let question of categoryQuestions) {
 
-		    return mostEngagedCategory.category;
-		},
+            // Add the question label, colon, and question text in a single element
+            let questionText = question.question_text.charAt(0).toUpperCase() + question.question_text.slice(1);
+            markdownContent += `**${questionText}**\n`;
 
-		leastEngagementCategory: async function() {
-		    // Ensure we have the answered questions data
-		    await this.fetchAnsweredQuestions();
+            // Add the question answer
+            let questionAnswer = question.answer ? question.answer : 'No answer yet';
+            markdownContent += `${questionAnswer}\n\n`;
+          }
+        }
+      }
+      this.markdownContent = markdownContent;
+    },
+    downloadInterview: function () {
+      this.generateMarkdownContent();
+      const interviewData = Alpine.store('interviewData');
+      const interviewName = interviewData.interviewName;
+      const currentDate = new Date().toISOString().split('T')[0];
+      const fileName = `${interviewName}-${currentDate}.md`;
+      downloadAsMarkdown(this.markdownContent, fileName);
+    },
+    saveInterview: function () {
+      console.log('saveInterview');
+      this.generateMarkdownContent();
+      const interviewData = Alpine.store('interviewData');
+      const interviewName = interviewData.interviewName;
+      const currentDate = new Date().toISOString().split('T')[0];
+      const fileName = `${interviewName}-${currentDate}.md`;
+      const interviewId = Alpine.store('interviewId'); // Add this line to retrieve the interviewId
+      saveToSupabase(this.markdownContent, fileName, interviewId);
+    },
 
-		    // Create an array to store engagement scores per category
-		    let engagementScores = this.categories.map(category => ({
-		        category: category.label,
-		        score: 0
-		    }));
 
-		    // For each answered question
-		    for (let question_id in this.answeredQuestions) {
-		        // Get the question category
-		        let question_category = this.answeredQuestions[question_id].question_category;
+    async init() {
+      await this.fetchQuestions();
+      await this.generateMarkdownContent(); // Generate the Markdown content when the component is initialized
+    },
 
-		        // Find the corresponding category in the engagementScores array
-		        let category = engagementScores.find(cat => cat.category === this.categories.find(c => c.id === question_category).label);
+    percentAnswered: function () {
+      let totalQuestions = 45;
+      let answeredQuestions = Object.keys(this.answeredQuestions).length;
+      return Math.round((answeredQuestions / totalQuestions) * 100);
+    },
+    mostAnsweredCategory: function () {
+      let categoryCounts = this.categories.map(category => ({
+        category: category.label,
+        count: Object.values(this.answeredQuestions).filter(a => a.question_category === category.id).length
+      }));
+      let maxCategory = categoryCounts.reduce((a, b) => a.count > b.count ? a : b);
+      return maxCategory.category;
+    },
+    longestAnswer: function () {
+      if (Object.keys(this.answeredQuestions).length === 0) {
+        return '';
+      }
 
-		        // Add the length of the answer to the score of the corresponding category
-		        if (category) {
-		            category.score += this.answeredQuestions[question_id].answer.length;
-		        }
-		    }
+      let maxAnswerQuestionId = Object.keys(this.answeredQuestions).reduce((a, b) => this.answeredQuestions[a].answer.length > this.answeredQuestions[b].answer.length ? a : b);
+      return this.answeredQuestions[maxAnswerQuestionId].question_text;
+    },
+    mostEngagementCategory: async function () {
+      // Ensure we have the answered questions data
+      await this.fetchAnsweredQuestions();
 
-		    // Find the category with the lowest engagement score
-		    let leastEngagedCategory = engagementScores.reduce((a, b) => a.score < b.score ? a : b);
+      // Create an array to store engagement scores per category
+      let engagementScores = this.categories.map(category => ({
+        category: category.label,
+        score: 0
+      }));
 
-		    return leastEngagedCategory.category;
-		},
-    }
+      // For each answered question
+      for (let question_id in this.answeredQuestions) {
+        // Get the question category
+        let question_category = this.answeredQuestions[question_id].question_category;
+
+        // Find the corresponding category in the engagementScores array
+        let category = engagementScores.find(cat => cat.category === this.categories.find(c => c.id === question_category).label);
+
+        // Add the length of the answer to the score of the corresponding category
+        if (category) {
+          category.score += this.answeredQuestions[question_id].answer.length;
+        }
+      }
+
+      // Find the category with the highest engagement score
+      let mostEngagedCategory = engagementScores.reduce((a, b) => a.score > b.score ? a : b);
+
+      return mostEngagedCategory.category;
+    },
+
+    leastEngagementCategory: async function () {
+      // Ensure we have the answered questions data
+      await this.fetchAnsweredQuestions();
+
+      // Create an array to store engagement scores per category
+      let engagementScores = this.categories.map(category => ({
+        category: category.label,
+        score: 0
+      }));
+
+      // For each answered question
+      for (let question_id in this.answeredQuestions) {
+        // Get the question category
+        let question_category = this.answeredQuestions[question_id].question_category;
+
+        // Find the corresponding category in the engagementScores array
+        let category = engagementScores.find(cat => cat.category === this.categories.find(c => c.id === question_category).label);
+
+        // Add the length of the answer to the score of the corresponding category
+        if (category) {
+          category.score += this.answeredQuestions[question_id].answer.length;
+        }
+      }
+
+      // Find the category with the lowest engagement score
+      let leastEngagedCategory = engagementScores.reduce((a, b) => a.score < b.score ? a : b);
+
+      return leastEngagedCategory.category;
+    },
+  }
 }
 
 
@@ -1635,7 +1647,7 @@ async function interviewSubmitted(interviewID) {
   //console.log("Checking if interview has been submitted...");
   //console.log("interviewID inside interviewSubmitted(): ", interviewID);
 
-  if(interviewID) {
+  if (interviewID) {
     const { data, error } = await supabase
       .from('interviews')
       .select('submitted')
@@ -1646,8 +1658,8 @@ async function interviewSubmitted(interviewID) {
       return;
     }
 
-    if(data && data.length > 0) {
-	  console.log("interview submitted - true");
+    if (data && data.length > 0) {
+      console.log("interview submitted - true");
       // interview submitted = true
 
       return data[0].submitted;
@@ -1668,26 +1680,26 @@ async function interviewSubmitted(interviewID) {
 
 async function submitInterview() {
 
-    // Your interview ID
-    const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
+  // Your interview ID
+  const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
 
-    if(!interviewID) {
-      console.error("No interview ID found.");
-      return;
-    }
+  if (!interviewID) {
+    console.error("No interview ID found.");
+    return;
+  }
 
-    // Upsert on Supabase
-    const { data, error } = await supabase
-      .from('interviews')
-      .update({ submitted: true })
-      .eq('id', interviewID);
+  // Upsert on Supabase
+  const { data, error } = await supabase
+    .from('interviews')
+    .update({ submitted: true })
+    .eq('id', interviewID);
 
-    if (error) {
-      console.error("Error submitting the interview: ", error);
-      return;
-    }
+  if (error) {
+    console.error("Error submitting the interview: ", error);
+    return;
+  }
 
-    console.log("Interview has been successfully submitted.");
+  console.log("Interview has been successfully submitted.");
 
 }
 
@@ -1696,19 +1708,19 @@ async function submitInterview() {
 
 // 1. invoke strategy page
 function strategyState() {
-	console.log("strategyState() function called");
+  console.log("strategyState() function called");
 
-	// Assume interviewExists is a boolean indicating if an interview exists
-	const interviewExists = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID != null;
-	console.log("And interviewID exists for this user - true or false? ", interviewExists);
+  // Assume interviewExists is a boolean indicating if an interview exists
+  const interviewExists = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID != null;
+  console.log("And interviewID exists for this user - true or false? ", interviewExists);
 
-	updateStrategyUI(interviewExists);
+  updateStrategyUI(interviewExists);
 
 
-	const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
-	console.log("interviewID inside strategyState(): ",interviewID);
+  const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
+  console.log("interviewID inside strategyState(): ", interviewID);
 
-	checkForStrategyAssets(interviewID);
+  checkForStrategyAssets(interviewID);
 }
 
 
@@ -1722,7 +1734,7 @@ function updateStrategyUI(interviewExists) {
 }
 // 2.1 Update navigation state
 function updateNav(interviewCreated) {
-	 console.log("updateNavigationState() function called");
+  console.log("updateNavigationState() function called");
   // Get the navigation item
   var strategyNavItem = document.querySelector('.strategy.child');
   var strategyButton = document.querySelector('.strategy-button');
@@ -1781,7 +1793,7 @@ async function checkForStrategyAssets(interviewID) {
     }
   }
 }
-window.onload = async function() {
+window.onload = async function () {
   const currentScreen = JSON.parse(window.localStorage.getItem('currentScreen'));
   const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
 
@@ -1867,7 +1879,7 @@ async function generatePositioning(interviewID) {
     // process the data as needed here
     console.log(data);
 
-	window.localStorage.setItem('positioningData', JSON.stringify(data.positioning));
+    window.localStorage.setItem('positioningData', JSON.stringify(data.positioning));
 
 
     // Return the positioning data for use in other parts of your code
@@ -1914,23 +1926,23 @@ async function regenerateDisplayPositioning() {
     // process the data as needed here
     console.log(data);
 
-	const positioningData = {
-	  id: null, // use actual value if available
-	  user_id: userID,
-	  interview_id: interviewID,
-	  positioning_strategy: null, // use actual value if available
-	  private_positioning: null, // use actual value if available
-	  public_positioning: null, // use actual value if available
-	  positioning_chart_logic: null, // use actual value if available
-	  positioning_chart_image: null, // use actual value if available
-	  created_at: new Date().toISOString(),
-	  updated_at: new Date().toISOString(),
-	  confirmed: false, // use actual value if available
-	  positioning: data.positioning
-	};
+    const positioningData = {
+      id: null, // use actual value if available
+      user_id: userID,
+      interview_id: interviewID,
+      positioning_strategy: null, // use actual value if available
+      private_positioning: null, // use actual value if available
+      public_positioning: null, // use actual value if available
+      positioning_chart_logic: null, // use actual value if available
+      positioning_chart_image: null, // use actual value if available
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      confirmed: false, // use actual value if available
+      positioning: data.positioning
+    };
 
-	// Store the positioningData object in local storage
-	window.localStorage.setItem('positioningData', JSON.stringify(positioningData));
+    // Store the positioningData object in local storage
+    window.localStorage.setItem('positioningData', JSON.stringify(positioningData));
 
 
 
@@ -1938,16 +1950,16 @@ async function regenerateDisplayPositioning() {
     displayPositioning(data.positioning);
 
 
-	document.getElementById("positioning-strategy").style.minHeight = "auto";
+    document.getElementById("positioning-strategy").style.minHeight = "auto";
 
 
 
-	hidePositioningModal();
+    hidePositioningModal();
 
     // Return the positioning data for use in other parts of your code
     //return data.positioning;
 
-  	} catch (error) {
+  } catch (error) {
     console.error('There was a problem with the request:', error);
   }
 }
@@ -1971,7 +1983,7 @@ function displayPositioning(positioning_strategy) {
 
   // Set the inner HTML of the element to the positioning string
   positioningElement.innerHTML = positioning_strategy;
- document.getElementById("positioning-strategy").style.minHeight = "auto";
+  document.getElementById("positioning-strategy").style.minHeight = "auto";
 
 
   console.log('displayPositioning is displayed in strategy state content area');
@@ -1983,8 +1995,8 @@ function displayPositioning(positioning_strategy) {
 // 3.2. display positioning
 function displayPositioningOnReload() {
 
-	const positioning_data = JSON.parse(window.localStorage.getItem('positioningData'));
-	const positioning_strategy = positioning_data.positioning_strategy;
+  const positioning_data = JSON.parse(window.localStorage.getItem('positioningData'));
+  const positioning_strategy = positioning_data.positioning_strategy;
 
 
 
@@ -2013,7 +2025,7 @@ window.onload = displayPositioningOnReload;
 async function positioningConfirmed(interviewID) {
 
 
-  if(interviewID) {
+  if (interviewID) {
     const { data, error } = await supabase
       .from('positioning_strategies')
       .select('confirmed')
@@ -2024,7 +2036,7 @@ async function positioningConfirmed(interviewID) {
       return;
     }
 
-    if(data && data.length > 0) {
+    if (data && data.length > 0) {
       console.log("Positioning confirmed - true");
       // Positioning confirmed = true
 
@@ -2183,8 +2195,8 @@ async function generateBrandStrategy(interviewID) {
     // display the strategy
     //displayStrategy(data.brand_strategy);
 
-	return data;
-  hideBrandStrategyModal();
+    return data;
+    hideBrandStrategyModal();
 
   } catch (error) {
     console.error('There was a problem with the request:', error);
@@ -2234,16 +2246,16 @@ async function regenerateBrandStrategy() {
     // displayStrategy(analyses)
 
 
-	document.getElementById("brand-strategy").style.minHeight = "auto";
+    document.getElementById("brand-strategy").style.minHeight = "auto";
 
 
 
-	hideBrandStrategyModal();
+    hideBrandStrategyModal();
 
     // Return the positioning data for use in other parts of your code
     //return data.positioning;
 
-  	} catch (error) {
+  } catch (error) {
     console.error('There was a problem with the request:', error);
   }
 }
@@ -2267,11 +2279,11 @@ function displayStrategy(positioning) {
 
 // 5.3. edit strategy
 function editStrategy(interviewID) {
- // when user clicks edit for a given item, let the div be editable
- // when user clicks done, user saves the edited text to Supabase
- // userSavesStrategy()
- // when user clicks cancel, revert the text to the original text
- //TODO: Add code to handle editing and saving of the strategy
+  // when user clicks edit for a given item, let the div be editable
+  // when user clicks done, user saves the edited text to Supabase
+  // userSavesStrategy()
+  // when user clicks cancel, revert the text to the original text
+  //TODO: Add code to handle editing and saving of the strategy
 }
 
 // 5.4. save/update strategy
@@ -2294,88 +2306,102 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
-	// JavaScript code
-	const showGuidelinesLink = document.getElementById('show-guidelines');
-	const guidelinesParagraph = document.getElementById('positioningGuidelines');
+  // JavaScript code
+  const showGuidelinesLink = document.getElementById('show-guidelines');
+  const guidelinesParagraph = document.getElementById('positioningGuidelines');
 
-	showGuidelinesLink.addEventListener('click', function(event) {
-	  event.preventDefault(); // Prevent the link from navigating
+  showGuidelinesLink.addEventListener('click', function (event) {
+    event.preventDefault(); // Prevent the link from navigating
 
-	  if (guidelinesParagraph.classList.contains('show')) {
-	    guidelinesParagraph.classList.remove('show');
-	    showGuidelinesLink.textContent = 'Show guidelines';
-	  } else {
-	    guidelinesParagraph.classList.add('show');
-	    showGuidelinesLink.textContent = 'Hide guidelines';
-	  }
-	});
-
-
-
-	// Call this function when the page loads
-	(async function() {
-	  const session = supabase.auth.session();
-	  const user = session ? session.user : null;
-
-	  // Everyone can start the interview immediately.
-	  await getInterviewQuestions();
-	  updateQuestionText();
-
-	  if (user) {
-	    await getUserData(user.id);
+    if (guidelinesParagraph.classList.contains('show')) {
+      guidelinesParagraph.classList.remove('show');
+      showGuidelinesLink.textContent = 'Show guidelines';
+    } else {
+      guidelinesParagraph.classList.add('show');
+      showGuidelinesLink.textContent = 'Hide guidelines';
+    }
+  });
 
 
 
-	    // Get userProfile from localStorage
-	    let userProfile = window.localStorage.getItem('userProfile');
-	    userProfile = JSON.parse(userProfile); // parse string back into an object
+  // Call this function when the page loads
+  (async function () {
+    const session = supabase.auth.session();
+    const user = session ? session.user : null;
 
-	    // Update the initials in DOM
-	    let profileElements = document.querySelectorAll('.user-initials');
-	    let firstI = userProfile.first_name ? userProfile.first_name[0].toUpperCase() : '';
-	    let lastI = userProfile.last_name ? userProfile.last_name[0].toUpperCase() : '';
-	    let initials = firstI + ' ' + lastI;
+    // Everyone can start the interview immediately.
+    await getInterviewQuestions();
+    updateQuestionText();
 
-	    profileElements.forEach(profileElement => {
-	      profileElement.textContent = initials;
-	    });
+    if (user) {
+      await getUserData(user.id);
 
 
 
+      // Get userProfile from localStorage
+      let userProfile = window.localStorage.getItem('userProfile');
+      userProfile = JSON.parse(userProfile); // parse string back into an object
 
+      // Update the initials in DOM
+      let profileElements = document.querySelectorAll('.user-initials');
+      let firstI = userProfile.first_name ? userProfile.first_name[0].toUpperCase() : '';
+      let lastI = userProfile.last_name ? userProfile.last_name[0].toUpperCase() : '';
+      let initials = firstI + ' ' + lastI;
 
-	  }
-	})();
-
-
-
-	document.getElementById('recreate-positioning').addEventListener('click', function() {
-	  regenerateDisplayPositioning();
-	});
-
-
-
-	document.getElementById('recreateBrandAnalysis').addEventListener('click', function() {
-
-
-	    // get the interviewID from the local storage
-	    const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
-	    const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null;
-
-	  	regenerateBrandStrategy(interviewID);
-	});
-
-
-	document.getElementById("PrintHTML").addEventListener("click", function(event){
-	    event.preventDefault();  // Prevent the default link click action
-	    window.print();  // Call the browser print function
-	});
+      profileElements.forEach(profileElement => {
+        profileElement.textContent = initials;
+      });
 
 
 
-  document.getElementById("SubmitInterview").addEventListener("click", function(event){
 
-	submitInterview();
+
+    }
+  })();
+
+
+
+  document.getElementById('recreate-positioning').addEventListener('click', function () {
+    regenerateDisplayPositioning();
+  });
+
+
+
+  document.getElementById('recreateBrandAnalysis').addEventListener('click', function () {
+
+
+    // get the interviewID from the local storage
+    const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
+    const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null;
+
+    regenerateBrandStrategy(interviewID);
+  });
+
+
+  document.getElementById("PrintHTML").addEventListener("click", function (event) {
+    event.preventDefault();  // Prevent the default link click action
+    window.print();  // Call the browser print function
+  });
+
+
+
+  document.getElementById("SubmitInterview").addEventListener("click", function (event) {
+    event.preventDefault();
+    const userProfile = JSON.parse(window.localStorage.getItem('userProfile'));
+
+    if (!userProfile || !userProfile.user_id) {
+      Alpine.store('authenticationStatus').showAuthPage('signup');
+      return;
+    }
+
+    submitInterview();
+    strategyState();
+    Alpine.store('currentScreen').current = 'strategies';
+  });
+
+
+
+  document.getElementById("welcomeShowStrategy").addEventListener("click", function (event) {
 
 
     // call getStrategy() function
@@ -2384,26 +2410,17 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 
 
-  document.getElementById("welcomeShowStrategy").addEventListener("click", function(event){
-
-
-    // call getStrategy() function
-    strategyState();
-  });
 
 
 
-
-
-
-  document.getElementById("confirmPositioning").addEventListener("click", async function(event){
+  document.getElementById("confirmPositioning").addEventListener("click", async function (event) {
     // get the interviewID from the local storage
     const interviewID = JSON.parse(window.localStorage.getItem('interviewData'))?.interviewID || null;
     const userID = JSON.parse(window.localStorage.getItem('userProfile'))?.user_id || null;
 
 
     // if interviewID doesn't exist, don't proceed
-    if(!interviewID) {
+    if (!interviewID) {
       console.error("No interview ID found.");
       return;
     }
@@ -2459,20 +2476,20 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
   // Callback function to execute when mutations are observed
   // Callback function to execute when mutations are observed
-  var callback = function(mutationsList, observer) {
-    for(let mutation of mutationsList) {
+  var callback = function (mutationsList, observer) {
+    for (let mutation of mutationsList) {
       if (mutation.type === 'childList') {
         //console.log('Child list has changed');
         // New nodes added or removed
         let textareas = targetNode.querySelectorAll('textarea');
         textareas.forEach(textarea => {
           // add keyup event listener to each textarea
-          textarea.addEventListener('keyup', function() {
+          textarea.addEventListener('keyup', function () {
             expandTextarea(this);
           });
 
           // add blur event listener to each textarea
-          textarea.addEventListener('blur', function() {
+          textarea.addEventListener('blur', function () {
             const questionId = this.id.replace('input-', '');
             const correspondingLi = document.getElementById('question-' + questionId);
             if (this.value.trim() === '') {
@@ -2504,7 +2521,7 @@ document.addEventListener('DOMContentLoaded', async (event) => { //
 
 // SECTION 11 - Helper Functions
 function expandTextarea(textarea) {
-    // Reset textarea height if text was deleted
+  // Reset textarea height if text was deleted
 
 }
 
@@ -2540,8 +2557,8 @@ function bodyClasses() {
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)); // Helper function to delay the execution of an async function
 
 function capitalizeWords(str) {
-  return str.replace(/\w\S*/g, function(txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  return str.replace(/\w\S*/g, function (txt) {
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 }
 
@@ -2550,8 +2567,8 @@ function capitalizeWords(str) {
 
 
 function toHtml(markdownText) {
-    var md = window.markdownit();
-    return md.render(markdownText);
+  var md = window.markdownit();
+  return md.render(markdownText);
 }
 
 
@@ -2616,6 +2633,6 @@ function hideBrandStrategyModal() {
 
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   initializeModelSelector();
 });
