@@ -59,7 +59,7 @@
  *   - Code related to deploying your app, building and packaging, server configuration, hosting service deployment, etc.
  */
 
-// curl -L -X POST 'https://wogivjshqopegucducyz.functions.supabase.co/llm' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvZ2l2anNocW9wZWd1Y2R1Y3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NzU4MzQsImV4cCI6MTk5NDA1MTgzNH0.zj-QBJknPolKZ6TZ_t3r7aPXbhVB1bf9mmoNBBif9OM' --data '{"name":"Functions"}'
+// curl -L -X POST 'https://wogivjshqopegucducyz.functions.supabase.co/llm' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZma2VvaXNsdHZlb2Zqc21sYWFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NjkxMDksImV4cCI6MjA4ODE0NTEwOX0.O3jTMtPw-wcdlPg8rKuO4LXFVDCX6MAqlAcUnNNn-SI' --data '{"name":"Functions"}'
 
 
 
@@ -253,10 +253,26 @@ document.addEventListener('alpine:init', function() {
 
 // SECTION 1, 2 and 3 - Configuration, Imports, Initialization
 // Handle the authentication with Supabase
-var SUPABASE_URL = 'https://wogivjshqopegucducyz.supabase.co'
+var SUPABASE_URL = 'https://ffkeoisltveofjsmlaac.supabase.co'
 var SUPABASE_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvZ2l2anNocW9wZWd1Y2R1Y3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NzU4MzQsImV4cCI6MTk5NDA1MTgzNH0.zj-QBJknPolKZ6TZ_t3r7aPXbhVB1bf9mmoNBBif9OM'
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZma2VvaXNsdHZlb2Zqc21sYWFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NjkxMDksImV4cCI6MjA4ODE0NTEwOX0.O3jTMtPw-wcdlPg8rKuO4LXFVDCX6MAqlAcUnNNn-SI'
 var supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+const LLM_MODEL_STORAGE_KEY = 'llmModel';
+const DEFAULT_LLM_MODEL = 'kimi-k2.5';
+
+function getSelectedModel() {
+  return localStorage.getItem(LLM_MODEL_STORAGE_KEY) || DEFAULT_LLM_MODEL;
+}
+
+function initializeModelSelector() {
+  const select = document.getElementById('llm-model-select');
+  if (!select) return;
+  select.value = getSelectedModel();
+  select.addEventListener('change', function() {
+    localStorage.setItem(LLM_MODEL_STORAGE_KEY, this.value);
+  });
+}
 
 
 
@@ -1837,7 +1853,8 @@ async function generatePositioning(interviewID) {
       },
       body: JSON.stringify({
         interviewID: interviewID,
-        userID: userID
+        userID: userID,
+        model: getSelectedModel()
       })
     });
 
@@ -1883,7 +1900,8 @@ async function regenerateDisplayPositioning() {
       },
       body: JSON.stringify({
         interviewID: interviewID,
-        userID: userID
+        userID: userID,
+        model: getSelectedModel()
       })
     });
 
@@ -2148,7 +2166,8 @@ async function generateBrandStrategy(interviewID) {
       },
       body: JSON.stringify({
         interviewID: interviewID,
-        userID: userID
+        userID: userID,
+        model: getSelectedModel()
       })
     });
 
@@ -2196,7 +2215,8 @@ async function regenerateBrandStrategy() {
       },
       body: JSON.stringify({
         interviewID: interviewID,
-        userID: userID
+        userID: userID,
+        model: getSelectedModel()
       })
     });
 
@@ -2594,3 +2614,8 @@ function hideBrandStrategyModal() {
   modal.style.display = 'none';
 }
 
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  initializeModelSelector();
+});

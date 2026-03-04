@@ -1281,7 +1281,16 @@
 
 	              <h4>Your Account</h4>
 
-				  <p>No settings are available yet.  </p>   <p>Any special requests? Please let me know with a DM on <a href="https://join.slack.com/t/messagemaps/shared_invite/zt-1xk6jv680-jq7N5a5msC_EmilY3gFWiQ">Slack</a> or by email at <a href="mailto:rowan@messagemaps.io">rowan@messagemaps.io</a></p>
+				  <div class="card p-3" style="max-width: 420px;">
+						<p class="mb-2"><strong>Choose model</strong></p>
+						<select id="llm-model-select" class="form-select">
+							<option value="minimax-m2.5">Minimax M-2.5</option>
+							<option value="kimi-k2.5">Kimi-K2.5</option>
+							<option value="qwen-3-235b-instruct">Qwen-3-235binstruct</option>
+							<option value="llama-3.3-70b">LlaMa 3.3 70B</option>
+						</select>
+						<p class="text-small text-secondary mt-2 mb-0">Default: Kimi-K2.5</p>
+					  </div>
 
 	            </div><!-- /#AccountView -->
 
